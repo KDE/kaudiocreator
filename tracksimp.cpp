@@ -515,10 +515,10 @@ void TracksImp::newAlbum() {
 		QString title;
 		
 		// Support for multiple artists stripping.
-		int delimiter = title.find(" / ");
-		if (delimiter > 0) {
+		int delimiter = t[i].title.find(" / ");
+		if (delimiter != -1) {
 			trackArtist = t[i].title.left(delimiter);
-			title = t[i].title.right(delimiter + 3);
+			title = t[i].title.mid(delimiter + 3);
 		}
 		else {
 			trackArtist = "";
