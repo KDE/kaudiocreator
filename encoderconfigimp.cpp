@@ -348,10 +348,12 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
 void EncoderConfigImp::jobDone(KProcess *process){
   if(!process)
     return;
+  bool normalExit = true;
   if(process->normalExit()){
     int retrunValue = process->exitStatus();
     if(retrunValue!=0)
       qDebug("Process exited with non 0 status: %d", retrunValue);
+    normalExit = false;
   }
 
   Job *job = jobs[(KShellProcess*)process];
@@ -361,7 +363,8 @@ void EncoderConfigImp::jobDone(KProcess *process){
   if( QFile::exists(job->newLocation)){
     if(!saveWav->isChecked())
       QFile::remove(job->location);
-    emit(updateProgress(job->id, 100));
+    if(normalExit)
+      emit(updateProgress(job->id, 100));
     if(createPlaylistCheckBox->isChecked())
       appendToPlaylist(job);
   }
