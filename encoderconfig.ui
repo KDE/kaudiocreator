@@ -239,6 +239,14 @@
                     <property name="name">
                         <cstring>currentEncoderName</cstring>
                     </property>
+                   <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <property name="frameShape">
                         <enum>LineEditPanel</enum>
                     </property>
@@ -249,23 +257,6 @@
                         <number>1</number>
                     </property>
                 </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>61</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
             </hbox>
         </widget>
         <spacer row="10" column="0">
