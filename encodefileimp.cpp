@@ -24,18 +24,25 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <kurlrequester.h>
-#include <kurlrequester.h>
 #include <qcombobox.h>
 #include <kmessagebox.h>
 
-EncodeFileImp::EncodeFileImp( QMap<QString, QString> g, QWidget* parent, const char* name) : EncodeFile(parent, name), genres(g) {
+EncodeFileImp::EncodeFileImp( QMap<QString, QString> g, QWidget* parent,
+		const char* name) : EncodeFile(parent, name), genres(g) {
   genre->insertStringList(genres.keys());
+  // Specify to only accept wav files
   file->setFilter("*.wav|Wav files");
 }
 
-void EncodeFileImp::accept(){
+/**
+ * When the user presses the encode button create a job with all of the current
+ * selection options and emit a signal with it.
+ */
+void EncodeFileImp::encode(){
   Job *newJob = new Job();
+  
   newJob->location = file->url();
+  
   newJob->album = album->text();
   newJob->genre = genres[genre->currentText()];
   if(newJob->genre.isEmpty())
@@ -48,13 +55,14 @@ void EncodeFileImp::accept(){
   newJob->song = track_title->text();
   newJob->song_artist = track_artist->text();
   newJob->song_comment = track_comment->text();
+
   emit(startJob(newJob));
   
-  // Same message from tracksimp.cpp
+  // Same message and *strings* from tracksimp.cpp
   int counter(1);
   KMessageBox::information(this,
-  i18n("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter),
+  i18n("%1 Job(s) have been started.  You can watch their progress in the " \
+	  "jobs section.").arg(counter),
  i18n("Jobs have started"), i18n("Jobs have started"));
-
 }
 

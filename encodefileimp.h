@@ -34,15 +34,20 @@ class EncodeFileImp : public EncodeFile  {
 Q_OBJECT
 
 signals:
+  // Start encoding this wav file
   void startJob(Job *newJob);
+
 public:
   EncodeFileImp( QMap<QString, QString> genres, QWidget* parent = 0, const char* name = 0);
 
 protected slots:
-  void accept();
+  // Encode button
+  void encode();
 
 private:
+  // List of genres and i18n versions
   QMap<QString, QString> genres;
+
 };
 
 #endif // ENCODEFILEIMP_H
