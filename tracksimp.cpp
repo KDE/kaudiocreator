@@ -19,7 +19,7 @@
  */
 #include "tracksimp.h"
 #include "job.h"
-#include "id3tagdialog.h"
+#include "infodialog.h"
 #include "prefs.h"
 #include <qlabel.h>
 #include <qlistview.h>
