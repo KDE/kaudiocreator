@@ -45,6 +45,7 @@ Comment[pt_BR]=Finalização da conversão da faixa
 Comment[sr]=Гребовање нумере је завршено
 Comment[sr@Latn]=Гребовање нумере је завршено
 Comment[sv]=Spåret har lagrats klart
+Comment[xx]=xxTrack finished rippingxx
 Comment[zh_CN]=音轨抓取完成
 
 [cd ripped]
@@ -85,6 +86,7 @@ Comment[pt_BR]=Finalização da conversão do CD
 Comment[sr]=Гребовање CD-а је завршено
 Comment[sr@Latn]=Гребовање CD-а је завршено
 Comment[sv]=Cd:n har lagrats klart
+Comment[xx]=xxCD finished rippingxx
 Comment[zh_CN]=CD 抓取完成
 
 [track encoded]
@@ -126,6 +128,7 @@ Comment[pt_BR]=Finalização da codificação da faixa
 Comment[sr]=Кодирање нумере је завршено
 Comment[sr@Latn]=Кодирање нумере је завршено
 Comment[sv]=Spåret har kodats klart
+Comment[xx]=xxTrack finished encodingxx
 Comment[zh_CN]=音轨编码完成
 
 [cd encoded]
@@ -167,6 +170,7 @@ Comment[pt_BR]=Finalização da codificação do CD
 Comment[sr]=Кодирање CD-а је завршено
 Comment[sr@Latn]=Кодирање CD-а је завршено
 Comment[sv]=Cd:n har kodats klart
+Comment[xx]=xxCD finished encodingxx
 Comment[zh_CN]=CD 编码完成
 default_presentation=17
 default_sound=KDE_ClockChime.wav
