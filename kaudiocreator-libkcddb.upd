@@ -1,0 +1,7 @@
+Id=kaudiocreator-libkcddb
+
+
+File=kaudiocreatorrc,kcmcddbrc
+Group=cdconfig,<default>
+Key=databasePort,Port
+Key=databaseServer,Host
