@@ -66,7 +66,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
 
     encPrefs = EncoderPrefs::prefs("Encoder_3");
     encPrefs->setEncoderName(i18n("FLAC"));
-    encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%{artist} --tag=Album=%{albumtitle} --tag=Title=%{title} --tag=Tracknumber=%{number} --tag=Genre=%{genre} %f");
+    encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%{artist} --tag=Album=%{albumtitle} --tag=Date=%{year} --tag=Title=%{title} --tag=Tracknumber=%{number} --tag=Genre=%{genre} %f");
     encPrefs->setExtension("flac");
     encPrefs->setPercentLength(2);
     encPrefs->writeConfig();
