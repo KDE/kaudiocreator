@@ -1,29 +1,38 @@
 [!Global!]
 IconName=kaudiocreator
 Comment=KAudioCreator
+Comment[sv]=Kaudiocreator
 
 [track ripped]
 Name=Track Ripped
+Name[sv]=Spår lagrat
 Name[ta]=தடம் பிரிக்கப்பட்டது
 Comment=Track finished ripping.
+Comment[sv]=Spåret har lagrats klart.
 Comment[ta]=தடம் பிரித்தலை முடித்தது
 
 [cd ripped]
 Name=CD Ripped
+Name[sv]=Cd lagrad
 Name[ta]=CD பிரிக்கப்பட்டது
 Comment=CD finished ripping.
+Comment[sv]=Cd:n har lagrats klart.
 Comment[ta]=CD பிரித்தல் முடிந்தது
 
 [track encoded]
 Name=Track Encoded
+Name[sv]=Spår kodat
 Name[ta]=தடம் மறையாக்கப் பட்டது
 Comment=Track finished encoding.
+Comment[sv]=Spåret har kodats klart.
 Comment[ta]=தடம் மறையாக்கத்தை முடித்தது
 
 [cd encoded]
 Name=CD Encoded
+Name[sv]=Cd kodad
 Name[ta]=CD மறையாக்கப் பட்டது
 Comment=CD finished encoding.
+Comment[sv]=Cd:n har kodats klart.
 Comment[ta]=CD மறையாக்கத்தை முடித்தது.
 default_presentation=17
 default_sound=KDE_ClockChime.wav
