@@ -42,7 +42,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
   
-  frame = options->addVBoxPage(i18n("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
+  frame = options->addVBoxPage(i18n("CD Config"),i18n("CD Config"), SmallIcon("network", 32));
   cdConfig = new CdConfigImp(frame, "CdConfig");
 
   frame = options->addVBoxPage(i18n("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
