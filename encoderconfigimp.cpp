@@ -180,7 +180,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   // Make sure the output string has a % symble in it.
   QString output = QString(buffer).mid(0,length);
   if( output.find('%') == -1 ){
-    qDebug("No percent symbol found in output, not updating.  Report as bug w/ encoder command line options if progress bar does not fill.");
+    qDebug("No \'%%\' found in output.  Report as a bug w/encoder command line options if progressbar does not fill.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());

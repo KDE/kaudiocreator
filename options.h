@@ -10,6 +10,7 @@ class CdConfig;
 class RipConfig;
 class EncoderConfig;
 class KAutoConfig;
+class General;
 
 class Options : public QObject {
 
@@ -34,7 +35,10 @@ private slots:
   void encoderWizard();
   void loadEncoderConfig(int index);
 
+  void updateExample();
+  
 private:
+  General* general;
   KDialogBase* options;
   CdConfig *cdConfig;
   RipConfig *ripConfig;

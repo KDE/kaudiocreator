@@ -1,28 +1,12 @@
-Combine the ripping and encoding into 1 job.
-
 Add flac preset
-Global replace regexp?  i.e. reaplce all " " with "_"
-
-10.5263     QString::~QString()
-15.7895     QueConfigImp::updateProgress(int, int)
-21.0526     EncoderConfigImp::receivedThreadOutput(KProcess*, char*, int)
-21.0526     QMapPrivate<KShellProcess*,ob*>::find(KShellProcess* const&) const 
-21.0526     QueListViewItem::paintCell(QPainter*, QColorGroup const&, int, int, int)
-
-TODO.
-
 BUG: encoding with different genre's
 
-Make it possible to stop and start encoding jobs:
-Save the joblist, so you can quit and continue later
-
-BUG: a cd with several tracks named the same
-     changed both the encoder location and the rip location, and it didn't help?
-     yet a possible problem. resarch
+Make it possible to stop and start encoding jobs by saving the joblist, so you can quit and continue later.
 
 Possiblity to use "nice" when calling encode jobs.
 
-Add audiocd ioslave config to the configure dialog
+Add audiocd ioslave CDDA options to the configure dialog
+
 -Multiple Artists for 1 album.
 
 -Auto replace text dialog (replace X with Y such as " " with "_")
@@ -35,4 +19,4 @@ Add the ability to encode files
 
 Rip from more then 1 cd-rom drive.
 
-Plugin system for encoders (user friendly) 
+Plugin system for encoders (user friendly thingys) 

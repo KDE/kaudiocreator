@@ -19,6 +19,8 @@
 #include <kconfig.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
+#include <qregexp.h>
+#include <qlabel.h>
 
 #include <kcmoduleloader.h>
 #include <kcmoduleinfo.h>
@@ -40,7 +42,11 @@ Options::Options(QObject* parent, const char* name) : QObject(parent, name), old
   connect(options, SIGNAL(defaultClicked()), this, SLOT(defaultClicked()));
   
   QVBox *frame = options->addVBoxPage(i18n("General"),i18n("General"), SmallIcon("package_settings", 32));
-  General *general = new General(frame, "general");
+  general = new General(frame, "general");
+  connect(general->selection, SIGNAL(textChanged( const QString & )), this, SLOT(updateExample()));
+  connect(general->replace, SIGNAL(textChanged( const QString & )), this, SLOT(updateExample()));
+  connect(general->example, SIGNAL(textChanged( const QString & )), this, SLOT(updateExample()));
+  
   kautoconfig->addWidget(general, "general");
 
   frame = options->addVBoxPage(i18n("CD Config"),i18n("CD Config"), SmallIcon("network", 32));
@@ -158,6 +164,12 @@ Options::~Options(){
 
   config.writeEntry("encoderCurrentItem", encoderConfig->encoder->currentItem());
   config.writeEntry("numberOfEncoders", encoderConfig->encoder->count());
+}
+
+void Options::updateExample(){
+  QString text = general->example->text();
+  text.replace( QRegExp(general->selection->text()), general->replace->text() );
+  general->exampleOutput->setText(text);
 }
 
 void Options::okClicked(){

@@ -125,26 +125,24 @@ void QueConfigImp::removeJob(QueListViewItem *item){
  */
 void QueConfigImp::removeSelectedJob(){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-  if( currentItem == NULL )
-    return;
-
-  if(currentItem->isSelected()){
-    QueListViewItem *t = currentItem;
-    currentItem = (QueListViewItem*)currentItem->nextSibling();
-    removeJob(t);
+  while(currentItem != NULL){
+    if(currentItem->isSelected()){
+      QueListViewItem *t = currentItem;
+      currentItem = (QueListViewItem*)currentItem->nextSibling();
+      removeJob(t);
+    }
+    else
+      currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
-  else
-    currentItem = (QueListViewItem*)currentItem->nextSibling();
 }
 
 /**
  * Remove all of the jobs in the list.
  */
 void QueConfigImp::removeAllJobs(){
-  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-  while( currentItem != NULL ){
+  QueListViewItem * currentItem = NULL;
+  while( (currentItem = (QueListViewItem*)todoQue->firstChild()) != NULL ){
     removeJob(currentItem);
-    currentItem = (QueListViewItem*)todoQue->firstChild();
   }
 }
 

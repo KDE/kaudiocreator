@@ -24,8 +24,113 @@
                 <cstring>removeCompletedJobs</cstring>
             </property>
             <property name="text">
-                <string>Remove jobs automaticly when completed.</string>
+                <string>Automaticly remove jobs when finished</string>
             </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>File Regular Expression Replacement</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Selection:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Regular expression used on all file names.  For example using selection " " and replace with "_" would replace all the spaces with underlines.
+</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>textLabel9</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Input:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="0">
+                    <property name="name">
+                        <cstring>textLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Output:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Example</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>exampleOutput</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cool artist - example audio file.wav</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>example</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cool artist - example audio file.wav</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>selection</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="2">
+                    <property name="name">
+                        <cstring>replace</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Replace With:</string>
+                    </property>
+                </widget>
+                <widget class="Line" row="3" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>line1</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <spacer>
             <property name="name">
@@ -40,7 +145,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>101</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
