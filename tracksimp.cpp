@@ -406,7 +406,7 @@ void TracksImp::cddbCD( ) {
 	qvl.append((cd->trk[numberOfTracks]).start );
 	//kdDebug(60002) << (cd->trk[numberOfTracks]).start << endl;
 
-    cddb->config().reparse();
+	cddb->config().reparse();
 	cddb->lookup(qvl);
 }
 
@@ -617,7 +617,10 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
 	while( currentItem != NULL )
 	{
 		KCDDB::TrackInfo t;
-		t.title = currentItem->text(HEADER_TRACK_NAME);
+		if (!currentItem->text(HEADER_TRACK_ARTIST).isEmpty())
+			t.title = currentItem->text(HEADER_TRACK_ARTIST) + Prefs::delimiter() + currentItem->text(HEADER_TRACK_NAME);
+		else
+			t.title = currentItem->text(HEADER_TRACK_NAME);
 		t.extt = currentItem->text(HEADER_TRACK_COMMENT);
 
 		info.trackInfoList.append(t);
@@ -772,13 +775,16 @@ void TracksImp::newSong(int track, const QString &newTitle, int length,
 	// Support for multiple artists stripping.
 	if( Prefs::seperateMultiArtist() && group == Prefs::genericArtist() ) {
 		QString delimiter = Prefs::delimiter();
-		if( Prefs::format_artistTitle() ) {
-			trackArtist = title.mid( 0,title.find(delimiter) );
-			title = title.mid( title.find(delimiter)+delimiter.length() );
-		}
-		else {
-			trackArtist = title.mid( title.find(delimiter)+delimiter.length() );
-			title = title.mid( 0,title.find(delimiter) );
+		if (title.contains(delimiter))
+		{
+			if( Prefs::format_artistTitle() ) {
+				trackArtist = title.mid( 0,title.find(delimiter) );
+				title = title.mid( title.find(delimiter)+delimiter.length() );
+			}
+			else {
+				trackArtist = title.mid( title.find(delimiter)+delimiter.length() );
+				title = title.mid( 0,title.find(delimiter) );
+			}
 		}
 	}
 				
