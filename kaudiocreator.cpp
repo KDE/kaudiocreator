@@ -116,7 +116,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
   KStdAction::keyBindings( guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
-
+  createStandardStatusBarAction();
   statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
   connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
   
