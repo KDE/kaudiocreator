@@ -51,7 +51,6 @@
  * Constructor, connect up slots and signals.
  */
 TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CDid(0), album(""), group(""), genre(""), year(-1){
-  connect(ripSelectedTracks, SIGNAL(clicked()), this, SLOT(startSession()));
   connect(editTag, SIGNAL(clicked()), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
   connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
@@ -246,6 +245,7 @@ void TracksImp::timerDone(){
   
   if(WM_CDS_NO_DISC(status)){
     kdDebug(60002) << "No disk." << endl;
+    emit(hasCD(false));
     newAlbum();
     CDid = 0;
     wm_cd_destroy();
@@ -270,6 +270,7 @@ void TracksImp::timerDone(){
   
   // A new album
   newAlbum();
+  emit(hasCD(true));
   CDid = currentDistID;
   kdDebug(60002) << "New disk.  Disk id: " << CDid << endl;
   int numberOfTracks = wm_cd_getcountoftracks();
@@ -551,6 +552,11 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
   group = newGroup;
   year = newYear;
   genre = newGenre;
+
+  selectAllTracksButton->setEnabled(false);
+  deselectAllTracksButton->setEnabled(false);
+  editTag->setEnabled(false);
+  emit(hasTracks(false));
 }
 
 /**
@@ -568,6 +574,11 @@ void TracksImp::newSong(int track, const QString &newsong, int length){
   QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song);
   newItem->setRenameEnabled(HEADER_NAME, TRUE);
   trackListing->setCurrentItem(trackListing->firstChild());
+
+  selectAllTracksButton->setEnabled(true);
+  deselectAllTracksButton->setEnabled(true);
+  editTag->setEnabled(true);
+  emit(hasTracks(true));
 }
 
 

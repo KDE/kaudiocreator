@@ -38,7 +38,9 @@ Q_OBJECT
 
 signals:
   void ripTrack(Job *job);
-  
+  void hasCD(bool);
+  void hasTracks(bool);
+ 
 public:
   TracksImp( QWidget* parent = 0, const char* name = 0);
   ~TracksImp();
@@ -52,11 +54,11 @@ public slots:
   void performCDDB();
   void eject();
   void selectAllTracks();
+  void deselectAllTracks();
 
 private slots:
   void ejectDone(KProcess *proc);
   void selectTrack(QListViewItem *);
-  void deselectAllTracks();
   void keyPressEvent(QKeyEvent *event);
   void editNextTrack();
   void editPreviousTrack();

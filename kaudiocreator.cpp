@@ -75,13 +75,28 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   resize(500, 440);
 
-  (void)new KAction(i18n("&Eject CD"), 0, tracks, SLOT(eject()), actionCollection(), "eject" );
+  KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks, SLOT(eject()), actionCollection(), "eject" );
+  connect(tracks, SIGNAL(hasTracks(bool)), eject, SLOT(setEnabled(bool)));
+  
   (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
-  (void)new KAction(i18n("Select &All Tracks"), 0, tracks, SLOT(selectAllTracks()), actionCollection(), "select_all" );
-  (void)new KAction(i18n("Rip &Selection"), 0, tracks, SLOT(startSession()), actionCollection(), "rip" );
+  
+  KAction *selectAll = new KAction(i18n("Select &All Tracks"), 0, tracks, SLOT(selectAllTracks()), actionCollection(), "select_all" );
+  connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
+  
+  KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), 0, tracks, SLOT(deselectAllTracks()), actionCollection(), "deselect_all" );
+  connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
+  
+  KAction *rip = new KAction(i18n("Rip &Selection"), 0, tracks, SLOT(startSession()), actionCollection(), "rip" );
+  connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
+  
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
-  (void)new KAction(i18n("&Edit Album"), 0, tracks, SLOT(editInformation()), actionCollection(), "edit_cd");
-  (void)new KAction(i18n("&CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
+  
+  KAction *edit = new KAction(i18n("&Edit Album"), 0, tracks, SLOT(editInformation()), actionCollection(), "edit_cd");
+  connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
+  
+  KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
+  connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
+  
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
   setStandardToolBarMenuEnabled(true);
 

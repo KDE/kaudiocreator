@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>Tracks</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>676</width>
-            <height>490</height>
+            <width>501</width>
+            <height>374</height>
         </rect>
     </property>
     <property name="caption">
@@ -143,14 +143,6 @@
                         <string>&amp;Deselect All Tracks</string>
                     </property>
                 </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>ripSelectedTracks</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Rip Selected Tracks</string>
-                    </property>
-                </widget>
             </hbox>
         </widget>
         <widget class="QLayoutWidget" row="0" column="0">
@@ -233,7 +225,6 @@
     <tabstop>trackListing</tabstop>
     <tabstop>selectAllTracksButton</tabstop>
     <tabstop>deselectAllTracksButton</tabstop>
-    <tabstop>ripSelectedTracks</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
