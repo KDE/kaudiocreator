@@ -49,7 +49,7 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
       map.insert("track", QString::number(track) );
 
   if (quote)
-      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacrosShellQuote(str, map);
+      KAudioCreatorNS::KHandDelimitedMacroMapExpander::expandMacrosShellQuote(str, map);
   else
-      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacros(str, map);
+      KAudioCreatorNS::KHandDelimitedMacroMapExpander::expandMacros(str, map);
 }
