@@ -113,6 +113,7 @@ void EncoderConfigImp::addEncoderSlot(){
   if(KAutoConfigDialog::showDialog(groupName.latin1()))
     return;
   KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+  dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
   connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadEncoderList()));
   dialog->show();
@@ -166,8 +167,8 @@ void EncoderConfigImp::configureEncoderSlot() {
 
   if(KAutoConfigDialog::showDialog(groupName.latin1()))
     return;
-    
   KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+  dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
   connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
