@@ -74,7 +74,7 @@ extern "C"
 #include "cdconfigimp.h"
 #include "cddb.h"
 
-using namespace KIO;
+//using namespace KIO;
 
 #define MAX_IPC_SIZE (1024*32)
 
