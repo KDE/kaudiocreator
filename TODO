@@ -7,3 +7,6 @@ Use KURL relativePath() function rather then selfmade one.
 Look into using QQue rather then the timer thing...
 
 If possible restart jobs that have failed.
+
+---
+FYI: Tmp files are stored in $KDEHOME/tmp-$HOST/appname which would be bad to change globally.
