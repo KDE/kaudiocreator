@@ -406,6 +406,7 @@ void TracksImp::cddbCD( ) {
 	qvl.append((cd->trk[numberOfTracks]).start );
 	//kdDebug(60002) << (cd->trk[numberOfTracks]).start << endl;
 
+    cddb->config().reparse();
 	cddb->lookup(qvl);
 }
 
