@@ -3,10 +3,13 @@ dnl the linux cdrom headers.
 
 enable_kac=yes
 
-KDE_CHECK_HEADER(linux/cdrom.h,
-	[:],
-	[AC_MSG_WARN([This doesn't seem to be a Linux system. KAudioCreator has been disabled.])
-enable_kac=no])
+dnl If you don't have Linux, you can still use cdparanoia's FixupTOC
+dnl which seems to be #ifdeffed out for non-Linux systems anyway.
+dnl
+dnl KDE_CHECK_HEADER(linux/cdrom.h,
+dnl 	[:],
+dnl 	[AC_MSG_WARN([This doesn't seem to be a Linux system. KAudioCreator has been disabled.])
+dnl enable_kac=no])
 
 if test "x$HAVE_CDPARANOIA" = "x1" ; then
 	# It just might work
