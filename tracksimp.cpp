@@ -53,7 +53,7 @@
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CDid(0), album(""), group(""), genre(""), year(-1){
+TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CDid(0), album(""), group(""), genre(""), year(-1) {
 	connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
 	connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
 	connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
@@ -72,6 +72,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
 	// setting the genre and encoders that barf on empty strings for
 	// the genre (e.g. lame).
 	genres.insert("Unknown", "Pop");
+
 	genres.insert(i18n("A Cappella"), "A Cappella");
 	genres.insert(i18n("Acid Jazz"), "Acid Jazz");
 	genres.insert(i18n("Acid Punk"), "Acid Punk");
@@ -230,15 +231,15 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
 /**
  * store the current device from the combo.
  */
-TracksImp::~TracksImp(){
+TracksImp::~TracksImp() {
 	QStringList list;
-	if(deviceCombo->count() != 0)
+	if( deviceCombo->count() != 0)
 		list.append(deviceCombo->currentText());
-	for(int i=0; i<deviceCombo->count();i++){
+	for ( int i=0; i<deviceCombo->count();i++ ) {
 		QString text = deviceCombo->text(i);
-		if(list.find(text) == list.end())
+		if( list.find(text) == list.end())
 			list.append(text);
-		if(list.count() == 5)
+		if( list.count() == 5)
 			break;
 	}
 
@@ -249,20 +250,20 @@ TracksImp::~TracksImp(){
 /**
  * Load the class settings. 
  */ 
-void TracksImp::loadSettings(){
+void TracksImp::loadSettings() {
 	QStringList list;
 
 	// Add the saved list, no dups
 	QStringList prefsList = Prefs::device();
 	QStringList::Iterator it;
 	for ( it = prefsList.begin(); it != prefsList.end(); ++it ) {
-		if(list.find( *it ) == list.end())
+		if( list.find( *it ) == list.end())
 			list.append(*it);
 	}
 	// Get current list, no dups
-	for(int i=0; i<deviceCombo->count();i++){
+	for ( int i=0; i<deviceCombo->count();i++ ) {
 		QString text = deviceCombo->text(i);
-		if(list.find(text) == list.end())
+		if( list.find(text) == list.end())
 			list.append(text);
 	}
 
@@ -275,17 +276,17 @@ void TracksImp::loadSettings(){
 /**
  * Check for changes in the cd.
  */ 
-void TracksImp::timerDone(){
+void TracksImp::timerDone() {
 	int status = wm_cd_init( WM_CDIN,
 			(char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
-	if(status == dstatus){
+	if( status == dstatus ) {
 		wm_cd_destroy();
 		return;
 	}
 	kdDebug(60002) << "Drive initialization return status: " << status << endl;
 	dstatus = status;
 
-	if(WM_CDS_NO_DISC(status)){
+	if( WM_CDS_NO_DISC(status) ) {
 		kdDebug(60002) << "No disk." << endl;
 		emit(hasCD(false));
 		newAlbum();
@@ -294,7 +295,7 @@ void TracksImp::timerDone(){
 		return;
 	}
 
-	if(status < 0) {
+	if( status < 0) {
 		QString errstring =
 							 i18n("CDROM read or access error (or no audio disc in drive).\n"\
 										"Please make sure you have access permissions to:\n%1")
@@ -305,7 +306,7 @@ void TracksImp::timerDone(){
 	}
 
 	unsigned long currentDistID = cddb_discid();
-	if(currentDistID == CDid){
+	if( currentDistID == CDid ) {
 		wm_cd_destroy();
 		return;
 	}
@@ -316,10 +317,10 @@ void TracksImp::timerDone(){
 	CDid = currentDistID;
 	kdDebug(60002) << "New disk. Disk id: " << CDid << endl;
 	int numberOfTracks = wm_cd_getcountoftracks();
-	for(int i=numberOfTracks; i>0; i--){
+	for ( int i=numberOfTracks; i>0; i-- ) {
 		newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
 	}
-	if(Prefs::performCDDBauto())
+	if( Prefs::performCDDBauto())
 		cddbCD();
 
 	wm_cd_destroy();
@@ -330,14 +331,14 @@ void TracksImp::timerDone(){
  * then call timerDone() to re-initialize the cd library and check its status.
  * @param file - the new text to check.
  */ 
-void TracksImp::changeDevice(const QString &file){
-	if(file == device){
+void TracksImp::changeDevice(const QString &file ) {
+	if( file == device ) {
 		//qDebug("Device names match, returning");
 		return;
 	}
 
 	QFileInfo fileInfo(file);
-	if(!fileInfo.exists() || fileInfo.isDir()) {
+	if( !fileInfo.exists() || fileInfo.isDir()) {
 		//qDebug("Device file !exist or isDir or !file");
 		return;
 	}
@@ -352,10 +353,10 @@ void TracksImp::changeDevice(const QString &file){
 /**
  * Helper function (toolbar button) for users.
  **/ 
-void TracksImp::performCDDB(){
+void TracksImp::performCDDB() {
 	int status = wm_cd_init( WM_CDIN,
 					 (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
-	if(WM_CDS_NO_DISC(status)){
+	if( WM_CDS_NO_DISC(status) ) {
 		KMessageBox::sorry(this, i18n("Please insert a disk."),
 		       i18n("CDDB Failed"));
 		wm_cd_destroy();
@@ -372,11 +373,11 @@ void TracksImp::performCDDB(){
  * wm_cd_init must be called before this.
  * @return true if successful.
  */ 
-void TracksImp::cddbCD(){
+void TracksImp::cddbCD( ) {
 	KCDDB::TrackOffsetList qvl;
 
 	int numberOfTracks = wm_cd_getcountoftracks();
-	for(int i=0; i<numberOfTracks; i++){
+	for ( int i=0; i<numberOfTracks; i++ ) {
 		qvl.append((cd->trk[i]).start);
 		//kdDebug(60002) << "Track: " << i << (cd->trk[i]).start << endl;
 	}
@@ -394,7 +395,7 @@ void TracksImp::cddbCD(){
  * continue.
  * @param result the success or failure of the cddb retrieval.
  */
-void TracksImp::cddbDone(CDDB::Result result){
+void TracksImp::cddbDone(CDDB::Result result ) {
 	// CDDBTODO: figure out why using CDDB::Success doesn't compile?!
 	if ((result != 0 /*KCDDB::CDDB::Lookup::Success*/) &&
 			(result != KCDDB::CDDB::MultipleRecordFound))
@@ -407,15 +408,15 @@ void TracksImp::cddbDone(CDDB::Result result){
 	// Choose the cddb entry
 	KCDDB::CDInfo info = cddb->bestLookupResponse();
 	// TODO Why doesn't libcddb not return MultipleRecordFound?
-	//if(result == KCDDB::CDDB::MultipleRecordFound){
-	if(Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1){
+	//if( result == KCDDB::CDDB::MultipleRecordFound ) {
+	if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
 		CDInfoList cddb_info = cddb->lookupResponse();
 		CDInfoList::iterator it;
 		QStringList list;
 		uint defaultChoice = 0;
 		uint maxrev = 0;
 		uint c = 0;
-		for ( it = cddb_info.begin(); it != cddb_info.end(); ++it ){
+		for ( it = cddb_info.begin(); it != cddb_info.end(); ++it  ) {
 			list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title)
 			  .arg((*it).genre));
 			KCDDB::CDInfo cinfo = *it;
@@ -435,10 +436,10 @@ void TracksImp::cddbDone(CDDB::Result result){
 			// The user selected and item and pressed OK
 			uint c = 0;
 			for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-				if(*it == res)	break;
+				if( *it == res)	break;
 				c++;
 			}
-			if(cddb_info.size() <= c)
+			if( cddb_info.size() <= c)
 				info = cddb_info[c];
 		} else {
 			// user pressed Cancel
@@ -452,7 +453,7 @@ void TracksImp::cddbDone(CDDB::Result result){
 	KCDDB::TrackInfoList t = info.trackInfoList;
 	for (unsigned i = t.count(); i > 0; i--)
 	{
-		if(cd->trk[i-1].data == 0)
+		if( cd->trk[i-1].data == 0)
 		{
 			QString n;
 			n.sprintf("%02d ", i-1 + 1);
@@ -461,7 +462,7 @@ void TracksImp::cddbDone(CDDB::Result result){
 	}
 
 	// See if the user wishes to automaticly rip after successfully retrieving
-	if(Prefs::autoRip())
+	if( Prefs::autoRip())
 		ripWholeAlbum();
 }
 
@@ -470,9 +471,9 @@ void TracksImp::cddbDone(CDDB::Result result){
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
-void TracksImp::editInformation(){
+void TracksImp::editInformation( ) {
 	QListViewItem * currentItem = trackListing->currentItem();
-	if( currentItem == 0 ){
+	if( currentItem == 0 ) {
 		KMessageBox::sorry(this, i18n("Please select a track."),
 		   i18n("No Track Selected"));
 		return;
@@ -490,11 +491,11 @@ void TracksImp::editInformation(){
 	dialog->track_comment->setText(currentItem->text(HEADER_TRACK_COMMENT));
 	dialog->genre->insertStringList(genres.keys());
 	int totalGenres = dialog->genre->count();
-	if(genre.isEmpty())
+	if( genre.isEmpty())
 		genre = i18n("Other");
 
-	for(int i = 0; i < totalGenres; i++){
-		if(dialog->genre->text(i) == genre){
+	for ( int i = 0; i < totalGenres; i++ ) {
+		if( dialog->genre->text(i) == genre ) {
 			dialog->genre->setCurrentItem(i);
 			break;
 		}
@@ -511,21 +512,21 @@ void TracksImp::editInformation(){
 
 	// Show dialog->and save results.
 	bool okClicked = dialog->exec();
-	if(okClicked){
+	if( okClicked ) {
 		QListViewItem *ci = trackListing->currentItem();
 		ci->setText(HEADER_TRACK_NAME, dialog->track_title->text());
 		ci->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
 		ci->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
-		if( group != dialog->artist->text()){
+		if( group != dialog->artist->text() ) {
 			int r = KMessageBox::questionYesNo(this, i18n("You have changed the "\
 			"album artist. Would you like all of the track artists that had the "\
 			"old name to be changed to the new name?"),
 			i18n("Album Artist Changed"));
 
-			if( r == KMessageBox::Yes ){
+			if( r == KMessageBox::Yes ) {
 				QListViewItem * currentItem = trackListing->firstChild();
-				while( currentItem != 0 ){
-					if(group == currentItem->text(HEADER_TRACK_ARTIST))
+				while( currentItem != 0 ) {
+					if( group == currentItem->text(HEADER_TRACK_ARTIST))
 						currentItem->setText(HEADER_TRACK_ARTIST, dialog->artist->text());
 					currentItem = currentItem->nextSibling();
 				}
@@ -538,7 +539,7 @@ void TracksImp::editInformation(){
 		genre = dialog->genre->currentText();
 
 		QString newTitle = QString("%1 - %2").arg(group).arg(album);
-		if(albumName->text() != newTitle)
+		if( albumName->text() != newTitle)
 			albumName->setText(newTitle);
 
 		KCDDB::CDInfo info;
@@ -554,7 +555,7 @@ void TracksImp::editInformation(){
  * Helper function.
  * Selects all tracks and then calls startSession to rip them all.
  */
-void TracksImp::ripWholeAlbum(){
+void TracksImp::ripWholeAlbum() {
 	selectAllTracks();
 	startSession();
 }
@@ -605,8 +606,8 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession(){
-	if(trackListing->childCount() == 0){
+void TracksImp::startSession( ) {
+	if( trackListing->childCount() == 0 ) {
 		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
 		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
 		return;
@@ -622,7 +623,7 @@ void TracksImp::startSession(){
 	if( album == "Unknown Album")
 		list += "Album";
 	
-	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ){
+	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
 		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"));
 		if( r == KMessageBox::No )
 			return;
@@ -630,13 +631,13 @@ void TracksImp::startSession(){
 	QListViewItem * currentItem = trackListing->firstChild();
 	Job *lastJob = NULL;
 	int counter = 0;
-	while( currentItem != 0 ){
-		if(currentItem->pixmap(HEADER_RIP) != NULL ){
+	while( currentItem != 0 ) {
+		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
 			Job *newJob = new Job();
 			newJob->device = device;
 			newJob->album = album;
 			newJob->genre = genres[genre];
-			if(newJob->genre.isEmpty())
+			if( newJob->genre.isEmpty())
 				newJob->genre = "Pop";
 			newJob->group = group;
 			newJob->comment = comment;
@@ -652,10 +653,10 @@ void TracksImp::startSession(){
 		}
 		currentItem = currentItem->nextSibling();
 	}
-	if(lastJob)
+	if( lastJob)
 		lastJob->lastSongInAlbum = true;
 
-	if(counter == 0){
+	if( counter == 0 ) {
 		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
 		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
 		return;
@@ -671,10 +672,10 @@ void TracksImp::startSession(){
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksImp::selectTrack(QListViewItem *currentItem){
+void TracksImp::selectTrack(QListViewItem *currentItem ) {
 	if(!currentItem)
 		return;
-	if(currentItem->pixmap(HEADER_RIP) != NULL){
+	if( currentItem->pixmap(HEADER_RIP) != NULL ) {
 		QPixmap empty;
 		currentItem->setPixmap(HEADER_RIP, empty);
 	}
@@ -685,9 +686,9 @@ void TracksImp::selectTrack(QListViewItem *currentItem){
 /**
  * Turn on all of the tracks.
  */
-void TracksImp::selectAllTracks(){
+void TracksImp::selectAllTracks() {
 	QListViewItem *currentItem = trackListing->firstChild();
-	while( currentItem != 0 ){
+	while( currentItem != 0 ) {
 		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
 		currentItem = currentItem->nextSibling();
 	}
@@ -696,10 +697,10 @@ void TracksImp::selectAllTracks(){
 /**
  * Turn off all of the tracks.
  */
-void TracksImp::deselectAllTracks(){
+void TracksImp::deselectAllTracks() {
 	QListViewItem *currentItem = trackListing->firstChild();
 	QPixmap empty;
-	while( currentItem != 0 ){
+	while( currentItem != 0 ) {
 		currentItem->setPixmap(HEADER_RIP, empty);
 		currentItem = currentItem->nextSibling();
 	}
@@ -710,7 +711,7 @@ void TracksImp::deselectAllTracks(){
  */
 void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
 			uint newYear, const QString &newGenre, uint newRevision,
-			const QString& newCategory, const QString& newComment){
+			const QString& newCategory, const QString& newComment ) {
 	albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
 	trackListing->clear();
 	album = newAlbum;
@@ -735,16 +736,16 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
  * @param length the lenght of track.
  */
 void TracksImp::newSong(int track, const QString &newTitle, int length,
-								        const QString &comment){
+								        const QString &comment ) {
 	QString trackArtist = group;
 	QString title = newTitle.mid(newTitle.find(' ',0)+1);
 	title = KURL::decode_string(title);
 	title.replace(QRegExp("/"), "-");
 	
 	// Support for multiple artists stripping.
-	if( Prefs::seperateMultiArtist() && group == Prefs::genericArtist() ){
+	if( Prefs::seperateMultiArtist() && group == Prefs::genericArtist() ) {
 		QString delimiter = Prefs::delimiter();
-		if( Prefs::format_artistTitle() ){
+		if( Prefs::format_artistTitle() ) {
 			trackArtist = title.mid( 0,title.find(delimiter) );
 			title = title.mid( title.find(delimiter)+delimiter.length() );
 		}
@@ -768,7 +769,7 @@ void TracksImp::newSong(int track, const QString &newTitle, int length,
  * If the user presses the F2 key, trigger renaming of the title.
  * @param event the QKeyEvent passed to this event handler.
  */
-void TracksImp::keyPressEvent(QKeyEvent *event){
+void TracksImp::keyPressEvent(QKeyEvent *event) {
 	if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
 		event->accept();
 		trackListing->selectedItem()->startRename(HEADER_TRACK_NAME);
@@ -780,7 +781,7 @@ void TracksImp::keyPressEvent(QKeyEvent *event){
 /**
  * Edit a differnt track
  */
-void TracksImp::editOtherTrack(bool nextOneUp){
+void TracksImp::editOtherTrack(bool nextOneUp ) {
 	QListViewItem* currentItem = trackListing->currentItem();
 	if(!currentItem)
 		return;
@@ -788,7 +789,7 @@ void TracksImp::editOtherTrack(bool nextOneUp){
 	currentItem->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
 	currentItem->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
 	QListViewItem* newCurrentItem;
-	if(nextOneUp)
+	if( nextOneUp)
 		newCurrentItem = currentItem->itemAbove();
 	else
 		newCurrentItem = currentItem->itemBelow();
@@ -816,7 +817,7 @@ void TracksImp::editPreviousTrack() {
 /**
  * Eject the current cd device
  */
-void TracksImp::eject(){
+void TracksImp::eject() {
 	ejectDevice(device);
 }
 
@@ -824,7 +825,7 @@ void TracksImp::eject(){
  * Eject a device
  * @param deviceToEject the device to eject.
  */
-void TracksImp::ejectDevice(const QString &deviceToEject){
+void TracksImp::ejectDevice(const QString &deviceToEject) {
  KProcess *proc = new KProcess();
 #ifdef __FreeBSD__
 	*proc << "cdcontrol" << "-f" << deviceToEject << "eject";
@@ -839,14 +840,14 @@ void TracksImp::ejectDevice(const QString &deviceToEject){
  * When it is done ejecting, report any errors.
  * @param proc pointer to the process that ended.
  */ 
-void TracksImp::ejectDone(KProcess *proc){
+void TracksImp::ejectDone(KProcess *proc) {
 	int returnValue = proc->exitStatus();
-	if(returnValue == 127){
+	if( returnValue == 127 ) {
 		KMessageBox:: sorry(this, i18n("\"eject\" command not installed."),
 		  i18n("Cannot Eject"));
 		return;
 	}
-	if(returnValue != 0){
+	if( returnValue != 0 ) {
 		kdDebug(60002) << "Eject failed and returned: " << returnValue << endl;
 		KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot Eject"));
 		return;

@@ -43,8 +43,8 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
   map.insert("number", QString().sprintf("%02d", track));
   map.insert("comment", sanitize(track_comment));
   map.insert("year", QString::number(year));
-  map.insert("genre", sanitize(genre));
-  
+	map.insert("genre", genre);
+	
   map.insert("albumtitle", sanitize(album));
   map.insert("albumcomment", sanitize(comment));
   map.insert("albumartist", sanitize(group));
