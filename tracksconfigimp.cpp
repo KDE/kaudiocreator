@@ -14,9 +14,9 @@
 #include <klocale.h>
 
 #define HEADER_TRACK 0
-#define HEADER_NAME 1
+#define HEADER_NAME 3
 #define HEADER_LENGTH 2
-#define HEADER_RIP 3
+#define HEADER_RIP 1
 
 /**
  * Constructor, connect up slots and signals.

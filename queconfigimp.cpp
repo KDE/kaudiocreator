@@ -5,6 +5,10 @@
 #include "job.h"
 #include <klocale.h>
 
+#define HEADER_JOB 0
+#define HEADER_PROGRESS 1
+#define HEADER_DESCRIPTION 2
+
 
 /**
  * Constructor, set up signals.
@@ -29,7 +33,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
     buffer += "0";
   if( job->id < 10 )
     buffer += "0";
-  QListViewItem * newItem = new QListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), name, "0%");
+  QListViewItem * newItem = new QListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), "0%", name);
   queLabel->setText(QString("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
@@ -49,15 +53,15 @@ void QueConfigImp::updateProgress(int id, int progress){
     buffer += "0";
   buffer += QString("%1").arg(id);
   while( currentItem != 0 ){
-    if(currentItem->text(0) == buffer)
+    if(currentItem->text(HEADER_JOB) == buffer)
       break;
     currentItem = currentItem->nextSibling();
   }
   if( currentItem){
     if(progress != -1)
-      currentItem->setText(2,QString("%1%").arg(progress));
+      currentItem->setText(HEADER_PROGRESS,QString("%1%").arg(progress));
     else
-      currentItem->setText(2,i18n("Error"));
+      currentItem->setText(HEADER_PROGRESS,i18n("Error"));
   }
 }
 
@@ -68,7 +72,7 @@ void QueConfigImp::removeSelectedJob(){
   QListViewItem * currentItem = todoQue->firstChild();
   while( currentItem != 0 ){
     if(currentItem->isSelected()){
-      emit (removeJob(currentItem->text(0).toInt()));
+      emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
       QListViewItem *t = currentItem;
       currentItem = currentItem->nextSibling();
       todoQue->takeItem(t);
@@ -92,7 +96,7 @@ void QueConfigImp::removeAllJobs(){
 
   QListViewItem * currentItem = todoQue->firstChild();
   while( currentItem != 0 ){
-    emit (removeJob(currentItem->text(0).toInt()));
+    emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
     todoQue->takeItem(currentItem);
     delete(currentItem);
     currentItem = todoQue->firstChild();
@@ -106,12 +110,12 @@ void QueConfigImp::clearDoneJobs(){
   QListViewItem * currentItem = todoQue->firstChild();
   while( currentItem != 0 ){
     QListViewItem *itemToRemove = NULL;
-    if( currentItem->text(2) == "100%" || currentItem->text(2) == i18n("Error") ){
+    if( currentItem->text(HEADER_PROGRESS) == "100%" || currentItem->text(HEADER_PROGRESS) == i18n("Error") ){
       itemToRemove = currentItem;
     }
     currentItem = currentItem->itemBelow();
     if(itemToRemove){
-      emit (removeJob(itemToRemove->text(0).toInt()));
+      emit (removeJob(itemToRemove->text(HEADER_JOB).toInt()));
       todoQue->takeItem(itemToRemove);
     }
   }
@@ -119,7 +123,6 @@ void QueConfigImp::clearDoneJobs(){
     queLabel->setText(i18n("No jobs are in the queue"));
   else
     queLabel->setText(QString("Number of jobs in the queue: %1").arg(todoQue->childCount()));
-
 }
 
 /**
@@ -130,7 +133,7 @@ int QueConfigImp::numberOfJobsNotFinished(){
   int totalJobsToDo = 0;
   QListViewItem * currentItem = todoQue->firstChild();
   while( currentItem != 0 ){
-    if( currentItem->text(2) != "100%" || currentItem->text(2) != i18n("Error") ){
+    if( currentItem->text(HEADER_PROGRESS) != "100%" || currentItem->text(HEADER_PROGRESS) != i18n("Error") ){
     }
     totalJobsToDo++;
     currentItem = currentItem->itemBelow();

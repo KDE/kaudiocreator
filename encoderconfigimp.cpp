@@ -28,21 +28,21 @@
  */
 void replaceSpecialChars(QString &string, Job * job, bool slash){
   if(slash == true){
-    string.replace(QRegExp("%a"), QString("\"%1\"").arg(job->album));
-    string.replace(QRegExp("%l"), QString("\"%1\"").arg(job->genre));
-    string.replace(QRegExp("%g"), QString("\"%1\"").arg(job->group));
-    string.replace(QRegExp("%y"), QString("\"%1\"").arg(job->year));
-    string.replace(QRegExp("%s"), QString("\"%1\"").arg(job->song));
-    string.replace(QRegExp("%t"), QString("\"%1\"").arg(job->track));
+    string.replace(QRegExp("%album"), QString("\"%1\"").arg(job->album));
+    string.replace(QRegExp("%genre"), QString("\"%1\"").arg(job->genre));
+    string.replace(QRegExp("%artist"), QString("\"%1\"").arg(job->group));
+    string.replace(QRegExp("%year"), QString("\"%1\"").arg(job->year));
+    string.replace(QRegExp("%song"), QString("\"%1\"").arg(job->song));
+    string.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
     return;
   }
   else{
-    string.replace(QRegExp("%a"), QString("%1").arg(job->album));
-    string.replace(QRegExp("%l"), QString("%1").arg(job->genre));
-    string.replace(QRegExp("%g"), QString("%1").arg(job->group));
-    string.replace(QRegExp("%y"), QString("%1").arg(job->year));
-    string.replace(QRegExp("%s"), QString("%1").arg(job->song));
-    string.replace(QRegExp("%t"), QString("%1").arg(job->track));
+    string.replace(QRegExp("%album"), QString("%1").arg(job->album));
+    string.replace(QRegExp("%genre"), QString("%1").arg(job->genre));
+    string.replace(QRegExp("%artist"), QString("%1").arg(job->group));
+    string.replace(QRegExp("%year"), QString("%1").arg(job->year));
+    string.replace(QRegExp("%song"), QString("%1").arg(job->song));
+    string.replace(QRegExp("%track"), QString("%1").arg(job->track));
     return;
   }
   // TODO replace all / ' ? etc with a // /' /? etc
@@ -58,9 +58,9 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   config.setGroup("encodeconfig");
   deleteWav->setChecked(config.readBoolEntry("deleteWav", true));
   numberOfCpus->setValue(config.readNumEntry("numberOfCpus", 1));
-  mp3FileFormat->setText(config.readEntry("mp3FileFormat", "~/mp3/%g/%a/%g - %s.mp3"));
+  mp3FileFormat->setText(config.readEntry("mp3FileFormat", "~/mp3/%artist/%album/%artist - %song.mp3"));
   createM3uAlbum->setChecked(config.readBoolEntry("createM3uAlbum", false));
-  m3uFileFormat->setText(config.readEntry("mpuFileFormat", "~/mp3/%g/%a/%g - %a.m3u"));
+  m3uFileFormat->setText(config.readEntry("mpuFileFormat", "~/mp3/%artist/%album/%artist - %album.m3u"));
   useRelitivePath->setChecked(config.readBoolEntry("useRelitivePath", false));
   encoder->setCurrentItem(config.readNumEntry("encoder",0));
   loadEncoderConfig(encoder->currentItem());
@@ -121,7 +121,7 @@ void EncoderConfigImp::loadEncoderConfig(int index){
 
   if(index == ENCODER_LAME){
     encoderExe->setText(config.readEntry("encoderExeLame", "lame"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineLame", "--r3mix --tt %s --ta %g --tl %a --ty %y --tn %t --tg %l \"%f\" \"%o\""));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineLame", "--r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre \"%f\" \"%o\""));
     return;
   }
   if(index == ENCODER_WAV){
@@ -131,7 +131,7 @@ void EncoderConfigImp::loadEncoderConfig(int index){
   }
   if(index == ENCODER_OGG){
     encoderExe->setText(config.readEntry("encoderExeOggEcc", "oggenc"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o %o -a \"%A\" -l \"%d\" -t \"%n\" %f"));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o \"%o\" -a \"%artist\" -l \"%album\" -t \"%song\" \"%f\""));
     return;
   }
   if(index == ENCODER_OTHER){

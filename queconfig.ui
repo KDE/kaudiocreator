@@ -65,7 +65,7 @@
             <column>
                 <property>
                     <name>text</name>
-                    <string>Description</string>
+                    <string>Progress</string>
                 </property>
                 <property>
                     <name>clickable</name>
@@ -79,7 +79,7 @@
             <column>
                 <property>
                     <name>text</name>
-                    <string>Progress</string>
+                    <string>Description</string>
                 </property>
                 <property>
                     <name>clickable</name>
