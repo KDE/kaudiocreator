@@ -23,6 +23,7 @@
 #include <qstringlist.h>
 
 class CDDB {
+
 public:
   CDDB();
   ~CDDB();
@@ -33,6 +34,7 @@ public:
   QString artist() const { return m_artist; }
   int trackCount() const { return m_tracks; }
   QString track(int i) const;
+
 private:
   bool readLine(QCString& s);
   bool writeLine(const QCString& s);
@@ -49,6 +51,7 @@ private:
   QString m_title;
   QString m_artist;
   QStringList m_names;
+
 };
 
 #endif

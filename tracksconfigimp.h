@@ -39,6 +39,7 @@ public slots:
 private slots:
   void selectTrack(QListViewItem *);
   void headerClicked(int);
+  void selectAllTracks();
 
 private:
   QString album;

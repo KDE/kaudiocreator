@@ -27,6 +27,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
   connect(trackListing->header(), SIGNAL(clicked(int)), this, SLOT(headerClicked(int)));
   connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
+  connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
   trackListing->setSorting(-1, false);
 }
 
@@ -147,7 +148,7 @@ void TracksConfigImp::headerClicked(int){
  
   // If the user manually turned them all on or off make sure we don't do the same. 
   int totalSelectedSongs = 0;
-   QListViewItem * currentItem = trackListing->firstChild();
+  QListViewItem * currentItem = trackListing->firstChild();
   while( currentItem != 0 ){
     if(currentItem->pixmap(HEADER_RIP) != NULL )
       totalSelectedSongs++;
@@ -184,6 +185,17 @@ void TracksConfigImp::selectTrack(QListViewItem *currentItem){
   }
   else
     currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+}
+
+/**
+ * Turn on all of the tracks.
+ */
+void TracksConfigImp::selectAllTracks(){
+  QListViewItem *currentItem = trackListing->firstChild();
+  while( currentItem != 0 ){
+    currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+    currentItem = currentItem->nextSibling();
+  }
 }
 
 /**
