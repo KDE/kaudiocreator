@@ -25,7 +25,6 @@
 RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,name){
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
-  fileFormat->setText(config.readEntry("fileFormat", "~/wav/%artist/%album/%artist - %song.wav"));
   maxWavFiles->setValue(config.readNumEntry("maxWavFiles", 1));
   beepAfterRip->setChecked(config.readBoolEntry("beepAfterRip", true));
   autoEjectAfterRip->setChecked(config.readBoolEntry("autoEjectAfterRip", false));
@@ -58,7 +57,6 @@ RipConfigImp::~RipConfigImp(){
 
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
-  config.writeEntry("fileFormat", fileFormat->text());
   config.writeEntry("maxWavFiles",maxWavFiles->value());
   config.writeEntry("beepAfterRip", beepAfterRip->isChecked());
   config.writeEntry("autoEjectAfterRip", autoEjectAfterRip->isChecked());
@@ -126,18 +124,8 @@ void RipConfigImp::tendToNewJobs(){
   pendingJobs.remove(job);
 
   QMap<QString, QString> map;
-  QString desiredFile = fileFormat->text();
-  job->replaceSpecialChars(desiredFile, false, map);
-
-  if(desiredFile[0] == '~'){
-    desiredFile.replace(0,1, QDir::homeDirPath());
-  }
-
-  int lastSlash = desiredFile.findRev('/',-1);
-  if( !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(this, i18n("The desired ripping file could not created.\nPlease check your file path option."), i18n("Ripping Failed"));
-    return;
-  }
+  KTempFile tmp;
+  tmp.setAutoDelete(true);
 
   QString wavFile;
   if(job->track < 10)
@@ -146,8 +134,7 @@ void RipConfigImp::tendToNewJobs(){
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
 
   KURL source(wavFile);
-  KURL dest;
-  dest.setPath(desiredFile);
+  KURL dest(tmp.name());
 
   KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, FALSE, TRUE, FALSE, FALSE);
   connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
@@ -169,8 +156,7 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
 
   if ( copyJob->error() == 0 ){
     emit updateProgress(newJob->id, 100);
-    QString newFileLocation = copyJob->destURL().path();
-    newJob->location = newFileLocation;
+    newJob->location = copyJob->destURL().path();
     emit( encodeWav(newJob));
   }
   else{
