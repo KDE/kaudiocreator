@@ -184,7 +184,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
   // Make sure the output string has a % symble in it.
   QString output = QString(buffer).mid(0,length);
   if( output.find('%') == -1 ){
-    qDebug("No \'%%\' found in output.  Report as a bug w/encoder command line options if progressbar does not fill.");
+    qDebug("No \'%%\' in output.  Report as bug w/encoder options if progressbar doesn't fill.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
