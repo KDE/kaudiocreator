@@ -37,7 +37,7 @@ class KProcess;
 namespace KCDDB
 {
 	class CDInfo;
-} ;
+}
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
