@@ -58,7 +58,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     encPrefs->writeConfig();
 
     encPrefs = EncoderPrefs::prefs("Encoder_2");
-    encPrefs->setEncoderName(i18n("Leave as a wav file"));
+    encPrefs->setEncoderName(i18n("Leave as wav File"));
     encPrefs->setCommandLine("mv %f %o");
     encPrefs->setExtension("wav");
     encPrefs->setPercentLength(2);

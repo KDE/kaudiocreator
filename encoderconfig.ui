@@ -97,7 +97,7 @@
                         <cstring>encoderWizardButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Wizard...</string>
+                        <string>&amp;Wizard</string>
                     </property>
                 </widget>
             </hbox>
@@ -201,7 +201,7 @@
                                 <cstring>playlistWizardButton</cstring>
                             </property>
                             <property name="text">
-                                <string>Wizard...</string>
+                                <string>Wizard</string>
                             </property>
                         </widget>
                     </hbox>

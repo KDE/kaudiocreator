@@ -124,7 +124,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	(void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue,
 		  SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
 
-	KAction *edit = new KAction(i18n("&Edit Album"), 0, tracks,
+	KAction *edit = new KAction(i18n("&Edit Album..."), 0, tracks,
 		  SLOT(editInformation()), actionCollection(), "edit_cd");
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
 
