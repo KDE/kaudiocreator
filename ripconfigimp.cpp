@@ -188,5 +188,7 @@ void RipConfigImp::updateProgress( KIO::Job *job, unsigned long percent){
   }
 }
 
+#include "ripconfigimp.moc"
+
 // ripconfigimp.cpp
 

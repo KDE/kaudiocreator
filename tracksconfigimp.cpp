@@ -190,5 +190,7 @@ void TracksConfigImp::newSong(int track, QString song, int length){
   trackListing->setCurrentItem(0);
 }
 
+#include "tracksconfigimp.moc"
+
 // trackconfigimp.cpp
 

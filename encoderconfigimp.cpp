@@ -305,5 +305,7 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
 
 }
 
+#include "encoderconfigimp.moc"
+
 // encoderconfigimp.cpp
 

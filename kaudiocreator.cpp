@@ -113,5 +113,7 @@ void KAudioCreator::viewQue(){
   janusWidget->showPage( quePage );
 }
 
+#include "kaudiocreator.moc"
+
 /// kaudiocreator.cpp
 

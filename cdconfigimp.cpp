@@ -740,5 +740,7 @@ void CdConfigImp::getParameters() {
   return;
 }
 
+#include "cdconfigimp.moc"
+
 // cdconfigimp.cpp
 

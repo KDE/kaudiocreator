@@ -122,5 +122,7 @@ void QueConfigImp::clearDoneJobs(){
 
 }
 
+#include "queconfigimp.moc"
+
 // queconfigimp.cpp
 
