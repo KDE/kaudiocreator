@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>337</width>
+            <width>333</width>
             <height>368</height>
         </rect>
     </property>
@@ -62,7 +62,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>~/mp3/%g/%a/%g - %s.wav</string>
+                        <string>~/mp3/%artist/%album/%artist - %song.wav</string>
                     </property>
                 </widget>
             </hbox>
@@ -73,9 +73,21 @@
                 <name>name</name>
                 <cstring>Line2</cstring>
             </property>
+            <property>
+                <name>frameShape</name>
+                <enum>HLine</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Sunken</enum>
+            </property>
             <property stdset="1">
                 <name>orientation</name>
                 <enum>Horizontal</enum>
+            </property>
+            <property>
+                <name>frameShape</name>
+                <enum>HLine</enum>
             </property>
         </widget>
         <widget>
@@ -174,7 +186,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Auto eject delay (seconds)</string>
+                        <string>Auto eject delay</string>
                     </property>
                 </widget>
                 <widget>
@@ -182,6 +194,14 @@
                     <property stdset="1">
                         <name>name</name>
                         <cstring>autoEjectDelay</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>suffix</name>
+                        <string> seconds</string>
+                    </property>
+                    <property stdset="1">
+                        <name>maxValue</name>
+                        <number>300</number>
                     </property>
                 </widget>
             </hbox>
