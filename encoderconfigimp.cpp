@@ -45,7 +45,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     
     encPrefs = EncoderPrefs::prefs("Encoder_0");
     encPrefs->setEncoderName(i18n("OggEnc"));
-    encPrefs->setCommandLine("oggenc -o %o --artist %artist --album %album --title %title --tracknum %track --genre %genre %f");
+    encPrefs->setCommandLine("oggenc -o %o --artist %artist --album %album --title %title --date %year --tracknum %track --genre %genre %f");
     encPrefs->setExtension("ogg");
     encPrefs->setPercentLength(4);
     encPrefs->writeConfig();
