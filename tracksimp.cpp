@@ -526,7 +526,7 @@ void TracksImp::newAlbum() {
 		}
 
 		// There is a new track for this title.  Add it to the list of tracks.
-		QString trackLength = framesTime(trackStartFrames[i + 1] - trackStartFrames[i]);
+		QString trackLength = framesTime(trackStartFrames[i + ((i + 1 < t.count()) ? 1 : 2)] - trackStartFrames[i]);
 		QListViewItem * newItem = new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
 	}
 
