@@ -346,10 +346,10 @@ bool TracksImp::cddbCD(){
     //kdDebug() << "Track: " << i << (cd->trk[i]).start << endl;
   }
 
-  qvl.append((cd->trk[0]).start - 150 );
-  //kdDebug() << (cd->trk[0]).start - 150 << endl;
-  qvl.append((cd->trk[numberOfTracks]).start - 150 );
-  //kdDebug() << (cd->trk[numberOfTracks]).start - 150 << endl;
+  qvl.append((cd->trk[0]).start);
+  //kdDebug() << (cd->trk[0]).start << endl;
+  qvl.append((cd->trk[numberOfTracks]).start );
+  //kdDebug() << (cd->trk[numberOfTracks]).start << endl;
   
   KApplication::setOverrideCursor(Qt::waitCursor);
 
