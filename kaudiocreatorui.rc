@@ -9,14 +9,17 @@
   <Action name="view_que" icon="run"/>
   <Action name="clear_done_jobs" icon="edittrash"/>
   <Action name="update_cd" icon="rotate_cw"/>
+  <Action name="edit_cd" icon="edit"/>
 </ActionProperties>
 
 <MenuBar>
   <Menu name="file"><Text>&amp;File</Text>
-    <Action name="rip"/>
-    <Action name="configuretoolbars"/>
     <Action name="update_cd"/>
+    <Action name="edit_cd">
+    <Action name="rip"/>
     <Action name="clear_done_jobs"/>
+    <Separator/>
+    <Action name="configuretoolbars"/>
     <Separator/>
     <Action name="quit"/>
   </Menu>
@@ -30,9 +33,11 @@
 </MenuBar>
 
 <ToolBar name="Main ToolBar">
+  <Action name="update_cd"/>
+  <Action name="edit_cd"/>
   <Action name="rip"/>
   <Action name="clear_done_jobs"/>
-  <Action name="update_cd"/>
+  <Action name="quit"/>
 </ToolBar>
 
 </kpartgui>
