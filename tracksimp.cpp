@@ -493,6 +493,8 @@ void TracksImp::startSession(){
       newJob->device = device;
       newJob->album = album;
       newJob->genre = genres[genre];
+      if(newJob->genre.isEmpty())
+        newJob->genre = "Pop";
       newJob->group = group;
       newJob->comment = comment;
       newJob->year = year;
