@@ -279,13 +279,13 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   }
 
   // Make sure the output string has a % symble in it.
-  QString output = buffer.mid(0,length);
+  QString output = QString(buffer).mid(0,length);
   if( output.find('%') == -1 ){
     qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
-  output = output.mid(percentLocation-encodersPercentStringLength,2);
+  output = output.mid(output.find('%')-encodersPercentStringLength,2);
   //qDebug(QString("Post cropped: %1").arg(output).latin1());
   bool conversionSuccessfull = false;
   int percent = output.toInt(&conversionSuccessfull);

@@ -55,7 +55,7 @@ public:
   QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString=0);
   virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align);
-  int percentDone;
+  double percentDone;
 };
 
 #endif

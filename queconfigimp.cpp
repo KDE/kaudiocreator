@@ -74,6 +74,7 @@ void QueConfigImp::updateProgress(int id, int progress){
       break;
     currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
+  
   if( currentItem){
     if(currentItem->percentDone != progress){
       currentItem->percentDone = progress;
@@ -173,6 +174,7 @@ int QueConfigImp::numberOfJobsNotFinished(){
  */
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align){
+  
   if(column != HEADER_PROGRESS){
     QListViewItem::paintCell(p,cg,column,width,align);
     return;
@@ -180,11 +182,12 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
   
   p->setPen(cg.base());
   p->drawRect(0,0,width,height());
-  if(!this->isSelected())
-    p->fillRect(1,1,width-2,height()-2,cg.base());
-  else
+  if(this->isSelected())
     p->fillRect(1,1,width-2,height()-2,cg.highlight());
-  int percent = (int)((double)(width-2)/(double)100* (double)percentDone);
+  else
+    p->fillRect(1,1,width-2,height()-2,cg.base());
+  
+  int percent = (int)(((double)(width-2)) * (percentDone/100));
 
   p->fillRect(1,1,percent,height()-2,cg.mid());
 
@@ -193,7 +196,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
   if(this->isSelected())
     p->setPen(cg.highlightedText());
   if(percentDone != -1)
-  p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(percentDone) + "%");
+  p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(int)percentDone) + "%");
   else
     p->drawText(0,0,width-1,height()-1,AlignCenter,i18n("Error"));
 }

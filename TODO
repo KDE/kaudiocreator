@@ -1,7 +1,7 @@
 10.5263     QString::~QString()
 15.7895     QueConfigImp::updateProgress(int, int)
 21.0526     EncoderConfigImp::receivedThreadOutput(KProcess*, char*, int)
-21.0526     QMapPrivate<KShellProcess*, 
+21.0526     QMapPrivate<KShellProcess*,ob*>::find(KShellProcess* const&) const 
 21.0526     QueListViewItem::paintCell(QPainter*, QColorGroup const&, int, int, int)
 
 TODO.
