@@ -19,42 +19,48 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+#include "kmacroexpander.h"
+
 #define ENCODER_EXE_STRING "encoderExe_"
 #define ENCODER_ARGS_STRING "encoderCommandLine_"
 #define ENCODER_EXTENSION_STRING "encoderExtension_"
 #define ENCODER_PERCENTLENGTH_STRING "encoderPercentLength_"
 
+// Clean up the string so that it doesn't wander off to unexpected directories
+static QString sanitize(const QString &s)
+{
+  QString result = s;
+  result.replace('/', ":");
+  if (result.isEmpty())
+    result = "(empty)";
+  if (result[0] == '.')
+    result[0] = '_';
+  return result;
+}
+
 /**
  * A helper function to replace %X with the stuff in the album.
- * if slash it tru then put "" around the %X
+ * if quote is true then put "" around the %X
  */
-void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slash){
-  if(slash == true){
-    string.replace(QRegExp("%album"), KShellProcess::quote(job->album));
-    string.replace(QRegExp("%genre"), KShellProcess::quote(job->genre));
-    string.replace(QRegExp("%artist"), KShellProcess::quote(job->group));
-    string.replace(QRegExp("%year"), QString::number(job->year));
-    string.replace(QRegExp("%song"), KShellProcess::quote(job->song));
-    string.replace(QRegExp("%extension"), KShellProcess::quote(encoderExtensionLineEdit->text()));
-    if( job->track < 10 )
-      string.replace(QRegExp("%track"), KShellProcess::quote(QString("0") +QString::number(job->track)));
-    else
-      string.replace(QRegExp("%track"), QString::number(job->track));
-    return;
-  }
-  else{
-    string.replace(QRegExp("%album"), job->album);
-    string.replace(QRegExp("%genre"), job->genre);
-    string.replace(QRegExp("%artist"), job->group);
-    string.replace(QRegExp("%year"), QString::number(job->year));
-    string.replace(QRegExp("%song"), job->song);
-    string.replace(QRegExp("%extension"), encoderExtensionLineEdit->text());
-    if( job->track < 10 )
-      string.replace(QRegExp("%track"), "0" + QString::number(job->track) );
-    else
-      string.replace(QRegExp("%track"), QString::number(job->track) );
-    return;
-  }
+void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool quote, QMap<QString, QString> _map){
+  QMap<QString,QString> map = _map;
+  
+  map.insert("album", sanitize(job->album));
+  map.insert("genre", sanitize(job->genre));
+  map.insert("artist", sanitize(job->group));
+  map.insert("year", QString::number(job->year));
+  map.insert("song", sanitize(job->song));
+  map.insert("extension", sanitize(encoderExtensionLineEdit->text()));
+  if( job->track < 10 )
+      map.insert("track", "0" + QString::number(job->track) );
+  else
+      map.insert("track", QString::number(job->track) );
+
+  if (quote)
+      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacrosShellQuote(string, map);
+  else
+      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacros(string, map);
+  
 }
 
 /**
@@ -253,7 +259,10 @@ void EncoderConfigImp::tendToNewJobs(){
   job->jobType = encoder->currentItem();
 
   QString desiredFile = fileFormat->text();
-  replaceSpecialChars(desiredFile, job, false);
+  {
+    QMap <QString,QString> map;
+    replaceSpecialChars(desiredFile, job, false, map);
+  }
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
@@ -266,9 +275,12 @@ void EncoderConfigImp::tendToNewJobs(){
   job->newLocation = desiredFile;
 
   QString command = encoderCommandLine->text();
-  replaceSpecialChars(command, job, true);
-  command.replace("%f", KShellProcess::quote(job->location));
-  command.replace("%o", KShellProcess::quote(desiredFile));
+  {
+    QMap <QString,QString> map;
+    map.insert("f", job->location);
+    map.insert("o", desiredFile);
+    replaceSpecialChars(command, job, true, map);
+  }
 
   updateProgress(job->id, 1);
 
@@ -367,7 +379,8 @@ void EncoderConfigImp::jobDone(KProcess *process){
  */
 void EncoderConfigImp::appendToPlaylist(Job* job){
   QString desiredFile = playlistFileFormat->text();
-  replaceSpecialChars(desiredFile, job, false);
+  QMap <QString,QString> map;
+  replaceSpecialChars(desiredFile, job, false, map);
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
