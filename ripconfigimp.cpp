@@ -36,16 +36,24 @@ RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,
  */
 RipConfigImp::~RipConfigImp(){
   pendingJobs.clear();
-  
   QMap<KIO::Job*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
-    jobs.remove(it.key());
-    KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
-    QString fileDestination = (copyJob->destURL()).path();
-    copyJob->kill();
-    QFile file( fileDestination );
-    file.remove();
+     KIO::Job* ioJob = it.key();
+    Job *job = it.data();
+    if(job){
+      delete job;
+    }
+    if(ioJob){
+      KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (ioJob);
+      disconnect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
+      disconnect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
+      QString fileDestination = (copyJob->destURL()).path();
+      copyJob->kill();
+      QFile file( fileDestination );
+      file.remove();
+    }
   }
+  jobs.clear();
 
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
@@ -63,7 +71,6 @@ RipConfigImp::~RipConfigImp(){
  * @param id the id number of the job to remove.  
  */
 void RipConfigImp::removeJob(int id){
-  //qDebug(QString("Remove Job:%1").arg(id).latin1());
   QMap<KIO::Job*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
     if(it.data()->id == id){

@@ -78,11 +78,11 @@ EncoderConfigImp::~EncoderConfigImp(){
     Job *job = jobs[it.key()];
     threads.remove(process);
     process->kill();
-    jobs.remove(process);
     QFile::remove(job->newLocation);
     delete job;
     delete process;
   }
+  jobs.clear();
 
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");

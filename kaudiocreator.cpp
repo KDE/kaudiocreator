@@ -92,20 +92,19 @@ KAudioCreator::~KAudioCreator(){
  * If there are jobs in the que promt the user before quiting.
  */
 void KAudioCreator::quit(){
-  if(queConfig->numberOfJobsNotFinished() > 0){
-    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"));
-    if( r == KMessageBox::No )
-      return;
-  }
-  qApp->quit();
+  this->close(true);
 }
 
 /**
  * Call quit which will ask the user if they really want to quit.
  */
 void KAudioCreator::closeEvent(QCloseEvent *e) {
+  if(queConfig->numberOfJobsNotFinished() > 0){
+    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"));
+  if( r == KMessageBox::No )
+    return;
+  }
   QWidget::closeEvent(e);
-  quit();
 }
 
 /**

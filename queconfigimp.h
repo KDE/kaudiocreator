@@ -11,8 +11,11 @@
 
 #include "queconfig.h"
 #include <qstring.h>
+#include <qlistview.h>
 
 class Job;
+class QPainter;
+class QColorGroup;
 
 class QueConfigImp : public QueConfig  {
 
@@ -37,6 +40,18 @@ private slots:
 private:
   int currentId;
 
+};
+
+/**
+ *
+ */
+class QueListViewItem : public QListViewItem {
+
+public:
+  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString=0);
+  virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
+	    int width,int align);
+  int percentDone;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "job.h"
 #include <klocale.h>
 
+#include <qpainter.h>
+
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
 #define HEADER_DESCRIPTION 2
@@ -33,7 +35,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
     buffer += "0";
   if( job->id < 10 )
     buffer += "0";
-  QListViewItem * newItem = new QListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), "0%", name);
+  QueListViewItem * newItem = new QueListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), "0", name);
   queLabel->setText(QString("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
@@ -43,7 +45,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
  * @param progress the new progress of the job.
  */
 void QueConfigImp::updateProgress(int id, int progress){
-  QListViewItem * currentItem = todoQue->firstChild();
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   QString buffer = "";
   if( id < 1000 )
     buffer += "0";
@@ -55,9 +57,10 @@ void QueConfigImp::updateProgress(int id, int progress){
   while( currentItem != 0 ){
     if(currentItem->text(HEADER_JOB) == buffer)
       break;
-    currentItem = currentItem->nextSibling();
+    currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
   if( currentItem){
+    currentItem->percentDone = progress;
     if(progress != -1)
       currentItem->setText(HEADER_PROGRESS,QString("%1%").arg(progress));
     else
@@ -69,17 +72,17 @@ void QueConfigImp::updateProgress(int id, int progress){
  * Remove the currently selected Job
  */
 void QueConfigImp::removeSelectedJob(){
-  QListViewItem * currentItem = todoQue->firstChild();
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
     if(currentItem->isSelected()){
       emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
-      QListViewItem *t = currentItem;
-      currentItem = currentItem->nextSibling();
+      QueListViewItem *t = currentItem;
+      currentItem = (QueListViewItem*)currentItem->nextSibling();
       todoQue->takeItem(t);
       delete(t);
     }
     else
-      currentItem = currentItem->nextSibling();
+      currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
 
   if(todoQue->childCount() == 0)
@@ -94,12 +97,12 @@ void QueConfigImp::removeSelectedJob(){
 void QueConfigImp::removeAllJobs(){
   queLabel->setText(i18n("No jobs are in the queue"));
 
-  QListViewItem * currentItem = todoQue->firstChild();
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
     emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
     todoQue->takeItem(currentItem);
     delete(currentItem);
-    currentItem = todoQue->firstChild();
+    currentItem = (QueListViewItem*)todoQue->firstChild();
   }
 }
 
@@ -107,13 +110,13 @@ void QueConfigImp::removeAllJobs(){
  * Remove any jobs that are in the list that are done.
  */
 void QueConfigImp::clearDoneJobs(){
-  QListViewItem * currentItem = todoQue->firstChild();
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
-    QListViewItem *itemToRemove = NULL;
-    if( currentItem->text(HEADER_PROGRESS) == "100%" || currentItem->text(HEADER_PROGRESS) == i18n("Error") ){
+    QueListViewItem *itemToRemove = NULL;
+    if( currentItem->percentDone == 100 || currentItem->percentDone == -1 ){
       itemToRemove = currentItem;
     }
-    currentItem = currentItem->itemBelow();
+    currentItem = (QueListViewItem*)currentItem->itemBelow();
     if(itemToRemove){
       emit (removeJob(itemToRemove->text(HEADER_JOB).toInt()));
       todoQue->takeItem(itemToRemove);
@@ -131,15 +134,46 @@ void QueConfigImp::clearDoneJobs(){
  */
 int QueConfigImp::numberOfJobsNotFinished(){
   int totalJobsToDo = 0;
-  QListViewItem * currentItem = todoQue->firstChild();
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
-    if( currentItem->text(HEADER_PROGRESS) != "100%" || currentItem->text(HEADER_PROGRESS) != i18n("Error") ){
+    if( currentItem->percentDone != 100 || currentItem->percentDone != -1 ){
     }
     else
       totalJobsToDo++;
-    currentItem = currentItem->itemBelow();
+    currentItem = (QueListViewItem*)currentItem->itemBelow();
   }
   return totalJobsToDo;
+}
+
+void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
+	    int width,int align){
+  if(column != HEADER_PROGRESS){
+    QListViewItem::paintCell(p,cg,column,width,align);
+    return;
+  }
+  
+  p->setPen(cg.dark());
+  //p->drawRect(0,0,width,height());
+  if(!this->isSelected())
+    p->fillRect(1,1,width-2,height()-2,cg.base());
+  else
+    p->fillRect(1,1,width-2,height()-2,cg.highlight());
+  int percent = (int)((double)(width-2)/(double)100* (double)percentDone);
+
+  p->fillRect(1,1,percent,height()-2,cg.mid());
+
+  // show the text
+  p->setPen(cg.text());
+  if(this->isSelected())
+    p->setPen(cg.highlightedText());
+  if(percentDone != -1)
+  p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(percentDone) + "%");
+  else
+    p->drawText(0,0,width-1,height()-1,AlignCenter,"Error");
+}
+
+QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name) : QListViewItem(parent, id, p, name){
+  percentDone = 0;
 }
 
 #include "queconfigimp.moc"
