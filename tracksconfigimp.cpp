@@ -25,6 +25,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
   connect(ripSelectedTracks, SIGNAL(clicked()), this, SLOT(startSession()));
   connect(editTag, SIGNAL(clicked()), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
+  connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
   connect(trackListing->header(), SIGNAL(clicked(int)), this, SLOT(headerClicked(int)));
   connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
   connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
@@ -59,7 +60,11 @@ void TracksConfigImp::editInformation(){
       break;
     }
   }
- 
+
+  // set focus to track title
+  dialog.title->setFocus();
+  dialog.title->selectAll();
+
   // Show dialog and save results.
   bool okClicked = dialog.exec();
   if(okClicked){

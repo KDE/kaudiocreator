@@ -147,7 +147,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>--r3mix --tt %s --ta %g --tl %a --ty %y --tn %t --tg %l "%f" "%o"</string>
+                        <string>--r3mix --tt %s --ta %g --tl %a --ty %y --tn %t --tg %l %f %o</string>
                     </property>
                 </widget>
             </grid>

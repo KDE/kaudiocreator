@@ -16,7 +16,7 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre("Other"),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false){};
+  inline Job():id(-1),genre("Other"),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false),jobType(-1){};
   int id; 
   QString genre;		
   QString group;
@@ -25,10 +25,20 @@ public:
   int track;
   int year;
 
+  // Currently location of file X
   QString location;
+
+  // New location of a file.
   QString newLocation;
+
+  // What was just attempted to do via this job.
   QString errorString;
+
+  // If this is the last song in to be ripped then true 
   bool lastSongInAlbum;
+
+  // The current type of job that is being done (ripping, encodeing, what encoding type etc)
+  int jobType;
 }; 
 
 #endif

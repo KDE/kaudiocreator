@@ -60,7 +60,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   connect(encoder, SIGNAL(activated(int)), this, SLOT(loadEncoderConfig(int)));
 
   KConfig &config = *KGlobal::config();
-  config.setGroup("encodeconfig");
+  config.setGroup("encoderconfig");
   deleteWav->setChecked(config.readBoolEntry("deleteWav", true));
   numberOfCpus->setValue(config.readNumEntry("numberOfCpus", 1));
   mp3FileFormat->setText(config.readEntry("mp3FileFormat", "~/mp3/%artist/%album/%artist - %song.mp3"));
@@ -122,21 +122,21 @@ EncoderConfigImp::~EncoderConfigImp(){
  */
 void EncoderConfigImp::loadEncoderConfig(int index){
   KConfig &config = *KGlobal::config();
-  config.setGroup("encodeconfig");
+  config.setGroup("encoderconfig");
 
   if(index == ENCODER_LAME){
     encoderExe->setText(config.readEntry("encoderExeLame", "lame"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineLame", "--r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre \"%f\" \"%o\""));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineLame", "--r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o"));
     return;
   }
   if(index == ENCODER_WAV){
     encoderExe->setText(config.readEntry("encoderExeWave", "mv"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineWav", "\"%f\" \"%o\""));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineWav", "%f %o"));
     return;
   }
   if(index == ENCODER_OGG){
     encoderExe->setText(config.readEntry("encoderExeOggEcc", "oggenc"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o \"%o\" -a \"%artist\" -l \"%album\" -t \"%song\" -N \"%track\" \"%f\""));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o %o -a %artist -l %album -t %song -N %track %f"));
     return;
   }
   if(index == ENCODER_OTHER){
@@ -200,6 +200,7 @@ void EncoderConfigImp::tendToNewJobs(){
  
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
+  job->jobType = encoder->currentItem();
 
   QString desiredFile = mp3FileFormat->text();
   replaceSpecialChars(desiredFile, job, false);
@@ -217,8 +218,8 @@ void EncoderConfigImp::tendToNewJobs(){
   QString command = encoderExe->text();
   command += " " + encoderCommandLine->text();
   replaceSpecialChars(command, job, true);
-  command.replace(QRegExp("%f"), job->location);
-  command.replace(QRegExp("%o"), desiredFile);
+  command.replace(QRegExp("%f"), "\"" + job->location + "\"");
+  command.replace(QRegExp("%o"), "\"" + desiredFile + "\"");
   
   // WHY O WHY DOES THIS HAVE TO BE HERE, WHY CAN'T AUDIOCD:/ MAKE IT +r?
   system(QString("chmod +r \"%1\"").arg(job->location).latin1());
@@ -246,14 +247,22 @@ void EncoderConfigImp::tendToNewJobs(){
  * @param buffer the output from the process
  * @param buflen the length of the buffer.
  */
-void EncoderConfigImp::receivedThreadOutput(KProcess *proc, char *buffer, int){
+void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int){
   QString output = buffer;
   int percent = output.find('%');
   if(percent!=-1){
     output = output.mid(percent-2,2);
+
+    Job *job = jobs[(KShellProcess*)process];
+    if(job){
+      if(job->jobType == ENCODER_OGG) // oggenc outputs 'xx.y%'
+        output = output.mid(percent-4,2);
+    }
+    else
+      output = output.mid(percent-2,2);
     int percent = output.toInt();
     if(percent > 0 && percent < 100){
-      Job *job = jobs[(KShellProcess*)proc];
+      Job *job = jobs[(KShellProcess*)process];
       if(job)
         emit(updateProgress(job->id, percent));
     }
