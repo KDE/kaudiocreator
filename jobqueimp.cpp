@@ -140,7 +140,7 @@ void JobQueImp::updateProgress(int id, int progress){
   else if(progress == 100){
     // Remove the job if requested.
     if(Prefs::removeCompletedJobs()){
-      removeJob(currentItem);
+      removeJob(currentItem, false);
       return;
     }
     currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
@@ -150,8 +150,10 @@ void JobQueImp::updateProgress(int id, int progress){
 /**
  * Remove job listed in item
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
+ * @param kill kill the actual job/process.  A bool here because this CAN cause
+ *        a race condition when the encoder is 100%, but hasn't exited.
  */
-void JobQueImp::removeJob(QueListViewItem *item){
+void JobQueImp::removeJob(QueListViewItem *item, bool kill){
   if(!item)
     return;
   if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator is not finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
@@ -161,7 +163,9 @@ void JobQueImp::removeJob(QueListViewItem *item){
   // "Thread" safe
   if(!item) return;
 
-  emit (removeJob(item->text(HEADER_JOB).toInt()));
+  if(kill)
+    emit (removeJob(item->text(HEADER_JOB).toInt()));
+  
   todoQue->takeItem(item);
   delete(item);
   item = NULL;

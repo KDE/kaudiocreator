@@ -71,7 +71,7 @@ private slots:
   void removeAllJobs();
 
 private:
-  void removeJob(QueListViewItem *item);
+  void removeJob(QueListViewItem *item, bool kill=true);
   QString getStringFromNumber(int number);
   int highestNumber;
 

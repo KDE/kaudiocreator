@@ -106,7 +106,7 @@ void Ripper::removeJob(int id){
       QFile file( fileDestination );
       if(file.exists())
         file.remove();
-      else{
+      else {
         QFile f( fileDestination+".part" );
         f.remove();
       }
@@ -187,13 +187,13 @@ void Ripper::tendToNewJobs(){
 /**
  * Copies the data from the KIO Job.  Uses this data to fill in the
  * information dialog.
- * @param job the IO job to copy from
+ * @param copyjob the IO job to copy from
  */
-void Ripper::copyJobResult(KIO::Job *job){
-  KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (job);
+void Ripper::copyJobResult(KIO::Job *copyjob){
+  KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
 
-  Job *newJob = jobs[job];
-  jobs.remove(job);
+  Job *newJob = jobs[copyjob];
+  jobs.remove(copyjob);
 
   if(Prefs::beepAfterRip())
     KNotifyClient::beep();

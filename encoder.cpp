@@ -33,7 +33,7 @@
 /**
  * Constructor, load settings.
  */
-Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name) {
+Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),reportCount(0) {
   loadSettings();
 }
 
@@ -165,6 +165,7 @@ void Encoder::tendToNewJobs(){
   }
 
   job->newLocation = desiredFile;
+  reportCount = 0;
 
   QString command = prefs->commandLine();
   {
@@ -213,8 +214,9 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
 
   // Make sure the output string has a % symble in it.
   QString output = QString(buffer).mid(0,length);
-  if( output.find('%') == -1 ){
+  if( output.find('%') == -1 && reportCount < 5){
     qDebug("No \'%%\' in output.  Report as bug w/encoder options if progressbar doesn't fill.");
+    reportCount++;
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());

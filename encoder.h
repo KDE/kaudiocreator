@@ -62,7 +62,7 @@ private:
   QMap<KShellProcess*, Job*> jobs;
 
   EncoderPrefs *prefs;
-
+  int reportCount;
 };
 
 #endif // ENCODER_H
