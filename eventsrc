@@ -65,6 +65,7 @@ Comment[sr]=Гребовање нумере је завршено
 Comment[sr@Latn]=Гребовање нумере је завршено
 Comment[sv]=Spåret har lagrats klart
 Comment[ta]=தடம் பிரித்தலை முடித்தது
+Comment[tg]=Шиор кандашавиро ба охир расонд
 Comment[tr]=İz çevirici sonlandırıcı
 Comment[zh_CN]=音轨抓取完成
 
@@ -127,6 +128,7 @@ Comment[sr]=Гребовање CD-а је завршено
 Comment[sr@Latn]=Гребовање CD-а је завршено
 Comment[sv]=Cd:n har lagrats klart
 Comment[ta]=CD பிரித்தல் முடிந்தது
+Comment[tg]=Диски Фишурда кандашавиро ба охир расонд
 Comment[tr]=CD çevirici sonlandırıcı
 Comment[zh_CN]=CD 抓取完成
 
@@ -190,6 +192,7 @@ Comment[sr]=Кодирање нумере је завршено
 Comment[sr@Latn]=Кодирање нумере је завршено
 Comment[sv]=Spåret har kodats klart
 Comment[ta]=தடம் மறையாக்கத்தை முடித்தது
+Comment[tg]=Шиор рамзикунониро ба охир расонд
 Comment[tr]=İz çözümleyici solandırıcı
 Comment[zh_CN]=音轨编码完成
 
@@ -253,6 +256,7 @@ Comment[sr]=Кодирање CD-а је завршено
 Comment[sr@Latn]=Кодирање CD-а је завршено
 Comment[sv]=Cd:n har kodats klart
 Comment[ta]=CD மறையாக்கத்தை முடித்தது.
+Comment[tg]=Диски Фишурда рамзикунониро ба охир расонд
 Comment[tr]=CD çözümleyici sonlandırıldı
 Comment[zh_CN]=CD 编码完成
 default_presentation=17
