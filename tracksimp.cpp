@@ -354,7 +354,7 @@ bool TracksImp::cddbCD(){
     return false;
   }
 	  
-  KCDDB::CDInfo info = c.lookupResponse().first();
+  KCDDB::CDInfo info = c.bestLookupResponse();
   newAlbum(info.artist, info.title, info.year, info.genre);  
       
   KCDDB::TrackInfoList t = info.trackInfoList;
