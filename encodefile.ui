@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EncodeFile</class>
-<widget class="QDialog">
+<widget class="KDialog">
     <property name="name">
         <cstring>EncodeFile</cstring>
     </property>
