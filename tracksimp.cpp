@@ -315,13 +315,13 @@ void TracksImp::changeDevice(const QString &file){
 void TracksImp::performCDDB(){
   int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(WM_CDS_NO_DISC(status)){
-    KMessageBox::sorry(this, i18n("Please insert a disk."), i18n("CDDB failed."));
+    KMessageBox::sorry(this, i18n("Please insert a disk."), i18n("CDDB Failed"));
     wm_cd_destroy();
     return;
   }
 
   if(!cddbCD())
-    KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB failed."));
+    KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
   wm_cd_destroy();
 }
 
