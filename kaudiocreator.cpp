@@ -32,7 +32,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   QVBox * frame = janusWidget->addVBoxPage(QString("Tracks"),i18n("Tracks"), SmallIcon("cdaudio_unmount", 32));
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Cd Config"),i18n("Cd Config"), SmallIcon("network", 32));
+  frame = janusWidget->addVBoxPage(QString("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
   cdConfig = new CdConfigImp(frame, "CdConfig");
   cdPage = janusWidget->pageIndex(frame);
   frame = janusWidget->addVBoxPage(QString("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
