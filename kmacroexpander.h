@@ -28,7 +28,7 @@
 // We put it in a namespace here to prevent a name-collision when
 // that happens.
 
-namespace KAudioCreatorNS {
+namespace KAudioCreator {
 
 struct KMacroExpanderPrivate;
 

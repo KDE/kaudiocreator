@@ -24,9 +24,9 @@
 #include <qvaluestack.h>
 #include <qregexp.h>
 
-using namespace KAudioCreatorNS;
+using namespace KAudioCreator;
 
-namespace KAudioCreatorNS {
+namespace KAudioCreator {
 
 struct KMacroExpanderPrivate {
     QChar escapechar;
@@ -248,7 +248,7 @@ bool KMacroExpander::expandMacrosShellQuote( QString &str, uint &pos )
 
 //////////////////////////////////////////////////
 
-namespace KAudioCreatorNS {
+namespace KAudioCreator {
 
 struct KMacroMapExpanderBasePrivate {
     QMap<QString,QString> macromap;

@@ -15,7 +15,7 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include <klineedit.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <qdir.h>
 #include <kconfig.h>
 #include <stdlib.h>
@@ -117,26 +117,21 @@ void RipConfigImp::ripTrack(Job *job){
  * then just loop.
  */
 void RipConfigImp::tendToNewJobs(){
+  // If we are currently ripping the max try again in a little bit.
   if(jobs.count() >= (uint)maxWavFiles->value()){
     QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
+  // Just to make sure in the event something goes wrong
   if(pendingJobs.count() == 0)
     return;
  
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
 
+  QMap<QString, QString> map;
   QString desiredFile = fileFormat->text();
-  desiredFile.replace(QRegExp("%album"), job->album);
-  desiredFile.replace(QRegExp("%genre"), job->genre);
-  desiredFile.replace(QRegExp("%artist"), job->group);
-  desiredFile.replace(QRegExp("%year"), QString("%1").arg(job->year));
-  desiredFile.replace(QRegExp("%song"), job->song);
-  if( job->track < 10 )
-    desiredFile.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
-  else
-    desiredFile.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
+  job->replaceSpecialChars(desiredFile, false, map);
     
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
@@ -159,7 +154,8 @@ void RipConfigImp::tendToNewJobs(){
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
   
   KURL source(wavFile);
-  KURL dest(desiredFile);
+  KURL dest;
+  dest.setPath(desiredFile);
 
   KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, FALSE, TRUE, FALSE, FALSE);
   connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));

@@ -12,7 +12,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -23,39 +23,6 @@
 #define ENCODER_ARGS_STRING "encoderCommandLine_"
 #define ENCODER_EXTENSION_STRING "encoderExtension_"
 #define ENCODER_PERCENTLENGTH_STRING "encoderPercentLength_"
-
-/**
- * A helper function to replace %X with the stuff in the album.
- * if slash it tru then put "" around the %X
- */
-void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slash){
-  if(slash == true){
-    string.replace(QRegExp("%album"), KProcess::quote(job->album));
-    string.replace(QRegExp("%genre"), KProcess::quote(job->genre));
-    string.replace(QRegExp("%artist"), KProcess::quote(job->group));
-    string.replace(QRegExp("%year"), QString::number(job->year));
-    string.replace(QRegExp("%song"), KProcess::quote(job->song));
-    string.replace(QRegExp("%extension"), KProcess::quote(encoderExtensionLineEdit->text()));
-    if( job->track < 10 )
-      string.replace(QRegExp("%track"), KProcess::quote(QString("0") +QString::number(job->track)));
-    else
-      string.replace(QRegExp("%track"), QString::number(job->track));
-    return;
-  }
-  else{
-    string.replace(QRegExp("%album"), job->album);
-    string.replace(QRegExp("%genre"), job->genre);
-    string.replace(QRegExp("%artist"), job->group);
-    string.replace(QRegExp("%year"), QString::number(job->year));
-    string.replace(QRegExp("%song"), job->song);
-    string.replace(QRegExp("%extension"), encoderExtensionLineEdit->text());
-    if( job->track < 10 )
-      string.replace(QRegExp("%track"), "0" + QString::number(job->track) );
-    else
-      string.replace(QRegExp("%track"), QString::number(job->track) );
-    return;
-  }
-}
 
 /**
  * Constructor, load settings.  Set the up the pull down menu with the correct item.
@@ -241,10 +208,12 @@ void EncoderConfigImp::encodeWav(Job *job){
  * then just loop back in 5 seconds and check agian.
  */
 void EncoderConfigImp::tendToNewJobs(){
+  // If we are currently ripping the max try again in a little bit.
   if(threads.count() >= (uint)numberOfCpus->value()){
     QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
+  // Just to make sure in the event something goes wrong
   if(pendingJobs.count() == 0)
     return;
  
@@ -253,7 +222,11 @@ void EncoderConfigImp::tendToNewJobs(){
   job->jobType = encoder->currentItem();
 
   QString desiredFile = fileFormat->text();
-  replaceSpecialChars(desiredFile, job, false);
+  {
+    QMap <QString,QString> map;
+    map.insert("extension", encoderExtensionLineEdit->text());
+    job->replaceSpecialChars(desiredFile, false, map);
+  }
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
@@ -266,9 +239,13 @@ void EncoderConfigImp::tendToNewJobs(){
   job->newLocation = desiredFile;
   
   QString command = encoderCommandLine->text();
-  replaceSpecialChars(command, job, true);
-  command.replace("%f", KProcess::quote(job->location));
-  command.replace("%o", KProcess::quote(desiredFile));
+  {
+    QMap <QString,QString> map;
+    map.insert("extension", encoderExtensionLineEdit->text());
+    map.insert("f", job->location);
+    map.insert("o", desiredFile);
+    job->replaceSpecialChars(command, true, map);
+  }
   
   updateProgress(job->id, 1);
   
@@ -297,7 +274,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   // Make sure we have a job to send an update too.
   Job *job = jobs[(KShellProcess*)process];
   if(!job){
-    qDebug(QString("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line:%1").arg(__LINE__).latin1());
+    qDebug("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line: %d", __LINE__);
     return;  
   }
 
@@ -306,7 +283,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   output = output.mid(0,length);
   int percentLocation = output.find('%');
   if(percentLocation==-1){
-    qDebug("No Percent symbol found in output, not updating");
+    qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all ever.");
     return;  
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1()); 
@@ -320,7 +297,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   }
   // If it was just some random output that couldn't be converted then don't report the error.
   else if(conversionSuccessfull){
-    qDebug(QString("The Percent done (%1) is not > 0 && < 100").arg(percent).latin1());
+    qDebug("The Percent done (%d) is not > 0 && < 100", percent);
   }
   //else{
   //  qDebug(QString("The Percent done (%1) is not > 0 && < 100, conversion ! sucesfull").arg(output).latin1());
@@ -334,10 +311,13 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
 void EncoderConfigImp::jobDone(KProcess *process){
   if(!process)
     return;
+  bool normalExit = true;
   if(process->normalExit()){
     int retrunValue = process->exitStatus();
-    if(retrunValue!=0)
-      qDebug(QString("Process exited with non 0 status: %1").arg(retrunValue).latin1());
+    if(retrunValue!=0){
+      qDebug("Process exited with non 0 status: %d", retrunValue);
+      normalExit = false;
+    }
   }
   
   Job *job = jobs[(KShellProcess*)process];
@@ -347,6 +327,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
   if( QFile::exists(job->newLocation)){
     if(!saveWav->isChecked())
       QFile::remove(job->location);
+    if(normalExit)
     emit(updateProgress(job->id, 100));
     if(createPlaylistCheckBox->isChecked())
       appendToPlaylist(job);
@@ -367,7 +348,9 @@ void EncoderConfigImp::jobDone(KProcess *process){
  */
 void EncoderConfigImp::appendToPlaylist(Job* job){
   QString desiredFile = playlistFileFormat->text();
-  replaceSpecialChars(desiredFile, job, false);
+  QMap <QString,QString> map;
+  map.insert("extension", encoderExtensionLineEdit->text());
+  job->replaceSpecialChars(desiredFile, false, map);
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }

@@ -13,7 +13,7 @@
 #include "job.h"
 #include <kio/jobclasses.h>
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KURL;
 class Job;
@@ -42,7 +42,9 @@ private slots:
   void eject();
 
 private:
+  // Jobs that we are currently doing.
   QMap<KIO::Job*, Job*> jobs;
+  // Jobs that we want to do , but havn't done yet
   QList<Job> pendingJobs;
 
 };

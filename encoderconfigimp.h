@@ -10,7 +10,7 @@
 #define ENCODERCONFIGIMP_H
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 #include <qthread.h>
 #include <qobject.h>
@@ -47,7 +47,6 @@ private:
   QList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
-  void replaceSpecialChars(QString &string, Job * job, bool slash);
   int encodersPercentStringLength;
   int oldEncoderSelection;
 

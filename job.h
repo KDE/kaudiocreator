@@ -9,6 +9,8 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <qmap.h>
+
 #include <klocale.h>
 
 /**
@@ -19,6 +21,9 @@ class Job{
 
 public:
   inline Job():id(-1),genre(i18n("Other")),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false),jobType(-1){};
+
+  void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
+
   int id; 
   QString genre;		
   QString group;
