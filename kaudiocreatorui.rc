@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kmp3creator" version="1">
+<kpartgui name="kaudiocreator" version="1">
 <ActionProperties>
   <Action name="rip" icon="shredder"/>
   <Action name="view_tracks" icon="cdaudio_unmount"/>

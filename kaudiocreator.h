@@ -56,5 +56,5 @@ private:
 
 #endif
 
-// kmp3creator.h
+// kaudiocreator.h
 
