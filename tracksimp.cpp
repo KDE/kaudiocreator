@@ -638,12 +638,12 @@ void TracksImp::eject(){
 void TracksImp::ejectDone(KProcess *proc){
   int returnValue = proc->exitStatus();
   if(returnValue == 127){
-    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Cannot eject"));
+    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Cannot Eject"));
     return;
   }
   if(returnValue != 0){
     kdDebug() << "Eject failed and returned: " << returnValue << endl;
-    KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot eject"));
+    KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot Eject"));
     return;
   }
   delete proc;
