@@ -129,7 +129,7 @@ void Encoder::removeJob(int id ) {
  * @param job the job to encode.
  */
 void Encoder::encodeWav(Job *job ) {
-	emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(prefs->extension()).arg(job->group).arg(job->track_title)));
+	emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(prefs->extension()).arg(job->track_artist).arg(job->track_title)));
 	pendingJobs.append(job);
 	tendToNewJobs();
 }
