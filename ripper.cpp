@@ -32,9 +32,6 @@
 // beep
 #include <knotifyclient.h>
 
-// settings
-#include <kconfig.h>
-
 /**
  * Constructor, load settings.
  */
@@ -46,7 +43,7 @@ Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
  * Loads the settings
  */
 void Ripper::loadSettings(){
-  for(int i=0; i<(uint)Prefs::maxWavFiles(); i++)
+  for(uint i=0; i<(uint)Prefs::maxWavFiles(); i++)
     tendToNewJobs();
 }
 

@@ -28,7 +28,6 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <kconfig.h>
 #include <kdebug.h>
 
 /**
@@ -50,7 +49,7 @@ void Encoder::loadSettings(){
   }
 
   // If the cpu count change then try
-  for(int i=0; i<(uint)Prefs::numberOfCpus(); i++)
+  for(uint i=0; i<(uint)Prefs::numberOfCpus(); i++)
     tendToNewJobs();
 }
 
