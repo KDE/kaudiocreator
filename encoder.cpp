@@ -235,7 +235,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	// Make sure we have a job to send an update too.
 	Job *job = jobs[(KShellProcess*)process];
 	if ( !job ) {
-		qDebug("Encoder::receivedThreadOutput Job doesn't exists. Line: %d", __LINE__);
+		kdDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
 		return;
 	}
 
@@ -245,7 +245,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	// Make sure the output string has a % symble in it.
 	QString output = QString(buffer).mid(0,length);
 	if ( output.find('%') == -1 && reportCount < 5 ) {
-		qDebug("No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill.");
+		kdDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
 		reportCount++;
 		return;
 	}
