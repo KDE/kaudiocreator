@@ -1,17 +1,19 @@
 #include "tracksconfigimp.h"
+#include "job.h"
+#include "id3tagdialog.h"
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qheader.h> 
-#include <qpixmap.h>
-#include <kiconloader.h>
-#include "job.h"
-#include "id3tagdialog.h"
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
+#include <qpixmap.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kurl.h>
+#include <qregexp.h>
 
 #define HEADER_TRACK 1
 #define HEADER_NAME 3
@@ -228,6 +230,8 @@ void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, 
  */
 void TracksConfigImp::newSong(int track, QString song, int length){
   song = song.mid(song.find(' ',0)+1, song.length());
+  song = KURL::decode_string(song);
+  song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
   QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song);
   trackListing->setCurrentItem(trackListing->firstChild());
