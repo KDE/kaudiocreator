@@ -149,7 +149,7 @@
         </spacer>
         <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>createPlaylistCheckBox</cstring>
+                <cstring>createPlaylist</cstring>
             </property>
             <property name="text">
                 <string>Create an album playlist file</string>
@@ -298,7 +298,7 @@
 </widget>
 <connections>
     <connection>
-        <sender>createPlaylistCheckBox</sender>
+        <sender>createPlaylist</sender>
         <signal>toggled(bool)</signal>
         <receiver>GroupBox2</receiver>
         <slot>setEnabled(bool)</slot>
@@ -330,7 +330,7 @@
     <tabstop>fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
     <tabstop>numberOfCpus</tabstop>
-    <tabstop>createPlaylistCheckBox</tabstop>
+    <tabstop>createPlaylist</tabstop>
     <tabstop>playlistFileFormat</tabstop>
     <tabstop>playlistWizardButton</tabstop>
     <tabstop>useRelitivePath</tabstop>

@@ -39,6 +39,9 @@ private slots:
   void tendToNewJobs();
 
 private:
+  bool relativeURL(const QString &path1, const QString &path2,
+				QString &relativePath );
+  
   QPtrList<Job> pendingJobs;
   QPtrList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
