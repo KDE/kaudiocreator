@@ -30,7 +30,7 @@ JobQueImp::JobQueImp( QWidget* parent, const char* name):JobQue(parent,name),hig
  */
 void JobQueImp::loadSettings(){
   KConfig &config = *KGlobal::config();
-  config.setGroup("general");
+  config.setGroup("General");
   removeCompletedJobs = config.readBoolEntry("removeCompletedJobs", false);
 }
 
