@@ -126,6 +126,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   
   createGUI();
   setAutoSaveSettings();
+  //setupGUI();
 }
 
 /**

@@ -152,16 +152,20 @@ void JobQueImp::updateProgress(int id, int progress){
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
  * @param kill kill the actual job/process.  A bool here because this CAN cause
  *        a race condition when the encoder is 100%, but hasn't exited.
+ * @param prompt the user if the job isn't finished
+ * @return bool if remove was successfull or not.
  */
-void JobQueImp::removeJob(QueListViewItem *item, bool kill){
+bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
   if(!item)
-    return;
-  if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator is not finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
+    return false;
+
+  if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."), KStdGuiItem::yes(), KStdGuiItem::no())
       == KMessageBox::No ))
-    return;
+    return false;
 
   // "Thread" safe
-  if(!item) return;
+  if(!item)
+    return false;
 
   if(kill)
     emit (removeJob(item->text(HEADER_JOB).toInt()));
@@ -178,6 +182,7 @@ void JobQueImp::removeJob(QueListViewItem *item, bool kill){
   }
   else
     queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+  return true;
 }
 
 /**
@@ -200,10 +205,24 @@ void JobQueImp::removeSelectedJob(){
  * Remove all of the jobs in the list.
  */
 void JobQueImp::removeAllJobs(){
+  // First determine if there are jobs not finished and prompt once here
+  bool finished=true;
+  QueListViewItem * item = (QueListViewItem*)todoQue->firstChild();
+  while( item != NULL ){
+    if(item && item->percentDone < 100 && item->percentDone > -1)
+      finished = false;
+    item = (QueListViewItem*)item->nextSibling();
+  }
+  if(!finished){
+    if(KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished all of the jobs.  Remove them anyway?"), i18n("Unfinished Job in the queue."), KStdGuiItem::yes(), KStdGuiItem::no())
+      == KMessageBox::No )
+    return;
+  }
+
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != NULL ){
     QueListViewItem *next = (QueListViewItem*)currentItem->nextSibling();
-    removeJob(currentItem);
+    removeJob(currentItem, true, false);
     currentItem = next;
   }
 }
@@ -328,7 +347,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 /**
  * Header for built in treelist item so we can have a progress bar in them.
  */
-QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name) : QListViewItem(parent, id, p, name), percentDone(0), progressing(false) {
+QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name, QString d, QString e) : QListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"

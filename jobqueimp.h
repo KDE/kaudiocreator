@@ -36,7 +36,7 @@ class QListView;
 class QueListViewItem : public QListViewItem {
 
 public:
-  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString=0);
+  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString c=0, QString d=0, QString e=0);
   virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align);
   double percentDone;
@@ -71,7 +71,7 @@ private slots:
   void removeAllJobs();
 
 private:
-  void removeJob(QueListViewItem *item, bool kill=true);
+  bool removeJob(QueListViewItem *item, bool kill=true, bool prompt=true);
   QString getStringFromNumber(int number);
   int highestNumber;
 
