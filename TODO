@@ -8,9 +8,6 @@ Add audiocd ioslave config (or the cddb lib config) to the configure dialog
 -Auto replace text dialog (replace X with Y such as " " with "_")
 Use same encoding options that audiocd has
 
-Correct for special charactors such as / and "
-> Maybe use ->KShellProcess.clear() or whatnot.
-
 Check to see if the ripped (wav) file exists before encoding.
 
 Check to see if the encoded binary exists before encoding (which?).
@@ -27,14 +24,12 @@ Add cancel button to options (i.e remove the functionality from those widgets).
 
 When printing encoding, it would be nice if it would say it's encoding to what (mp3, ogg, whatever)
 
-
 I found a bug in kaudiocreator from the kdemultimedia-20020809 snapshot:
 If the file format in the Ripper Config contains something like ".../%track - 
 %song.wav", the ripper save the file with " around the track number and lame 
 can't find this file because it search for a file without the ".
 
 - Album Editor: Button for next and previous Track.
-
 
 CDDBLib people to e-mail
 -MadCoder <pierre.habouzit@m4x.org>
