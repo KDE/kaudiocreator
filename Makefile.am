@@ -2,7 +2,8 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir)/libkcddb $(all_includ
 
 bin_PROGRAMS = kaudiocreator
 
-kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp  cdconfig.ui  encoderconfig.ui  encoderedit.ui jobque.ui  ripconfig.ui  tracks.ui id3tagdialog.ui wizard.ui general.ui
+kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp encoderedit.ui jobque.ui  tracks.ui id3tagdialog.ui wizard.ui \
+general.ui cdconfig.ui ripconfig.ui encoderconfig.ui 
 
 EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoder.h encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
 

@@ -9,7 +9,7 @@
 #include <kconfig.h>
 
 /**
- * Constructor, load settings.  Set the up the pull down menu with the correct item.
+ * Constructor, load settings.
  */
 Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name) {
   loadSettings();
@@ -53,8 +53,8 @@ Encoder::~Encoder(){
 
   QMap<KShellProcess*, Job*>::Iterator pit;
   for( pit = jobs.begin(); pit != jobs.end(); ++pit ){
-    KShellProcess *process = pit.key();
     Job *job = jobs[pit.key()];
+    KShellProcess *process = pit.key();
     threads.remove(process);
     process->kill();
     QFile::remove(job->newLocation);
@@ -65,7 +65,7 @@ Encoder::~Encoder(){
 }
 
 /**
- * Stop this job with the matchin id.
+ * Stop this job with the matching id.
  * @param id the id number of the job to stop.
  */
 void Encoder::removeJob(int id){
@@ -106,7 +106,7 @@ void Encoder::encodeWav(Job *job){
 
 /**
  * See if there are are new jobs to attend too.  If we are all loaded up
- * then just loop back in 5 seconds and check agian.
+ * then just loop back in a few seconds and check agian.
  */
 void Encoder::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
@@ -136,7 +136,7 @@ void Encoder::tendToNewJobs(){
   
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    qDebug("Can not place file, unable to make directories");
+    qDebug("Can not place file, unable to make directories.");
     return;
   }
 
@@ -154,7 +154,6 @@ void Encoder::tendToNewJobs(){
   updateProgress(job->id, 1);
 
   job->errorString = command;
-  //qDebug(command.latin1());
   KShellProcess *proc = new KShellProcess();
   *proc << QFile::encodeName(command);
   connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
@@ -169,7 +168,7 @@ void Encoder::tendToNewJobs(){
 }
 
 /**
- * We have recieved some output from a thread. See if it contains a foo%.
+ * We have recieved some output from a thread. See if it contains %.
  * @param proc the process that has new output.
  * @param buffer the output from the process
  * @param buflen the length of the buffer.
@@ -204,7 +203,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
 }
 
 /**
- * When the thread is done encoding the file this function is called.
+ * When the process is done encoding a file this function is called.
  * @param job the job that just finished.
  */
 void Encoder::jobDone(KProcess *process){
@@ -239,7 +238,7 @@ void Encoder::jobDone(KProcess *process){
       appendToPlaylist(job);
   }
   else{
-    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }
@@ -262,14 +261,13 @@ void Encoder::appendToPlaylist(Job* job){
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(0, i18n("The desired encoded file could not be created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
-    QFile::remove(job->location);
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n."), i18n("Playlist Creation Failed"));
     return;
   }
 
   QFile f(desiredFile);
   if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist Addition Failed"));
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check the file path option."), i18n("Playlist Addition Failed"));
     return;
   }
 
