@@ -31,6 +31,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
   connect(trackListing->header(), SIGNAL(clicked(int)), this, SLOT(headerClicked(int)));
   connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
   connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
+  connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
   trackListing->setSorting(-1, false);
 }
 
@@ -211,6 +212,18 @@ void TracksConfigImp::selectAllTracks(){
   QListViewItem *currentItem = trackListing->firstChild();
   while( currentItem != 0 ){
     currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+    currentItem = currentItem->nextSibling();
+  }
+}
+
+/**
+ * Turn on all of the tracks.
+ */
+void TracksConfigImp::deselectAllTracks(){
+  QListViewItem *currentItem = trackListing->firstChild();
+  QPixmap empty;
+  while( currentItem != 0 ){
+    currentItem->setPixmap(HEADER_RIP, empty);
     currentItem = currentItem->nextSibling();
   }
 }

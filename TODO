@@ -1,5 +1,24 @@
 TODO.
 
+Make it possible to stop and start encoding jobs:
+
+   <W0rf>    hmm - maybe it would be cool to save the joblist, so you can quit and continue later
+             - would eliminate the need for what i discussed above (encode wav's allready ripped)
+
+   <lypanov> therefore being able to "queue" the encodes would be really nice
+             i.e when you rip the ripper lives some state info in a .wav.state file
+
+   <icefox>  W0rf: hmm I might be able to save the state asuming the current processes can finish
+   <icefox>  but not mid process
+
+   <lypanov> well if its mid process
+   <lypanov> you could have a warning sying "please wait until following jobs are complete..."
+   
+Possiblity to use "nice" when calling encode jobs.
+
+Make it possible to queue all encoding jobs until the user wishes
+for them to being. 
+
 Use a proper CDDB library that the rest of kde uses.
 - Support for local CDDB directories as in kscd or audiocd-kioslave.
 
