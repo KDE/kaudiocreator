@@ -51,11 +51,11 @@ public slots:
   void editInformation();
   void performCDDB();
   void eject();
+  void selectAllTracks();
 
 private slots:
   void ejectDone(KProcess *proc);
   void selectTrack(QListViewItem *);
-  void selectAllTracks();
   void deselectAllTracks();
   void keyPressEvent(QKeyEvent *event);
   void editNextTrack();
