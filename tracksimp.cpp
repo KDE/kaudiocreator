@@ -39,7 +39,6 @@
 
 #include "kaudiocreator_workman.h"
 
-#include "client.h"
 #include <kconfig.h>
 #include <kapplication.h>
 
@@ -61,6 +60,11 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
   
   connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
   
+  cddb = new KCDDB::Client();
+  cddb->setBlockingMode(false);
+  connect(cddb, SIGNAL(finished(CDDB::Result)),
+          this, SLOT(cddbDone(CDDB::Result)));
+
   trackListing->setSorting(-1, false);
   // DON't i18n this!  It is to catch stupid people who don't bother setting the genre and
   // encoders that barf on empty strings for the genre (e.g. lame).
@@ -285,8 +289,7 @@ void TracksImp::timerDone(){
       newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length);
   }
   if(Prefs::performCDDBauto())
-    if(cddbCD() && Prefs::autoRip())
-      ripWholeAlbum();
+    cddbCD();
 
   wm_cd_destroy();
 }
@@ -326,8 +329,8 @@ void TracksImp::performCDDB(){
     return;
   }
 
-  if(!cddbCD())
-    KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
+  cddbCD();
+  
   wm_cd_destroy();
 }
 
@@ -336,7 +339,7 @@ void TracksImp::performCDDB(){
  * wm_cd_init must be called before this.
  * @return true if successful.
  */ 
-bool TracksImp::cddbCD(){
+void TracksImp::cddbCD(){
   KCDDB::TrackOffsetList qvl;
 
   int numberOfTracks = wm_cd_getcountoftracks();
@@ -350,30 +353,50 @@ bool TracksImp::cddbCD(){
   qvl.append((cd->trk[numberOfTracks]).start );
   //kdDebug(60002) << (cd->trk[numberOfTracks]).start << endl;
   
-  KApplication::setOverrideCursor(Qt::waitCursor);
+  cddb->lookup(qvl);
+}
 
-  KCDDB::Client c;
-  KCDDB::CDDB::Result result = c.lookup(qvl);
-
-  if (result != KCDDB::CDDB::Success){
-    KApplication::restoreOverrideCursor();
-    return false;
+/**
+ * The non blocking CDDB function calling has finished.  Report an error or
+ * continue.
+ * @param result the success or failure of the cddb retrieval.
+ */
+void TracksImp::cddbDone(CDDB::Result result){
+  // CDDBTODO: figure out why using CDDB::Success doesn't compile?!
+  if ((result != 0 /*KCDDB::CDDB::Success*/) &&
+      (result != KCDDB::CDDB::MultipleRecordFound))
+  {
+     KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
+    return;
   }
-	  
-  KCDDB::CDInfo info = c.bestLookupResponse();
+
+  // Choose the cddb entry
+  KCDDB::CDInfo info;
+  if(result != KCDDB::CDDB::MultipleRecordFound){
+    // TODO prompt user with a dialog
+    info = cddb->bestLookupResponse();
+  }
+  else{
+    info = cddb->bestLookupResponse();
+  }
+
+  // Fill in all album data
   newAlbum(info.artist, info.title, info.year, info.genre);  
       
   KCDDB::TrackInfoList t = info.trackInfoList;
   for (unsigned i = t.count(); i > 0; i--)
   {
-    if(cd->trk[i-1].data == 0){
+    if(cd->trk[i-1].data == 0)
+    {
       QString n;
       n.sprintf("%02d ", i-1 + 1);
       newSong(i, (n + t[i-1].title), cd->trk[i-1].length);
     }
   }
-  KApplication::restoreOverrideCursor();
-  return true;
+
+  // See if the user wishes to automaticly rip after successfully retrieving
+  if(Prefs::autoRip())
+    ripWholeAlbum();
 }
 
 /**
@@ -432,7 +455,7 @@ void TracksImp::editInformation(){
         QListViewItem * currentItem = trackListing->firstChild();
         while( currentItem != 0 ){
           if(group == currentItem->text(HEADER_TRACK_ARTIST))
-	    currentItem->setText(HEADER_TRACK_ARTIST, dialog->artist->text());
+            currentItem->setText(HEADER_TRACK_ARTIST, dialog->artist->text());
           currentItem = currentItem->nextSibling();
         }
       }
@@ -564,7 +587,7 @@ void TracksImp::deselectAllTracks(){
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
-		uint newYear, const QString &newGenre){
+                         uint newYear, const QString &newGenre){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
   trackListing->clear();
   album = newAlbum;

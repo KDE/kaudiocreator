@@ -24,6 +24,11 @@
 #include "tracks.h"
 #include <klocale.h>
 
+// CDDB support via libkcddb
+#include <libkcddb/client.h>
+
+using namespace KCDDB;
+
 class QListViewItem;
 class Job;
 class AlbumEditor;
@@ -66,10 +71,11 @@ private slots:
  
   void timerDone();
   void changeDevice(const QString &file);
+  void cddbDone(CDDB::Result result);
 
 private:
 
-  bool cddbCD();
+  void cddbCD();
   void newAlbum(const QString &group = i18n("Unknown Artist"),
 		const QString &album = i18n("Unknown Album"),
 		uint year = 0, const QString &genre = "");
@@ -78,6 +84,7 @@ private:
   void editOtherTrack(bool nextOneUp);
   
   AlbumEditor *dialog;
+  KCDDB::Client* cddb;
   QMap<QString, QString> genres;
   unsigned long CDid;
   int dstatus;
