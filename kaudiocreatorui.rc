@@ -15,7 +15,7 @@
 <MenuBar>
   <Menu name="file"><Text>&amp;File</Text>
     <Action name="update_cd"/>
-    <Action name="edit_cd">
+    <Action name="edit_cd"/>
     <Action name="rip"/>
     <Action name="clear_done_jobs"/>
     <Separator/>
