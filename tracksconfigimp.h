@@ -47,6 +47,7 @@ private:
   QString genre;
   int year;
   bool allOn;
+  QMap<QString, QString> genres;
 };
 
 #endif
