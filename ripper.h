@@ -33,33 +33,33 @@ class Ripper : public QObject {
 Q_OBJECT
 
 signals:
-  void addJob(Job *job, const QString &name);
-  void updateProgress(int id, int progress);
-  void encodeWav(Job *job);
-  void eject(const QString &device);
-  void jobsChanged();
+	void addJob( Job *job, const QString &name );
+	void updateProgress( int id, int progress );
+	void encodeWav( Job *job );
+	void eject( const QString &device );
+	void jobsChanged();
 
 public:
-  Ripper( QObject* parent = 0, const char* name = 0);
-  ~Ripper();
-  int activeJobCount();
-  int pendingJobCount();
+	Ripper( QObject* parent = 0, const char* name = 0 );
+	~Ripper();
+	int activeJobCount();
+	int pendingJobCount();
 
 public slots:
-  void loadSettings();
-  void ripTrack(Job *);
-  void removeJob(int id);
+	void loadSettings();
+	void ripTrack( Job * );
+	void removeJob( int id );
 
 private slots:
-  void copyJobResult(KIO::Job *job);
-  void updateProgress( KIO::Job *job, unsigned long percent);
-  void tendToNewJobs();
+	void copyJobResult( KIO::Job *job );
+	void updateProgress( KIO::Job *job, unsigned long percent );
+	void tendToNewJobs();
 
 private:
-  // Jobs that we are currently doing.
-  QMap<KIO::Job*, Job*> jobs;
-  // Jobs that we want to do , but haven't done yet
-  QPtrList<Job> pendingJobs;
+	// Jobs that we are currently doing.
+	QMap<KIO::Job*, Job*> jobs;
+	// Jobs that we want to do , but haven't done yet
+	QPtrList<Job> pendingJobs;
 };
 
 #endif

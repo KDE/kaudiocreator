@@ -209,9 +209,17 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 
   if(newJob->lastSongInAlbum){
     if(Prefs::autoEjectAfterRip()){
-      QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject(newJob->device)));
-    }
-    KNotifyClient::event("cd ripped");
+			// Don't eject device if a pending job has that device
+			Job *job = pendingJobs.first();
+			while( job ){
+				if( job->device == newJob->device )
+					break;
+				job = pendingJobs.next();
+			}
+			if( !job )
+				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject(newJob->device)));
+		}
+		KNotifyClient::event("cd ripped");
   }
   tendToNewJobs();
 }

@@ -31,41 +31,41 @@
 class Job{
 
 public:
-  inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false){};
+	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false){};
 
-  void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
+	void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
-  // The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
-  QString device;
-  int id; 
+	// The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
+	QString device;
+	int id; 
 
-  QString track_title;
-  QString track_artist;
-  int track;
-  QString track_comment;
-  int year;
-  QString genre;
-  
-  QString group;
-  QString album;
-  QString comment;
-  
-  // Currently location of file X
-  QString location;
+	QString track_title;
+	QString track_artist;
+	int track;
+	QString track_comment;
+	int year;
+	QString genre;
 
-  // New location of a file after current opertation is complete (rip/encode).
-  QString newLocation;
+	QString group;
+	QString album;
+	QString comment;
 
-  // What was just attempted to do via this job and is spit out in the event
-  // of an error.
-  QString errorString;
+	// Currently location of file X
+	QString location;
 
-  // If this is the last track to be ripped then value is true. 
-  bool lastSongInAlbum;
+	// New location of a file after current opertation is complete (rip/encode).
+	QString newLocation;
 
-  // output from the processing.
-  QString output;
+	// What was just attempted to do via this job and is spit out in the event
+	// of an error.
+	QString errorString;
+
+	// If this is the last track to be ripped then value is true. 
+	bool lastSongInAlbum;
+
+	// output from the processing.
+	QString output;
 }; 
 
-#endif
+#endif // JOB_H
 
