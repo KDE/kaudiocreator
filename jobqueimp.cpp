@@ -5,6 +5,7 @@
 #include <qpainter.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
@@ -94,7 +95,7 @@ void JobQueImp::updateProgress(int id, int progress){
     }
   }
   else{
-    qDebug("An update was recieved about a job, but the job couldn't be found: %d", id);
+    kdDebug() << "An update was recieved about a job, but the job couldn't be found: " << id << endl;
   }
 }
 

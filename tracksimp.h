@@ -10,6 +10,7 @@
 #define TRACKSIMP_H
 
 #include "tracks.h"
+#include <klocale.h>
 
 class QListViewItem;
 class Job;
@@ -24,19 +25,18 @@ class TracksImp : public Tracks  {
 Q_OBJECT
 
 signals:
-  void updateProgress(int id, int progress);
   void ripTrack(Job *job);
-  void refreshCd();
   
 public:
   TracksImp( QWidget* parent = 0, const char* name = 0);
   ~TracksImp();
 
 public slots:
+  void loadSettings();
+  
+  // Toolbar Buttons
   void startSession();
   void editInformation();
-  
-  void loadSettings();
   void performCDDB();
   void eject();
 
@@ -54,7 +54,9 @@ private slots:
 
 private:
   bool cddbCD();
-  void newAlbum(QString group, QString album, int year, QString genre);
+  void newAlbum(QString group = i18n("Unknown Artist"),
+		QString album = i18n("Unknown Album"),
+		uint year = 0, QString genre = "");
   void newSong(int track, QString song, int length); 
   void ripWholeAlbum();
    

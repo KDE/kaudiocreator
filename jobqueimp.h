@@ -43,10 +43,12 @@ public:
   int numberOfJobsNotFinished();
 
 public slots:
+  void loadSettings();
   void updateProgress(int id, int progress);
   void addJob(Job* job, QString name);
+  
+  // Toolbar Button
   void clearDoneJobs();
-  void loadSettings();
   
 private slots:
   void removeSelectedJob();

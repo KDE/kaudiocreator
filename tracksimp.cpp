@@ -223,7 +223,6 @@ void TracksImp::loadSettings(){
  * Check for changes in the cd.
  */ 
 void TracksImp::timerDone(){
-  
   int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(status == dstatus){
     wm_cd_destroy();
@@ -234,7 +233,7 @@ void TracksImp::timerDone(){
   
   if(WM_CDS_NO_DISC(status)){
     kdDebug() << "No disk." << endl;
-    newAlbum("Unknown Artist", "Unknown Album", 0, "");
+    newAlbum();
     CDid = 0;
     wm_cd_destroy();
     return;
@@ -246,6 +245,7 @@ void TracksImp::timerDone(){
                     "Please make sure you have access permissions to:\n%1")
                .arg(device);
     KMessageBox::error(this, errstring, i18n("Error"));
+    wm_cd_destroy();
     return;
   }
 
@@ -256,7 +256,7 @@ void TracksImp::timerDone(){
   }
   
   // A new album
-  newAlbum("Unknown Artist", "Unknown Album", 0, "");
+  newAlbum();
   CDid = currentDistID;
   kdDebug() << "New disk.  Disk id: " << CDid << endl;
   int numberOfTracks = wm_cd_getcountoftracks();
@@ -274,8 +274,9 @@ void TracksImp::timerDone(){
 }
 
 /**
- * The device text has changed.  If valid different file
- * then re-initialize the cd library and check its status.
+ * The device text has changed.  If valid different file from device
+ * then call timerDone() to re-initialize the cd library and check its status.
+ * @param file - the new text to check.
  */ 
 void TracksImp::changeDevice(const QString &file){
   if(file == device)
@@ -290,12 +291,13 @@ void TracksImp::changeDevice(const QString &file){
 }
 
 /**
- * Helper function for users.
+ * Helper function (toolbar button) for users.
  **/ 
 void TracksImp::performCDDB(){
   int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(WM_CDS_NO_DISC(status)){
     KMessageBox::sorry(this, i18n("Please put in a disk."), i18n("CDDB failed."));
+    wm_cd_destroy();
     return;
   }
 
@@ -315,13 +317,13 @@ bool TracksImp::cddbCD(){
   int numberOfTracks = wm_cd_getcountoftracks();
   for(int i=0; i<numberOfTracks; i++){
     qvl.append((cd->trk[i]).start);
-    //qDebug("Track:%i %i", i, (cd->trk[i]).start);
+    //kdDebug() << "Track: " << i << (cd->trk[i]).start << endl;
   }
 
   qvl.append((cd->trk[0]).start - 150 );
-  //qDebug("%i", (cd->trk[0]).start - 150 );
+  //kdDebug() << (cd->trk[0]).start - 150 << endl;
   qvl.append((cd->trk[numberOfTracks]).start - 150 );
-  //qDebug("%i", (cd->trk[numberOfTracks]).start - 150 );
+  //kdDebug() << (cd->trk[numberOfTracks]).start - 150 << endl;
   
   KApplication::setOverrideCursor(Qt::waitCursor);
 
@@ -404,7 +406,8 @@ void TracksImp::editInformation(){
 }
 
 /**
- * Helper function.  Checks all tracks and then calls startSession to rip them all.
+ * Helper function.  
+ * Selects all tracks and then calls startSession to rip them all.
  */
 void TracksImp::ripWholeAlbum(){
   selectAllTracks();
@@ -518,7 +521,7 @@ void TracksImp::deselectAllTracks(){
 /**
  * Set the current stats for the new album being displayed.
  */
-void TracksImp::newAlbum(QString newGroup, QString newAlbum, int newYear, QString newGenre){
+void TracksImp::newAlbum(QString newGroup, QString newAlbum, uint newYear, QString newGenre){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
   trackListing->clear();
   album = newAlbum;
@@ -532,9 +535,10 @@ void TracksImp::newAlbum(QString newGroup, QString newAlbum, int newYear, QStrin
  * current selected song to the first one.
  * @param track the track number for the song.
  * @param song the name of the song.
+ * @param length the lenght of song.
  */
 void TracksImp::newSong(int track, QString song, int length){
-  song = song.mid(song.find(' ',0)+1, song.length());
+  song = song.mid(song.find(' ',0)+1);
   song = KURL::decode_string(song);
   song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
@@ -557,9 +561,13 @@ void TracksImp::keyPressEvent(QKeyEvent *event){
     Tracks::keyPressEvent(event);
 }
 
-void TracksImp::editNextTrack()
-{
+/**
+ * 
+ */
+void TracksImp::editNextTrack() {
   QListViewItem* currentItem = trackListing->currentItem();
+  if(!currentItem)
+    return;
   currentItem->setText(HEADER_NAME, dialog->title->text());
   QListViewItem* newCurrentItem = currentItem->itemBelow();
   if (newCurrentItem)
@@ -572,9 +580,13 @@ void TracksImp::editNextTrack()
   dialog->title->selectAll();
 }
 
-void TracksImp::editPreviousTrack()
-{
+/**
+ *
+ */ 
+void TracksImp::editPreviousTrack() {
   QListViewItem* currentItem = trackListing->currentItem();
+  if(!currentItem)
+    return;
   currentItem->setText(HEADER_NAME, dialog->title->text());
   QListViewItem* newCurrentItem = currentItem->itemAbove();
   if (newCurrentItem)
@@ -588,7 +600,7 @@ void TracksImp::editPreviousTrack()
 }
 
 /**
- * Eject the cd
+ * Eject the current cd device
  */
 void TracksImp::eject(){
   KProcess *proc = new KProcess();
@@ -599,6 +611,7 @@ void TracksImp::eject(){
 
 /**
  * When it is done ejecting, report any errors.
+ * @param proc pointer to the process that ended.
  */ 
 void TracksImp::ejectDone(KProcess *proc){
   int returnValue = proc->exitStatus();
@@ -607,7 +620,7 @@ void TracksImp::ejectDone(KProcess *proc){
     return;
   }
   if(returnValue != 0){
-    qDebug("%i", returnValue);
+    kdDebug() << "Eject failed and returned: " << returnValue << endl;
     KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Can not eject"));
     return;
   }

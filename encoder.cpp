@@ -37,6 +37,7 @@ void Encoder::loadSettings(){
     encoderPercentLength = config.readNumEntry("percentLength");
   }
 	  
+  config.setGroup("Encoder");
   numberOfCpus = config.readNumEntry("numberOfCpus", 1);
   fileFormat = config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
   createPlaylist = config.readBoolEntry("createPlaylist", false);
