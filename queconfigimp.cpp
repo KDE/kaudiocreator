@@ -196,7 +196,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
   if(this->isSelected())
     p->setPen(cg.highlightedText());
   if(percentDone != -1)
-  p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(int)percentDone) + "%");
+  p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(percentDone) + "%");
   else
     p->drawText(0,0,width-1,height()-1,AlignCenter,i18n("Error"));
 }
