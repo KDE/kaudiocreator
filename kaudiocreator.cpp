@@ -216,7 +216,7 @@ void KAudioCreator::configureNotifications() {
 }
 
 void KAudioCreator::encodeFile(){
-	EncodeFileImp *file = new EncodeFileImp(tracks->genres, this, "EncodeFile");
+	EncodeFileImp *file = new EncodeFileImp(this, "EncodeFile");
 	connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
 	file->show();
 }

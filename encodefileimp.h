@@ -38,7 +38,7 @@ signals:
   void startJob(Job *newJob);
 
 public:
-  EncodeFileImp( QMap<QString, QString> genres, QWidget* parent = 0, const char* name = 0);
+  EncodeFileImp(QWidget* parent = 0, const char* name = 0);
 
 protected slots:
   // Encode button
