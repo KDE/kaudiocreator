@@ -290,9 +290,11 @@ void Encoder::appendToPlaylist(Job* job){
   QMap <QString,QString> map;
   map.insert("extension", encoderExtension);
   job->replaceSpecialChars(desiredFile, false, map);
-  if(desiredFile[0] == '~'){
-    desiredFile.replace(0,1, QDir::homeDirPath());
-  }
+  
+  desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+  // If the user wants anything regexp replaced do it now...
+  desiredFile.replace( QRegExp(replaceInput), replaceOutput );
+  
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
     KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n"), i18n("Playlist Creation Failed"));
