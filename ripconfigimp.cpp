@@ -4,7 +4,12 @@
 #include <qfile.h>
 #include <ktempfile.h>
 #include <qfileinfo.h>
+#include <qglobal.h>
+#if QT_VERSION < 300
 #include <kapp.h>
+#else
+#include <kapplication.h>
+#endif
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qtimer.h>
@@ -144,7 +149,11 @@ void RipConfigImp::tendToNewJobs(){
   }
 
   QString wavFile;
+  #if QT_VERSION < 300
+  if(1)
+  #else
   if(job->track < 10)
+  #endif
     wavFile = QString("audiocd:/By Track/Track 0%1.wav").arg(job->track);
   else
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);

@@ -54,6 +54,7 @@ void TracksConfigImp::editInformation(){
   int totalGenres = dialog.genre->count();
   if(genre == "")
     genre = "Other";
+  
   for(int i = 0; i < totalGenres; i++){
     if(dialog.genre->text(i) == genre){
       dialog.genre->setCurrentItem(i);
@@ -73,6 +74,10 @@ void TracksConfigImp::editInformation(){
     year = dialog.year->value();
     currentItem->setText(HEADER_NAME, dialog.title->text());
     genre = dialog.genre->currentText();
+
+    QString newTitle = QString("%1 - %2").arg(group).arg(album);
+    if(albumName->text() != newTitle)
+      albumName->setText(newTitle);
   }
 }
 

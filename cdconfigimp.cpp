@@ -28,7 +28,13 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdlib.h>
+
+#include <qglobal.h>
+#if QT_VERSION < 300
+#include <kapp.h>
+#else
 #include <kapplication.h>
+#endif
 
 #include <qfile.h>
 #include <qstrlist.h>

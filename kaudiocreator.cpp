@@ -5,7 +5,14 @@
 #include <qvbox.h>
 #include <qstring.h>
 #include <kiconloader.h>
+
+#include <qglobal.h>
+#if QT_VERSION < 300
 #include <kapp.h>
+#else
+#include <kapplication.h>
+#endif
+
 #include <kmessagebox.h>
 
 #include <klocale.h>
