@@ -2,10 +2,13 @@ TODO.
 
 Use a proper CDDB library that the rest of kde uses.
 Add audiocd ioslave config (or the cddb lib config) to the configure dialog
+-Multiple Artists for 1 album.
+-Auto replace text dialog (replace X with Y such as " " with "_")
+Use same encoding options that audiocd has
 
 Correct for special charactors such as / and "
-
-Multiple Artists for 1 album.
+> Maybe use ->KShellProcess.clear() or whatnot.
 
 Check to see if the encoded binary exists before encoding (which?).
 
+Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
