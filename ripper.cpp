@@ -157,7 +157,6 @@ void Ripper::tendToNewJobs(){
   connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
   connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
   jobs.insert(copyJob, job);
-
 }
 
 /**

@@ -35,8 +35,9 @@
 #define HEADER_RIP 0
 
 extern "C" {
-#include "../kscd/libwm/include/workman.h"
+  #include "../kscd/libwm/include/workman.h"
 }
+
 #include "client.h"
 #include <kconfig.h>
 #include <kapplication.h>
@@ -236,6 +237,8 @@ void TracksImp::loadSettings(){
 
   device = config.readEntry("device", DEFAULT_CD_DEVICE);
   deviceCombo->setCurrentText(device);
+
+  promptIfIncompleteInfo = config.readBoolEntry("promptIfIncompleteInfo", true);
 }
 
 /**
@@ -298,12 +301,16 @@ void TracksImp::timerDone(){
  * @param file - the new text to check.
  */ 
 void TracksImp::changeDevice(const QString &file){
-  if(file == device)
+  if(file == device){
+    //qDebug("Device names match, returning");
     return;
+  }
   
   QFileInfo fileInfo(file);
-  if(!fileInfo.exists() || fileInfo.isDir() || !fileInfo.isFile())
+  if(!fileInfo.exists() || fileInfo.isDir()){
+    //qDebug("Device file !exist or isDir or !file");
     return;
+  }
  
   device = file;
   timerDone();
@@ -464,7 +471,7 @@ void TracksImp::startSession(){
       list += ", ";
     list += "Album";
   }
-  if( !list.isEmpty() ){
+  if( promptIfIncompleteInfo && !list.isEmpty() ){
     int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information Incomplete"));
     if( r == KMessageBox::No )
       return;
@@ -475,7 +482,7 @@ void TracksImp::startSession(){
   while( currentItem != 0 ){
     if(currentItem->pixmap(HEADER_RIP) != NULL ){
       Job *newJob = new Job();
-      newJob->device = deviceCombo->currentText();
+      newJob->device = device;
       newJob->album = album;
       newJob->genre = genres[genre];
       newJob->group = group;
