@@ -5,7 +5,7 @@ bin_PROGRAMS = kaudiocreator
 kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp encoderedit.ui jobque.ui  tracks.ui id3tagdialog.ui wizard.ui \
 general.ui cdconfig.ui ripconfig.ui encoderconfig.ui 
 
-EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoder.h encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
+EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
 
 kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH) -lkutils
 
