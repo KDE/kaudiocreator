@@ -104,12 +104,13 @@ void TracksConfigImp::startSession(){
     list += "Album";
   }
   if( list != ""){
-    int r = KMessageBox:: questionYesNo(this, i18n(QString("Part of the album is not set: %1. Would you like to continue anyway?").arg(list).latin1()), i18n("Album Information incomplete"));
+    int r = KMessageBox:: questionYesNo(this, i18n(QString("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list).latin1()), i18n("Album Information incomplete"));
     if( r == KMessageBox::No )
       return;
   }
   QListViewItem * currentItem = trackListing->firstChild();
   Job *lastJob = NULL;
+  int counter = 0;
   while( currentItem != 0 ){
     if(currentItem->pixmap(HEADER_RIP) != NULL ){
       Job *newJob = new Job();
@@ -121,11 +122,21 @@ void TracksConfigImp::startSession(){
       newJob->year = year;
       lastJob = newJob;
       emit( ripTrack(newJob) ); 
+    counter++;
     }
     currentItem = currentItem->nextSibling();
   }
   if(lastJob)
     lastJob->lastSongInAlbum = true;
+
+  if(counter == 0){
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip.  Please select at least 1 track before ripping."), i18n("No tracks selected."));
+    return;
+  }
+
+  KMessageBox::information(this,
+  i18n(QString("%1 Jobs have been started.  You can watch their progress in the jobs section.").arg(counter).latin1()),
+ i18n("Jobs have started"), "Jobs have started");
 }
 
 /**

@@ -135,7 +135,8 @@ int QueConfigImp::numberOfJobsNotFinished(){
   while( currentItem != 0 ){
     if( currentItem->text(HEADER_PROGRESS) != "100%" || currentItem->text(HEADER_PROGRESS) != i18n("Error") ){
     }
-    totalJobsToDo++;
+    else
+      totalJobsToDo++;
     currentItem = currentItem->itemBelow();
   }
   return totalJobsToDo;
