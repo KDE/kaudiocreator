@@ -216,12 +216,18 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 					break;
 				job = pendingJobs.next();
 			}
-			if( !job )
-				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject(newJob->device)));
+			if( !job ){
+				deviceToEject = newJob->device;
+				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SLOT(ejectNow()));
+			}
 		}
 		KNotifyClient::event("cd ripped");
   }
   tendToNewJobs();
+}
+
+void Ripper::ejectNow(){
+	emit eject(deviceToEject);
 }
 
 /**

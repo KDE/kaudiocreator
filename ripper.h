@@ -54,13 +54,15 @@ private slots:
 	void copyJobResult( KIO::Job *job );
 	void updateProgress( KIO::Job *job, unsigned long percent );
 	void tendToNewJobs();
+	void ejectNow();
 
 private:
+	QString deviceToEject;
 	// Jobs that we are currently doing.
 	QMap<KIO::Job*, Job*> jobs;
 	// Jobs that we want to do , but haven't done yet
 	QPtrList<Job> pendingJobs;
 };
 
-#endif
+#endif // RIPPER_H
 
