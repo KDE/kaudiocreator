@@ -129,7 +129,7 @@ void Ripper::removeJob(int id){
  * @param job the new job that we need to handle.
  */
 void Ripper::ripTrack(Job *job){
-  emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->song)));
+  emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->track_title)));
   pendingJobs.append(job);
   tendToNewJobs();
 }

@@ -31,7 +31,7 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),comment(""), track(-1),year(-1),song(""), song_comment(""), song_artist(""), lastSongInAlbum(false){};
+  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),comment(""), track(-1),year(-1),track_title(""), track_comment(""), track_artist(""), lastSongInAlbum(false){};
 
   void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
@@ -46,16 +46,9 @@ public:
   int track;
   int year;
   
-  /**
-   * TODO
-   * Change to:
-   * track_title
-   * track_comment
-   * track_artist;
-   */
-  QString song;
-  QString song_comment;
-  QString song_artist;
+  QString track_title;
+  QString track_comment;
+  QString track_artist;
  
   // Currently location of file X
   QString location;
@@ -67,7 +60,7 @@ public:
   // of an error.
   QString errorString;
 
-  // If this is the last song in to be ripped then value is true. 
+  // If this is the last track to be ripped then value is true. 
   bool lastSongInAlbum;
 
   // output from the processing.

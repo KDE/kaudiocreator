@@ -73,7 +73,7 @@
                 <cstring>kcfg_autoEjectAfterRip</cstring>
             </property>
             <property name="text">
-                <string>&amp;Auto-eject CD after last song is ripped</string>
+                <string>&amp;Auto-eject CD after last track is ripped</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">

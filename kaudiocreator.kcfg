@@ -9,7 +9,7 @@
       <default>true</default>
     </entry>
     <entry name="autoRip" type="Bool">
-      <label>Automatically rip all songs upon a successful CDDB retrieval</label>
+      <label>Automatically rip all tracks upon a successful CDDB retrieval</label>
       <default>false</default>
     </entry>
     <entry name="device" type="String">
@@ -48,7 +48,7 @@
     </entry>
     <entry name="fileFormat" type="String">
       <label>Location pattern for encoded files</label>
-      <default>~/%{extension}/%{artist}/%{album}/%{artist} - %{song}.%{extension}</default>
+      <default>~/%{extension}/%{artist}/%{album}/%{artist} - %{title}.%{extension}</default>
     </entry>
     <entry name="createPlayList" type="Bool">
       <label>Create an album playlist file</label>
@@ -83,7 +83,7 @@
       <default>true</default>
     </entry>
     <entry name="autoEjectAfterRip" type="Bool">
-      <label>Eject CD after last song is ripped</label>
+      <label>Eject CD after last track is ripped</label>
       <default>false</default>
     </entry>
     <entry name="autoEjectDelay" type="Int">

@@ -52,9 +52,9 @@ void EncodeFileImp::encode(){
   newJob->year = year->value();
   newJob->track = track->value();
      
-  newJob->song = track_title->text();
-  newJob->song_artist = track_artist->text();
-  newJob->song_comment = track_comment->text();
+  newJob->track_title = track_title->text();
+  newJob->track_artist = track_artist->text();
+  newJob->track_comment = track_comment->text();
 
   emit(startJob(newJob));
   

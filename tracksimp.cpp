@@ -481,7 +481,7 @@ void TracksImp::editInformation(){
     trackListing->currentItem()->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
     
     if( group != dialog->artist->text()){
-      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist. Would you like all of the song artists that had the old name to be changed to the new name?"), i18n("Album Artist Changed"));
+      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist. Would you like all of the track artists that had the old name to be changed to the new name?"), i18n("Album Artist Changed"));
       if( r == KMessageBox::Yes ){
         QListViewItem * currentItem = trackListing->firstChild();
         while( currentItem != 0 ){
@@ -602,9 +602,9 @@ void TracksImp::startSession(){
       newJob->year = year;
       newJob->track = currentItem->text(HEADER_TRACK).toInt();
       
-      newJob->song = currentItem->text(HEADER_TRACK_NAME);
-      newJob->song_artist = currentItem->text(HEADER_TRACK_ARTIST);
-      newJob->song_comment = currentItem->text(HEADER_TRACK_COMMENT);
+      newJob->track_title = currentItem->text(HEADER_TRACK_NAME);
+      newJob->track_artist = currentItem->text(HEADER_TRACK_ARTIST);
+      newJob->track_comment = currentItem->text(HEADER_TRACK_COMMENT);
       lastJob = newJob;
       emit( ripTrack(newJob) ); 
       counter++;
@@ -685,18 +685,18 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
 }
 
 /**
- * There is a new song for this album.  Add it to the list of songs.  Set the
- * current selected song to the first one.
- * @param track the track number for the song.
- * @param song the name of the song.
- * @param length the lenght of song.
+ * There is a new track for this album.  Add it to the list of tracks.  Set the
+ * current selected track to the first one.
+ * @param track the track number.
+ * @param title the name of the track.
+ * @param length the lenght of track.
  */
-void TracksImp::newSong(int track, const QString &newsong, int length, const QString &comment){
-  QString song = newsong.mid(newsong.find(' ',0)+1);
-  song = KURL::decode_string(song);
-  song.replace(QRegExp("/"), "-");
-  QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
-  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song, group, comment);
+void TracksImp::newSong(int track, const QString &newTitle, int length, const QString &comment){
+  QString title = newTitle.mid(newTitle.find(' ',0)+1);
+  title = KURL::decode_string(title);
+  title.replace(QRegExp("/"), "-");
+  QString trackLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
+  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), trackLength, title, group, comment);
   newItem->setRenameEnabled(HEADER_TRACK_NAME, TRUE);
   trackListing->setCurrentItem(trackListing->firstChild());
 
@@ -745,9 +745,11 @@ void TracksImp::editOtherTrack(bool nextOneUp){
   dialog->track_title->setFocus();
   dialog->track_title->selectAll();
 }
+
 void TracksImp::editNextTrack() {
   editOtherTrack(false);
 }
+
 void TracksImp::editPreviousTrack() {
   editOtherTrack(true);
 }

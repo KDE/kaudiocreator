@@ -89,7 +89,7 @@ private:
 		uint year = 0, const QString &genre = "",
 		uint revision = 0, const QString &category = "",
 		const QString& comment = "");
-  void newSong(int track, const QString &song, int length, const QString& comment); 
+  void newSong(int track, const QString &title, int length, const QString& comment); 
   void ripWholeAlbum();
 
   void editOtherTrack(bool nextOneUp);
