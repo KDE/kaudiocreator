@@ -182,7 +182,7 @@ void Encoder::tendToNewJobs(){
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
   if(Prefs::fullDecoderDebug())
-    kdDebug() << buffer << endl;
+    kdDebug(60002) << buffer << endl;
 	
   // Make sure we have a job to send an update too.
   Job *job = jobs[(KShellProcess*)process];

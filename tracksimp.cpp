@@ -241,11 +241,11 @@ void TracksImp::timerDone(){
     wm_cd_destroy();
     return;
   }
-  kdDebug() << "Drive initialization return status: " << status << endl;
+  kdDebug(60002) << "Drive initialization return status: " << status << endl;
   dstatus = status;
   
   if(WM_CDS_NO_DISC(status)){
-    kdDebug() << "No disk." << endl;
+    kdDebug(60002) << "No disk." << endl;
     newAlbum();
     CDid = 0;
     wm_cd_destroy();
@@ -271,7 +271,7 @@ void TracksImp::timerDone(){
   // A new album
   newAlbum();
   CDid = currentDistID;
-  kdDebug() << "New disk.  Disk id: " << CDid << endl;
+  kdDebug(60002) << "New disk.  Disk id: " << CDid << endl;
   int numberOfTracks = wm_cd_getcountoftracks();
   for(int i=numberOfTracks; i>0; i--){
     if( i < 10 )
@@ -337,13 +337,13 @@ bool TracksImp::cddbCD(){
   int numberOfTracks = wm_cd_getcountoftracks();
   for(int i=0; i<numberOfTracks; i++){
     qvl.append((cd->trk[i]).start);
-    //kdDebug() << "Track: " << i << (cd->trk[i]).start << endl;
+    //kdDebug(60002) << "Track: " << i << (cd->trk[i]).start << endl;
   }
 
   qvl.append((cd->trk[0]).start);
-  //kdDebug() << (cd->trk[0]).start << endl;
+  //kdDebug(60002) << (cd->trk[0]).start << endl;
   qvl.append((cd->trk[numberOfTracks]).start );
-  //kdDebug() << (cd->trk[numberOfTracks]).start << endl;
+  //kdDebug(60002) << (cd->trk[numberOfTracks]).start << endl;
   
   KApplication::setOverrideCursor(Qt::waitCursor);
 
@@ -643,7 +643,7 @@ void TracksImp::ejectDone(KProcess *proc){
     return;
   }
   if(returnValue != 0){
-    kdDebug() << "Eject failed and returned: " << returnValue << endl;
+    kdDebug(60002) << "Eject failed and returned: " << returnValue << endl;
     KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot Eject"));
     return;
   }

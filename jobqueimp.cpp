@@ -112,7 +112,7 @@ void JobQueImp::updateProgress(int id, int progress){
     currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
   if( !currentItem ){
-    kdDebug() << "JobQueImp::updateProgress An update was received about a job, but the job couldn't be found: " << id << endl;
+    kdDebug(60002) << "JobQueImp::updateProgress An update was received about a job, but the job couldn't be found: " << id << endl;
     return;
   }
 
