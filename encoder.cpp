@@ -162,7 +162,7 @@ void Encoder::tendToNewJobs() {
 	{
 		QMap <QString,QString> map;
 		map.insert("extension", prefs->extension());
-		job->replaceSpecialChars(desiredFile, false, map);
+		desiredFile = job->replaceSpecialChars(desiredFile, false, map);
 	}
 	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
 
@@ -200,7 +200,7 @@ void Encoder::tendToNewJobs() {
 		map.insert("extension", prefs->extension());
 		map.insert("f", job->location);
 		map.insert("o", desiredFile);
-		job->replaceSpecialChars(command, true, map);
+		command = job->replaceSpecialChars(command, true, map);
 	}
 
 	updateProgress(job->id, 1);

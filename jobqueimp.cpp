@@ -342,7 +342,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 /**
  * Header for built in treelist item so we can have a progress bar in them.
  */
-QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name, QString d, QString e) : QListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
+QueListViewItem::QueListViewItem(QListView *parent, const QString id, const QString p , const QString name, const QString d, const QString e) : QListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"

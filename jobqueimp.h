@@ -36,7 +36,7 @@ class QListView;
 class QueListViewItem : public QListViewItem {
 
 public:
-	QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString c=0, QString d=0, QString e=0);
+	QueListViewItem (QListView * p = NULL, const QString a=0, const QString b=0, const QString c=0, const QString d=0, const QString e=0);
 	virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
       int width,int align);
 	double percentDone;

@@ -33,7 +33,7 @@ class Job{
 public:
 	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), encoder(-1) {};
 
-	void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
+	QString replaceSpecialChars(const QString &string, bool quote, QMap<QString,QString> map);
 
 	// The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
 	QString device;

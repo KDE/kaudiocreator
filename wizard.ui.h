@@ -104,7 +104,7 @@ void fileWizard::fileFormatTextChanged(const QString& text)
 	job.track_comment = "This Song Rocks!";
 	QMap<QString,QString> map;
 	map.insert("extension", "mp3");
-	job.replaceSpecialChars(string, false, map);
+	string = job.replaceSpecialChars(string, false, map);
 	exampleLabel->setText(i18n("Example: %1").arg(string));
 }
 

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Comment=Frontend for audio file creation
 Comment[af]=Voorprogram vir audio lêer skep
 Comment[ar]=واجهة لإنشاء ملفات الصوت
@@ -101,5 +102,5 @@ Exec=kaudiocreator
 Icon=kaudiocreator
 Path=
 Type=Application
-Terminal=0
-Categories=Qt;KDE;AudioVideo
+Terminal=false
+Categories=Qt;KDE;AudioVideo;

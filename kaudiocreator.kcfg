@@ -47,8 +47,8 @@
     <entry name="format_titleArtist" type="Bool">
       <default>false</default>
     </entry>
-   </group>
-   <group name="Encoder">
+  </group>
+  <group name="Encoder">
     <entry name="currentEncoder" type="Int" key="encoderChoice">
       <label>Currently selected encoder</label>
       <default>0</default>
@@ -87,7 +87,7 @@
       <label>Enable full decoder debugging</label>
       <default>false</default>
     </entry>
-   </group>
+  </group>
   <group name="Ripper">
     <entry name="maxWavFiles" type="Int">
       <label>Number of tracks to rip at a time</label>
@@ -113,5 +113,5 @@
       <label>Location of temporary directory to use</label>
       <default></default>
     </entry>
-   </group>
+  </group>
 </kcfg>
