@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kaudiocreator" version="2">
+<kpartgui name="kaudiocreator" version="3">
 <ActionProperties>
   <Action name="rip" icon="shredder"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
@@ -21,8 +21,8 @@
     <Action name="quit"/>
   </Menu>
   <Menu name="settings">
-    <Action name="configuretoolbars"/>
-    <Action name="configure_kaudiocreator"/>
+    <Action name="configuretoolbars" append="configure_merge"/>
+    <Action name="configure_kaudiocreator" append="configure_merge"/>
   </Menu>
 </MenuBar>
 
