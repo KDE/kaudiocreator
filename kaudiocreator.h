@@ -48,7 +48,6 @@ private slots:
   void configuretoolbars();
   void saveToolbarConfig();
   void showSettings();
-  void slotConfigureKeys();
   void updateStatus();
 
   void hasCD(bool);

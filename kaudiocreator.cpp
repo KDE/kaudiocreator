@@ -41,7 +41,6 @@
 #include "encoderconfigimp.h"
 #include "general.h"
 #include <kcmoduleloader.h>
-#include <kkeydialog.h>
 #include <kurlrequester.h>
 
 /**
@@ -108,7 +107,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   setStandardToolBarMenuEnabled(true);
 
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
-  KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+  KStdAction::keyBindings( guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
 
   statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
   connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
@@ -125,11 +124,6 @@ void KAudioCreator::hasCD(bool cd){
     statusBar()->changeItem(i18n("CD Inserted"), 0 );
   else	  
     statusBar()->changeItem(i18n("No Audio CD detected"), 0 );
-}
-
-void KAudioCreator::slotConfigureKeys()
-{
-  KKeyDialog::configure( actionCollection(), this );
 }
 
 void KAudioCreator::updateStatus() {
