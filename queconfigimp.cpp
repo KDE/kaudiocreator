@@ -106,6 +106,7 @@ void QueConfigImp::removeSelectedJob(){
   if(todoQue->childCount() == 0){
     queLabel->setText(i18n("No jobs are in the queue"));
     highestNumber = DEFAULT_HIGHEST_NUMBER;
+    currentId = 0;
   }
   else
     queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
@@ -125,6 +126,7 @@ void QueConfigImp::removeAllJobs(){
     currentItem = (QueListViewItem*)todoQue->firstChild();
   }
   highestNumber = DEFAULT_HIGHEST_NUMBER;
+  currentId = 0;
 }
 
 /**
@@ -146,6 +148,7 @@ void QueConfigImp::clearDoneJobs(){
   if(todoQue->childCount() == 0){
     queLabel->setText(i18n("No jobs are in the queue"));
     highestNumber = DEFAULT_HIGHEST_NUMBER;
+    currentId = 0;
   }
   else
     queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
