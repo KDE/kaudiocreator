@@ -72,6 +72,20 @@ Encoder::~Encoder(){
   jobs.clear();
 }
 
+/** 
+ * @return The number of active jobs
+ */
+int Encoder::activeJobCount() {
+  return jobs.count();
+}
+
+/** 
+ * @return The number of pending jobs
+ */
+int Encoder::pendingJobCount() {
+  return pendingJobs.count();
+}
+
 /**
  * Stop this job with the matching id.
  * @param id the id number of the job to stop.
@@ -118,12 +132,16 @@ void Encoder::encodeWav(Job *job){
  * then just loop back in a few seconds and check agian.
  */
 void Encoder::tendToNewJobs(){
-  if(pendingJobs.count() == 0)
+  if(pendingJobs.count() == 0){
+    emit jobsChanged();
     return;
+  }
   
   // If we are currently ripping the max try again in a little bit.
-  if((int)threads.count() >= Prefs::numberOfCpus())
+  if((int)threads.count() >= Prefs::numberOfCpus()){
+    emit jobsChanged();
     return;
+  }
 
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
@@ -142,6 +160,7 @@ void Encoder::tendToNewJobs(){
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
     qDebug("Can not place file, unable to make directories.");
+    emit jobsChanged();
     return;
   }
 
@@ -172,6 +191,7 @@ void Encoder::tendToNewJobs(){
   threads.append(proc);
 
   proc->start(KShellProcess::NotifyOnExit,  KShellProcess::AllOutput);
+  emit jobsChanged();
 }
 
 /**

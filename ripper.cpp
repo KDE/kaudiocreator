@@ -72,6 +72,20 @@ Ripper::~Ripper(){
   jobs.clear();
 }
 
+/** 
+ * @return The number of active jobs
+ */
+int Ripper::activeJobCount() {
+  return jobs.count();
+}
+
+/** 
+ * @return The number of pending jobs
+ */
+int Ripper::pendingJobCount() {
+  return pendingJobs.count();
+}
+	
 /**
  * Cancel and remove the job with the matching id.
  * Remove it from the local collection of jobs, delete the temp file if
@@ -130,12 +144,16 @@ void Ripper::ripTrack(Job *job){
  * then just loop.
  */
 void Ripper::tendToNewJobs(){
-  if(pendingJobs.count() == 0)
+  if(pendingJobs.count() == 0){
+    emit jobsChanged();
     return;
+  }
   
   // If we are currently ripping the max try again in a little bit.
-  if(jobs.count() >= (uint)Prefs::maxWavFiles())
+  if(jobs.count() >= (uint)Prefs::maxWavFiles()){
+    emit jobsChanged();
     return;
+  }
 
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
@@ -163,6 +181,7 @@ void Ripper::tendToNewJobs(){
   connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
   connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
   jobs.insert(copyJob, job);
+  emit jobsChanged();
 }
 
 /**

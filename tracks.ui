@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>Tracks</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>501</width>
-            <height>374</height>
+            <height>377</height>
         </rect>
     </property>
     <property name="caption">
@@ -207,21 +207,12 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>editTag</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Edit Information</string>
-                    </property>
-                </widget>
             </hbox>
         </widget>
     </grid>
 </widget>
 <tabstops>
     <tabstop>deviceCombo</tabstop>
-    <tabstop>editTag</tabstop>
     <tabstop>trackListing</tabstop>
     <tabstop>selectAllTracksButton</tabstop>
     <tabstop>deselectAllTracksButton</tabstop>

@@ -27,6 +27,7 @@
 
 #include <kaction.h>
 #include <kedittoolbar.h>
+#include <kstatusbar.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
@@ -73,6 +74,10 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   connect(ripper, SIGNAL(encodeWav(Job *)), encoder, SLOT(encodeWav(Job *)));
 
+  connect( ripper, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
+  connect( encoder, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
+  connect( jobQue, SIGNAL( removeJob( int ) ), this, SLOT( updateStatus() ) );
+
   resize(500, 440);
 
   KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks, SLOT(eject()), actionCollection(), "eject" );
@@ -103,13 +108,54 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
   KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
 
+  statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
+  connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
+  
   createGUI("kaudiocreatorui.rc");
   setAutoSaveSettings( "Main Window" );
+}
+
+/**
+ * Changes the status bar to let the user no if a cd was not detected or inserted.
+ */
+void KAudioCreator::hasCD(bool cd){
+  if(cd)
+    statusBar()->changeItem(i18n("CD Inserted"), 0 );
+  else	  
+    statusBar()->changeItem(i18n("No Audio CD detected"), 0 );
 }
 
 void KAudioCreator::slotConfigureKeys()
 {
   KKeyDialog::configure( actionCollection(), this );
+}
+
+void KAudioCreator::updateStatus() {
+  QString status = i18n("Idle.");
+  QString rippingStatus;
+  QString encodingStatus;	
+  int activeRippingJobs = ripper->activeJobCount();
+  int pendingRippingJobs = ripper->pendingJobCount();
+  int activeEncodingJobs = encoder->activeJobCount();
+  int pendingEncodingJobs = encoder->pendingJobCount();
+
+  if ( activeRippingJobs ) {
+    rippingStatus = i18n("Ripping (%1 active, %2 queued)").arg( activeRippingJobs ).arg( pendingRippingJobs );
+    status = rippingStatus;
+  }
+  if ( activeEncodingJobs ) {
+    encodingStatus = i18n("Encoding (%1 active, %2 queued)").arg( activeEncodingJobs ).arg( pendingEncodingJobs );
+
+    if ( activeRippingJobs ) {
+      status.append(" : ");
+      status.append( encodingStatus );
+    }
+    else {
+      status = encodingStatus;
+    }
+  }
+
+  statusBar()->changeItem( status, 0 );
 }
 
 /**

@@ -37,10 +37,13 @@ Q_OBJECT
 signals:
   void addJob(Job *job, const QString &name);
   void updateProgress(int id, int progress);
+  void jobsChanged();
 
 public:
   Encoder( QObject* parent = 0, const char* name = 0);
   ~Encoder();
+  int activeJobCount();
+  int pendingJobCount();
 
 public slots:
   void removeJob(int id);
@@ -59,6 +62,7 @@ private:
   void appendToPlaylist(Job* job);
 
   EncoderPrefs *prefs;
+
 };
 
 #endif // ENCODER_H

@@ -49,6 +49,9 @@ private slots:
   void saveToolbarConfig();
   void showSettings();
   void slotConfigureKeys();
+  void updateStatus();
+
+  void hasCD(bool);
 
 private:
   KJanusWidget *janusWidget;

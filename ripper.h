@@ -37,11 +37,14 @@ signals:
   void updateProgress(int id, int progress);
   void encodeWav(Job *job);
   void eject();
+  void jobsChanged();
 
 public:
   Ripper( QObject* parent = 0, const char* name = 0);
   ~Ripper();
-  
+  int activeJobCount();
+  int pendingJobCount();
+
 public slots:
   void loadSettings();
   void ripTrack(Job *);
