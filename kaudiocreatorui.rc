@@ -12,7 +12,7 @@
 </ActionProperties>
 
 <MenuBar>
-  <Menu name="file"><Text>&amp;File</Text>
+  <Menu name="file"><Text>&amp;Program</Text>
     <Action name="update_cd"/>
     <Action name="cddb_now"/>
     <Action name="edit_cd"/>

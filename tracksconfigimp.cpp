@@ -27,6 +27,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
   connect(editTag, SIGNAL(clicked()), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
   connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
+  connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
   connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
   connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
   connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
@@ -206,8 +207,8 @@ void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, 
 }
 
 /**
- * There is a new song for this album.  Add it to the list of songs.  Set the current selected
- * song to the first one.
+ * There is a new song for this album.  Add it to the list of songs.  Set the
+ * current selected song to the first one.
  * @param track the track number for the song.
  * @param song the name of the song.
  */
@@ -217,7 +218,22 @@ void TracksConfigImp::newSong(int track, QString song, int length){
   song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
   QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song);
+  newItem->setRenameEnabled(HEADER_NAME, TRUE);
   trackListing->setCurrentItem(trackListing->firstChild());
+}
+
+
+/**
+ * If the user presses the F2 key, trigger renaming of the title.
+ * @param event the QKeyEvent passed to this event handler.
+ */
+void TracksConfigImp::keyPressEvent(QKeyEvent *event){
+  if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
+    event->accept();
+    trackListing->selectedItem()->startRename(HEADER_NAME);
+  }
+  else
+    TracksConfig::keyPressEvent(event);
 }
 
 #include "tracksconfigimp.moc"

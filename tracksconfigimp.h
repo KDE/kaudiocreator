@@ -40,7 +40,8 @@ private slots:
   void selectTrack(QListViewItem *);
   void selectAllTracks();
   void deselectAllTracks();
-
+  void keyPressEvent(QKeyEvent *event);
+  
 private:
   QString album;
   QString group;
