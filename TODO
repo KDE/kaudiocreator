@@ -19,8 +19,11 @@ Possiblity to use "nice" when calling encode jobs.
 
 Remove the magical "Rip" list header action which (de)selects all jobs.
 
-Make it possible to queue all encoding jobs until the user wishes
-for them to being. 
+"Alternate" encoder location configs. Therefore allowing "sampler cds"
+to use "<album>/<tracknumber> <artist> - <title>"
+and normal cd's to use "<artist>/<album>/<tracknumber> <title>"
+the alternate selection could just be a simple checkbox next
+to rip selected tracks.
 
 Use a proper CDDB library that the rest of kde uses.
 - Support for local CDDB directories as in kscd or audiocd-kioslave.
