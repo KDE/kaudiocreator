@@ -1,5 +1,4 @@
 BUG? encoding with different genre's
-Possiblity to use "nice" when calling encoding jobs. (todo once kprocess gets that feature)
 Multiple Artists for 1 album.
 Add the ability to encode files.
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
