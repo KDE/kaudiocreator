@@ -129,16 +129,9 @@ void RipConfigImp::tendToNewJobs(){
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
 
+  QMap<QString, QString> map;
   QString desiredFile = fileFormat->text();
-  desiredFile.replace(QRegExp("%album"), job->album);
-  desiredFile.replace(QRegExp("%genre"), job->genre);
-  desiredFile.replace(QRegExp("%artist"), job->group);
-  desiredFile.replace(QRegExp("%year"), QString("%1").arg(job->year));
-  desiredFile.replace(QRegExp("%song"), job->song);
-  if( job->track < 10 )
-    desiredFile.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
-  else
-    desiredFile.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
+  job->replaceSpecialChars(desiredFile, false, map);
 
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());

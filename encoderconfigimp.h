@@ -47,7 +47,6 @@ private:
   QList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
-  void replaceSpecialChars(QString &string, Job * job, bool slash, QMap<QString,QString> map);
   int encodersPercentStringLength;
   int oldEncoderSelection;
 

@@ -19,49 +19,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include "kmacroexpander.h"
-
 #define ENCODER_EXE_STRING "encoderExe_"
 #define ENCODER_ARGS_STRING "encoderCommandLine_"
 #define ENCODER_EXTENSION_STRING "encoderExtension_"
 #define ENCODER_PERCENTLENGTH_STRING "encoderPercentLength_"
-
-// Clean up the string so that it doesn't wander off to unexpected directories
-static QString sanitize(const QString &s)
-{
-  QString result = s;
-  result.replace('/', ":");
-  if (result.isEmpty())
-    result = "(empty)";
-  if (result[0] == '.')
-    result[0] = '_';
-  return result;
-}
-
-/**
- * A helper function to replace %X with the stuff in the album.
- * if quote is true then put "" around the %X
- */
-void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool quote, QMap<QString, QString> _map){
-  QMap<QString,QString> map = _map;
-  
-  map.insert("album", sanitize(job->album));
-  map.insert("genre", sanitize(job->genre));
-  map.insert("artist", sanitize(job->group));
-  map.insert("year", QString::number(job->year));
-  map.insert("song", sanitize(job->song));
-  map.insert("extension", sanitize(encoderExtensionLineEdit->text()));
-  if( job->track < 10 )
-      map.insert("track", "0" + QString::number(job->track) );
-  else
-      map.insert("track", QString::number(job->track) );
-
-  if (quote)
-      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacrosShellQuote(string, map);
-  else
-      KAudioCreator::KSelfDelimitingMacroMapExpander::expandMacros(string, map);
-  
-}
 
 /**
  * Constructor, load settings.  Set the up the pull down menu with the correct item.
@@ -263,7 +224,8 @@ void EncoderConfigImp::tendToNewJobs(){
   QString desiredFile = fileFormat->text();
   {
     QMap <QString,QString> map;
-    replaceSpecialChars(desiredFile, job, false, map);
+    map.insert("extension", encoderExtensionLineEdit->text());
+    job->replaceSpecialChars(desiredFile, false, map);
   }
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
@@ -279,9 +241,10 @@ void EncoderConfigImp::tendToNewJobs(){
   QString command = encoderCommandLine->text();
   {
     QMap <QString,QString> map;
+    map.insert("extension", encoderExtensionLineEdit->text());
     map.insert("f", job->location);
     map.insert("o", desiredFile);
-    replaceSpecialChars(command, job, true, map);
+    job->replaceSpecialChars(command, true, map);
   }
 
   updateProgress(job->id, 1);
@@ -386,7 +349,8 @@ void EncoderConfigImp::jobDone(KProcess *process){
 void EncoderConfigImp::appendToPlaylist(Job* job){
   QString desiredFile = playlistFileFormat->text();
   QMap <QString,QString> map;
-  replaceSpecialChars(desiredFile, job, false, map);
+  map.insert("extension", encoderExtensionLineEdit->text());
+  job->replaceSpecialChars(desiredFile, false, map);
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
