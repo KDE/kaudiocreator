@@ -27,6 +27,7 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 /**
  * Constructor, load settings.
@@ -205,7 +206,7 @@ void Encoder::tendToNewJobs(){
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
   if(fullDecoderDebug)
-    qDebug(buffer);
+    kdDebug() << buffer << endl;
 	
   // Make sure we have a job to send an update too.
   Job *job = jobs[(KShellProcess*)process];
