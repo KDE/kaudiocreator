@@ -711,7 +711,11 @@ void TracksImp::eject(){
  */
 void TracksImp::ejectDevice(const QString &deviceToEject){
  KProcess *proc = new KProcess();
-  *proc << "eject" << deviceToEject;
+#ifdef __FreeBSD__
+  *proc << "cdcontrol" << "-f" << device << "eject";
+#else
+   *proc << "eject" << device;
+#endif
   connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
   proc->start(KProcess::NotifyOnExit,  KShellProcess::NoCommunication);
 }
