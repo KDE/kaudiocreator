@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>410</width>
-            <height>334</height>
+            <width>762</width>
+            <height>295</height>
         </rect>
     </property>
     <property name="caption">
@@ -119,7 +119,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Replace With:</string>
+                        <string>Replace with:</string>
                     </property>
                 </widget>
                 <widget class="Line" row="3" column="0" rowspan="1" colspan="3">

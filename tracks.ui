@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>Tracks</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>664</width>
-            <height>482</height>
+            <width>676</width>
+            <height>484</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>Tracks</string>
     </property>
     <grid>
         <property name="name">
@@ -134,7 +137,10 @@
                         <cstring>deselectAllTracksButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;De-select All Tracks</string>
+                        <string>&amp;Deselect All Tracks</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -211,6 +217,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>deviceCombo</tabstop>
     <tabstop>editTag</tabstop>
@@ -221,7 +229,6 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

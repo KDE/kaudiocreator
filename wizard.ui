@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>573</width>
-            <height>247</height>
+            <width>575</width>
+            <height>469</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -83,7 +83,7 @@
                         <cstring>TextLabel9</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;File Location</string>
+                        <string>&amp;File location:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>playlistFormat</cstring>

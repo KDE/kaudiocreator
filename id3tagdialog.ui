@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>Id3TagDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>370</width>
-            <height>228</height>
+            <width>414</width>
+            <height>249</height>
         </rect>
     </property>
     <property name="caption">
@@ -33,7 +33,7 @@
                 <cstring>trackLabel</cstring>
             </property>
             <property name="text">
-                <string>Track</string>
+                <string>Track:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -56,7 +56,7 @@
                 <cstring>TextLabel5</cstring>
             </property>
             <property name="text">
-                <string>Artist</string>
+                <string>Artist:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -69,7 +69,7 @@
                 <cstring>TextLabel6</cstring>
             </property>
             <property name="text">
-                <string>Album</string>
+                <string>Album:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -98,7 +98,7 @@
                 <cstring>TextLabel7</cstring>
             </property>
             <property name="text">
-                <string>Year</string>
+                <string>Year:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -111,7 +111,7 @@
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Genre</string>
+                <string>Genre:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>

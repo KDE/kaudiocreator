@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EncoderEdit</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,8 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>409</width>
-            <height>124</height>
+            <height>127</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>EncoderEdit</string>
     </property>
     <grid>
         <property name="name">
@@ -53,7 +56,7 @@
                 <cstring>textLabel6</cstring>
             </property>
             <property name="text">
-                <string>Command Line:</string>
+                <string>Command line:</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
