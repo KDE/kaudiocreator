@@ -4,7 +4,6 @@
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
-#include <qheader.h> 
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
@@ -23,12 +22,11 @@
 /**
  * Constructor, connect up slots and signals.
  */
-TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfig(parent,name), album(""), group(""), genre(""), year(-1),allOn(false){
+TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfig(parent,name), album(""), group(""), genre(""), year(-1){
   connect(ripSelectedTracks, SIGNAL(clicked()), this, SLOT(startSession()));
   connect(editTag, SIGNAL(clicked()), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
   connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
-  connect(trackListing->header(), SIGNAL(clicked(int)), this, SLOT(headerClicked(int)));
   connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
   connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
   connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
@@ -88,8 +86,7 @@ void TracksConfigImp::editInformation(){
  * Helper function.  Checks all tracks and then calls startSession to rip them all.
  */
 void TracksConfigImp::ripWholeAlbum(){
-  allOn = false;
-  headerClicked(3);
+  selectAllTracks();
   startSession();
 }
 
@@ -159,38 +156,6 @@ void TracksConfigImp::startSession(){
 }
 
 /**
- * The header was clicked so turn all of the tracks on/off
- */
-void TracksConfigImp::headerClicked(int){
-  allOn = !allOn;
- 
-  // If the user manually turned them all on or off make sure we don't do the same. 
-  int totalSelectedSongs = 0;
-  QListViewItem * currentItem = trackListing->firstChild();
-  while( currentItem != 0 ){
-    if(currentItem->pixmap(HEADER_RIP) != NULL )
-      totalSelectedSongs++;
-    currentItem = currentItem->nextSibling();
-  }
-  if(totalSelectedSongs == 0)
-    allOn = true;
-  if(totalSelectedSongs == trackListing->childCount())
-    allOn = false;
-
-  // Turn them all on or off.
-  currentItem = trackListing->firstChild();
-  while( currentItem != 0 ){
-    if(allOn)
-      currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
-    else{
-      QPixmap emptyPixmap;
-      currentItem->setPixmap(HEADER_RIP, emptyPixmap);
-    }
-    currentItem = currentItem->nextSibling();
-  }
-}
-
-/**
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
@@ -217,7 +182,7 @@ void TracksConfigImp::selectAllTracks(){
 }
 
 /**
- * Turn on all of the tracks.
+ * Turn off all of the tracks.
  */
 void TracksConfigImp::deselectAllTracks(){
   QListViewItem *currentItem = trackListing->firstChild();

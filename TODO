@@ -1,3 +1,9 @@
+10.5263     QString::~QString()
+15.7895     QueConfigImp::updateProgress(int, int)
+21.0526     EncoderConfigImp::receivedThreadOutput(KProcess*, char*, int)
+21.0526     QMapPrivate<KShellProcess*, 
+21.0526     QueListViewItem::paintCell(QPainter*, QColorGroup const&, int, int, int)
+
 TODO.
 Should it really say Ripping when it is at 0% and qued?  What else could we say?
 

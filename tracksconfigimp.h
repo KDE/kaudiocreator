@@ -38,7 +38,6 @@ public slots:
 
 private slots:
   void selectTrack(QListViewItem *);
-  void headerClicked(int);
   void selectAllTracks();
   void deselectAllTracks();
 
@@ -47,7 +46,6 @@ private:
   QString group;
   QString genre;
   int year;
-  bool allOn;
 };
 
 #endif

@@ -75,8 +75,10 @@ void QueConfigImp::updateProgress(int id, int progress){
     currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
   if( currentItem){
-    currentItem->percentDone = progress;
-    currentItem->repaint();
+    if(currentItem->percentDone != progress){
+      currentItem->percentDone = progress;
+      currentItem->repaint();
+    }
   }
   else{
     qDebug("An update was recieved about a job, but the job couldn't be found: %d", id);

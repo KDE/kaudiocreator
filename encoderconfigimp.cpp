@@ -213,7 +213,7 @@ void EncoderConfigImp::tendToNewJobs(){
     QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
-  // Just to make sure in the event something goes wrong
+  // Just to make sure in the event something goes wrong or we are exiting
   if(pendingJobs.count() == 0)
     return;
 
@@ -279,11 +279,9 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   }
 
   // Make sure the output string has a % symble in it.
-  QString output = buffer;
-  output = output.mid(0,length);
-  int percentLocation = output.find('%');
-  if(percentLocation==-1){
-    qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all ever.");
+  QString output = buffer.mid(0,length);
+  if( output.find('%') == -1 ){
+    qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
@@ -296,12 +294,9 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
     emit(updateProgress(job->id, percent));
   }
   // If it was just some random output that couldn't be converted then don't report the error.
-  else if(conversionSuccessfull){
-    qDebug("The Percent done (%d) is not > 0 && < 100", percent);
-  }
-  //else{
-  //  qDebug(QString("The Percent done (%1) is not > 0 && < 100, conversion ! sucesfull").arg(output).latin1());
-  //}
+  else
+    if(conversionSuccessfull)
+      qDebug("The Percent done:\"%d\" is not > 0 && < 100", percent);
 }
 
 /**
@@ -309,17 +304,12 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
  * @param job the job that just finished.
  */
 void EncoderConfigImp::jobDone(KProcess *process){
+  // Normal error checking here.
   if(!process)
     return;
-  bool normalExit = true;
-  if(process->normalExit()){
-    int retrunValue = process->exitStatus();
-    if(retrunValue!=0){
-      qDebug("Process exited with non 0 status: %d", retrunValue);
-      normalExit = false;
-    }
-  }
-
+  
+  qDebug("Process exited with status: %d", process->exitStatus());
+  
   Job *job = jobs[(KShellProcess*)process];
   threads.remove((KShellProcess*)process);
   jobs.remove((KShellProcess*)process);
@@ -327,8 +317,16 @@ void EncoderConfigImp::jobDone(KProcess *process){
   if( QFile::exists(job->newLocation)){
     if(!saveWav->isChecked())
       QFile::remove(job->location);
-    if(normalExit)
+    
+    // TODO kill -9 lame or oggenc when processing and see what they return.
+    if(process->normalExit() && process->exitStatus() != 0){
+      //qDebug("Failed to complete!");
+      qDebug("Process exited with non 0 status: %d", process->exitStatus());
+    }
+    else{ 
+      //qDebug("Must be done: %d", (process->exitStatus()));
       emit(updateProgress(job->id, 100));
+    }
     if(createPlaylistCheckBox->isChecked())
       appendToPlaylist(job);
   }
@@ -377,7 +375,6 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
     t << job->newLocation << endl;
   }
   f.close();
-
 }
 
 /**

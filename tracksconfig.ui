@@ -72,7 +72,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Refresh View</string>
+                        <string>Refresh &amp;View</string>
                     </property>
                 </widget>
                 <widget>
@@ -83,7 +83,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Edit Information</string>
+                        <string>&amp;Edit Information</string>
                     </property>
                 </widget>
             </hbox>
@@ -129,7 +129,7 @@
                 </property>
                 <property>
                     <name>clickable</name>
-                    <bool>false</bool>
+                    <bool>true</bool>
                 </property>
                 <property>
                     <name>resizeable</name>
@@ -143,7 +143,7 @@
                 </property>
                 <property>
                     <name>clickable</name>
-                    <bool>false</bool>
+                    <bool>true</bool>
                 </property>
                 <property>
                     <name>resizeable</name>
@@ -157,7 +157,7 @@
                 </property>
                 <property>
                     <name>clickable</name>
-                    <bool>false</bool>
+                    <bool>true</bool>
                 </property>
                 <property>
                     <name>resizeable</name>
@@ -217,7 +217,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Select All Tracks</string>
+                        <string>&amp;Select All Tracks</string>
                     </property>
                 </widget>
                 <widget>
@@ -228,7 +228,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>De-select All Tracks</string>
+                        <string>&amp;De-select All Tracks</string>
                     </property>
                 </widget>
                 <widget>
@@ -239,7 +239,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Rip Selected Tracks</string>
+                        <string>&amp;Rip Selected Tracks</string>
                     </property>
                 </widget>
             </hbox>
