@@ -193,6 +193,7 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 	if(!copyjob)
 		return;
 	KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
+	KNotifyClient::event("track ripped");
 	
 	Job *newJob = jobs[copyjob];
 	if(!newJob)
@@ -208,7 +209,6 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 		emit( encodeWav(newJob));
 	}
 	else{
-		KNotifyClient::event("track ripped");
 		copyJob->showErrorDialog(0);
 		QFile file( (copyJob->destURL()).path());
 		file.remove();
