@@ -255,7 +255,8 @@ void TracksImp::loadSettings(){
   }
   // Add the saved list, no dups
   QStringList prefsList = Prefs::device();
-  for ( QStringList::Iterator it = prefsList.begin(); it != prefsList.end(); ++it ) {
+  QStringList::Iterator it;
+  for ( it = prefsList.begin(); it != prefsList.end(); ++it ) {
     if(list.find( *it ) == list.end())
       list.append(*it);
   }
@@ -270,7 +271,8 @@ void TracksImp::loadSettings(){
  * Check for changes in the cd.
  */ 
 void TracksImp::timerDone(){
-  int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
+  int status = wm_cd_init( WM_CDIN,
+      (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(status == dstatus){
     wm_cd_destroy();
     return;
@@ -346,9 +348,11 @@ void TracksImp::changeDevice(const QString &file){
  * Helper function (toolbar button) for users.
  **/ 
 void TracksImp::performCDDB(){
-  int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
+  int status = wm_cd_init( WM_CDIN,
+           (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(WM_CDS_NO_DISC(status)){
-    KMessageBox::sorry(this, i18n("Please insert a disk."), i18n("CDDB Failed"));
+    KMessageBox::sorry(this, i18n("Please insert a disk."),
+                             i18n("CDDB Failed"));
     wm_cd_destroy();
     return;
   }
@@ -390,7 +394,8 @@ void TracksImp::cddbDone(CDDB::Result result){
   if ((result != 0 /*KCDDB::CDDB::Lookup::Success*/) &&
       (result != KCDDB::CDDB::MultipleRecordFound))
   {
-     KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
+     KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."),
+                              i18n("CDDB Failed"));
     return;
   }
 
@@ -406,7 +411,8 @@ void TracksImp::cddbDone(CDDB::Result result){
     uint maxrev = 0;
     uint c = 0;
     for ( it = cddb_info.begin(); it != cddb_info.end(); ++it ){
-      list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title).arg((*it).genre));
+      list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title)
+                                        .arg((*it).genre));
       KCDDB::CDInfo cinfo = *it;
       if ( ( *it ).revision >= maxrev ) {
         maxrev = info.revision;
@@ -417,7 +423,8 @@ void TracksImp::cddbDone(CDDB::Result result){
  
     bool ok(false); 
     QString res = KInputDialog::getItem(
-            i18n("Select  a CDDB entry - KAudioCreator"), i18n("Select a CDDB entry:"), list, defaultChoice, false, &ok,
+            i18n("Select  a CDDB entry - KAudioCreator"),
+            i18n("Select a CDDB entry:"), list, defaultChoice, false, &ok,
             this );
     if ( ok ) {
       // The user selected and item and pressed OK
@@ -434,7 +441,8 @@ void TracksImp::cddbDone(CDDB::Result result){
   }
 
   // Fill in all album data
-  newAlbum(info.artist, info.title, info.year, info.genre, info.revision, info.category, info.extd);  
+  newAlbum(info.artist, info.title, info.year, info.genre,
+           info.revision, info.category, info.extd);  
       
   KCDDB::TrackInfoList t = info.trackInfoList;
   for (unsigned i = t.count(); i > 0; i--)
@@ -460,7 +468,8 @@ void TracksImp::cddbDone(CDDB::Result result){
 void TracksImp::editInformation(){
   QListViewItem * currentItem = trackListing->currentItem();
   if( currentItem == 0 ){
-    KMessageBox::sorry(this, i18n("Please select a track."), i18n("No Track Selected"));
+    KMessageBox::sorry(this, i18n("Please select a track."),
+                             i18n("No Track Selected"));
     return;
   }
 
@@ -498,12 +507,17 @@ void TracksImp::editInformation(){
   // Show dialog->and save results.
   bool okClicked = dialog->exec();
   if(okClicked){
-    trackListing->currentItem()->setText(HEADER_TRACK_NAME, dialog->track_title->text());
-    trackListing->currentItem()->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
-    trackListing->currentItem()->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
+    QListViewItem *ci = trackListing->currentItem();
+    ci->setText(HEADER_TRACK_NAME, dialog->track_title->text());
+    ci->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
+    ci->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
     
     if( group != dialog->artist->text()){
-      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist. Would you like all of the track artists that had the old name to be changed to the new name?"), i18n("Album Artist Changed"));
+      int r = KMessageBox::questionYesNo(this, i18n("You have changed the "\
+      "album artist. Would you like all of the track artists that had the "\
+      "old name to be changed to the new name?"),
+      i18n("Album Artist Changed"));
+
       if( r == KMessageBox::Yes ){
         QListViewItem * currentItem = trackListing->firstChild();
         while( currentItem != 0 ){
@@ -550,8 +564,8 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
   {
     QStringList catlist;
     catlist << "blues" << "classical" << "country"
-	    << "data" << "folk" << "jazz" << "misc" << "newage" << "reggae"
-	    << "rock" << "soundtrack";
+            << "data" << "folk" << "jazz" << "misc" << "newage" << "reggae"
+            << "rock" << "soundtrack";
 
     bool ok;
 
@@ -589,7 +603,8 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
  */
 void TracksImp::startSession(){
   if(trackListing->childCount() == 0){
-    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No Tracks Selected"));
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
+     "select at least 1 track before ripping."), i18n("No Tracks Selected"));
     return;
   }
 
@@ -637,13 +652,15 @@ void TracksImp::startSession(){
     lastJob->lastSongInAlbum = true;
 
   if(counter == 0){
-    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No Tracks Selected"));
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
+     "select at least 1 track before ripping."), i18n("No Tracks Selected"));
     return;
   }
 
   KMessageBox::information(this,
-  i18n("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter),
- i18n("Jobs have started"), i18n("Jobs have started"));
+  i18n("%1 Job(s) have been started.  You can watch their progress in the "\
+       "jobs section.").arg(counter),
+  i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
 /**
@@ -805,7 +822,8 @@ void TracksImp::ejectDevice(const QString &deviceToEject){
 void TracksImp::ejectDone(KProcess *proc){
   int returnValue = proc->exitStatus();
   if(returnValue == 127){
-    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Cannot Eject"));
+    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."),
+                              i18n("Cannot Eject"));
     return;
   }
   if(returnValue != 0){
