@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kaudiocreatorrc"/>
+  <include>kaudiocreator_workman.h</include>
+  <group name="CD">
+    <entry name="performCDDBauto" type="Bool">
+      <label>Perform automatic CDDB lookups.</label>
+      <default>false</default>
+    </entry>
+    <entry name="autoRip" type="Bool">
+      <label>Automatically rip all songs upon a succesful CDDB retrieval</label>
+      <default>false</default>
+    </entry>
+    <entry name="device" type="String">
+      <label>CD device</label>
+      <default code="true">DEFAULT_CD_DEVICE</default>
+    </entry>
+    <entry name="promptIfIncompleteInfo" type="Bool">
+      <label>Prompt if information is not complete</label>
+      <default>true</default>
+    </entry>
+  </group>
+  <group name="General">
+    <entry name="removeCompletedJobs" type="Bool">
+      <label>Automatically remove jobs when finished</label>
+      <default>false</default>
+    </entry>
+    <entry name="replaceInput" type="String" key="selection">
+      <label>Regexp to match file names with</label>
+    </entry>
+    <entry name="replaceOutput" type="String" key="replace">
+      <label>String used to replace the parts that match the selection regexp</label>
+    </entry>
+   </group>
+   <group name="Encoder">
+    <entry name="currentEncoder" type="Int" key="encoderChoice">
+      <label>Currently selected encoder</label>
+      <default>0</default>
+    </entry>
+    <entry name="lastKnownEncoder" type="Int">
+      <label>Last encoder in the list</label>
+      <default>0</default>
+    </entry>
+    <entry name="numberOfCpus" type="Int">
+      <label>Number of files to encode at a time</label>
+      <default>1</default>
+    </entry>
+    <entry name="fileFormat" type="String">
+      <label>Location pattern for encoded files</label>
+      <default>~/%extension/%artist/%album/%artist - %song.%extension</default>
+    </entry>
+    <entry name="createPlayList" type="Bool">
+      <label>Create an album playlist file</label>
+      <default>false</default>
+    </entry>
+    <entry name="playlistFileFormat" type="String">
+      <label>Location pattern for playlist files</label>
+      <default>~/%extension/%artist/%album/%artist - %album.m3u</default>
+    </entry>
+    <entry name="useRelativePath" type="Bool" key="useRelitivePath">
+      <label>Use relative path for playlists</label>
+      <default>false</default>
+    </entry>
+    <entry name="NiceLevel" type="Int">
+      <label>Encoder priority</label>
+      <default>0</default>
+      <min>-19</min>
+      <max>19</max>
+    </entry>
+    <entry name="FullDecoderDebug" type="Bool">
+      <label>Enable full decoder debugging</label>
+      <default>false</default>
+    </entry>
+   </group>
+  <group name="Ripper">
+    <entry name="maxWavFiles" type="Int">
+      <label>Number of tracks to rip at a time</label>
+      <default>1</default>
+    </entry>
+    <entry name="beepAfterRip" type="Bool">
+      <label>Beep after rip</label>
+      <default>true</default>
+    </entry>
+    <entry name="autoEjectAfterRip" type="Bool">
+      <label>Eject CD after last song is ripped</label>
+      <default>false</default>
+    </entry>
+    <entry name="autoEjectDelay" type="Int">
+      <label>Auto-eject delay</label>
+      <default>0</default>
+    </entry>
+   </group>
+</kcfg>

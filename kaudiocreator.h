@@ -22,12 +22,15 @@
 #define KAUDIOCREATOR_H
 
 #include <kmainwindow.h>
+#include <kconfigdialog.h>
 
 class KJanusWidget;
 class TracksImp;
 class JobQueImp;
 class Ripper;
 class Encoder;
+class KCModule;
+class EncoderConfigImp;
 
 class KAudioCreator : public KMainWindow {
 
@@ -54,6 +57,30 @@ private:
   Ripper *ripper;
   Encoder *encoder;
 
+};
+
+class SettingsDialog: public KConfigDialog {
+Q_OBJECT
+
+public:
+  SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
+  
+protected slots:
+  void updateSettings();
+  void updateWidgets();
+  void updateWidgetsDefault();
+  void slotCddbChanged(bool);
+  
+protected:
+  bool hasChanged();
+  bool isDefault();
+
+public:
+   EncoderConfigImp *encoderConfigImp;
+
+private:
+  KCModule* cddb;
+  bool cddbChanged;
 };
 
 #endif

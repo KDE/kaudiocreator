@@ -75,7 +75,6 @@ private:
   int highestNumber;
 
   int currentId;
-  bool removeCompletedJobs;
 };
 
 #endif

@@ -85,9 +85,6 @@ private:
   
   // Settings
   QString device;
-  bool performCDDBauto;
-  bool autoRip;
-  bool promptIfIncompleteInfo;
 };
 
 #endif

@@ -20,6 +20,7 @@
 #include "tracksimp.h"
 #include "job.h"
 #include "id3tagdialog.h"
+#include "prefs.h"
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
@@ -34,9 +35,7 @@
 #define HEADER_LENGTH 2
 #define HEADER_RIP 0
 
-extern "C" {
-  #include "../kscd/libwm/include/workman.h"
-}
+#include "kaudiocreator_workman.h"
 
 #include "client.h"
 #include <kconfig.h>
@@ -221,24 +220,16 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
  * store the current device from the combo.
  */
 TracksImp::~TracksImp(){
-  KConfig &config = *KGlobal::config();
-  config.setGroup("CD");
-  config.writeEntry("device", deviceCombo->currentText());
+  Prefs::setDevice(deviceCombo->currentText());
+  Prefs::writeConfig();
 }
 
 /**
  * Load the class settings. 
  */ 
 void TracksImp::loadSettings(){
-  KConfig &config = *KGlobal::config();
-  config.setGroup("CD");
-  performCDDBauto = config.readBoolEntry("performCDDBauto", false);
-  autoRip = config.readBoolEntry("autoRip", false);
-
-  device = config.readEntry("device", DEFAULT_CD_DEVICE);
+  device = Prefs::device();
   deviceCombo->setCurrentText(device);
-
-  promptIfIncompleteInfo = config.readBoolEntry("promptIfIncompleteInfo", true);
 }
 
 /**
@@ -288,8 +279,8 @@ void TracksImp::timerDone(){
     else
       newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length);
   }
-  if(performCDDBauto)
-    if(cddbCD() && autoRip)
+  if(Prefs::performCDDBauto())
+    if(cddbCD() && Prefs::autoRip())
       ripWholeAlbum();
 
   wm_cd_destroy();
@@ -471,7 +462,7 @@ void TracksImp::startSession(){
       list += ", ";
     list += "Album";
   }
-  if( promptIfIncompleteInfo && !list.isEmpty() ){
+  if( Prefs::promptIfIncompleteInfo() && !list.isEmpty() ){
     int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information Incomplete"));
     if( r == KMessageBox::No )
       return;

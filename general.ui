@@ -24,7 +24,7 @@
         </property>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>removeCompletedJobs</cstring>
+                <cstring>kcfg_removeCompletedJobs</cstring>
             </property>
             <property name="text">
                 <string>&amp;Automatically remove jobs when finished</string>
@@ -103,12 +103,12 @@
                 </widget>
                 <widget class="QLineEdit" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>selection</cstring>
+                        <cstring>kcfg_replaceInput</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="2" column="2">
                     <property name="name">
-                        <cstring>replace</cstring>
+                        <cstring>kcfg_replaceOutput</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="2">
@@ -156,13 +156,13 @@
 </widget>
 <connections>
     <connection>
-        <sender>selection</sender>
+        <sender>kcfg_replaceInput</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>General</receiver>
         <slot>updateExample()</slot>
     </connection>
     <connection>
-        <sender>replace</sender>
+        <sender>kcfg_replaceOutput</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>General</receiver>
         <slot>updateExample()</slot>
@@ -175,10 +175,10 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>selection</tabstop>
-    <tabstop>replace</tabstop>
+    <tabstop>kcfg_replaceInput</tabstop>
+    <tabstop>kcfg_replaceOutput</tabstop>
     <tabstop>example</tabstop>
-    <tabstop>removeCompletedJobs</tabstop>
+    <tabstop>kcfg_removeCompletedJobs</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">general.ui.h</include>

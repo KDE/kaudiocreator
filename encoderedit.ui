@@ -18,7 +18,7 @@
         </property>
         <widget class="QLineEdit" row="1" column="1">
             <property name="name">
-                <cstring>commandLine</cstring>
+                <cstring>kcfg_commandLine</cstring>
             </property>
             <property name="text">
                 <string>app.exe %f %o</string>
@@ -26,7 +26,7 @@
         </widget>
         <widget class="QLineEdit" row="0" column="1">
             <property name="name">
-                <cstring>encoderName</cstring>
+                <cstring>kcfg_encoderName</cstring>
             </property>
             <property name="text">
                 <string>Unknown Encoder</string>
@@ -34,7 +34,7 @@
         </widget>
         <widget class="QLineEdit" row="2" column="1">
             <property name="name">
-                <cstring>extension</cstring>
+                <cstring>kcfg_extension</cstring>
             </property>
             <property name="text">
                 <string>wav</string>
@@ -84,9 +84,9 @@
     </grid>
 </widget>
 <tabstops>
-    <tabstop>encoderName</tabstop>
-    <tabstop>commandLine</tabstop>
-    <tabstop>extension</tabstop>
+    <tabstop>kcfg_encoderName</tabstop>
+    <tabstop>kcfg_commandLine</tabstop>
+    <tabstop>kcfg_extension</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

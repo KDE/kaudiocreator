@@ -1,0 +1,7 @@
+# Code generation options for kconfig_compiler
+File=kaudiocreator_encoders.kcfg
+#IncludeFiles=defines.h
+ClassName=EncoderPrefs
+Singleton=false
+CustomAdditions=true
+Mutators=true

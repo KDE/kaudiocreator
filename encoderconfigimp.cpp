@@ -20,10 +20,11 @@
 
 #include "encoderconfigimp.h"
 #include "encoderedit.h"
+#include "prefs.h"
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <kautoconfigdialog.h>
+#include <kconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -36,39 +37,42 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-  connect(encoderChoice, SIGNAL(doubleClicked ( QListBoxItem * )),this, SLOT(configureEncoderSlot()));
-  KConfig &config = *KGlobal::config();
-  config.setGroup("Encoder");
-  int lastKnownEncoder = config.readNumEntry("lastKnownEncoder",0);
+  connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( QListBoxItem * )),this, SLOT(configureEncoderSlot()));
 
   // If there are no encoders then store the three default ones.
-  if( lastKnownEncoder == 0){
-    config.setGroup("Encoder_0");
-    config.writeEntry("encoderName", i18n("OggEnc"));
-    config.writeEntry("commandLine", "oggenc -o %o --artist %artist --album %album --title %song --tracknum %track --genre %genre %f");
-    config.writeEntry("extension", "ogg");
-    config.writeEntry("percentLength", 4);
+  if( Prefs::lastKnownEncoder() == 0){
+    EncoderPrefs *encPrefs;
+    
+    encPrefs = EncoderPrefs::prefs("Encoder_0");
+    encPrefs->setEncoderName(i18n("OggEnc"));
+    encPrefs->setCommandLine("oggenc -o %o --artist %artist --album %album --title %song --tracknum %track --genre %genre %f");
+    encPrefs->setExtension("ogg");
+    encPrefs->setPercentLength(4);
+    encPrefs->writeConfig();
 
-    config.setGroup("Encoder_1");
-    config.writeEntry("encoderName", i18n("Lame"));
-    config.writeEntry("commandLine", "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
-    config.writeEntry("extension", "mp3");
-    config.writeEntry("percentLength", 2);
+    encPrefs = EncoderPrefs::prefs("Encoder_1");
+    encPrefs->setEncoderName(i18n("Lame"));
+    encPrefs->setCommandLine("lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
+    encPrefs->setExtension("mp3");
+    encPrefs->setPercentLength(2);
+    encPrefs->writeConfig();
 
-    config.setGroup("Encoder_2");
-    config.writeEntry("encoderName", i18n("Leave as a wav file"));
-    config.writeEntry("commandLine", "mv %f %o");
-    config.writeEntry("extension", "wav");
-    config.writeEntry("percentLength", 2);
+    encPrefs = EncoderPrefs::prefs("Encoder_2");
+    encPrefs->setEncoderName(i18n("Leave as a wav file"));
+    encPrefs->setCommandLine("mv %f %o");
+    encPrefs->setExtension("wav");
+    encPrefs->setPercentLength(2);
+    encPrefs->writeConfig();
 
-    config.setGroup("Encoder_3");
-    config.writeEntry("encoderName", i18n("FLAC"));
-    config.writeEntry("commandLine", "flac --best -o %o --tag=Artist=%artist --tag=Album=%album --tag=Title=%song --tag=Tracknumber=%track --tag=Genre=%genre %f");
-    config.writeEntry("extension", "flac");
-    config.writeEntry("percentLength", 2);
+    encPrefs = EncoderPrefs::prefs("Encoder_3");
+    encPrefs->setEncoderName(i18n("FLAC"));
+    encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%artist --tag=Album=%album --tag=Title=%song --tag=Tracknumber=%track --tag=Genre=%genre %f");
+    encPrefs->setExtension("flac");
+    encPrefs->setPercentLength(2);
+    encPrefs->writeConfig();
 
-    config.setGroup("Encoder");
-    config.writeEntry("lastKnownEncoder", 2);
+    Prefs::setLastKnownEncoder(3);
+    Prefs::writeConfig();
   }
   
   loadEncoderList();
@@ -81,37 +85,33 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
  */ 
 void EncoderConfigImp::loadEncoderList(){
   encoderNames.clear();
-  encoderChoice->clear();
+  kcfg_currentEncoder->clear();
   
-  KConfig &config = *KGlobal::config();
-  config.setGroup("Encoder");
-  
-  QString currentEncoderString = config.readEntry("currentEncoder");
   bool foundCurrentEncoder = false;
   
-  uint lastEncoder = 0;
-  uint lastKnownEncoder = config.readNumEntry("lastKnownEncoder",0);
+  int lastEncoder = 0;
+  int lastKnownEncoder = Prefs::lastKnownEncoder();
   lastKnownEncoder++;
-  for( uint i=0; i<=lastKnownEncoder; i++ ){
+  for( int i=0; i<=lastKnownEncoder; i++ ){
     QString currentGroup = QString("Encoder_%1").arg(i);
-    if(config.hasGroup(currentGroup)){
+    if(EncoderPrefs::hasPrefs(currentGroup)){
       lastEncoder = i;
-      config.setGroup(currentGroup);
-      QString encoderName = config.readEntry("encoderName", i18n("Unknown Encoder"));
-      encoderChoice->insertItem(encoderName);
+      EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
+      QString encoderName = encPrefs->encoderName();
+      kcfg_currentEncoder->insertItem(encoderName);
       encoderNames.insert(encoderName, currentGroup);
-      if(currentEncoderString == encoderName)
+      if(Prefs::currentEncoder() == i)
 	foundCurrentEncoder = true;    
     }
   }
-  if((lastKnownEncoder-1) != lastEncoder){
-    config.setGroup("Encoder");
-    config.writeEntry("lastKnownEncoder", lastEncoder);
+  if(lastEncoder != Prefs::lastKnownEncoder()){
+    Prefs::setLastKnownEncoder(lastEncoder);
+    Prefs::writeConfig();
   }
   
   // Make sure that the current encoder is valid.
-  if(!foundCurrentEncoder && encoderChoice->count() > 0)
-    encoderChoice->setCurrentItem(0);
+  if(!foundCurrentEncoder && kcfg_currentEncoder->count() > 0)
+    kcfg_currentEncoder->setCurrentItem(0);
 }
 
 /**
@@ -119,22 +119,23 @@ void EncoderConfigImp::loadEncoderList(){
  * bring up dialog for that group.
  */ 
 void EncoderConfigImp::addEncoderSlot(){
-  KConfig &config = *KGlobal::config();
   bool foundEmptyGroup = false;
   uint number = 0;
+  QString groupName;
   while(!foundEmptyGroup){
-    if(!config.hasGroup(QString("Encoder_%1").arg(number)))
+    groupName = QString("Encoder_%1").arg(number);
+    if(!EncoderPrefs::hasPrefs(groupName))
       foundEmptyGroup = true;
     else
       number++;
   }
  
-  QString groupName = QString("Encoder_%1").arg(number);
-  if(KAutoConfigDialog::showDialog(groupName.latin1()))
+  if(KConfigDialog::showDialog(groupName.latin1()))
     return;
-  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+    
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName), KDialogBase::Swallow);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
+  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadEncoderList()));
   dialog->show();
 }
@@ -150,11 +151,11 @@ void EncoderConfigImp::addEncoderSlot(){
  * Deleted from the config.
  */ 
 void EncoderConfigImp::removeEncoderSlot(){
-  if(!encoderChoice->selectedItem()){
+  if(!kcfg_currentEncoder->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }	
-  if(encoderChoice->count() <= 1){
+  if(kcfg_currentEncoder->count() <= 1){
     KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can Not Remove"));
     return;
   }
@@ -162,10 +163,12 @@ void EncoderConfigImp::removeEncoderSlot(){
       == KMessageBox::No )
     return;
   
-  QString groupName = encoderNames[encoderChoice->currentText()];
-  KConfig &config = *KGlobal::config();
-  config.deleteGroup(groupName);
-  encoderChoice->removeItem(encoderChoice->currentItem());
+  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
+  kcfg_currentEncoder->removeItem(kcfg_currentEncoder->currentItem());
+
+  delete KConfigDialog::exists(groupName.latin1());
+
+  EncoderPrefs::deletePrefs(groupName);
 }
 
 /**
@@ -176,20 +179,21 @@ void EncoderConfigImp::removeEncoderSlot(){
  * Bring up dialog
  */ 
 void EncoderConfigImp::configureEncoderSlot() {
-  if(!encoderChoice->selectedItem()){
+  if(!kcfg_currentEncoder->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }
-  QString groupName = encoderNames[encoderChoice->currentText()];
+  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
   KConfig &config = *KGlobal::config();
   if(!config.hasGroup(groupName))
     return;
 
-  if(KAutoConfigDialog::showDialog(groupName.latin1()))
+  if(KConfigDialog::showDialog(groupName.latin1()))
     return;
-  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName), KDialogBase::Swallow);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
+  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
   connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
@@ -228,23 +232,54 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   }
   if(!found)
     return;
-  KConfig &config = *KGlobal::config();
-  if(!config.hasGroup(groupName))
+  if(!EncoderPrefs::hasPrefs(groupName))
     return;
-  config.setGroup(groupName);
-  QString newName = config.readEntry("encoderName");
+  QString newName = EncoderPrefs::prefs(groupName)->encoderName();
   if(newName == encoderName)
     return;
   
-  QListBoxItem *item = encoderChoice->findItem(encoderName);
+  QListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
   if(!item)
     return;
-  encoderChoice->changeItem(newName, encoderChoice->index(item));
+  kcfg_currentEncoder->changeItem(newName, kcfg_currentEncoder->index(item));
 
   encoderNames.insert(newName, groupName);
   encoderNames.erase(encoderName);
 }
 
+QDict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
+
+EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
+{
+  if (!m_prefs)
+  {
+     m_prefs = new QDict<EncoderPrefs>();
+     m_prefs->setAutoDelete(true);
+  }
+  EncoderPrefs *encPrefs = m_prefs->find(groupName);
+  if (encPrefs)
+    return encPrefs;
+    
+  encPrefs = new EncoderPrefs(groupName);
+  encPrefs->readConfig();
+  m_prefs->insert(groupName, encPrefs);
+  return encPrefs;
+}
+
+bool EncoderPrefs::hasPrefs(const QString &groupName)
+{
+  KConfig &config = *KGlobal::config();
+  return config.hasGroup(groupName);
+}
+
+void EncoderPrefs::deletePrefs(const QString &groupName)
+{
+  KConfig &config = *KGlobal::config();
+  config.deleteGroup(groupName);
+  if (!m_prefs)
+    return;
+  m_prefs->remove(groupName);
+}
 
 #include "encoderconfigimp.moc"
 

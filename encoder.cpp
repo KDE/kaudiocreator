@@ -20,6 +20,9 @@
 
 #include "encoder.h"
 
+#include "prefs.h"
+#include "encoder_prefs.h"
+
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qdir.h>
@@ -40,39 +43,12 @@ Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name) {
  * Load the settings for this class.
  */ 
 void Encoder::loadSettings(){
-  KConfig &config = *KGlobal::config();
-  
-  config.setGroup("General");
-  replaceInput = config.readEntry("selection");
-  replaceOutput = config.readEntry("replace");
-  
-  config.setGroup("Encoder");
-  uint currentEncoder = config.readNumEntry("encoderChoice", 0);
-  QString currentEncoderGroup = QString("Encoder_%1").arg(currentEncoder);
-  if(!config.hasGroup(currentEncoderGroup)){
+  QString currentEncoderGroup = QString("Encoder_%1").arg(Prefs::currentEncoder());
+  prefs = EncoderPrefs::prefs(currentEncoderGroup);
+  if(!EncoderPrefs::hasPrefs(currentEncoderGroup)){
     KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
+    prefs->setCommandLine(QString::null);
   }
-  else{
-    config.setGroup(currentEncoderGroup);
-    encoderCommandLine = config.readPathEntry("commandLine");
-    encoderExtension = config.readEntry("extension");
-    encoderPercentLength = config.readNumEntry("percentLength");
-  }
-  
-  config.setGroup("Encoder");
-  numberOfCpus = config.readNumEntry("numberOfCpus", 1);
-  fileFormat = config.readPathEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
-  createPlaylist = config.readBoolEntry("createPlaylist", false);
-  playlistFileFormat = config.readPathEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
-  useRelitivePath = config.readBoolEntry("useRelitivePath", false);
-
-  if(config.hasKey("NiceLevel")){
-    niceLevel = config.readNumEntry("NiceLevel");
-    setNiceLevel = true;
-  }
-  else
-    setNiceLevel = false;
-  fullDecoderDebug = config.readBoolEntry("FullDecoderDebug", false);
 }
 
 /**
@@ -129,7 +105,7 @@ void Encoder::removeJob(int id){
  * @param job the job to encode.
  */
 void Encoder::encodeWav(Job *job){
-  emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(encoderExtension).arg(job->group).arg(job->song)));
+  emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(prefs->extension()).arg(job->group).arg(job->song)));
   pendingJobs.append(job);
   tendToNewJobs();
 }
@@ -140,7 +116,7 @@ void Encoder::encodeWav(Job *job){
  */
 void Encoder::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
-  if(threads.count() >= numberOfCpus){
+  if((int)threads.count() >= Prefs::numberOfCpus()){
     QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
@@ -151,16 +127,16 @@ void Encoder::tendToNewJobs(){
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
 
-  QString desiredFile = fileFormat;
+  QString desiredFile = Prefs::fileFormat();
   {
     QMap <QString,QString> map;
-    map.insert("extension", encoderExtension);
+    map.insert("extension", prefs->extension());
     job->replaceSpecialChars(desiredFile, false, map);
   }
   desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
   
   // If the user wants anything regexp replaced do it now...
-  desiredFile.replace( QRegExp(replaceInput), replaceOutput );
+  desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
   
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
@@ -170,10 +146,10 @@ void Encoder::tendToNewJobs(){
 
   job->newLocation = desiredFile;
 
-  QString command = encoderCommandLine;
+  QString command = prefs->commandLine();
   {
     QMap <QString,QString> map;
-    map.insert("extension", encoderExtension);
+    map.insert("extension", prefs->extension());
     map.insert("f", job->location);
     map.insert("o", desiredFile);
     job->replaceSpecialChars(command, true, map);
@@ -183,8 +159,7 @@ void Encoder::tendToNewJobs(){
 
   job->errorString = command;
   KShellProcess *proc = new KShellProcess();
-  if(setNiceLevel)
-    proc->setPriority(niceLevel);
+  proc->setPriority(Prefs::niceLevel());
   
   *proc << QFile::encodeName(command);
   connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
@@ -205,7 +180,7 @@ void Encoder::tendToNewJobs(){
  * @param buflen the length of the buffer.
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
-  if(fullDecoderDebug)
+  if(Prefs::fullDecoderDebug())
     kdDebug() << buffer << endl;
 	
   // Make sure we have a job to send an update too.
@@ -222,7 +197,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
-  output = output.mid(output.find('%')-encoderPercentLength,2);
+  output = output.mid(output.find('%')-prefs->percentLength(),2);
   //qDebug(QString("Post cropped: %1").arg(output).latin1());
   bool conversionSuccessfull = false;
   int percent = output.toInt(&conversionSuccessfull);
@@ -268,7 +243,7 @@ void Encoder::jobDone(KProcess *process){
       //qDebug("Must be done: %d", (process->exitStatus()));
       emit(updateProgress(job->id, 100));
     }
-    if(createPlaylist)
+    if(Prefs::createPlayList())
       appendToPlaylist(job);
   }
   else{
@@ -286,14 +261,14 @@ void Encoder::jobDone(KProcess *process){
  * @param job too append to the playlist.
  */
 void Encoder::appendToPlaylist(Job* job){
-  QString desiredFile = playlistFileFormat;
+  QString desiredFile = Prefs::playlistFileFormat();
   QMap <QString,QString> map;
-  map.insert("extension", encoderExtension);
+  map.insert("extension", prefs->extension());
   job->replaceSpecialChars(desiredFile, false, map);
   
   desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
   // If the user wants anything regexp replaced do it now...
-  desiredFile.replace( QRegExp(replaceInput), replaceOutput );
+  desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
   
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
@@ -310,7 +285,7 @@ void Encoder::appendToPlaylist(Job* job){
   QTextStream t( &f );        // use a text stream
 
   bool relWorked = false;
-  if(useRelitivePath){
+  if(Prefs::useRelativePath()){
     QFileInfo audioFile(job->newLocation);
     QString relative;
     KURL d(desiredFile);

@@ -24,13 +24,10 @@
         </property>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>beepAfterRip</cstring>
+                <cstring>kcfg_beepAfterRip</cstring>
             </property>
             <property name="text">
                 <string>&amp;Beep after each rip is done</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -55,25 +52,22 @@
                         <string>&amp;Number of tracks to rip at a time:</string>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>maxWavFiles</cstring>
+                        <cstring>kcfg_maxWavFiles</cstring>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
                     <property name="name">
-                        <cstring>maxWavFiles</cstring>
+                        <cstring>kcfg_maxWavFiles</cstring>
                     </property>
                     <property name="maxValue">
                         <number>99999</number>
-                    </property>
-                    <property name="value">
-                        <number>1</number>
                     </property>
                 </widget>
             </hbox>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>autoEjectAfterRip</cstring>
+                <cstring>kcfg_autoEjectAfterRip</cstring>
             </property>
             <property name="text">
                 <string>&amp;Auto-eject CD after last song is ripped</string>
@@ -104,12 +98,12 @@
                         <string>Auto-&amp;eject delay:</string>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>autoEjectDelay</cstring>
+                        <cstring>kcfg_autoEjectDelay</cstring>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
                     <property name="name">
-                        <cstring>autoEjectDelay</cstring>
+                        <cstring>kcfg_autoEjectDelay</cstring>
                     </property>
                     <property name="enabled">
                         <bool>false</bool>
@@ -144,23 +138,23 @@
 </widget>
 <connections>
     <connection>
-        <sender>autoEjectAfterRip</sender>
+        <sender>kcfg_autoEjectAfterRip</sender>
         <signal>toggled(bool)</signal>
-        <receiver>autoEjectDelay</receiver>
+        <receiver>kcfg_autoEjectDelay</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>autoEjectAfterRip</sender>
+        <sender>kcfg_autoEjectAfterRip</sender>
         <signal>toggled(bool)</signal>
         <receiver>TextLabel15</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>
-    <tabstop>beepAfterRip</tabstop>
-    <tabstop>maxWavFiles</tabstop>
-    <tabstop>autoEjectAfterRip</tabstop>
-    <tabstop>autoEjectDelay</tabstop>
+    <tabstop>kcfg_beepAfterRip</tabstop>
+    <tabstop>kcfg_maxWavFiles</tabstop>
+    <tabstop>kcfg_autoEjectAfterRip</tabstop>
+    <tabstop>kcfg_autoEjectDelay</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -14,6 +14,6 @@
 void General::updateExample()
 {
   QString text = example->text();
-  text.replace( QRegExp(selection->text()), replace->text() );
+  text.replace( QRegExp(kcfg_replaceInput->text()), kcfg_replaceOutput->text() );
   exampleOutput->setText(text);
 }

@@ -24,7 +24,7 @@
         </property>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>performCDDBauto</cstring>
+                <cstring>kcfg_performCDDBauto</cstring>
             </property>
             <property name="text">
                 <string>&amp;Perform CDDB lookup automatically</string>
@@ -32,7 +32,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>autoRip</cstring>
+                <cstring>kcfg_autoRip</cstring>
             </property>
             <property name="text">
                 <string>&amp;Automatically rip all songs upon a successful CDDB retrieval</string>

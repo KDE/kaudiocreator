@@ -20,6 +20,8 @@
 
 #include "ripper.h"
 
+#include "prefs.h"
+
 #include <qfile.h>
 #include <ktempfile.h>
 #include <qtimer.h>
@@ -44,12 +46,6 @@ Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
  * Loads the settings
  */
 void Ripper::loadSettings(){
-  KConfig &config = *KGlobal::config();
-  config.setGroup("Ripper");
-  maxWavFiles = config.readNumEntry("maxWavFiles", 1);
-  beepAfterRip = config.readBoolEntry("beepAfterRip", true);
-  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", false);
-  autoEjectDelay = config.readNumEntry("autoEjectDelay", 0);
 }
 
 /**
@@ -126,7 +122,7 @@ void Ripper::ripTrack(Job *job){
  */
 void Ripper::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
-  if(jobs.count() >= (uint)maxWavFiles){
+  if(jobs.count() >= (uint)Prefs::maxWavFiles()){
     QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
@@ -170,7 +166,7 @@ void Ripper::copyJobResult(KIO::Job *job){
   Job *newJob = jobs[job];
   jobs.remove(job);
 
-  if(beepAfterRip)
+  if(Prefs::beepAfterRip())
     KNotifyClient::beep();
    
   if ( copyJob->error() == 0 ){
@@ -187,8 +183,8 @@ void Ripper::copyJobResult(KIO::Job *job){
   }
 
   if(newJob->lastSongInAlbum){
-    if(autoEjectAfterRip){
-      QTimer::singleShot( autoEjectDelay*1000 + 500, this, SIGNAL(eject()));
+    if(Prefs::autoEjectAfterRip()){
+      QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject()));
     }
   }
 }

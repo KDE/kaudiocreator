@@ -15,11 +15,11 @@
  */
 void EncoderConfig::playlistWizard(){
   fileWizard wizard(this, "Playlist File FormatWizard", true);
-  wizard.playlistFormat->setText(playlistFileFormat->text());
+  wizard.playlistFormat->setText(kcfg_playlistFileFormat->text());
   // Show dialog and save results if ok is pressed.
   bool okClicked = wizard.exec();
   if(okClicked){
-    playlistFileFormat->setText(wizard.playlistFormat->text());
+    kcfg_playlistFileFormat->setText(wizard.playlistFormat->text());
   }
 }
 
@@ -28,11 +28,11 @@ void EncoderConfig::playlistWizard(){
  */
 void EncoderConfig::encoderWizard(){
   fileWizard wizard(this, "Encoder File Format Wizard", true);
-  wizard.playlistFormat->setText(fileFormat->text());
+  wizard.playlistFormat->setText(kcfg_fileFormat->text());
 
   // Show dialog and save results if ok is pressed.
   bool okClicked = wizard.exec();
   if(okClicked){
-    fileFormat->setText(wizard.playlistFormat->text());
+    kcfg_fileFormat->setText(wizard.playlistFormat->text());
   }
 }

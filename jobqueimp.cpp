@@ -20,6 +20,7 @@
 
 #include "jobqueimp.h"
 #include "job.h"
+#include "prefs.h"
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qpainter.h>
@@ -53,9 +54,6 @@ JobQueImp::JobQueImp( QWidget* parent, const char* name) :
  * Loads the settings
  */
 void JobQueImp::loadSettings(){
-  KConfig &config = *KGlobal::config();
-  config.setGroup("General");
-  removeCompletedJobs = config.readBoolEntry("removeCompletedJobs", false);
 }
 
 /**
@@ -135,7 +133,7 @@ void JobQueImp::updateProgress(int id, int progress){
   }
   else if(progress == 100){
     // Remove the job if requested.
-    if(removeCompletedJobs){
+    if(Prefs::removeCompletedJobs()){
       removeJob(currentItem);
       return;
     }

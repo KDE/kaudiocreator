@@ -57,12 +57,6 @@ private:
   QMap<KIO::Job*, Job*> jobs;
   // Jobs that we want to do , but haven't done yet
   QPtrList<Job> pendingJobs;
-
-  int maxWavFiles;
-  bool beepAfterRip;
-  bool autoEjectAfterRip;
-  int autoEjectDelay;
-
 };
 
 #endif

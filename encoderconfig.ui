@@ -24,7 +24,7 @@
         </property>
         <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
             <property name="name">
-                <cstring>encoderChoice</cstring>
+                <cstring>kcfg_currentEncoder</cstring>
             </property>
         </widget>
         <widget class="QPushButton" row="0" column="1" rowspan="1" colspan="2">
@@ -92,10 +92,7 @@
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
-                        <cstring>fileFormat</cstring>
-                    </property>
-                    <property name="text">
-                        <string>~/%extension/%artist/%album/%artist - %song.%extension</string>
+                        <cstring>kcfg_fileFormat</cstring>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -121,7 +118,7 @@
         </widget>
         <widget class="QSpinBox" row="6" column="1">
             <property name="name">
-                <cstring>numberOfCpus</cstring>
+                <cstring>kcfg_numberOfCpus</cstring>
             </property>
             <property name="minValue">
                 <number>1</number>
@@ -146,13 +143,10 @@
         </spacer>
         <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>createPlaylist</cstring>
+                <cstring>kcfg_createPlayList</cstring>
             </property>
             <property name="text">
                 <string>Create an album &amp;playlist file</string>
-            </property>
-            <property name="checked">
-                <bool>false</bool>
             </property>
         </widget>
         <widget class="QGroupBox" row="8" column="0" rowspan="1" colspan="3">
@@ -199,7 +193,7 @@
                         </widget>
                         <widget class="QLineEdit">
                             <property name="name">
-                                <cstring>playlistFileFormat</cstring>
+                                <cstring>kcfg_playlistFileFormat</cstring>
                             </property>
                             <property name="text">
                                 <string>~/%extension/%artist/%album/%artist - %album.m3u</string>
@@ -217,7 +211,7 @@
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>useRelitivePath</cstring>
+                        <cstring>kcfg_useRelativePath</cstring>
                     </property>
                     <property name="text">
                         <string>Use relative path</string>
@@ -304,7 +298,7 @@
                 </property>
                 <widget class="QSlider" row="0" column="0" rowspan="1" colspan="3">
                     <property name="name">
-                        <cstring>NiceLevel</cstring>
+                        <cstring>kcfg_NiceLevel</cstring>
                     </property>
                     <property name="minValue">
                         <number>-19</number>
@@ -358,7 +352,7 @@
 </widget>
 <connections>
     <connection>
-        <sender>createPlaylist</sender>
+        <sender>kcfg_createPlayList</sender>
         <signal>toggled(bool)</signal>
         <receiver>GroupBox2</receiver>
         <slot>setEnabled(bool)</slot>
@@ -376,24 +370,24 @@
         <slot>encoderWizard()</slot>
     </connection>
     <connection>
-        <sender>encoderChoice</sender>
+        <sender>kcfg_currentEncoder</sender>
         <signal>highlighted(const QString&amp;)</signal>
         <receiver>currentEncoderName</receiver>
         <slot>setText(const QString&amp;)</slot>
     </connection>
 </connections>
 <tabstops>
-    <tabstop>encoderChoice</tabstop>
+    <tabstop>kcfg_currentEncoder</tabstop>
     <tabstop>addEncoder</tabstop>
     <tabstop>removeEncoder</tabstop>
     <tabstop>configureEncoder</tabstop>
-    <tabstop>fileFormat</tabstop>
+    <tabstop>kcfg_fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
-    <tabstop>numberOfCpus</tabstop>
-    <tabstop>createPlaylist</tabstop>
-    <tabstop>playlistFileFormat</tabstop>
+    <tabstop>kcfg_numberOfCpus</tabstop>
+    <tabstop>kcfg_createPlayList</tabstop>
+    <tabstop>kcfg_playlistFileFormat</tabstop>
     <tabstop>playlistWizardButton</tabstop>
-    <tabstop>useRelitivePath</tabstop>
+    <tabstop>kcfg_useRelativePath</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">encoderconfig.ui.h</include>

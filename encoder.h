@@ -28,6 +28,8 @@
 #include "job.h"
 #include <kprocess.h>
 
+class EncoderPrefs;
+
 class Encoder : public QObject {
 
 Q_OBJECT
@@ -59,21 +61,7 @@ private:
   QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
 
-  // Class KConfig Settings
-  QString encoderCommandLine;
-  QString encoderExtension;
-  int encoderPercentLength;
-  uint numberOfCpus;
-  bool setNiceLevel;
-  int niceLevel;
-  QString fileFormat;
-  bool createPlaylist;
-  QString playlistFileFormat;
-  bool useRelitivePath;
-  bool fullDecoderDebug;
-  
-  QString replaceInput;
-  QString replaceOutput;
+  EncoderPrefs *prefs;
 };
 
 #endif

@@ -3,7 +3,7 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir)/libkcddb $(all_includ
 bin_PROGRAMS = kaudiocreator
 
 kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp encoderedit.ui jobque.ui  tracks.ui id3tagdialog.ui wizard.ui \
-general.ui cdconfig.ui ripconfig.ui encoderconfig.ui 
+general.ui cdconfig.ui ripconfig.ui encoderconfig.ui prefs.kcfgc encoder_prefs.kcfgc
 
 EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
 
@@ -26,6 +26,7 @@ KDE_ICON = AUTO
 SUBDIRS = icons
 
 xdg_apps_DATA = kaudiocreator.desktop
+kde_kcfg_DATA = kaudiocreator.kcfg kaudiocreator_encoders.kcfg
 
 appdata_DATA = kaudiocreatorui.rc
 appdatadir = $(kde_datadir)/kaudiocreator

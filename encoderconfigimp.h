@@ -22,7 +22,9 @@
 #define ENCODERCONFIGIMP_H
 
 #include "encoderconfig.h"
+#include "encoder_prefs.h"
 #include <qmap.h>
+#include <qdict.h>
 
 /**
  * Class mainly build to manage encoder list.
@@ -49,7 +51,6 @@ private slots:
 private:
   // Name, groupName
   QMap<QString, QString> encoderNames;
-  
 };
 
 #endif

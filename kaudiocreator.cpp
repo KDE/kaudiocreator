@@ -32,9 +32,9 @@
 #include "jobqueimp.h"
 #include "ripper.h"
 #include "encoder.h"
+#include "prefs.h"
 
 // Settings
-#include <kautoconfigdialog.h>
 #include "ripconfig.h"
 #include "cdconfig.h"
 #include "encoderconfigimp.h"
@@ -129,12 +129,24 @@ void KAudioCreator::saveToolbarConfig(){
  * Show Settings dialog.
  */
 void KAudioCreator::showSettings(){
-  if(KAutoConfigDialog::showDialog("settings"))
+  if(KConfigDialog::showDialog("settings"))
     return;
 
-  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
-  dialog->addPage(new General(0, "General"), i18n("General"), "General", "package_settings", i18n("General Configuration"));
-  dialog->addPage(new CdConfig(0, "CD"), i18n("CD"), "CD", "package_system", i18n("CD Configuration"));
+  SettingsDialog *dialog = new SettingsDialog(this, "settings", Prefs::self());
+  connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), jobQue, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
+  connect(dialog->encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
+  dialog->show();
+}
+
+SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config)
+ : KConfigDialog(parent, name, config),
+ cddb(0), cddbChanged(false)
+{
+  addPage(new General(0, "General"), i18n("General"), "package_settings", i18n("General Configuration"));
+  addPage(new CdConfig(0, "CD"), i18n("CD"), "package_system", i18n("CD Configuration"));
 
   // Because WE don't segfault on our users...
   KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
@@ -143,31 +155,55 @@ void KAudioCreator::showSettings(){
     KCModuleInfo info(libkcddb->desktopEntryPath());
     if (info.service()->isValid())
     {
-      KCModule *m = KCModuleLoader::loadModule(info);
-      if (m)
+      cddb = KCModuleLoader::loadModule(info);
+      if (cddb)
       {
-        m->load();
-        dialog->addPage(m, i18n("CDDB"), "Game", "cdaudio_unmount", i18n("CDDB Configuration"), false);
-        connect(dialog, SIGNAL(okClicked()), m, SLOT(save()));
-        connect(dialog, SIGNAL(applyClicked()), m, SLOT(save()));
-        connect(dialog, SIGNAL(defaultClicked()), m, SLOT(defaults()));
-	// TODO someday...
-	//connect(dialog, SIGNAL(), dialog, SLOT(settingModified()));
+        cddb->load();
+        addPage(cddb, i18n("CDDB"), "cdaudio_unmount", i18n("CDDB Configuration"), false);
+	connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
       }
     }
   }
   
-  dialog->addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "Ripper", "shredder", i18n("Ripper Configuration") );
-  EncoderConfigImp *encoderConfigImp = new EncoderConfigImp(0, "Encoder");
-  dialog->addPage(encoderConfigImp, i18n("Encoder"), "Encoder", "filter", i18n("Encoder Configuration") );
+  addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "shredder", i18n("Ripper Configuration") );
+  encoderConfigImp = new EncoderConfigImp(0, "Encoder");
+  addPage(encoderConfigImp, i18n("Encoder"), "filter", i18n("Encoder Configuration") );
+}
 
-  connect(encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
+void SettingsDialog::updateSettings()
+{
+  if (cddb)
+    cddb->save();
+}
 
-  connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
-  connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
-  connect(dialog, SIGNAL(settingsChanged()), jobQue, SLOT(loadSettings()));
-  connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
-  dialog->show(false);
+void SettingsDialog::updateWidgets()
+{
+  if (cddb)
+    cddb->load();
+}
+
+void SettingsDialog::updateWidgetsDefault()
+{
+  if (cddb)
+    cddb->defaults();
+}
+
+bool SettingsDialog::hasChanged()
+{
+  return cddbChanged;
+}
+
+bool SettingsDialog::isDefault()
+{
+  if (cddb)
+    return false;
+  return true;
+}
+
+void SettingsDialog::slotCddbChanged(bool changed)
+{
+  cddbChanged = changed;
+  updateButtons();
 }
 
 #include "kaudiocreator.moc"
