@@ -29,8 +29,6 @@ Add audiocd ioslave config to the configure dialog
 
 Use same encoding options that audiocd has
 
-Check to see if the encoded binary exists before encoding (use which?).
-
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 
 Add the ability to encode files

@@ -131,7 +131,7 @@ void EncoderConfigImp::tendToNewJobs(){
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-   qDebug("Can not place file, unable to make directories");
+    qDebug("Can not place file, unable to make directories");
     return;
   }
 
@@ -180,7 +180,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   // Make sure the output string has a % symble in it.
   QString output = QString(buffer).mid(0,length);
   if( output.find('%') == -1 ){
-    qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all.");
+    qDebug("No percent symbol found in output, not updating.  Report as bug w/ encoder command line options if progress bar does not fill.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
@@ -189,13 +189,13 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   bool conversionSuccessfull = false;
   int percent = output.toInt(&conversionSuccessfull);
   //qDebug(QString("number: %1").arg(percent).latin1());
-  if(percent > 0 && percent < 100 && conversionSuccessfull){
+  if(percent >= 0 && percent < 100 && conversionSuccessfull){
     emit(updateProgress(job->id, percent));
   }
   // If it was just some random output that couldn't be converted then don't report the error.
   else
     if(conversionSuccessfull)
-      qDebug("The Percent done:\"%d\" is not > 0 && < 100", percent);
+      qDebug("Percent done:\"%d\" is not >= 0 && < 100.", percent);
 }
 
 /**
@@ -206,14 +206,19 @@ void EncoderConfigImp::jobDone(KProcess *process){
   // Normal error checking here.
   if(!process)
     return;
-  
-  qDebug("Process exited with status: %d", process->exitStatus());
+ 
+  //qDebug("Process exited with status: %d", process->exitStatus());
   
   Job *job = jobs[(KShellProcess*)process];
   threads.remove((KShellProcess*)process);
   jobs.remove((KShellProcess*)process);
 
-  if( QFile::exists(job->newLocation)){
+  if(process->exitStatus() == 127){
+    KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    QFile::remove(job->location);
+    emit(updateProgress(job->id, -1));
+  }
+  else if( QFile::exists(job->newLocation)){
     if(!saveWav)
       QFile::remove(job->location);
     
