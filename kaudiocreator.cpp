@@ -132,7 +132,7 @@ void KAudioCreator::showSettings(){
   KService::Ptr libkcddb = KService::serviceByDesktopName("cddb");
   if (libkcddb && libkcddb->isValid())
   {
-    KCModuleInfo info(libkcddb->desktopEntryPath(), "settings");
+    KCModuleInfo info(libkcddb->desktopEntryPath());
     if (info.service()->isValid())
     {
       KCModule *m = KCModuleLoader::loadModule(info);
