@@ -31,7 +31,7 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),comment(""), track(-1),year(-1),track_title(""), track_comment(""), track_artist(""), lastSongInAlbum(false){};
+  inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false){};
 
   void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 

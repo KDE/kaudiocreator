@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>General</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>489</width>
-            <height>343</height>
+            <width>442</width>
+            <height>517</height>
         </rect>
     </property>
     <property name="caption">
@@ -28,6 +28,9 @@
             </property>
             <property name="text">
                 <string>&amp;Automatically remove jobs when finished</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -71,7 +74,7 @@
                 </widget>
                 <widget class="QLabel" row="5" column="0">
                     <property name="name">
-                        <cstring>textLabel9</cstring>
+                        <cstring>inputlabel</cstring>
                     </property>
                     <property name="text">
                         <string>Input:</string>
@@ -79,7 +82,7 @@
                 </widget>
                 <widget class="QLabel" row="6" column="0">
                     <property name="name">
-                        <cstring>textLabel8</cstring>
+                        <cstring>outputLabel</cstring>
                     </property>
                     <property name="text">
                         <string>Output:</string>
@@ -87,7 +90,7 @@
                 </widget>
                 <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>textLabel6</cstring>
+                        <cstring>exampleLabel</cstring>
                     </property>
                     <property name="text">
                         <string>Example</string>
@@ -143,6 +146,93 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>kcfg_seperateMultiArtist</cstring>
+            </property>
+            <property name="title">
+                <string>Automatically seperate multi-artist CDDB entries</string>
+            </property>
+            <property name="checkable">
+                <bool>true</bool>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup2</cstring>
+                    </property>
+                    <property name="title">
+                        <string>Format</string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>kcfg_format_titleArtist</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Title - Artist</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>kcfg_format_artistTitle</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Artist - Title</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>delimiterLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Delimiter:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>genArtistLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Generic Artist:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>kcfg_delimiter</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>kcfg_genericArtist</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
         <spacer>
             <property name="name">
                 <cstring>spacer1</cstring>
@@ -156,7 +246,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>

@@ -32,6 +32,21 @@
     <entry name="replaceOutput" type="String" key="replace">
       <label>String used to replace the parts that match the selection regexp</label>
     </entry>
+    <entry name="seperateMultiArtist" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="genericArtist" type="String">
+      <default>Various Artists</default>
+    </entry>
+    <entry name="delimiter" type="String">
+      <default> - </default>
+    </entry>
+    <entry name="format_artistTitle" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="format_titleArtist" type="Bool">
+      <default>false</default>
+    </entry>
    </group>
    <group name="Encoder">
     <entry name="currentEncoder" type="Int" key="encoderChoice">

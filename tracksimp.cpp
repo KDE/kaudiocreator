@@ -220,6 +220,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
 	genres.insert(i18n("Tribal"), "Tribal");
 	genres.insert(i18n("Trip-Hop"), "Trip-Hop");
 	genres.insert(i18n("Vocal"), "Vocal");
+
 	loadSettings();
 	QTimer *timer = new QTimer( this );
 	connect( timer, SIGNAL(timeout()), this, SLOT(timerDone()) );
@@ -313,10 +314,10 @@ void TracksImp::timerDone(){
 	newAlbum();
 	emit(hasCD(true));
 	CDid = currentDistID;
-	kdDebug(60002) << "New disk.	Disk id: " << CDid << endl;
+	kdDebug(60002) << "New disk. Disk id: " << CDid << endl;
 	int numberOfTracks = wm_cd_getcountoftracks();
 	for(int i=numberOfTracks; i>0; i--){
-			newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
+		newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
 	}
 	if(Prefs::performCDDBauto())
 		cddbCD();
@@ -336,7 +337,7 @@ void TracksImp::changeDevice(const QString &file){
 	}
 
 	QFileInfo fileInfo(file);
-	if(!fileInfo.exists() || fileInfo.isDir()){
+	if(!fileInfo.exists() || fileInfo.isDir()) {
 		//qDebug("Device file !exist or isDir or !file");
 		return;
 	}
@@ -733,12 +734,28 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
  * @param title the name of the track.
  * @param length the lenght of track.
  */
-void TracksImp::newSong(int track, const QString &newTitle, int length, const QString &comment){
+void TracksImp::newSong(int track, const QString &newTitle, int length,
+								        const QString &comment){
+	QString trackArtist = group;
 	QString title = newTitle.mid(newTitle.find(' ',0)+1);
 	title = KURL::decode_string(title);
 	title.replace(QRegExp("/"), "-");
+	
+	// Support for multiple artists stripping.
+	if( Prefs::seperateMultiArtist() && group == Prefs::genericArtist() ){
+		QString delimiter = Prefs::delimiter();
+		if( Prefs::format_artistTitle() ){
+			trackArtist = title.mid( 0,title.find(delimiter) );
+			title = title.mid( title.find(delimiter)+delimiter.length() );
+		}
+		else {
+			trackArtist = title.mid( title.find(delimiter)+delimiter.length() );
+			title = title.mid( 0,title.find(delimiter) );
+		}
+	}
+				
 	QString trackLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
-	QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), trackLength, title, group, comment);
+	QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), trackLength, title, trackArtist, comment);
 	newItem->setRenameEnabled(HEADER_TRACK_NAME, TRUE);
 	trackListing->setCurrentItem(trackListing->firstChild());
 
