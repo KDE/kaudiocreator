@@ -30,3 +30,7 @@ appdatadir = $(kde_datadir)/kaudiocreator
 updatedir = $(kde_datadir)/kconf_update
 update_DATA = kaudiocreator-meta.upd kaudiocreator-libkcddb.upd
 update_SCRIPTS = upgrade-kaudiocreator-metadata.sh
+
+encoderconfig.o: wizard.h
+kaudiocreator.o: ../libkcddb/configbase.h
+tracksimp.o: ../libkcddb/configbase.h ../libkcddb/cdinfodialogbase.h
