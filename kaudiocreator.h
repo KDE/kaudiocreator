@@ -17,6 +17,7 @@ class CdConfigImp;
 class RipConfigImp;
 class EncoderConfigImp;
 class QueConfigImp;
+class QCloseEvent;
 
 class KAudioCreator : public KMainWindow {
 
@@ -35,6 +36,8 @@ private slots:
   void viewEncoderConfig();
   void viewQue();
   void configuretoolbars();
+  void quit();
+  void closeEvent(QCloseEvent *);
 
 private:
   KJanusWidget *janusWidget;
