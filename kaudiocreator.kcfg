@@ -24,7 +24,7 @@
   <group name="General">
     <entry name="removeCompletedJobs" type="Bool">
       <label>Automatically remove jobs when finished</label>
-      <default>false</default>
+      <default>true</default>
     </entry>
     <entry name="replaceInput" type="String" key="selection">
       <label>Regexp to match file names with</label>

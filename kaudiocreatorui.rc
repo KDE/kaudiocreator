@@ -30,7 +30,6 @@
   <Action name="cddb_now"/>
   <Action name="edit_cd"/>
   <Action name="rip"/>
-  <Action name="clear_done_jobs"/>
   <Action name="eject"/>
 </ToolBar>
 
