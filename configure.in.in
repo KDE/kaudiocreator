@@ -1,0 +1,6 @@
+if test "x$HAVE_CDPARANOIA" = "x1" ; then
+	# It just might work
+	:
+else
+	DO_NOT_COMPILE="$DO_NOT_COMPILE kaudiocreator"
+fi
