@@ -17,5 +17,5 @@ Comment=Track finished encoding.
 [cd encoded]
 Name=CD Encoded
 Comment=CD finished encoding.
-
-
+default_presentation=17
+default_sound=KDE_ClockChime.wav
