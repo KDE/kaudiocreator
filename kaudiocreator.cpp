@@ -180,6 +180,7 @@ void SettingsDialog::updateWidgets()
 {
   if (cddb)
     cddb->load();
+  cddbChanged = false;
 }
 
 void SettingsDialog::updateWidgetsDefault()
