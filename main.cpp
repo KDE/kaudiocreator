@@ -15,7 +15,7 @@
 #include <klocale.h>
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "0.89",
+  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "0.90",
     I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2002, Benjamin Meyer",
     0, "http://www.csh.rit.edu/~benjamin/");
     aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben@meyerhome.net");
@@ -28,6 +28,4 @@ int main(int argc, char *argv[]){
   app->show();
   return a.exec();
 }
-
-// main.cpp
 

@@ -423,5 +423,3 @@ void TracksConfigImp::editPreviousTrack()
 
 #include "tracksconfigimp.moc"
 
-// trackconfigimp.cpp
-

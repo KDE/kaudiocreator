@@ -1,5 +1,6 @@
 Add flac preset
-BUG: encoding with different genre's
+
+BUG? encoding with different genre's
 
 Make it possible to stop and start encoding jobs by saving the joblist, so you can quit and continue later.
 
@@ -7,16 +8,16 @@ Possiblity to use "nice" when calling encode jobs.
 
 Add audiocd ioslave CDDA options to the configure dialog
 
--Multiple Artists for 1 album.
-
--Auto replace text dialog (replace X with Y such as " " with "_")
+Multiple Artists for 1 album.
 
 Use same encoding options that audiocd has
-
-Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 
 Add the ability to encode files
 
 Rip from more then 1 cd-rom drive.
 
-Plugin system for encoders (user friendly thingys) 
+Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
+
+Plugin system for encoders (user friendly thingys)
+
+Move to use the kcd cd library to get the toc information.

@@ -10,7 +10,6 @@
 #define JOB_H
 
 #include <qmap.h>
-
 #include <klocale.h>
 
 /**
