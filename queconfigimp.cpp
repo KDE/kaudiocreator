@@ -79,7 +79,7 @@ void QueConfigImp::updateProgress(int id, int progress){
     currentItem->repaint();
   }
   else{
-    qDebug(QString("An update was recieved about a job, but the job couldn't be found: %1").arg(id).latin1());
+    qDebug("An update was recieved about a job, but the job couldn't be found: %d", id);
   }
 }
 
