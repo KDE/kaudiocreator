@@ -169,6 +169,8 @@ class CdConfigImp::Private
     int tracks;
     QString cd_title;
     QString cd_artist;
+    int cd_year;
+    QString cd_genre;
     QStringList titles;
     bool is_audio[100];
     bool based_on_cddb;
@@ -407,7 +409,9 @@ int CdConfigImp::updateCD(struct cdrom_drive * drive){
 
       d->cd_title = info.title;
       d->cd_artist = info.artist;
-
+      d->cd_year = info.year;
+      d->cd_genre = info.genre;
+      
       KCDDB::TrackInfoList t = info.trackInfoList;
       for (unsigned i = 0; i < t.count(); i++)
       {
@@ -463,7 +467,7 @@ void CdConfigImp::attemptToListAlbum(){
     return;
   }
 
-  emit(newAlbum(d->cd_artist,d->cd_title, 0, i18n("Other")));
+  emit(newAlbum(d->cd_artist,d->cd_title, d->cd_year, d->cd_genre));
   for (int i = d->tracks; i > 0; i--){
     if (d->is_audio[i-1])
     {
@@ -558,11 +562,9 @@ CdConfigImp::parseArgs(const KURL & url)
     d->discid = 0;
 
   kdDebug(60002) << "CDDB: use_cddb = " << d->useCDDB << endl;
-
 }
 
 void CdConfigImp::getParameters() {
-
   KConfig *config;
   config = new KConfig("kcmaudiocdrc");
 
@@ -590,6 +592,4 @@ void CdConfigImp::getParameters() {
 }
 
 #include "cdconfigimp.moc"
-
-// cdconfigimp.cpp
 

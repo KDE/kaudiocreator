@@ -11,6 +11,8 @@ Global replace regexp?  i.e. reaplce all " " with "_"
 
 TODO.
 
+BUG: encoding with different genre's
+
 Make it possible to stop and start encoding jobs:
 Save the joblist, so you can quit and continue later
 
@@ -20,12 +22,6 @@ BUG: a cd with several tracks named the same
 
 Possiblity to use "nice" when calling encode jobs.
 
-"Alternate" encoder location configs. Therefore allowing "sampler cds"
-to use "<album>/<tracknumber> <artist> - <title>"
-and normal cd's to use "<artist>/<album>/<tracknumber> <title>"
-the alternate selection could just be a simple checkbox next
-to rip selected tracks.
-
 Add audiocd ioslave config to the configure dialog
 -Multiple Artists for 1 album.
 
@@ -33,8 +29,12 @@ Add audiocd ioslave config to the configure dialog
 
 Use same encoding options that audiocd has
 
-Check to see if the encoded binary exists before encoding (which?).
+Check to see if the encoded binary exists before encoding (use which?).
 
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 
 Add the ability to encode files
+
+Rip from more then 1 cd-rom drive.
+
+Plugin system for encoders (user friendly) 
