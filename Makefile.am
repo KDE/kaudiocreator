@@ -28,9 +28,6 @@ kde_kcfg_DATA = kaudiocreator.kcfg kaudiocreator_encoders.kcfg
 appdata_DATA = kaudiocreatorui.rc eventsrc
 appdatadir = $(kde_datadir)/kaudiocreator
 
-conf_DATA = kaudiocreatorrc
-confdir = $(kde_confdir)
-
 updatedir = $(kde_datadir)/kconf_update
 update_DATA = kaudiocreator-meta.upd kaudiocreator-libkcddb.upd
 update_SCRIPTS = upgrade-kaudiocreator-metadata.sh
