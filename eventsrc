@@ -5,33 +5,41 @@ Comment[sv]=Kaudiocreator
 
 [track ripped]
 Name=Track Ripped
+Name[da]=Spor rippet
 Name[sv]=Spår lagrat
 Name[ta]=தடம் பிரிக்கப்பட்டது
 Comment=Track finished ripping.
+Comment[da]=Spor færdig med at blive rippet.
 Comment[sv]=Spåret har lagrats klart.
 Comment[ta]=தடம் பிரித்தலை முடித்தது
 
 [cd ripped]
 Name=CD Ripped
+Name[da]=CD rippet
 Name[sv]=Cd lagrad
 Name[ta]=CD பிரிக்கப்பட்டது
 Comment=CD finished ripping.
+Comment[da]=CD færdig med at blive rippet.
 Comment[sv]=Cd:n har lagrats klart.
 Comment[ta]=CD பிரித்தல் முடிந்தது
 
 [track encoded]
 Name=Track Encoded
+Name[da]=Spor indkodet
 Name[sv]=Spår kodat
 Name[ta]=தடம் மறையாக்கப் பட்டது
 Comment=Track finished encoding.
+Comment[da]=Spor færdig med at blive indkodet.
 Comment[sv]=Spåret har kodats klart.
 Comment[ta]=தடம் மறையாக்கத்தை முடித்தது
 
 [cd encoded]
 Name=CD Encoded
+Name[da]=CD indkodet
 Name[sv]=Cd kodad
 Name[ta]=CD மறையாக்கப் பட்டது
 Comment=CD finished encoding.
+Comment[da]=CD færdig med at blive indkodet.
 Comment[sv]=Cd:n har kodats klart.
 Comment[ta]=CD மறையாக்கத்தை முடித்தது.
 default_presentation=17
