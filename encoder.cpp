@@ -37,13 +37,20 @@ void Encoder::loadSettings(){
     encoderExtension = config.readEntry("extension");
     encoderPercentLength = config.readNumEntry("percentLength");
   }
-	  
+  
   config.setGroup("Encoder");
   numberOfCpus = config.readNumEntry("numberOfCpus", 1);
   fileFormat = config.readPathEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
   createPlaylist = config.readBoolEntry("createPlaylist", false);
   playlistFileFormat = config.readPathEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
   useRelitivePath = config.readBoolEntry("useRelitivePath", false);
+
+  if(config.hasKey("NiceLevel")){
+    niceLevel = config.readNumEntry("NiceLevel");
+    setNiceLevel = true;
+  }
+  else
+    setNiceLevel = false;
 }
 
 /**
@@ -156,6 +163,9 @@ void Encoder::tendToNewJobs(){
 
   job->errorString = command;
   KShellProcess *proc = new KShellProcess();
+  if(setNiceLevel)
+    proc->setPriority(niceLevel);
+  
   *proc << QFile::encodeName(command);
   connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
                        this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
@@ -294,7 +304,7 @@ void Encoder::appendToPlaylist(Job* job){
  * returns true is successful.
  */
 bool Encoder::relativeURL(const QString &path1, const QString &path2,
-				QString &relativePath ) const {
+                          QString &relativePath ) const {
   QDir p1(QDir::cleanDirPath(path1));
   QDir p2(QDir::cleanDirPath(path2));
   if(!p1.exists() || !p2.exists())

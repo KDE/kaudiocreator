@@ -40,7 +40,7 @@ private slots:
 
 private:
   bool relativeURL(const QString &path1, const QString &path2,
-				QString &relativePath ) const;
+                   QString &relativePath ) const;
   
   QPtrList<Job> pendingJobs;
   QPtrList<KShellProcess> threads;
@@ -52,6 +52,8 @@ private:
   QString encoderExtension;
   int encoderPercentLength;
   uint numberOfCpus;
+  bool setNiceLevel;
+  int niceLevel;
   QString fileFormat;
   bool createPlaylist;
   QString playlistFileFormat;
