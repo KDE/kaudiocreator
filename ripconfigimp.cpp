@@ -24,7 +24,7 @@
 RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,name){
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
-  fileFormat->setText(config.readEntry("fileFormat", "~/mp3/%g/%a/%g - %s.wav"));
+  fileFormat->setText(config.readEntry("fileFormat", "~/mp3/%artist/%album/%artist - %song.wav"));
   maxWavFiles->setValue(config.readNumEntry("maxWavFiles", 1));
   beepAfterRip->setChecked(config.readBoolEntry("beepAfterRip", true));
   autoEjectAfterRip->setChecked(config.readBoolEntry("autoEjectAfterRip", false));
@@ -123,11 +123,16 @@ void RipConfigImp::tendToNewJobs(){
   pendingJobs.remove(job);
 
   QString desiredFile = fileFormat->text();
-  desiredFile.replace(QRegExp("%a"), job->album);
-  desiredFile.replace(QRegExp("%t"), job->genre);
-  desiredFile.replace(QRegExp("%g"), job->group);
-  desiredFile.replace(QRegExp("%y"), QString("%1").arg(job->year));
-  desiredFile.replace(QRegExp("%s"), job->song);
+  desiredFile.replace(QRegExp("%album"), job->album);
+  desiredFile.replace(QRegExp("%genre"), job->genre);
+  desiredFile.replace(QRegExp("%artist"), job->group);
+  desiredFile.replace(QRegExp("%year"), QString("%1").arg(job->year));
+  desiredFile.replace(QRegExp("%song"), job->song);
+  if( job->track < 10 )
+    desiredFile.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
+  else
+    desiredFile.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
+    
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }

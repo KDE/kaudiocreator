@@ -61,10 +61,7 @@ void QueConfigImp::updateProgress(int id, int progress){
   }
   if( currentItem){
     currentItem->percentDone = progress;
-    if(progress != -1)
-      currentItem->setText(HEADER_PROGRESS,QString("%1%").arg(progress));
-    else
-      currentItem->setText(HEADER_PROGRESS,i18n("Error"));
+    currentItem->repaint();
   }
 }
 
@@ -145,6 +142,9 @@ int QueConfigImp::numberOfJobsNotFinished(){
   return totalJobsToDo;
 }
 
+/**
+ * The repaint function overloaded so that we can have a built in progressbar.
+ */
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align){
   if(column != HEADER_PROGRESS){
@@ -169,9 +169,12 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
   if(percentDone != -1)
   p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum(percentDone) + "%");
   else
-    p->drawText(0,0,width-1,height()-1,AlignCenter,"Error");
+    p->drawText(0,0,width-1,height()-1,AlignCenter,i18n("Error"));
 }
 
+/**
+ * Header for built in treelist item so we can have a progress bar in them.
+ */
 QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name) : QListViewItem(parent, id, p, name){
   percentDone = 0;
 }

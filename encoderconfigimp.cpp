@@ -33,7 +33,10 @@ void replaceSpecialChars(QString &string, Job * job, bool slash){
     string.replace(QRegExp("%artist"), QString("\"%1\"").arg(job->group));
     string.replace(QRegExp("%year"), QString("\"%1\"").arg(job->year));
     string.replace(QRegExp("%song"), QString("\"%1\"").arg(job->song));
-    string.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
+    if( job->track < 10 )
+      string.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
+    else
+      string.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
     return;
   }
   else{
@@ -42,10 +45,12 @@ void replaceSpecialChars(QString &string, Job * job, bool slash){
     string.replace(QRegExp("%artist"), QString("%1").arg(job->group));
     string.replace(QRegExp("%year"), QString("%1").arg(job->year));
     string.replace(QRegExp("%song"), QString("%1").arg(job->song));
-    string.replace(QRegExp("%track"), QString("%1").arg(job->track));
+    if( job->track < 10 )
+      string.replace(QRegExp("%track"), QString("0%1").arg(job->track));
+    else
+      string.replace(QRegExp("%track"), QString("%1").arg(job->track));
     return;
   }
-  // TODO replace all / ' ? etc with a // /' /? etc
 }
 
 /**
