@@ -30,29 +30,29 @@
  */
 void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slash){
   if(slash == true){
-    string.replace(QRegExp("%album"), QString("\"%1\"").arg(job->album));
-    string.replace(QRegExp("%genre"), QString("\"%1\"").arg(job->genre));
-    string.replace(QRegExp("%artist"), QString("\"%1\"").arg(job->group));
-    string.replace(QRegExp("%year"), QString("\"%1\"").arg(job->year));
-    string.replace(QRegExp("%song"), QString("\"%1\"").arg(job->song));
-    string.replace(QRegExp("%extension"), QString("\"%1\"").arg(encoderExtensionLineEdit->text()));
+    string.replace(QRegExp("%album"), KProcess::quote(job->album));
+    string.replace(QRegExp("%genre"), KProcess::quote(job->genre));
+    string.replace(QRegExp("%artist"), KProcess::quote(job->group));
+    string.replace(QRegExp("%year"), QString::number(job->year));
+    string.replace(QRegExp("%song"), KProcess::quote(job->song));
+    string.replace(QRegExp("%extension"), KProcess::quote(encoderExtensionLineEdit->text()));
     if( job->track < 10 )
-      string.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
+      string.replace(QRegExp("%track"), KProcess::quote(QString("0") +QString::number(job->track)));
     else
-      string.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
+      string.replace(QRegExp("%track"), QString::number(job->track));
     return;
   }
   else{
-    string.replace(QRegExp("%album"), QString("%1").arg(job->album));
-    string.replace(QRegExp("%genre"), QString("%1").arg(job->genre));
-    string.replace(QRegExp("%artist"), QString("%1").arg(job->group));
-    string.replace(QRegExp("%year"), QString("%1").arg(job->year));
-    string.replace(QRegExp("%song"), QString("%1").arg(job->song));
-    string.replace(QRegExp("%extension"), QString("%1").arg(encoderExtensionLineEdit->text()));
+    string.replace(QRegExp("%album"), job->album);
+    string.replace(QRegExp("%genre"), job->genre);
+    string.replace(QRegExp("%artist"), job->group);
+    string.replace(QRegExp("%year"), QString::number(job->year));
+    string.replace(QRegExp("%song"), job->song);
+    string.replace(QRegExp("%extension"), encoderExtensionLineEdit->text());
     if( job->track < 10 )
-      string.replace(QRegExp("%track"), QString("0%1").arg(job->track));
+      string.replace(QRegExp("%track"), "0" + QString::number(job->track) );
     else
-      string.replace(QRegExp("%track"), QString("%1").arg(job->track));
+      string.replace(QRegExp("%track"), QString::number(job->track) );
     return;
   }
 }
@@ -267,15 +267,15 @@ void EncoderConfigImp::tendToNewJobs(){
   
   QString command = encoderCommandLine->text();
   replaceSpecialChars(command, job, true);
-  command.replace(QRegExp("%f"), "\"" + job->location + "\"");
-  command.replace(QRegExp("%o"), "\"" + desiredFile + "\"");
+  command.replace("%f", KProcess::quote(job->location));
+  command.replace("%o", KProcess::quote(desiredFile));
   
   updateProgress(job->id, 1);
   
   job->errorString = command;
   //qDebug(command.latin1());
   KShellProcess *proc = new KShellProcess();
-  *proc << command.latin1();
+  *proc << QFile::encodeName(command);
   connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
                        this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
   connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
