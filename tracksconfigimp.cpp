@@ -42,7 +42,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
 void TracksConfigImp::editInformation(){
   QListViewItem * currentItem = trackListing->currentItem();
   if( currentItem == 0 ){
-    KMessageBox::sorry(this, i18n("Please select a track"), i18n("No Track Selected"));
+    KMessageBox::sorry(this, i18n("Please select a track."), i18n("No Track Selected"));
     return;
   }
 
@@ -97,6 +97,11 @@ void TracksConfigImp::ripWholeAlbum(){
  * If any album information is not set, notify the user first.
  */
 void TracksConfigImp::startSession(){
+  if(trackListing->childCount() == 0){
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No Tracks Selected"));
+    return;
+  }
+
   QString list = "";
   if( genre == "" )
     list += "Genre";

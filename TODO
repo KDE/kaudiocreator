@@ -7,5 +7,5 @@ Correct for special charactors such as / and "
 
 Multiple Artists for 1 album.
 
-Check to see if the binary is valid before encoding.
+Check to see if the encoded binary exists before encoding (which?).
 
