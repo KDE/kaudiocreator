@@ -1,7 +1,4 @@
 TODO.
-
-Warn on exit if something is encoding.
-
 Correct for special charactors such as / and "
 
 Check to see if CDDB sends / or %2f

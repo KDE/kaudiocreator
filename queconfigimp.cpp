@@ -126,14 +126,15 @@ void QueConfigImp::clearDoneJobs(){
 }
 
 /**
- * Return the number of jobs in the que that don't have 100% or Error marked down.
- * @param the number of jobs that are in the que that havn't been finished.
+ * Return the number of jobs in the que that don't have 100% or Error in the
+ * Progress column
+ * @return the number of jobs that are in the que that havn't been finished.
  */
 int QueConfigImp::numberOfJobsNotFinished(){
   int totalJobsToDo = 0;
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
-    if( currentItem->percentDone != 100 || currentItem->percentDone != -1 ){
+    if( currentItem->percentDone == 100 || currentItem->percentDone == -1 ){
     }
     else
       totalJobsToDo++;

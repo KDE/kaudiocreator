@@ -107,8 +107,9 @@ void KAudioCreator::quit(){
  */
 void KAudioCreator::closeEvent(QCloseEvent *e) {
   if(queConfig->numberOfJobsNotFinished() > 0){
-    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"));
-  if( r == KMessageBox::No )
+    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"), i18n("&No"), i18n("&Yes"));
+  // This is backwards because we want the default (first item which is YES) to be no. 
+  if( r == KMessageBox::Yes )
     return;
   }
   QWidget::closeEvent(e);
