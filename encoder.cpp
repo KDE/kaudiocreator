@@ -172,7 +172,7 @@ void Encoder::tendToNewJobs() {
 	while ( QFile::exists( desiredFile ) ) {
 		bool ok;
 		QString text = KInputDialog::getText(
-			i18n("KAudioCreator - File already exists"), i18n("Sorry, file already exists, please pick a new name:"),
+			i18n("File Already Exists"), i18n("Sorry, file already exists. Please pick a new name:"),
 			desiredFile, &ok );
 		if ( ok && !text.isEmpty() )
 		 	desiredFile = text;
@@ -186,7 +186,7 @@ void Encoder::tendToNewJobs() {
 	int lastSlash = desiredFile.findRev('/',-1);
 	if ( lastSlash == -1 ||
 			!(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash))) ) {
-		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed."));
+		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed"));
 		emit jobsChanged();
 		updateProgress(job->id, -1);
 		return;

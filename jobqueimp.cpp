@@ -152,7 +152,7 @@ bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
 	if(!item)
 		return false;
 
-	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."), KStdGuiItem::yes(), KStdGuiItem::no())
+	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStdGuiItem::yes(), KStdGuiItem::no())
 		  == KMessageBox::No ))
 		return false;
 
