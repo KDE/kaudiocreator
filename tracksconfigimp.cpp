@@ -7,10 +7,8 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include <qpixmap.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <klocale.h>
 #include <kurl.h>
 #include <qregexp.h>
 

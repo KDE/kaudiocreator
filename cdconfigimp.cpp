@@ -48,7 +48,6 @@ typedef unsigned long long  __u64;
 
 #include <kdebug.h>
 #include <kprotocolmanager.h>
-#include <kinstance.h>
 #include <klocale.h>
 
 #include "cdconfigimp.h"
@@ -206,7 +205,7 @@ CdConfigImp::CdConfigImp( QObject* parent, const char* name) : QObject(parent,na
  */
 void CdConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
-  config.setGroup("cdconfig");
+  config.setGroup("CD");
   autoRip = config.readBoolEntry("autoRip", false);
   performCDDBauto = config.readBoolEntry("performCDDBauto", false);
   constantlyScan = config.readBoolEntry("constantlyScan", false); 

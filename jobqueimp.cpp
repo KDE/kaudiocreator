@@ -1,10 +1,8 @@
-#include "queconfigimp.h"
+#include "jobqueimp.h"
 #include "job.h"
-#include <qlistview.h> 
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qpainter.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 
@@ -19,7 +17,7 @@
  * @param parent - parent widget
  * @param name - widget name
  */
-QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
+JobQueImp::JobQueImp( QWidget* parent, const char* name):JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
   connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
@@ -29,7 +27,7 @@ QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,
 /**
  * Loads the settings
  */
-void QueConfigImp::loadSettings(){
+void JobQueImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("general");
   removeCompletedJobs = config.readBoolEntry("removeCompletedJobs", false);
@@ -40,7 +38,7 @@ void QueConfigImp::loadSettings(){
  * Based upon a highest number that is kept. 
  * @param number the number to fill out.
  */ 
-QString QueConfigImp::getStringFromNumber(int number){
+QString JobQueImp::getStringFromNumber(int number){
   if(number > highestNumber){
     int diff = QString("%1").arg(number).length() - QString("%1").arg(highestNumber).length();
     highestNumber = number;
@@ -66,7 +64,7 @@ QString QueConfigImp::getStringFromNumber(int number){
  * @param id the id of the job.
  * @param name the name of the job.
  */
-void QueConfigImp::addJob(Job*job, QString name ){
+void JobQueImp::addJob(Job*job, QString name ){
   job->id = ++currentId;
   (void)new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
   queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
@@ -77,7 +75,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
  * @param id the id of the job to update
  * @param progress the new progress of the job.
  */
-void QueConfigImp::updateProgress(int id, int progress){
+void JobQueImp::updateProgress(int id, int progress){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   QString buffer = getStringFromNumber(id);
   buffer += QString("%1").arg(id);
@@ -104,7 +102,7 @@ void QueConfigImp::updateProgress(int id, int progress){
  * Remove job listed in item
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
  */ 
-void QueConfigImp::removeJob(QueListViewItem *item){
+void JobQueImp::removeJob(QueListViewItem *item){
   emit (removeJob(item->text(HEADER_JOB).toInt()));
   todoQue->takeItem(item);
   delete(item);
@@ -123,7 +121,7 @@ void QueConfigImp::removeJob(QueListViewItem *item){
 /**
  * Remove the currently selected Job
  */
-void QueConfigImp::removeSelectedJob(){
+void JobQueImp::removeSelectedJob(){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while(currentItem != NULL){
     if(currentItem->isSelected()){
@@ -139,7 +137,7 @@ void QueConfigImp::removeSelectedJob(){
 /**
  * Remove all of the jobs in the list.
  */
-void QueConfigImp::removeAllJobs(){
+void JobQueImp::removeAllJobs(){
   QueListViewItem * currentItem = NULL;
   while( (currentItem = (QueListViewItem*)todoQue->firstChild()) != NULL ){
     removeJob(currentItem);
@@ -149,7 +147,7 @@ void QueConfigImp::removeAllJobs(){
 /**
  * Remove any jobs that are in the list that are done.
  */
-void QueConfigImp::clearDoneJobs(){
+void JobQueImp::clearDoneJobs(){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
     QueListViewItem *itemToRemove = NULL;
@@ -176,7 +174,7 @@ void QueConfigImp::clearDoneJobs(){
  * Progress column
  * @return the number of jobs that are in the que that havn't been finished.
  */
-int QueConfigImp::numberOfJobsNotFinished(){
+int JobQueImp::numberOfJobsNotFinished(){
   int totalJobsToDo = 0;
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
@@ -228,5 +226,5 @@ QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QStr
   percentDone = 0;
 }
 
-#include "queconfigimp.moc"
+#include "jobqueimp.moc"
 

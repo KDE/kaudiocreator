@@ -8,7 +8,7 @@
 class KDialogBase;
 class CdConfig;
 class RipConfig;
-class EncoderConfig;
+class EncoderConfigImp;
 class KAutoConfig;
 class General;
 
@@ -33,16 +33,13 @@ private slots:
 
   void playlistWizard();
   void encoderWizard();
-  void loadEncoderConfig(int index);
 
-  void updateExample();
-  
 private:
   General* general;
   KDialogBase* options;
   CdConfig *cdConfig;
   RipConfig *ripConfig;
-  EncoderConfig *encoderConfig;
+  EncoderConfigImp *encoderConfigImp;
 
   KAutoConfig *kautoconfig;
 

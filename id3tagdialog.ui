@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>342</width>
-            <height>211</height>
+            <width>370</width>
+            <height>228</height>
         </rect>
     </property>
     <property name="caption">
@@ -210,6 +210,9 @@
     <tabstop>artist</tabstop>
     <tabstop>album</tabstop>
     <tabstop>year</tabstop>
+    <tabstop>genre</tabstop>
+    <tabstop>buttonPrevious</tabstop>
+    <tabstop>buttonNext</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>

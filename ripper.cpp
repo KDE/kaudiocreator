@@ -1,6 +1,5 @@
-#include "ripconfigimp.h"
+#include "ripper.h"
 
-#include "job.h"
 
 #include <qfile.h>
 #include <ktempfile.h>
@@ -8,6 +7,7 @@
 
 // eject
 #include <stdlib.h>
+#include <kmessagebox.h>
 
 // beep
 #include <knotifyclient.h>
@@ -19,16 +19,16 @@
 /**
  * Constructor, load settings.
  */
-RipConfigImp::RipConfigImp( QObject* parent, const char* name) : QObject(parent,name) {
+Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
   loadSettings();
 }
 
 /**
  * Loads the settings
  */
-void RipConfigImp::loadSettings(){
+void Ripper::loadSettings(){
   KConfig &config = *KGlobal::config();
-  config.setGroup("ripconfig");
+  config.setGroup("Ripper");
   maxWavFiles = config.readNumEntry("maxWavFiles", 1);
   beepAfterRip = config.readBoolEntry("beepAfterRip", true);
   autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", false);
@@ -38,7 +38,7 @@ void RipConfigImp::loadSettings(){
 /**
  * Deconstructor, remove pending jobs, remove current jobs, save settings.
  */
-RipConfigImp::~RipConfigImp(){
+Ripper::~Ripper(){
   pendingJobs.clear();
   QMap<KIO::Job*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
@@ -66,7 +66,7 @@ RipConfigImp::~RipConfigImp(){
  * there is one.
  * @param id the id number of the job to remove.
  */
-void RipConfigImp::removeJob(int id){
+void Ripper::removeJob(int id){
   QMap<KIO::Job*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
     if(it.data()->id == id){
@@ -97,7 +97,7 @@ void RipConfigImp::removeJob(int id){
  * @param job the new job that this module should take over.
  * @param job the new job that we need to handle.
  */
-void RipConfigImp::ripTrack(Job *job){
+void Ripper::ripTrack(Job *job){
   emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->song)));
   pendingJobs.append(job);
   tendToNewJobs();
@@ -107,7 +107,7 @@ void RipConfigImp::ripTrack(Job *job){
  * See if there are are new jobs to attend too.  If we are all loaded up
  * then just loop.
  */
-void RipConfigImp::tendToNewJobs(){
+void Ripper::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
   if(jobs.count() >= (uint)maxWavFiles){
     QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
@@ -145,7 +145,7 @@ void RipConfigImp::tendToNewJobs(){
  * information dialog.
  * @param job the IO job to copy from
  */
-void RipConfigImp::copyJobResult(KIO::Job *job){
+void Ripper::copyJobResult(KIO::Job *job){
   KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (job);
 
   Job *newJob = jobs[job];
@@ -176,8 +176,16 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
 /**
  * Eject the cd
  */
-void RipConfigImp::eject(){
-  system("eject");
+void Ripper::eject(){
+  int returnValue = system("eject");
+  if(returnValue == 127){
+    KMessageBox:: sorry(0, i18n("\"eject\" command not installed."), i18n("Can not eject"));
+    return;
+  }
+  if(returnValue != 0){
+    KMessageBox:: sorry(0, i18n("\"eject\" command failed."), i18n("Can not eject"));
+    return;
+  } 
 }
 
 /**
@@ -185,7 +193,7 @@ void RipConfigImp::eject(){
  * @param job the current ioslave job in progress
  * @param percent the current percent that the ioslave has done.
  */
-void RipConfigImp::updateProgress( KIO::Job *job, unsigned long percent){
+void Ripper::updateProgress( KIO::Job *job, unsigned long percent){
   if(job){
     Job *ripJob = (jobs[job]);
     if(ripJob)
@@ -193,5 +201,5 @@ void RipConfigImp::updateProgress( KIO::Job *job, unsigned long percent){
   }
 }
 
-#include "ripconfigimp.moc"
+#include "ripper.moc"
 

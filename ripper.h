@@ -6,8 +6,8 @@
     email                : ben-dev@meyerhome.net
  ***************************************************************************/
 
-#ifndef RIPCONFIGIMP_H
-#define RIPCONFIGIMP_H
+#ifndef RIPPER_H
+#define RIPPER_H
 
 #include "job.h"
 #include <kio/jobclasses.h>
@@ -17,7 +17,7 @@
 class KURL;
 class Job;
 
-class RipConfigImp : public QObject {
+class Ripper : public QObject {
 
 Q_OBJECT
 
@@ -27,8 +27,8 @@ signals:
   void encodeWav(Job *job);
 
 public:
-  RipConfigImp( QObject* parent = 0, const char* name = 0);
-  ~RipConfigImp();
+  Ripper( QObject* parent = 0, const char* name = 0);
+  ~Ripper();
   
 public slots:
   void loadSettings();

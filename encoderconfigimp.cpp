@@ -1,295 +1,244 @@
 #include "encoderconfigimp.h"
+#include "encoderedit.h"
 
-#include <qapplication.h>
-#include <qregexp.h>
-#include <qtimer.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qdir.h>
-#include <kstandarddirs.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <kautoconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kurl.h>
 #include <kconfig.h>
-#include <kglobal.h>
-
-#define ENCODER_EXE_STRING "encoderExe_"
-#define ENCODER_ARGS_STRING "encoderCommandLine_"
-#define ENCODER_EXTENSION_STRING "encoderExtension_"
-#define ENCODER_PERCENTLENGTH_STRING "encoderPercentLength_"
 
 /**
- * Constructor, load settings.  Set the up the pull down menu with the correct item.
+ * Constructor.
  */
-EncoderConfigImp::EncoderConfigImp( QObject* parent, const char* name):QObject(parent,name) {
-  loadSettings();
-}
+EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
+    EncoderConfig (parent, name) {
+  connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
+  connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
+  connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
+  connect(setCurrentEncoder, SIGNAL(clicked()), this, SLOT(setCurrentEncoderSlot()));
 
-/**
- * Load the settings for this class.
- */ 
-void EncoderConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
-  config.setGroup("encoderconfig");
-  saveWav =  config.readBoolEntry("saveWav", false);
-  numberOfCpus = config.readNumEntry("numberOfCpus", 1);
-  fileFormat = config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
-  createPlaylist = config.readBoolEntry("createPlaylist", false);
-  playlistFileFormat = config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
-  useRelitivePath = config.readBoolEntry("useRelitivePath", false);
+  config.setGroup("Encoder");
+  int lastKnownEncoder = config.readNumEntry("lastKnownEncoder",0);
 
-  // Set the current item and settings.
-  int currentItem = config.readNumEntry("encoderCurrentItem",0);
+  // If there are no encoders then store the three default ones.
+  if( lastKnownEncoder == 0){
+    config.setGroup("Encoder_0");
+    config.writeEntry("encoderName", i18n("OggEnc"));
+    config.writeEntry("commandLine", "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
+    config.writeEntry("extension", "ogg");
+    config.writeEntry("percentLength", 4);
 
-  encoderCommandLine = config.readEntry(QString(ENCODER_ARGS_STRING "%1").arg(currentItem),"");
-  encoderExtension = config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(currentItem));
-  encoderPercentLenght = config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(currentItem),2);
+    config.setGroup("Encoder_1");
+    config.writeEntry("encoderName", i18n("Lame"));
+    config.writeEntry("commandLine", "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
+    config.writeEntry("extension", "mp3");
+    config.writeEntry("percentLength", 2);
 
-  config.setGroup("general");
-  replaceInput = config.readEntry("selection");
-  replaceOutput = config.readEntry("replace");
-}
+    config.setGroup("Encoder_2");
+    config.writeEntry("encoderName", i18n("Leave as a wav file"));
+    config.writeEntry("commandLine", "mv %f %o");
+    config.writeEntry("extension", "wav");
+    config.writeEntry("percentLength", 2);
 
-/**
- * Deconstructor, remove pending jobs, remove current jobs.
- */
-EncoderConfigImp::~EncoderConfigImp(){
-  pendingJobs.clear();
-
-  QMap<KShellProcess*, Job*>::Iterator pit;
-  for( pit = jobs.begin(); pit != jobs.end(); ++pit ){
-    KShellProcess *process = pit.key();
-    Job *job = jobs[pit.key()];
-    threads.remove(process);
-    process->kill();
-    QFile::remove(job->newLocation);
-    delete job;
-    delete process;
+    config.setGroup("Encoder");
+    config.writeEntry("lastKnownEncoder", 2);
   }
-  jobs.clear();
+  
+  loadEncoderList();
 }
 
 /**
- * Stop this job with the matchin id.
- * @param id the id number of the job to stop.
- */
-void EncoderConfigImp::removeJob(int id){
-  QMap<KShellProcess*, Job*>::Iterator it;
-  for( it = jobs.begin(); it != jobs.end(); ++it ){
-    if(it.data()->id == id){
-      KShellProcess *process = it.key();
-      Job *job = jobs[it.key()];
-      threads.remove(process);
-      process->kill();
-      jobs.remove(process);
-      delete job;
-      delete process;
-      break;
+ * Clear map
+ * Clear listbox
+ * Load list of encoders.
+ */ 
+void EncoderConfigImp::loadEncoderList(){
+  encoderNames.clear();
+  encoderList->clear();
+  
+  KConfig &config = *KGlobal::config();
+  config.setGroup("Encoder");
+  
+  QString currentEncoderString = config.readEntry("currentEncoder");
+  bool foundCurrentEncoder = false;
+  
+  uint lastEncoder = 0;
+  uint lastKnownEncoder = config.readNumEntry("lastKnownEncoder",0);
+  lastKnownEncoder++;
+  for( uint i=0; i<=lastKnownEncoder; i++ ){
+    QString currentGroup = QString("Encoder_%1").arg(i);
+    if(config.hasGroup(currentGroup)){
+      lastEncoder = i;
+      config.setGroup(currentGroup);
+      QString encoderName = config.readEntry("encoderName", i18n("Unknown Encoder"));
+      encoderList->insertItem(encoderName);
+      encoderNames.insert(encoderName, currentGroup);
+      if(currentEncoderString == currentGroup)
+	foundCurrentEncoder = true;    
     }
   }
-  Job *job = pendingJobs.first();
-  while(job){
-    if(job->id == id)
-      break;
-    job = pendingJobs.next();
+  if((lastKnownEncoder-1) != lastEncoder){
+    config.setGroup("Encoder");
+    config.writeEntry("lastKnownEncoder", lastEncoder);
   }
-  if(job){
-    pendingJobs.remove(job);
-    delete job;
-  }
-}
-
-/**
- * Adds job to the que of jobs to encode.
- * @param job the job to encode.
- */
-void EncoderConfigImp::encodeWav(Job *job){
-  emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(encoderExtension).arg(job->group).arg(job->song)));
-  pendingJobs.append(job);
-  tendToNewJobs();
-}
-
-/**
- * See if there are are new jobs to attend too.  If we are all loaded up
- * then just loop back in 5 seconds and check agian.
- */
-void EncoderConfigImp::tendToNewJobs(){
-  // If we are currently ripping the max try again in a little bit.
-  if(threads.count() >= numberOfCpus){
-    QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
-    return;
-  }
-  // Just to make sure in the event something goes wrong or we are exiting
-  if(pendingJobs.count() == 0)
-    return;
-
-  Job *job = pendingJobs.first();
-  pendingJobs.remove(job);
-
-  QString desiredFile = fileFormat;
-  {
-    QMap <QString,QString> map;
-    map.insert("extension", encoderExtension);
-    job->replaceSpecialChars(desiredFile, false, map);
-  }
-  if(desiredFile[0] == '~'){
-    desiredFile.replace(0,1, QDir::homeDirPath());
-  }
-
-  // If the user wants anything regexp replaced do it now...
-  desiredFile.replace( QRegExp(replaceInput), replaceOutput );
   
-  int lastSlash = desiredFile.findRev('/',-1);
-  if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    qDebug("Can not place file, unable to make directories");
-    return;
+  // Make sure that the current encoder is valid.
+  if(foundCurrentEncoder){
+    config.setGroup(currentEncoderString);
+    currentEncoderName->setText(config.readEntry("encoderName"));
   }
-
-  job->newLocation = desiredFile;
-
-  QString command = encoderCommandLine;
-  {
-    QMap <QString,QString> map;
-    map.insert("extension", encoderExtension);
-    map.insert("f", job->location);
-    map.insert("o", desiredFile);
-    job->replaceSpecialChars(command, true, map);
-  }
-
-  updateProgress(job->id, 1);
-
-  job->errorString = command;
-  //qDebug(command.latin1());
-  KShellProcess *proc = new KShellProcess();
-  *proc << QFile::encodeName(command);
-  connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-                       this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-  connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
-                       this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-  connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(jobDone(KProcess *)));
-  jobs.insert(proc, job);
-  threads.append(proc);
-
-  proc->start(KShellProcess::NotifyOnExit,  KShellProcess::AllOutput);
 }
 
 /**
- * We have recieved some output from a thread. See if it contains a foo%.
- * @param proc the process that has new output.
- * @param buffer the output from the process
- * @param buflen the length of the buffer.
- */
-void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int length){
-  // Make sure we have a job to send an update too.
-  Job *job = jobs[(KShellProcess*)process];
-  if(!job){
-    qDebug("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line: %d", __LINE__);
-    return;
+ * Find empty group
+ * bring up dialog for that group.
+ */ 
+void EncoderConfigImp::addEncoderSlot(){
+  KConfig &config = *KGlobal::config();
+  bool foundEmptyGroup = false;
+  uint number = 0;
+  while(!foundEmptyGroup){
+    if(!config.hasGroup(QString("Encoder_%1").arg(number)))
+      foundEmptyGroup = true;
+    else
+      number++;
   }
-
-  // Make sure the output string has a % symble in it.
-  QString output = QString(buffer).mid(0,length);
-  if( output.find('%') == -1 ){
-    qDebug("No \'%%\' found in output.  Report as a bug w/encoder command line options if progressbar does not fill.");
-    return;
-  }
-  //qDebug(QString("Pre cropped: %1").arg(output).latin1());
-  output = output.mid(output.find('%')-encoderPercentLenght,2);
-  //qDebug(QString("Post cropped: %1").arg(output).latin1());
-  bool conversionSuccessfull = false;
-  int percent = output.toInt(&conversionSuccessfull);
-  //qDebug(QString("number: %1").arg(percent).latin1());
-  if(percent >= 0 && percent < 100 && conversionSuccessfull){
-    emit(updateProgress(job->id, percent));
-  }
-  // If it was just some random output that couldn't be converted then don't report the error.
-  else
-    if(conversionSuccessfull)
-      qDebug("Percent done:\"%d\" is not >= 0 && < 100.", percent);
-}
-
-/**
- * When the thread is done encoding the file this function is called.
- * @param job the job that just finished.
- */
-void EncoderConfigImp::jobDone(KProcess *process){
-  // Normal error checking here.
-  if(!process)
-    return;
  
-  //qDebug("Process exited with status: %d", process->exitStatus());
-  
-  Job *job = jobs[(KShellProcess*)process];
-  threads.remove((KShellProcess*)process);
-  jobs.remove((KShellProcess*)process);
-
-  if(process->exitStatus() == 127){
-    KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
-    QFile::remove(job->location);
-    emit(updateProgress(job->id, -1));
-  }
-  else if( QFile::exists(job->newLocation)){
-    if(!saveWav)
-      QFile::remove(job->location);
-    
-    // TODO kill -9 lame or oggenc when processing and see what they return.
-    if(process->normalExit() && process->exitStatus() != 0){
-      //qDebug("Failed to complete!");
-      qDebug("Process exited with non 0 status: %d", process->exitStatus());
-    }
-    else{ 
-      //qDebug("Must be done: %d", (process->exitStatus()));
-      emit(updateProgress(job->id, 100));
-    }
-    if(createPlaylist)
-      appendToPlaylist(job);
-  }
-  else{
-    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
-    QFile::remove(job->location);
-    emit(updateProgress(job->id, -1));
-  }
-
-  delete job;
-  delete process;
+  QString groupName = QString("Encoder_%1").arg(number);
+  if(KAutoConfigDialog::showDialog(groupName.latin1()))
+    return;
+  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
+  connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadEncoderList()));
+  dialog->show();
 }
 
 /**
- * Append the job to the playlist as specified in the options.
- * @param job too append to the playlist.
- */
-void EncoderConfigImp::appendToPlaylist(Job* job){
-  QString desiredFile = playlistFileFormat;
-  QMap <QString,QString> map;
-  map.insert("extension", encoderExtension);
-  job->replaceSpecialChars(desiredFile, false, map);
-  if(desiredFile[0] == '~'){
-    desiredFile.replace(0,1, QDir::homeDirPath());
+ * If
+ * Something is selected
+ * There is more then 1 thing left
+ * The user says ok to delete.
+ * Is not the current encoder.
+ * Then
+ * The group is removed from the list
+ * Deleted from the config.
+ */ 
+void EncoderConfigImp::removeEncoderSlot(){
+  if(!encoderList->selectedItem()){
+    KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
+    return;
+  }	
+  if(encoderList->count() <= 1){
+    KMessageBox:: sorry(this, i18n("There must exist at least one encoder."), i18n("Can't remove."));
+    return;
   }
-  int lastSlash = desiredFile.findRev('/',-1);
-  if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(0, i18n("The desired encoded file could not be created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
-    QFile::remove(job->location);
+  if(currentEncoderName->text() == encoderList->currentText()){
+    KMessageBox:: sorry(this, i18n("Encoder is currently set as current.\nPlease select a different encoder as current before this one can be removed."), i18n("Can't remove."));
     return;
   }
 
-  QFile f(desiredFile);
-  if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist Addition Failed"));
+  if(KMessageBox::questionYesNo(this, i18n("Delete Encoder?"), i18n("Delete Encoder"))
+      == KMessageBox::No )
     return;
-  }
-
-  QTextStream t( &f );        // use a text stream
-
-  if(useRelitivePath){
-    KURL audioFile(job->newLocation);
-    t << "./" << audioFile.fileName() << endl;
-  }
-  else{
-    t << job->newLocation << endl;
-  }
-  f.close();
+  
+  QString groupName = encoderNames[encoderList->currentText()];
+  KConfig &config = *KGlobal::config();
+  config.deleteGroup(groupName);
+  encoderList->removeItem(encoderList->currentItem());
 }
+
+/**
+ * If
+ * Something is selected
+ * Group exists
+ * Then
+ * Bring up dialog
+ */ 
+void EncoderConfigImp::configureEncoderSlot() {
+  if(!encoderList->selectedItem()){
+    KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
+    return;
+  }
+  QString groupName = encoderNames[encoderList->currentText()];
+  KConfig &config = *KGlobal::config();
+  if(!config.hasGroup(groupName))
+    return;
+
+  if(KAutoConfigDialog::showDialog(groupName.latin1()))
+    return;
+    
+  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
+  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
+  connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
+  connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
+  dialog->show();
+}
+
+void EncoderConfigImp::setCurrentEncoderSlot(){
+  if(!encoderList->selectedItem()){
+    KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
+    return;
+  }
+  currentEncoderName->setText(encoderList->currentText());
+
+  KConfig &config = *KGlobal::config();
+  config.setGroup("Encoder");
+  config.writeEntry("currentEncoder", encoderNames[encoderList->currentText()]);
+}
+
+/**
+ * If object exists update encoder.
+ */ 
+void EncoderConfigImp::updateEncoder(QObject * obj){
+  if(!obj)
+   return;
+  updateEncoder(obj->name());
+}
+
+/**
+ * If
+ * Exists
+ * Then
+ * Get name
+ * Make sure group exists
+ * Update name
+ * Update Map
+ * If current encoder update also.
+ */ 
+void EncoderConfigImp::updateEncoder(const char *dialogName){
+  QString groupName = dialogName;
+  QString encoderName;
+  bool found = false;
+  QMap<QString, QString>::Iterator it;
+  for ( it = encoderNames.begin(); it != encoderNames.end(); ++it ) {
+    if(it.data() == groupName){
+      found = true;
+      encoderName = it.key();
+    }
+  }
+  if(!found)
+    return;
+  KConfig &config = *KGlobal::config();
+  if(!config.hasGroup(groupName))
+    return;
+  config.setGroup(groupName);
+  QString newName = config.readEntry("encoderName");
+  if(newName == encoderName)
+    return;
+  
+  QListBoxItem *item = encoderList->findItem(encoderName);
+  if(!item)
+    return;
+  encoderList->changeItem(newName, encoderList->index(item));
+
+  if(currentEncoderName->text() == encoderName)
+    currentEncoderName->setText(newName);
+  encoderNames.insert(newName, groupName);
+  encoderNames.erase(encoderName);
+}
+
 
 #include "encoderconfigimp.moc"
 

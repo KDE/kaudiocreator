@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>411</width>
-            <height>413</height>
+            <width>408</width>
+            <height>341</height>
         </rect>
     </property>
     <property name="caption">
@@ -151,5 +151,37 @@
         </spacer>
     </vbox>
 </widget>
+<connections>
+    <connection>
+        <sender>selection</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>General</receiver>
+        <slot>updateExample()</slot>
+    </connection>
+    <connection>
+        <sender>replace</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>General</receiver>
+        <slot>updateExample()</slot>
+    </connection>
+    <connection>
+        <sender>example</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>General</receiver>
+        <slot>updateExample()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>removeCompletedJobs</tabstop>
+    <tabstop>selection</tabstop>
+    <tabstop>replace</tabstop>
+    <tabstop>example</tabstop>
+</tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">general.ui.h</include>
+</includes>
+<slots>
+    <slot access="protected" specifier="non virtual">updateExample()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

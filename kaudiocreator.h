@@ -14,9 +14,9 @@
 class KJanusWidget;
 class TracksConfigImp;
 class CdConfigImp;
-class RipConfigImp;
-class EncoderConfigImp;
-class QueConfigImp;
+class Ripper;
+class Encoder;
+class JobQueImp;
 class QCloseEvent;
 class KDialogBase;
 
@@ -44,9 +44,9 @@ private:
   KJanusWidget *janusWidget;
   TracksConfigImp *tracksConfig;
   CdConfigImp *cdConfig;
-  RipConfigImp *ripConfig;
-  EncoderConfigImp *encoderConfig;
-  QueConfigImp *queConfig;
+  Ripper *ripper;
+  Encoder *encoder;
+  JobQueImp *jobQue;
 
   Options *optionsDialog;
 };

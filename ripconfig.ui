@@ -8,70 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>364</width>
-            <height>368</height>
+            <width>346</width>
+            <height>227</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form3</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QLayoutWidget" row="6" column="0">
-            <property name="name">
-                <cstring>Layout6</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel15</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Auto-eject delay:</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>autoEjectDelay</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> seconds</string>
-                    </property>
-                    <property name="maxValue">
-                        <number>300</number>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QCheckBox" row="5" column="0">
-            <property name="name">
-                <cstring>autoEjectAfterRip</cstring>
-            </property>
-            <property name="text">
-                <string>Auto-eject CD after last song is ripped</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="4" column="0">
+        <widget class="QCheckBox">
             <property name="name">
                 <cstring>beepAfterRip</cstring>
             </property>
@@ -82,7 +30,7 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="3" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout4</cstring>
             </property>
@@ -117,7 +65,53 @@
                 </widget>
             </hbox>
         </widget>
-        <spacer row="7" column="0">
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>autoEjectAfterRip</cstring>
+            </property>
+            <property name="text">
+                <string>Auto-eject CD after last song is ripped</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout6</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel15</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Auto-eject delay:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>autoEjectDelay</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string> seconds</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>300</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer>
             <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
@@ -130,11 +124,11 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>150</height>
+                    <height>130</height>
                 </size>
             </property>
         </spacer>
-    </grid>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -150,5 +144,11 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>beepAfterRip</tabstop>
+    <tabstop>maxWavFiles</tabstop>
+    <tabstop>autoEjectAfterRip</tabstop>
+    <tabstop>autoEjectDelay</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

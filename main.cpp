@@ -6,13 +6,11 @@
     email                : ben-dev@meyerhome.net
  ***************************************************************************/
 
-#include <qglobal.h>
 #include <kapplication.h>
 
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-#include <klocale.h>
 
 int main(int argc, char *argv[]){
   KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "0.90",
