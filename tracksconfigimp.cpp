@@ -13,10 +13,10 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#define HEADER_TRACK 0
+#define HEADER_TRACK 1
 #define HEADER_NAME 3
 #define HEADER_LENGTH 2
-#define HEADER_RIP 1
+#define HEADER_RIP 0
 
 /**
  * Constructor, connect up slots and signals.
@@ -196,7 +196,7 @@ void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, 
 void TracksConfigImp::newSong(int track, QString song, int length){
   song = song.mid(song.find(' ',0)+1, song.length());
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
-  QListViewItem * newItem = new QListViewItem(trackListing, QString("%1").arg(track), "", songLength, song);
+  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song);
   trackListing->setCurrentItem(trackListing->firstChild());
 }
 

@@ -105,11 +105,11 @@
             <column>
                 <property>
                     <name>text</name>
-                    <string>Track</string>
+                    <string>Rip</string>
                 </property>
                 <property>
                     <name>clickable</name>
-                    <bool>false</bool>
+                    <bool>true</bool>
                 </property>
                 <property>
                     <name>resizeable</name>
@@ -119,11 +119,11 @@
             <column>
                 <property>
                     <name>text</name>
-                    <string>Rip</string>
+                    <string>Track</string>
                 </property>
                 <property>
                     <name>clickable</name>
-                    <bool>true</bool>
+                    <bool>false</bool>
                 </property>
                 <property>
                     <name>resizeable</name>
