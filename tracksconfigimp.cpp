@@ -400,6 +400,7 @@ void TracksConfigImp::editNextTrack()
   {
     trackListing->setCurrentItem(newCurrentItem);
     dialog->title->setText(newCurrentItem->text(HEADER_NAME));
+    dialog->trackLabel->setText(i18n("Track %1").arg(newCurrentItem->text(HEADER_TRACK)));
   }
   dialog->title->setFocus();
   dialog->title->selectAll();
@@ -414,6 +415,7 @@ void TracksConfigImp::editPreviousTrack()
   {
     trackListing->setCurrentItem(newCurrentItem);
     dialog->title->setText(newCurrentItem->text(HEADER_NAME));
+    dialog->trackLabel->setText(i18n("Track %1").arg(newCurrentItem->text(HEADER_TRACK)));
   }
   dialog->title->setFocus();
   dialog->title->selectAll();
