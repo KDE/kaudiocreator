@@ -24,6 +24,7 @@ Name[sv]=Spår lagrat
 Name[ta]=தடம் பிரிக்கப்பட்டது
 Name[tg]=Шиор Канда шудааст
 Name[xx]=xxTrack Rippedxx
+Name[zh_CN]=音轨已抓取
 Comment=Track finished ripping
 Comment[bg]=Завършване на запис на пътечка
 Comment[cy]=Wedi gorffen rhwygo'r trac
@@ -33,6 +34,7 @@ Comment[nl]=Klaar met rippen van track
 Comment[pt]=A faixa foi extraida
 Comment[pt_BR]=A faixa foi extraida
 Comment[sv]=Spåret har lagrats klart
+Comment[zh_CN]=音轨抓取完成
 
 [cd ripped]
 Name=CD Ripped
@@ -53,6 +55,7 @@ Name[ta]=CD பிரிக்கப்பட்டது
 Name[tg]=Диски Фишурда Канда шудааст
 Name[uz]=Компакт-диск риппер
 Name[xx]=xxCD Rippedxx
+Name[zh_CN]=CD 已抓取
 Comment=CD finished ripping
 Comment[bg]=Завършване на запис на аудио диск
 Comment[cy]=Wedi gorffen rhwygo'r CD
@@ -62,6 +65,7 @@ Comment[nl]=Klaar met rippen van cd
 Comment[pt]=O CD foi extraido
 Comment[pt_BR]=O CD foi extraido
 Comment[sv]=Cd:n har lagrats klart
+Comment[zh_CN]=CD 抓取完成
 
 [track encoded]
 Name=Track Encoded
@@ -81,6 +85,7 @@ Name[sv]=Spår kodat
 Name[ta]=தடம் மறையாக்கப் பட்டது
 Name[tg]=Шиор Рамзӣ кунонида шудааст
 Name[xx]=xxTrack Encodedxx
+Name[zh_CN]=音轨已编码
 Comment=Track finished encoding
 Comment[bg]=Завършване на кодиране на пътечка
 Comment[cy]=Wedi gorffen amgodio'r trac
@@ -90,6 +95,7 @@ Comment[nl]=Klaar met coderen van track
 Comment[pt]=A faixa foi codificada
 Comment[pt_BR]=A faixa foi codificada
 Comment[sv]=Spåret har kodats klart
+Comment[zh_CN]=音轨编码完成
 
 [cd encoded]
 Name=CD Encoded
@@ -109,6 +115,7 @@ Name[sv]=Cd kodad
 Name[ta]=CD மறையாக்கப் பட்டது
 Name[tg]=Диски Фишурда Рамзӣ кунонида шудааст
 Name[xx]=xxCD Encodedxx
+Name[zh_CN]=CD 已编码
 Comment=CD finished encoding
 Comment[bg]=Завършване на кодиране на аудио диск
 Comment[cy]=Wedi gorffen amgodio'r CD
@@ -118,5 +125,6 @@ Comment[nl]=Klaar met coderen van cd
 Comment[pt]=O CD foi codificado
 Comment[pt_BR]=O CD foi codificado
 Comment[sv]=Cd:n har kodats klart
+Comment[zh_CN]=CD 编码完成
 default_presentation=17
 default_sound=KDE_ClockChime.wav
