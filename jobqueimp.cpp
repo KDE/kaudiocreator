@@ -95,7 +95,7 @@ void JobQueImp::updateProgress(int id, int progress){
     }
   }
   else{
-    kdDebug() << "An update was recieved about a job, but the job couldn't be found: " << id << endl;
+    kdDebug() << "An update was received about a job, but the job couldn't be found: " << id << endl;
   }
 }
 

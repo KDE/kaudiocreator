@@ -14,7 +14,7 @@
 
 /**
  * The job class is what is passed around the system.  All of the data about
- * the file beeing ripped and encoded is stored in here.
+ * the file being ripped and encoded is stored in here.
  */
 class Job{
 

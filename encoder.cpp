@@ -169,7 +169,7 @@ void Encoder::tendToNewJobs(){
 }
 
 /**
- * We have recieved some output from a thread. See if it contains %.
+ * We have received some output from a thread. See if it contains %.
  * @param proc the process that has new output.
  * @param buffer the output from the process
  * @param buflen the length of the buffer.
@@ -291,7 +291,7 @@ void Encoder::appendToPlaylist(Job* job){
 
 /**
  * Finds the relative path from path1 to path2
- * returns true is successfull.
+ * returns true is successful.
  */
 bool Encoder::relativeURL(const QString &path1, const QString &path2,
 				QString &relativePath ) const {
