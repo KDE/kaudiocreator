@@ -52,6 +52,7 @@ private slots:
 
   void hasCD(bool);
   void configureNotifications();
+  void encodeFile();
 
 private:
   KJanusWidget *janusWidget;

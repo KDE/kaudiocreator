@@ -29,12 +29,16 @@
 #include <kedittoolbar.h>
 #include <kstatusbar.h>
 #include <knotifydialog.h>
+#include <qspinbox.h>
+#include <qlineedit.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
 #include "ripper.h"
 #include "encoder.h"
 #include "prefs.h"
+#include "encodefileimp.h"
+#include "job.h"
 
 // Settings
 #include "ripconfig.h"
@@ -101,6 +105,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   KAction *edit = new KAction(i18n("&Edit Album"), 0, tracks, SLOT(editInformation()), actionCollection(), "edit_cd");
   connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
   
+  KAction *encode = new KAction(i18n("Encode &File"), 0, this, SLOT(encodeFile()), actionCollection(), "encode_file");
+
   KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
   connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
   
@@ -194,6 +200,30 @@ void KAudioCreator::saveToolbarConfig(){
 void KAudioCreator::configureNotifications() {
 	KNotifyDialog *dialog = new KNotifyDialog(this, "KNotifyDialog", false);
 	dialog->show();
+}
+
+void KAudioCreator::encodeFile(){
+  EncodeFileImp file(this, "EncodeFile");
+  QMap<QString, QString> genres = tracks->genres;
+  file.genre->insertStringList(genres.keys());
+  if(file.exec() == QDialog::Rejected )
+    return;
+
+  Job *newJob = new Job();
+  newJob->location = file.file->url();
+  newJob->album = file.album->text();
+  newJob->genre = genres[file.genre->currentText()];
+  if(newJob->genre.isEmpty())
+     newJob->genre = "Pop";
+  newJob->group = file.artist->text();
+  newJob->comment = file.comment->text();
+  newJob->year = file.year->value();
+  newJob->track = file.track->value();
+     
+  newJob->song = file.track_title->text();
+  newJob->song_artist = file.track_artist->text();
+  newJob->song_comment = file.track_comment->text();
+  encoder->encodeWav(newJob);
 }
 
 /**

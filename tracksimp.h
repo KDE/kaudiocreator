@@ -55,6 +55,9 @@ public:
   TracksImp( QWidget* parent = 0, const char* name = 0);
   ~TracksImp();
 
+  // This is public so the file encoder can use it
+  QMap<QString, QString> genres;
+
 public slots:
   void loadSettings();
   
@@ -94,7 +97,7 @@ private:
   
   AlbumEditor *dialog;
   KCDDB::Client* cddb;
-  QMap<QString, QString> genres;
+  
   unsigned long CDid;
   int dstatus;
   
