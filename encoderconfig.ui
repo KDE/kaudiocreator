@@ -51,7 +51,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Encoder:</string>
+                        <string>Encoder</string>
                     </property>
                 </widget>
                 <widget>
@@ -175,7 +175,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Mp3 file format</string>
+                        <string>Encoded file format</string>
                     </property>
                 </widget>
                 <widget>
@@ -276,7 +276,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Create an album playlist file (.m3u)</string>
+                <string>Create an album playlist file</string>
             </property>
             <property stdset="1">
                 <name>checked</name>

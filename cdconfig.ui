@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>272</width>
+            <width>269</width>
             <height>320</height>
         </rect>
     </property>
@@ -36,7 +36,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Perform CDDB lookup automaticlly</string>
+                <string>Perform CDDB lookup automatically</string>
             </property>
             <property stdset="1">
                 <name>checked</name>
@@ -113,6 +113,17 @@
             </grid>
         </widget>
         <widget>
+            <class>Line</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Line1</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget>
             <class>QCheckBox</class>
             <property stdset="1">
                 <name>name</name>
@@ -124,7 +135,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Automaticly rip every song on cd insert</string>
+                <string>Automaticly rip every song on new CD</string>
             </property>
         </widget>
         <spacer>

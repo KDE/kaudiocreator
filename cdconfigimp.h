@@ -1,89 +1,46 @@
-/***************************************************************************
-                                cdconfig.h
-                             -------------------
-    begin                : Friday Feb 9 2002
-    copyright            : (C) 2001 by Benjamin Meyer
-    email                : ben-dev@meyerhome.net
- ***************************************************************************/
+/****************************************************************************
+** Form interface generated from reading ui file './cdconfig.ui'
+**
+** Created: Wed Feb 13 09:47:42 2002
+**      by:  The User Interface Compiler (uic)
+**
+** WARNING! All changes made in this file will be lost!
+****************************************************************************/
+#ifndef CDCONFIG_H
+#define CDCONFIG_H
 
-#ifndef CDCONFIGIMP_H
-#define CDCONFIGIMP_H
-
+#include <qvariant.h>
 #include <qwidget.h>
-#include "cdconfig.h"
-#include <kjanuswidget.h>
-#include <kurl.h>
-#include <qtimer.h>
+class QVBoxLayout; 
+class QHBoxLayout; 
+class QGridLayout; 
+class QCheckBox;
+class QFrame;
+class QGroupBox;
+class QLabel;
+class QLineEdit;
+class QSpinBox;
 
-class Job;
-
-class CdConfigImp : public CdConfig  {
-
-Q_OBJECT
-
-signals:
-  void newAlbum(QString group, QString album, int year, QString genre);
-  void newSong(int track, QString song, int length);
-  void ripAlbum();
+class CdConfig : public QWidget
+{ 
+    Q_OBJECT
 
 public:
-  CdConfigImp( QWidget* parent = 0, const char* name = 0);
-  ~CdConfigImp();
+    CdConfig( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ~CdConfig();
 
-public slots:
-  void timerDone();
+    QCheckBox* performCDDBauto;
+    QGroupBox* GroupBox1;
+    QLabel* TextLabel3;
+    QLineEdit* databaseServer;
+    QSpinBox* databasePort;
+    QLabel* TextLabel2;
+    QFrame* Line1;
+    QCheckBox* autoRip;
 
-private slots:
-  void attemptToListAlbum();
-
-private:
-  QTimer *timer;
-
-  protected:
-
-    enum FileType
-    {
-      FileTypeUnknown,
-      FileTypeOggVorbis,
-      FileTypeMP3,
-      FileTypeWAV
-    };
-
-    enum DirType
-    {
-      DirTypeUnknown,
-      DirTypeDevice,
-      DirTypeByName,
-      DirTypeByTrack,
-      DirTypeTitle,
-      DirTypeInfo,
-      DirTypeRoot,
-      DirTypeMP3
-    };
-
-    void                  writeHeader(long);
-    struct cdrom_drive *  findDrive(bool &noPermission);
-    void                  parseArgs(const KURL &);
-
-    void getParameters();
-
-    struct cdrom_drive *  initRequest(const KURL &);
-    uint                  discid(struct cdrom_drive *);
-    int                  updateCD(struct cdrom_drive *);
-
-    FileType fileType(const QString & filename);
-
-    class Private;
-    Private * d;
-    
-  private:
-    cdrom_drive * pickDrive();
-    unsigned int get_discid(cdrom_drive *);
-    bool updating;
-
+protected:
+    QVBoxLayout* CdConfigLayout;
+    QGridLayout* GroupBox1Layout;
 };
 
-#endif
-
-// cdconfig.h
-
+#endif // CDCONFIG_H
