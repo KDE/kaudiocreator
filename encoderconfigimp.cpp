@@ -98,7 +98,7 @@ void EncoderConfigImp::removeJob(int id){
  * @param job the job to encode.
  */
 void EncoderConfigImp::encodeWav(Job *job){
-  emit(addJob(job, i18n("Encoding: %1 - %2").arg(job->group).arg(job->song)));
+  emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(encoderExtension).arg(job->group).arg(job->song)));
   pendingJobs.append(job);
   tendToNewJobs();
 }
@@ -119,7 +119,6 @@ void EncoderConfigImp::tendToNewJobs(){
 
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
-  //job->jobType = encoder->currentItem();
 
   QString desiredFile = fileFormat;
   {

@@ -20,7 +20,7 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false),jobType(-1){};
+  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false){};
 
   void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
@@ -44,8 +44,6 @@ public:
   // If this is the last song in to be ripped then true 
   bool lastSongInAlbum;
 
-  // The current type of job that is being done (ripping, encodeing, what encoding type etc)
-  int jobType;
 }; 
 
 #endif

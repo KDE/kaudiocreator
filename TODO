@@ -11,20 +11,8 @@ Global replace regexp?  i.e. reaplce all " " with "_"
 
 TODO.
 
-Should it really say Ripping when it is at 0% and qued?  What else could we say?
-
 Make it possible to stop and start encoding jobs:
-
 Save the joblist, so you can quit and continue later
-
-<lypanov> therefore being able to "queue" the encodes would be really nice
-             i.e when you rip the ripper lives some state info in a .wav.state file
-
-   <icefox>  W0rf: hmm I might be able to save the state asuming the current processes can finish
-   <icefox>  but not mid process
-
-   <lypanov> well if its mid process
-   <lypanov> you could have a warning sying "please wait until following jobs are complete..."
 
 BUG: a cd with several tracks named the same
      changed both the encoder location and the rip location, and it didn't help?
@@ -32,20 +20,17 @@ BUG: a cd with several tracks named the same
 
 Possiblity to use "nice" when calling encode jobs.
 
-Remove the magical "Rip" list header action which (de)selects all jobs.
-
 "Alternate" encoder location configs. Therefore allowing "sampler cds"
 to use "<album>/<tracknumber> <artist> - <title>"
 and normal cd's to use "<artist>/<album>/<tracknumber> <title>"
 the alternate selection could just be a simple checkbox next
 to rip selected tracks.
 
-Use a proper CDDB library that the rest of kde uses.
-- Support for local CDDB directories as in kscd or audiocd-kioslave.
-
-Add audiocd ioslave config (or the cddb lib config) to the configure dialog
+Add audiocd ioslave config to the configure dialog
 -Multiple Artists for 1 album.
+
 -Auto replace text dialog (replace X with Y such as " " with "_")
+
 Use same encoding options that audiocd has
 
 Check to see if the encoded binary exists before encoding (which?).
@@ -53,8 +38,3 @@ Check to see if the encoded binary exists before encoding (which?).
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 
 Add the ability to encode files
-
-Option to automaticly remove completed jobs.
-
-When printing encoding, it would be nice if it would say it's encoding to what (mp3, ogg, whatever)
-
