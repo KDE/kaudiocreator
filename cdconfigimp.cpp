@@ -17,7 +17,6 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include <qpushbutton.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -53,7 +52,11 @@ extern "C"
 #include <cdda_paranoia.h>
 
 /* This is in support for the Mega Hack, if cdparanoia ever is fixed, or we
-   use another ripping library we can remove this.  */
+   use another ripping library we can remove this.*/ 
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,50)
+typedef unsigned long long  __u64;
+#endif
 #include <linux/cdrom.h>
 #include <sys/ioctl.h>
 }
