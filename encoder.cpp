@@ -155,10 +155,8 @@ void Encoder::tendToNewJobs(){
     map.insert("extension", encoderExtension);
     job->replaceSpecialChars(desiredFile, false, map);
   }
-  if(desiredFile[0] == '~'){
-    desiredFile.replace(0,1, QDir::homeDirPath());
-  }
-
+  desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+  
   // If the user wants anything regexp replaced do it now...
   desiredFile.replace( QRegExp(replaceInput), replaceOutput );
   
