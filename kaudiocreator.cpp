@@ -192,7 +192,8 @@ void KAudioCreator::saveToolbarConfig(){
 }
 
 void KAudioCreator::configureNotifications() {
-    KNotifyDialog::configure(this);
+	KNotifyDialog *dialog = new KNotifyDialog(this, "KNotifyDialog", false);
+	dialog->show();
 }
 
 /**
