@@ -261,7 +261,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	// If it was just some random output that couldn't be converted then don't report the error.
 	else
 		if ( conversionSuccessfull )
-			qWarning("Percent done:\"%d\" is not >= 0 && < 100.", percent);
+			kdWarning("Percent done:\"%d\" is not >= 0 && < 100.", percent);
 }
 
 /**
