@@ -186,7 +186,7 @@ void Encoder::tendToNewJobs() {
 	int lastSlash = desiredFile.findRev('/',-1);
 	if ( lastSlash == -1 ||
 			!(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash))) ) {
-		KMessageBox::sorry(0, i18n("Can not place file, unable to make directories."), i18n("Encoding Failed."));
+		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed."));
 		emit jobsChanged();
 		updateProgress(job->id, -1);
 		return;
