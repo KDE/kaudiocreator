@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>EncodeFile</string>
+        <string>Encode File</string>
     </property>
     <vbox>
         <property name="name">
@@ -289,7 +289,7 @@
                         <cstring>pushButton5</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Cancel</string>
+                        <string>&amp;Close</string>
                     </property>
                     <property name="accel">
                         <string>Alt+C</string>

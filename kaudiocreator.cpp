@@ -29,8 +29,6 @@
 #include <kedittoolbar.h>
 #include <kstatusbar.h>
 #include <knotifydialog.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
@@ -203,27 +201,9 @@ void KAudioCreator::configureNotifications() {
 }
 
 void KAudioCreator::encodeFile(){
-  EncodeFileImp file(this, "EncodeFile");
-  QMap<QString, QString> genres = tracks->genres;
-  file.genre->insertStringList(genres.keys());
-  if(file.exec() == QDialog::Rejected )
-    return;
-
-  Job *newJob = new Job();
-  newJob->location = file.file->url();
-  newJob->album = file.album->text();
-  newJob->genre = genres[file.genre->currentText()];
-  if(newJob->genre.isEmpty())
-     newJob->genre = "Pop";
-  newJob->group = file.artist->text();
-  newJob->comment = file.comment->text();
-  newJob->year = file.year->value();
-  newJob->track = file.track->value();
-     
-  newJob->song = file.track_title->text();
-  newJob->song_artist = file.track_artist->text();
-  newJob->song_comment = file.track_comment->text();
-  encoder->encodeWav(newJob);
+  EncodeFileImp *file = new EncodeFileImp(tracks->genres, this, "EncodeFile");
+  connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*))); 
+  file->show();
 }
 
 /**

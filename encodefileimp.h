@@ -22,6 +22,9 @@
 #define ENCODEFILEIMP_H
 
 #include "encodefile.h"
+#include "qmap.h"
+
+class Job;
 
 /**
  * This class lets the user encode a file.
@@ -30,13 +33,16 @@ class EncodeFileImp : public EncodeFile  {
 
 Q_OBJECT
 
+signals:
+  void startJob(Job *newJob);
 public:
-  EncodeFileImp( QWidget* parent = 0, const char* name = 0);
-  ~EncodeFileImp();
+  EncodeFileImp( QMap<QString, QString> genres, QWidget* parent = 0, const char* name = 0);
 
 protected slots:
   void accept();
 
+private:
+  QMap<QString, QString> genres;
 };
 
 #endif // ENCODEFILEIMP_H
