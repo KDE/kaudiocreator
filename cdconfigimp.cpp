@@ -212,7 +212,6 @@ class CdConfigImp::Private
 
 CdConfigImp::CdConfigImp( QWidget* parent, const char* name):CdConfig(parent,name){
   d = new Private;
-  d->cddb = new CDDB;
   //connect(getNow, SIGNAL(clicked()), this, SLOT(attemptToListAlbum()));
   KConfig &config = *KGlobal::config();
   config.setGroup("cdconfig");
@@ -241,8 +240,6 @@ CdConfigImp::~CdConfigImp()
   config.writeEntry("databasePort",databasePort->value());
   config.writeEntry("performCDDBauto", performCDDBauto->isChecked());
   config.writeEntry("autoRip", autoRip->isChecked());
-
-  delete d->cddb;
   delete d;
 }
 
@@ -433,6 +430,7 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
 
   if (performCDDBauto->isChecked())
   {
+    d->cddb = new CDDB;
     KApplication::setOverrideCursor(Qt::waitCursor);
     d->cddb->set_server(databaseServer->text().latin1(), databasePort->value());
 
@@ -451,6 +449,7 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
       return 0;
     }
     KApplication::restoreOverrideCursor();
+    delete d->cddb;
   }
 
   d->based_on_cddb = false;
@@ -478,14 +477,14 @@ void CdConfigImp::attemptToListAlbum(){
 
   if (0 == drive)
   {
-    emit(newAlbum("No Artist","No Album", 0, "other"));
+    emit(newAlbum("No Artist","No Album", 0, "Other"));
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return;
   }
 
   if (0 != cdda_open(drive))
   {
-    emit(newAlbum("No Artist","No Album", 0, "other"));
+    emit(newAlbum("No Artist","No Album", 0, "Other"));
     //error(KIO::ERR_CANNOT_OPEN_FOR_READING, url.path());
     return;
   }
@@ -495,7 +494,7 @@ void CdConfigImp::attemptToListAlbum(){
     return;
   }
 
-  emit(newAlbum(d->cd_artist,d->cd_title, 0, "other"));
+  emit(newAlbum(d->cd_artist,d->cd_title, 0, "Other"));
   for (int i = d->tracks; i > 0; i--){
     if (d->is_audio[i-1])
     {

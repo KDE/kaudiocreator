@@ -32,27 +32,23 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
 
 /**
  * Bring up the dialog to edit the information about this album.
+ * If there is not currently selected track return.
+ * If ok is pressed then store the information and update track name.
  */
 void TracksConfigImp::editInformation(){
-  QListViewItem * currentItem = trackListing->firstChild();
-  int counter = 0;
-  while( currentItem != 0 ){
-    if(currentItem->isSelected())
-      break;
-    currentItem = currentItem->nextSibling();
-    counter++;
-  }
+  QListViewItem * currentItem = trackListing->currentItem();
   if( currentItem == 0 ){
     KMessageBox::sorry(this, i18n("Please select a track"), i18n("No track selected"));
     return;
   }
 
-  Id3TagDialog dialog(this, "info dialog", true);
+  // Create dialog.
+  Id3TagDialog dialog(this, "Album info editor dialog", true);
   dialog.artist->setText(group);
   dialog.album->setText(album);
   dialog.year->setValue(year);
-  dialog.trackLabel->setText(QString("Track %1").arg(counter+1));
-  dialog.title->setText(currentItem->text(1));
+  dialog.trackLabel->setText(QString("Track %1").arg(currentItem->text(HEADER_TRACK)));
+  dialog.title->setText(currentItem->text(HEADER_NAME));
   int totalGenres = dialog.genre->count();
   if(genre == "")
     genre = "Other";
@@ -62,20 +58,20 @@ void TracksConfigImp::editInformation(){
       break;
     }
   }
-  
+ 
+  // Show dialog and save results.
   bool okClicked = dialog.exec();
   if(okClicked){
     group = dialog.artist->text();
     album = dialog.album->text();
     year = dialog.year->value();
-    currentItem->setText(1, dialog.title->text());
+    currentItem->setText(HEADER_NAME, dialog.title->text());
     genre = dialog.genre->currentText();
   }
-  
 }
 
 /**
- * Helper function.  Selects all tracks and then rips.
+ * Helper function.  Checks all tracks and then calls startSession to rip them all.
  */
 void TracksConfigImp::ripWholeAlbum(){
   allOn = false;
@@ -84,7 +80,8 @@ void TracksConfigImp::ripWholeAlbum(){
 }
 
 /**
- * Start of the ripping session by emiting signals to rip the selected tracks.
+ * Start of the "ripping session" by emiting signals to rip the selected tracks.
+ * If any album information is not set, notify the user first.
  */
 void TracksConfigImp::startSession(){
   QString list = "";
@@ -112,40 +109,52 @@ void TracksConfigImp::startSession(){
       return;
   }
   QListViewItem * currentItem = trackListing->firstChild();
-  int counter = 1;
-  Job *last = NULL;
+  Job *lastJob = NULL;
   while( currentItem != 0 ){
     if(currentItem->pixmap(HEADER_RIP) != NULL ){
-      Job *j = new Job();
-      j->album = album;
-      j->genre = genre;
-      j->group = group;
-      j->song = currentItem->text(HEADER_NAME);
-      j->track = counter;
-      j->year = year;
-      last = j;
-      emit( ripTrack(j) ); 
+      Job *newJob = new Job();
+      newJob->album = album;
+      newJob->genre = genre;
+      newJob->group = group;
+      newJob->song = currentItem->text(HEADER_NAME);
+      newJob->track = currentItem->text(HEADER_TRACK).toInt();
+      newJob->year = year;
+      lastJob = newJob;
+      emit( ripTrack(newJob) ); 
     }
-    counter++;
     currentItem = currentItem->nextSibling();
   }
-  if(last)
-    last->lastSongInAlbum = true;
+  if(lastJob)
+    lastJob->lastSongInAlbum = true;
 }
 
 /**
- * The header was clicked so turn them all on/off
+ * The header was clicked so turn all of the tracks on/off
  */
 void TracksConfigImp::headerClicked(int){
   allOn = !allOn;
-  QListViewItem * currentItem = trackListing->firstChild();
+ 
+  // If the user manually turned them all on or off make sure we don't do the same. 
+  int totalSelectedSongs = 0;
+   QListViewItem * currentItem = trackListing->firstChild();
   while( currentItem != 0 ){
-    if(!allOn){
-      QPixmap a;
-      currentItem->setPixmap(HEADER_RIP,a);
-    }
-    else{
+    if(currentItem->pixmap(HEADER_RIP) != NULL )
+      totalSelectedSongs++;
+    currentItem = currentItem->nextSibling();
+  }
+  if(totalSelectedSongs == 0)
+    allOn = true;
+  if(totalSelectedSongs == trackListing->childCount())
+    allOn = false;
+
+  // Turn them all on or off.
+  currentItem = trackListing->firstChild();
+  while( currentItem != 0 ){
+    if(allOn)
       currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+    else{
+      QPixmap emptyPixmap;
+      currentItem->setPixmap(HEADER_RIP, emptyPixmap);
     }
     currentItem = currentItem->nextSibling();
   }
@@ -167,7 +176,7 @@ void TracksConfigImp::selectTrack(QListViewItem *currentItem){
 }
 
 /**
- * Set the current stats for the album being displayed.
+ * Set the current stats for the new album being displayed.
  */
 void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, QString newGenre){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
@@ -179,7 +188,8 @@ void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, 
 }
 
 /**
- * There is a new song for this album.  Add it to the list of songs.
+ * There is a new song for this album.  Add it to the list of songs.  Set the current selected
+ * song to the first one.
  * @param track the track number for the song.
  * @param song the name of the song.
  */
@@ -187,7 +197,7 @@ void TracksConfigImp::newSong(int track, QString song, int length){
   song = song.mid(song.find(' ',0)+1, song.length());
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
   QListViewItem * newItem = new QListViewItem(trackListing, QString("%1").arg(track), song, songLength, "");
-  trackListing->setCurrentItem(0);
+  trackListing->setCurrentItem(trackListing->firstChild());
 }
 
 #include "tracksconfigimp.moc"
