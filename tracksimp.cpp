@@ -342,7 +342,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 }
 
 /**
- * Bring up the dialog to edit the information about this cddbInfo.title.
+ * Bring up the dialog to edit the information about this album.
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
@@ -392,7 +392,7 @@ void TracksImp::ripWholeAlbum() {
 
 /**
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
- * If any cddbInfo.title information is not set, notify the user first.
+ * If any album information is not set, notify the user first.
  */
 void TracksImp::startSession() {
 	startSession(-1);
@@ -415,6 +415,7 @@ void TracksImp::startSession( int encoder ) {
 		list += "Album";
 	
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
+		// FIXME s/cddbInfo.title/album/
 		int r = KMessageBox::questionYesNo(this, i18n("Part of the cddbInfo.title is not set: %1.\n (To change cddbInfo.title information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"));
 		if( r == KMessageBox::No )
 			return;
@@ -499,7 +500,7 @@ void TracksImp::deselectAllTracks() {
 }
 
 /**
- * Set the current stats for the new cddbInfo.title being displayed.
+ * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum() {
 	albumName->setText(QString("%1 - %2").arg(cddbInfo.artist).arg(cddbInfo.title));
