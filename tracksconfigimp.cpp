@@ -104,7 +104,7 @@ void TracksConfigImp::startSession(){
     list += "Album";
   }
   if( list != ""){
-    int r = KMessageBox:: questionYesNo(this, QString("Part of the album is not set: %1. Would you like to continue anyway?").arg(list), "Album Information incomplete");
+    int r = KMessageBox:: questionYesNo(this, i18n(QString("Part of the album is not set: %1. Would you like to continue anyway?").arg(list).latin1()), i18n("Album Information incomplete"));
     if( r == KMessageBox::No )
       return;
   }

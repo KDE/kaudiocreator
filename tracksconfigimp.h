@@ -34,11 +34,11 @@ public slots:
   void newAlbum(QString group, QString album, int year, QString genre);
   void newSong(int track, QString song, int length);
   void ripWholeAlbum();
+  void editInformation();
 
 private slots:
   void selectTrack(QListViewItem *);
   void headerClicked(int);
-  void editInformation();
 
 private:
   QString album;
