@@ -53,11 +53,7 @@ Add the ability to encode files
 
 Option to automaticly remove completed jobs.
 
-By default have the temp dir when ripping removed.
-
 Add cancel button to options (i.e seperate the functionality from the widgets).
 
 When printing encoding, it would be nice if it would say it's encoding to what (mp3, ogg, whatever)
-
-- Album Editor: Button for next and previous Track.
 
