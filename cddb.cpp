@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <kdebug.h>
+#define KSOCK_NO_BROKEN
 #include <ksock.h>
 #include <klocale.h>
 
