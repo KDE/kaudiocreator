@@ -21,8 +21,6 @@
     <Action name="rip"/>
     <Action name="clear_done_jobs"/>
     <Separator/>
-    <Action name="configuretoolbars"/>
-    <Separator/>
     <Action name="quit"/>
   </Menu>
   <Menu name="view"><Text>&amp;View</Text>
@@ -31,6 +29,9 @@
     <Action name="view_rip"/>
     <Action name="view_encoder"/>
     <Action name="view_que"/>
+  </Menu>
+  <Menu name="settings"><Text>&amp;Settings</Text>
+    <Action name="configuretoolbars"/>
   </Menu>
 </MenuBar>
 
