@@ -75,6 +75,7 @@ extern "C"
 {
 /* This is in support for the Mega Hack, if cdparanoia ever is fixed, or we
    use another ripping library we can remove this.  */
+#define _LINUX_BYTEORDER_SWAB_H
 #include <linux/cdrom.h>
 #include <sys/ioctl.h>
 
