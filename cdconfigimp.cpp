@@ -350,7 +350,7 @@ struct cdrom_drive * CdConfigImp::initRequest(const KURL & url) {
   if (d->req_track >= d->tracks)
     d->req_track = -1;
 
-  kdDebug(7101) << "audiocd: dir=" << dname << " file=" << d->fname
+  kdDebug(60002) << "audiocd: dir=" << dname << " file=" << d->fname
     << " req_track=" << d->req_track << " which_dir=" << d->which_dir << endl;
   return drive;
 }
@@ -504,7 +504,7 @@ CdConfigImp::pickDrive()
 
   if (0 == drive)
   {
-    kdDebug(7101) << "Can't find an audio CD" << endl;
+    kdDebug(60002) << "Can't find an audio CD" << endl;
   }
 
   return drive;
@@ -577,7 +577,7 @@ CdConfigImp::parseArgs(const KURL & url)
       || old_cddb_port != d->cddbPort)
     d->discid = 0;
 
-  kdDebug(7101) << "CDDB: use_cddb = " << d->useCDDB << endl;
+  kdDebug(60002) << "CDDB: use_cddb = " << d->useCDDB << endl;
 
 }
 
