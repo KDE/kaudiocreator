@@ -48,7 +48,7 @@ void Ripper::loadSettings(){
   config.setGroup("Ripper");
   maxWavFiles = config.readNumEntry("maxWavFiles", 1);
   beepAfterRip = config.readBoolEntry("beepAfterRip", true);
-  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", true);
+  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", false);
   autoEjectDelay = config.readNumEntry("autoEjectDelay", 0);
 }
 

@@ -40,6 +40,9 @@ public:
   virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align);
   double percentDone;
+  // Has the percentDone gone beyond 0
+  // Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
+  bool progressing;
 };
 
 

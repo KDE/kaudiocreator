@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>346</width>
-            <height>230</height>
+            <height>233</height>
         </rect>
     </property>
     <property name="caption">
@@ -84,9 +84,6 @@
             <property name="accel">
                 <string>Alt+A</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -106,6 +103,9 @@
                     <property name="name">
                         <cstring>TextLabel15</cstring>
                     </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
                     <property name="text">
                         <string>Auto-&amp;eject delay:</string>
                     </property>
@@ -116,6 +116,9 @@
                 <widget class="QSpinBox">
                     <property name="name">
                         <cstring>autoEjectDelay</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                     <property name="suffix">
                         <string> seconds</string>

@@ -513,7 +513,7 @@ void TracksImp::selectTrack(QListViewItem *currentItem){
     currentItem->setPixmap(HEADER_RIP, empty);
   }
   else
-    currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+    currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
 }
 
 /**
@@ -522,7 +522,7 @@ void TracksImp::selectTrack(QListViewItem *currentItem){
 void TracksImp::selectAllTracks(){
   QListViewItem *currentItem = trackListing->firstChild();
   while( currentItem != 0 ){
-    currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
+    currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
     currentItem = currentItem->nextSibling();
   }
 }

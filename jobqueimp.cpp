@@ -26,10 +26,13 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
 #define HEADER_DESCRIPTION 2
+#define ICON_LOC HEADER_DESCRIPTION
 
 #define DEFAULT_HIGHEST_NUMBER 9
 
@@ -55,7 +58,7 @@ void JobQueImp::loadSettings(){
   removeCompletedJobs = config.readBoolEntry("removeCompletedJobs", false);
 }
 
-/***
+/**
  * Return a buffer of "000" so that new, updated jobs strings will be able to
  * sort via the columns.
  * Based upon a highest number that is kept. 
@@ -74,7 +77,7 @@ QString JobQueImp::getStringFromNumber(int number){
       }
     }
   }
-	
+
   QString buffer = "";
   uint newLength = QString("%1").arg(highestNumber).length() - QString("%1").arg(number).length();
   for(uint i=0; i < newLength; i++)
@@ -89,7 +92,8 @@ QString JobQueImp::getStringFromNumber(int number){
  */
 void JobQueImp::addJob(Job*job, const QString &name ){
   job->id = ++currentId;
-  (void)new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
+  QueListViewItem *currentItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
+  currentItem->setPixmap(ICON_LOC, SmallIcon("player_pause", currentItem->height()-2));
   queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
@@ -102,22 +106,38 @@ void JobQueImp::updateProgress(int id, int progress){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   QString buffer = getStringFromNumber(id);
   buffer += QString("%1").arg(id);
+  
+  // Find the current item
   while( currentItem != 0 ){
     if(currentItem->text(HEADER_JOB) == buffer)
       break;
     currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
-  
-  if( currentItem){
-    if(currentItem->percentDone != progress){
-      currentItem->percentDone = progress;
-      currentItem->repaint();
-      if(removeCompletedJobs && progress == 100)
-	removeJob(currentItem);      
-    }
+  if( !currentItem ){
+    kdDebug() << "JobQueImp::updateProgress An update was received about a job, but the job couldn't be found: " << id << endl;
+    return;
   }
-  else{
-    kdDebug() << "An update was received about a job, but the job couldn't be found: " << id << endl;
+
+  // Only update the % if it changed.
+  if(currentItem->percentDone == progress)
+    return;
+  
+  currentItem->percentDone = progress;
+  currentItem->repaint();
+
+  // Update the icon if needed
+  if(progress > 0 && progress < 100 && !currentItem->progressing ){
+    currentItem->setPixmap(ICON_LOC, SmallIcon("gear", currentItem->height()-2));
+    currentItem->progressing = true;
+  }
+  else if(progress == -1){
+    currentItem->setPixmap(ICON_LOC, SmallIcon("button_cancel", currentItem->height()-2));
+  }
+  else if(progress == 100){
+    // Remove the job if requested.
+    if(removeCompletedJobs)
+      removeJob(currentItem);      
+    currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
   }
 }
 
@@ -126,6 +146,13 @@ void JobQueImp::updateProgress(int id, int progress){
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
  */ 
 void JobQueImp::removeJob(QueListViewItem *item){
+  if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator isn't finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
+      == KMessageBox::No ))
+    return;
+
+  // "Thread" safe
+  if(!item) return;
+  
   emit (removeJob(item->text(HEADER_JOB).toInt()));
   todoQue->takeItem(item);
   delete(item);
@@ -161,9 +188,11 @@ void JobQueImp::removeSelectedJob(){
  * Remove all of the jobs in the list.
  */
 void JobQueImp::removeAllJobs(){
-  QueListViewItem * currentItem = NULL;
-  while( (currentItem = (QueListViewItem*)todoQue->firstChild()) != NULL ){
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
+  while( currentItem != NULL ){
+    QueListViewItem *next = (QueListViewItem*)currentItem->nextSibling();
     removeJob(currentItem);
+    currentItem = next;
   }
 }
 
@@ -214,19 +243,7 @@ int JobQueImp::numberOfJobsNotFinished(){
  * The repaint function overloaded so that we can have a built in progressbar.
  */
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
-	    int width,int align){
-  
-  /*
-
-  QColorGroup newCG = cg;
-  if(percentDone == 0)
-    newCG.setColor(QColorGroup::Text, startColor);
-  else if(percentDone < 100 && percentDone > 0)
-    newCG.setColor(QColorGroup::Text, middleColor);
-  else
-    newCG.setColor(QColorGroup::Text, endColor);
-  */
-  
+      int width,int align){
   if(column != HEADER_PROGRESS){
     QListViewItem::paintCell(p,cg,column,width,align);
     return;
@@ -256,8 +273,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 /**
  * Header for built in treelist item so we can have a progress bar in them.
  */
-QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name) : QListViewItem(parent, id, p, name){
-  percentDone = 0;
+QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QString name) : QListViewItem(parent, id, p, name), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"
