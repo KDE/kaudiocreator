@@ -309,7 +309,7 @@ void TracksImp::performCDDB(){
 /**
  * See if we can't get the cddb value for this cd.
  * wm_cd_init must be called before this.
- * @return true if sucessfull.
+ * @return true if successful.
  */ 
 bool TracksImp::cddbCD(){
   KCDDB::TrackOffsetList qvl;

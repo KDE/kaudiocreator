@@ -173,7 +173,7 @@ void JobQueImp::clearDoneJobs(){
 /**
  * Return the number of jobs in the que that don't have 100% or Error in the
  * Progress column
- * @return the number of jobs that are in the que that havn't been finished.
+ * @return the number of jobs that are in the que that haven't been finished.
  */
 int JobQueImp::numberOfJobsNotFinished(){
   int totalJobsToDo = 0;

@@ -43,7 +43,7 @@ private slots:
 private:
   // Jobs that we are currently doing.
   QMap<KIO::Job*, Job*> jobs;
-  // Jobs that we want to do , but havn't done yet
+  // Jobs that we want to do , but haven't done yet
   QPtrList<Job> pendingJobs;
 
   int maxWavFiles;
