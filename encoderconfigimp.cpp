@@ -247,10 +247,12 @@ void EncoderConfigImp::encodeWav(Job *job){
  * then just loop back in 5 seconds and check agian.
  */
 void EncoderConfigImp::tendToNewJobs(){
+  // If we are currently ripping the max try again in a little bit.
   if(threads.count() >= (uint)numberOfCpus->value()){
-    QTimer::singleShot( threads.count()*2*1000, this, SLOT(tendToNewJobs()));
+    QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
+  // Just to make sure in the event something goes wrong
   if(pendingJobs.count() == 0)
     return;
 

@@ -119,7 +119,7 @@ void RipConfigImp::ripTrack(Job *job){
 void RipConfigImp::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
   if(jobs.count() >= (uint)maxWavFiles->value()){
-    QTimer::singleShot( jobs.count()*2*1000, this, SLOT(tendToNewJobs()));
+    QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
   // Just to make sure in the event something goes wrong
