@@ -227,7 +227,7 @@ void JobQueImp::clearDoneJobs(){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   while( currentItem != 0 ){
     QueListViewItem *itemToRemove = NULL;
-    if( currentItem->percentDone == 100 || currentItem->percentDone == -1 ){
+    if( currentItem->percentDone == 100 ){
       itemToRemove = currentItem;
     }
     currentItem = (QueListViewItem*)currentItem->itemBelow();
