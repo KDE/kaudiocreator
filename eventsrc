@@ -8,6 +8,7 @@ Comment[tg]=KЭҷодкунандаиАудио
 
 [track ripped]
 Name=Track Ripped
+Name[ar]=المسارُ مزّقَ
 Name[bg]=Запис на пътечка
 Name[bs]=Numera ripovana
 Name[ca]=Extractor de peces
@@ -40,6 +41,7 @@ Name[tr]=İz Çevirici
 Name[uk]=Витягнута доріжка
 Name[zh_CN]=音轨已抓取
 Comment=Track finished ripping
+Comment[ar]=انتهى المسار من التمزيق
 Comment[bg]=Завършване на запис на пътечка
 Comment[bn]=ট্র্যাক রিপ করা শেষ
 Comment[bs]=Završeno ripovanje numere
@@ -76,6 +78,7 @@ Comment[zh_CN]=音轨抓取完成
 
 [cd ripped]
 Name=CD Ripped
+Name[ar]=CD مزّق
 Name[bg]=Запис на аудио диск
 Name[bn]=সিডি রিপ করা হয়েছে
 Name[bs]=CD ripovan
@@ -110,6 +113,7 @@ Name[uk]=Витягнутий музичний КД
 Name[uz]=Компакт-диск риппер
 Name[zh_CN]=CD 已抓取
 Comment=CD finished ripping
+Comment[ar]=CD انتهى من التمزيق
 Comment[bg]=Завършване на запис на аудио диск
 Comment[bn]=সিডি রিপ করা শেষ
 Comment[bs]=Završeno ripovanje CDa
@@ -146,6 +150,7 @@ Comment[zh_CN]=CD 抓取完成
 
 [track encoded]
 Name=Track Encoded
+Name[ar]=المسار تم تشفيره
 Name[bg]=Кодиране на пътечка
 Name[bn]=ট্র্যাক এনকোড করা হয়েছে
 Name[bs]=Numera kodirana
@@ -181,6 +186,7 @@ Name[tr]=İz Dönüştürücü
 Name[uk]=Закодована доріжка
 Name[zh_CN]=音轨已编码
 Comment=Track finished encoding
+Comment[ar]=انتهى المسار من التشفير
 Comment[bg]=Завършване на кодиране на пътечка
 Comment[bn]=ট্র্যাক এনকোডিং করা শেষ
 Comment[bs]=Završeno kodiranje numere
@@ -217,6 +223,7 @@ Comment[zh_CN]=音轨编码完成
 
 [cd encoded]
 Name=CD Encoded
+Name[ar]=CD تم تشفير
 Name[bg]=Кодиране на аудио диск
 Name[bn]=সিডি এনকোড করা হয়েছে
 Name[bs]=CD kodiran
@@ -252,6 +259,7 @@ Name[tr]=CD Dönüştürücü
 Name[uk]=Закодований музичний КД
 Name[zh_CN]=CD 已编码
 Comment=CD finished encoding
+Comment[ar]=CD انتهى من التشفير
 Comment[bg]=Завършване на кодиране на аудио диск
 Comment[bn]=সিডি এনকোডিং করা শেষ
 Comment[bs]=Završeno kodiranje CDa
