@@ -11,42 +11,35 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>369</width>
-            <height>307</height>
+            <width>420</width>
+            <height>287</height>
         </rect>
     </property>
     <property stdset="1">
         <name>caption</name>
         <string>Form5</string>
     </property>
-    <vbox>
+    <grid>
         <property stdset="1">
             <name>margin</name>
-            <number>11</number>
+            <number>0</number>
         </property>
         <property stdset="1">
             <name>spacing</name>
             <number>6</number>
         </property>
-        <widget>
-            <class>QLabel</class>
+        <widget row="2"  column="0" >
+            <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>queLabel</cstring>
+                <cstring>removeDoneJobs</cstring>
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>No jobs are in the queue</string>
-            </property>
-            <property stdset="1">
-                <name>alignment</name>
-                <set>AlignCenter</set>
-            </property>
-            <property>
-                <name>hAlign</name>
+                <string>Remove Completed Jobs</string>
             </property>
         </widget>
-        <widget>
+        <widget row="1"  column="0"  rowspan="1"  colspan="4" >
             <class>QListView</class>
             <column>
                 <property>
@@ -103,78 +96,68 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget>
-            <class>QLayoutWidget</class>
+        <widget row="2"  column="1" >
+            <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>Layout7</cstring>
+                <cstring>removeSelected</cstring>
             </property>
-            <grid>
-                <property stdset="1">
-                    <name>margin</name>
-                    <number>0</number>
-                </property>
-                <property stdset="1">
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <spacer row="0"  column="1" >
-                    <property>
-                        <name>name</name>
-                        <cstring>Spacer4</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>orientation</name>
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
-                        <enum>Expanding</enum>
-                    </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget row="0"  column="0" >
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>removeDoneJobs</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Remove Completed Jobs</string>
-                    </property>
-                </widget>
-                <widget row="0"  column="2" >
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>removeSelected</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Remove Selected Jobs</string>
-                    </property>
-                </widget>
-                <widget row="1"  column="2" >
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>removeAll</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Remove All Jobs</string>
-                    </property>
-                </widget>
-            </grid>
+            <property stdset="1">
+                <name>text</name>
+                <string>Remove Selected Jobs</string>
+            </property>
         </widget>
-    </vbox>
+        <widget row="2"  column="2" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>removeAll</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Remove All Jobs</string>
+            </property>
+        </widget>
+        <spacer row="2"  column="3" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget row="0"  column="0"  rowspan="1"  colspan="4" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>queLabel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>No jobs are in the queue</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignCenter</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <customwidgets>
     <customwidget>

@@ -1,321 +1,385 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI>
 <class>EncoderConfig</class>
-<widget class="QWidget">
-    <property name="name">
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
         <cstring>EncoderConfig</cstring>
     </property>
-    <property name="geometry">
+    <property stdset="1">
+        <name>geometry</name>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>397</width>
-            <height>393</height>
+            <width>440</width>
+            <height>434</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form4</string>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Form1</string>
     </property>
     <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+        <property stdset="1">
+            <name>margin</name>
+            <number>0</number>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
+        <property stdset="1">
+            <name>spacing</name>
             <number>6</number>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout12</cstring>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBox1</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel16</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Encoder</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Lame</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Don't Encode</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>OggEnc</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Other</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>encoder</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>GroupBox6</cstring>
-            </property>
-            <property name="title">
+            <property stdset="1">
+                <name>title</name>
                 <string>Encoder Configuration</string>
             </property>
             <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
+                <property stdset="1">
+                    <name>margin</name>
                     <number>11</number>
                 </property>
-                <property name="spacing">
+                <property stdset="1">
+                    <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>TextLabel17</cstring>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
                     </property>
-                    <property name="text">
-                        <string>Executable</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>TextLabel18</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Command line</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Encoder</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>encoderExe</cstring>
+                <widget row="2"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel3</cstring>
                     </property>
-                    <property name="text">
-                        <string>lame</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Extension</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Command Line</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>QComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>encoder</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
                         <cstring>encoderCommandLine</cstring>
                     </property>
-                    <property name="text">
-                        <string>--r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o</string>
+                </widget>
+                <widget row="2"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>encoderExtension</cstring>
                     </property>
                 </widget>
             </grid>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout8</cstring>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBox3</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Encoded File Location</string>
             </property>
             <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
+                <property stdset="1">
+                    <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel19</cstring>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2_2</cstring>
                     </property>
-                    <property name="text">
-                        <string>Encoded file format</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Location</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>mp3FileFormat</cstring>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>fileFormat</cstring>
                     </property>
-                    <property name="text">
-                        <string>~/mp3/%artist/%album/%artist - %song.mp3</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>~/%extension/%artist/%album/%artist - %song.%extension</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>encoderWizardButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Wizard</string>
                     </property>
                 </widget>
             </hbox>
         </widget>
-        <widget class="Line">
-            <property name="name">
-                <cstring>Line3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout9</cstring>
+        <widget>
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
             </property>
             <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
+                <property stdset="1">
+                    <name>margin</name>
                     <number>0</number>
                 </property>
-                <property name="spacing">
+                <property stdset="1">
+                    <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel20</cstring>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1_2</cstring>
                     </property>
-                    <property name="text">
+                    <property stdset="1">
+                        <name>text</name>
                         <string>Number of wav files to encode at a time</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
+                <widget>
+                    <class>QSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
                         <cstring>numberOfCpus</cstring>
                     </property>
-                    <property name="enabled">
-                        <bool>true</bool>
-                    </property>
-                    <property name="maxValue">
-                        <number>24</number>
-                    </property>
-                    <property name="minValue">
-                        <number>1</number>
-                    </property>
-                    <property name="value">
+                    <property stdset="1">
+                        <name>minValue</name>
                         <number>1</number>
                     </property>
                 </widget>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Spacer4_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </hbox>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
+        <widget>
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>saveWav</cstring>
             </property>
-            <property name="text">
+            <property stdset="1">
+                <name>text</name>
                 <string>Save wav file as well as encoded file</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>createM3uAlbum</cstring>
+        <widget>
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>createPlaylistCheckBox</cstring>
             </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
+            <property stdset="1">
+                <name>text</name>
                 <string>Create an album playlist file</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
+            <property stdset="1">
+                <name>checked</name>
+                <bool>false</bool>
             </property>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>GroupBox3</cstring>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBox2</cstring>
             </property>
-            <property name="title">
+            <property stdset="1">
+                <name>enabled</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
+                <name>title</name>
                 <string>Playlist Options</string>
             </property>
             <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
+                <property stdset="1">
+                    <name>margin</name>
                     <number>11</number>
                 </property>
-                <property name="spacing">
+                <property stdset="1">
+                    <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>useRelitivePath</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>true</bool>
-                    </property>
-                    <property name="text">
-                        <string>Use relative path</string>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>Layout7</cstring>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout2</cstring>
                     </property>
                     <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
+                        <property stdset="1">
+                            <name>margin</name>
                             <number>0</number>
                         </property>
-                        <property name="spacing">
+                        <property stdset="1">
+                            <name>spacing</name>
                             <number>6</number>
                         </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>TextLabel22</cstring>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel4</cstring>
                             </property>
-                            <property name="text">
-                                <string>File format</string>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Location</string>
                             </property>
                         </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>m3uFileFormat</cstring>
+                        <widget>
+                            <class>QLineEdit</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>playlistFileFormat</cstring>
                             </property>
-                            <property name="text">
-                                <string>~/mp3/%artist/%album/%artist-%album.m3u</string>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>~/%extension/%artist/%album/%artist - %album.m3u</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QPushButton</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>playlistWizardButton</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Wizard</string>
                             </property>
                         </widget>
                     </hbox>
                 </widget>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>useRelitivePath</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Use relative path</string>
+                    </property>
+                </widget>
             </vbox>
         </widget>
         <spacer>
-            <property name="name">
+            <property>
+                <name>name</name>
                 <cstring>Spacer3</cstring>
             </property>
-            <property name="orientation">
+            <property stdset="1">
+                <name>orientation</name>
                 <enum>Vertical</enum>
             </property>
-            <property name="sizeType">
+            <property stdset="1">
+                <name>sizeType</name>
                 <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
     </vbox>
 </widget>
+<customwidgets>
+    <customwidget>
+        <class>QWidget</class>
+        <header location="local">qwidget.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>7</verdata>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="45">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523250004143a55a6b2e0026630c4f</data>
+    </image>
+</images>
 <connections>
     <connection>
-        <sender>createM3uAlbum</sender>
+        <sender>createPlaylistCheckBox</sender>
         <signal>toggled(bool)</signal>
-        <receiver>GroupBox3</receiver>
+        <receiver>GroupBox2</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
-<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -106,12 +106,12 @@ void TracksConfigImp::startSession(){
       list += ", ";
     list += "Year";
   }
-  if( group == "No Artist"){
+  if( group == "Unknown Artist"){
     if(list != "")
       list += ", ";
     list += "Artist";
   }
-  if( album == "No Album"){
+  if( album == "Unknown Album"){
     if(list != "")
       list += ", ";
     list += "Album";

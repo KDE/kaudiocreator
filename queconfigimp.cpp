@@ -1,24 +1,52 @@
 #include "queconfigimp.h"
+#include "job.h"
 #include <qlistview.h> 
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include "job.h"
-#include <klocale.h>
-
 #include <qpainter.h>
+#include <klocale.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
 #define HEADER_DESCRIPTION 2
 
+#define DEFAULT_HIGHEST_NUMBER 9
 
 /**
  * Constructor, set up signals.
+ * @param parent - parent widget
+ * @param name - widget name
  */
-QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,name),currentId(0){
+QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
   connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
+}
+
+/***
+ * Return a buffer of "000" so that new, updated jobs strings will be able to sort via the columns.
+ * Based upon a highest number that is kept. 
+ * @param number the number to fill out.
+ */ 
+QString QueConfigImp::getStringFromNumber(int number){
+  if(number > highestNumber){
+    int diff = QString("%1").arg(number).length() - QString("%1").arg(highestNumber).length();
+    highestNumber = number;
+    if(diff > 0){
+      // We have to update all of the cells.
+      QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
+      while( currentItem != 0 ){
+        currentItem->setText(HEADER_JOB, "0" + currentItem->text(HEADER_JOB));
+        currentItem = (QueListViewItem*)currentItem->itemBelow();
+      }
+    }
+  }
+	
+  QString buffer = "";
+  uint newLength = QString("%1").arg(highestNumber).length() - QString("%1").arg(number).length();
+  for(uint i=0; i < newLength; i++)
+    buffer += "0";
+  return buffer;
 }
 
 /** 
@@ -28,14 +56,7 @@ QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,
  */
 void QueConfigImp::addJob(Job*job, QString name ){
   job->id = ++currentId;
-  QString buffer = "";
-  if( job->id < 1000 )
-    buffer += "0";
-  if( job->id < 100 )
-    buffer += "0";
-  if( job->id < 10 )
-    buffer += "0";
-  QueListViewItem * newItem = new QueListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), "0", name);
+  QueListViewItem * newItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
   queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
@@ -46,13 +67,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
  */
 void QueConfigImp::updateProgress(int id, int progress){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-  QString buffer = "";
-  if( id < 1000 )
-    buffer += "0";
-  if( id < 100 )
-    buffer += "0";
-  if( id < 10 )
-    buffer += "0";
+  QString buffer = getStringFromNumber(id);
   buffer += QString("%1").arg(id);
   while( currentItem != 0 ){
     if(currentItem->text(HEADER_JOB) == buffer)
@@ -62,6 +77,9 @@ void QueConfigImp::updateProgress(int id, int progress){
   if( currentItem){
     currentItem->percentDone = progress;
     currentItem->repaint();
+  }
+  else{
+    qDebug(QString("An update was recieved about a job, but the job couldn't be found: %1").arg(id).latin1());
   }
 }
 
@@ -82,8 +100,10 @@ void QueConfigImp::removeSelectedJob(){
       currentItem = (QueListViewItem*)currentItem->nextSibling();
   }
 
-  if(todoQue->childCount() == 0)
+  if(todoQue->childCount() == 0){
     queLabel->setText(i18n("No jobs are in the queue"));
+    highestNumber = DEFAULT_HIGHEST_NUMBER;
+  }
   else
     queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
@@ -101,6 +121,7 @@ void QueConfigImp::removeAllJobs(){
     delete(currentItem);
     currentItem = (QueListViewItem*)todoQue->firstChild();
   }
+  highestNumber = DEFAULT_HIGHEST_NUMBER;
 }
 
 /**
@@ -119,8 +140,10 @@ void QueConfigImp::clearDoneJobs(){
       todoQue->takeItem(itemToRemove);
     }
   }
-  if(todoQue->childCount() == 0)
+  if(todoQue->childCount() == 0){
     queLabel->setText(i18n("No jobs are in the queue"));
+    highestNumber = DEFAULT_HIGHEST_NUMBER;
+  }
   else
     queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }

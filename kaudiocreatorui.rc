@@ -3,9 +3,7 @@
 <ActionProperties>
   <Action name="rip" icon="shredder"/>
   <Action name="view_tracks" icon="cdaudio_unmount"/>
-  <Action name="view_cd" icon="network"/>
-  <Action name="view_rip" icon="shredder"/>
-  <Action name="view_encoder" icon="filter"/>
+  <Action name="configure_kaudiocreator" icon="configure"/>
   <Action name="view_que" icon="run"/>
   <Action name="clear_done_jobs" icon="edittrash"/>
   <Action name="update_cd" icon="rotate_cw"/>
@@ -25,12 +23,10 @@
   </Menu>
   <Menu name="view"><Text>&amp;View</Text>
     <Action name="view_tracks"/>
-    <Action name="view_cd"/>
-    <Action name="view_rip"/>
-    <Action name="view_encoder"/>
     <Action name="view_que"/>
   </Menu>
   <Menu name="settings"><Text>&amp;Settings</Text>
+    <Action name="configure_kaudiocreator"/>
     <Action name="configuretoolbars"/>
   </Menu>
 </MenuBar>

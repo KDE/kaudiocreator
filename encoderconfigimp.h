@@ -39,13 +39,17 @@ private slots:
   void jobDone(KProcess *process);
   void tendToNewJobs();
   void loadEncoderConfig(int index);
+  void playlistWizard();
+  void encoderWizard();
 
 private:
   QList<Job> pendingJobs;
   QList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
-
+  void replaceSpecialChars(QString &string, Job * job, bool slash);
+  int encodersPercentStringLength;
+  int oldEncoderSelection;
 };
 
 #endif

@@ -22,7 +22,7 @@
     <vbox>
         <property stdset="1">
             <name>margin</name>
-            <number>11</number>
+            <number>0</number>
         </property>
         <property stdset="1">
             <name>spacing</name>
@@ -96,7 +96,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>No Artist - No Album</string>
+                <string>Unknown Artist - Unknown Album</string>
             </property>
             <property stdset="1">
                 <name>alignment</name>

@@ -428,8 +428,8 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
   
   d->discid = id;
   d->tracks = cdda_tracks(drive);
-  d->cd_title = i18n("No Album");
-  d->cd_artist = i18n("No Artist");
+  d->cd_title = i18n("Unknown Album");
+  d->cd_artist = i18n("Unknown Artist");
   d->titles.clear();
   QValueList<int> qvl;
 
@@ -493,14 +493,14 @@ void CdConfigImp::attemptToListAlbum(){
 
   if (0 == drive)
   {
-    emit(newAlbum(i18n("No Artist"),i18n("No Album"), 0, i18n("Other")));
+    emit(newAlbum(i18n("Unknown Artist"),i18n("Unknown Album"), 0, i18n("Other")));
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return;
   }
 
   if (0 != cdda_open(drive))
   {
-    emit(newAlbum(i18n("No Artist"),i18n("No Album"), 0, i18n("Other")));
+    emit(newAlbum(i18n("Unknown Artist"),i18n("Unknown Album"), 0, i18n("Other")));
     //error(KIO::ERR_CANNOT_OPEN_FOR_READING, url.path());
     return;
   }

@@ -16,6 +16,7 @@
 class Job;
 class QPainter;
 class QColorGroup;
+class QListView;
 
 class QueConfigImp : public QueConfig  {
 
@@ -38,12 +39,15 @@ private slots:
   void removeAllJobs();
 
 private:
+  QString getStringFromNumber(int number);
+  int highestNumber;
+
   int currentId;
 
 };
 
 /**
- *
+ * Helper class to allow for progress bars in list view items.
  */
 class QueListViewItem : public QListViewItem {
 

@@ -29,7 +29,7 @@
 RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,name){
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
-  fileFormat->setText(config.readEntry("fileFormat", "~/mp3/%artist/%album/%artist - %song.wav"));
+  fileFormat->setText(config.readEntry("fileFormat", "~/wav/%artist/%album/%artist - %song.wav"));
   maxWavFiles->setValue(config.readNumEntry("maxWavFiles", 1));
   beepAfterRip->setChecked(config.readBoolEntry("beepAfterRip", true));
   autoEjectAfterRip->setChecked(config.readBoolEntry("autoEjectAfterRip", false));

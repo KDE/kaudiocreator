@@ -18,6 +18,7 @@ class RipConfigImp;
 class EncoderConfigImp;
 class QueConfigImp;
 class QCloseEvent;
+class KDialogBase;
 
 class KAudioCreator : public KMainWindow {
 
@@ -31,24 +32,20 @@ public:
 
 private slots:
   void viewTracks();
-  void viewCdConfig();
-  void viewRipConfig();
-  void viewEncoderConfig();
   void viewQue();
   void configuretoolbars();
   void quit();
   void closeEvent(QCloseEvent *);
-
+  void showOptions();
+  
 private:
   KJanusWidget *janusWidget;
+  KDialogBase* options;
   TracksConfigImp *tracksConfig;
   int trackPage;
   CdConfigImp *cdConfig;
-  int cdPage;
   RipConfigImp *ripConfig;
-  int ripPage;
   EncoderConfigImp *encoderConfig;
-  int encoderPage;
   QueConfigImp *queConfig;
   int quePage;
 

@@ -20,7 +20,7 @@
 #include <kstdaction.h>
 #include <kedittoolbar.h>
 #include <kconfig.h>
-
+#include <kdialogbase.h>
 
 #include "tracksconfigimp.h"
 #include "cdconfigimp.h"
@@ -33,21 +33,24 @@
  * Constructor.  Connect all of the object and the job control.
  */
 KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(parent, name){
-  janusWidget = new KJanusWidget(this, name, KJanusWidget::IconList);
+  janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
   setCentralWidget(janusWidget);
 
-  QVBox * frame = janusWidget->addVBoxPage(QString("Tracks"),i18n("Tracks"), SmallIcon("cdaudio_unmount", 32));
+  options = new KDialogBase(KDialogBase::IconList, i18n("Options"), 0x00000004,KDialogBase::Ok,this, "Options Dialog");
+	 
+  QVBox * frame = janusWidget->addVBoxPage(QString("CD Tracks"),i18n("CD Tracks"), SmallIcon("cdaudio_unmount", 32));
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
+  
+  frame = options->addVBoxPage(QString("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
   cdConfig = new CdConfigImp(frame, "CdConfig");
-  cdPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
+
+  frame = options->addVBoxPage(QString("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
   ripConfig = new RipConfigImp(frame, "RipConfig");
-  ripPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
+  
+  frame = options->addVBoxPage(QString("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
   encoderConfig = new EncoderConfigImp(frame, "EncoderConfig");
-  encoderPage = janusWidget->pageIndex(frame);
+  
   frame = janusWidget->addVBoxPage(QString("Jobs"),i18n("Jobs"), SmallIcon("run", 32));
   queConfig = new QueConfigImp(frame, "QueConfig");
   quePage = janusWidget->pageIndex(frame);
@@ -71,10 +74,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   resize(500, 440);
 
   (void)new KAction(i18n("View &Tracks"), 0, this, SLOT(viewTracks()), actionCollection(), "view_tracks" );
-  (void)new KAction(i18n("View &CD Config"), 0, this, SLOT(viewCdConfig()), actionCollection(), "view_cd" );
-  (void)new KAction(i18n("View &Ripper Config"), 0, this, SLOT(viewRipConfig()), actionCollection(), "view_rip" );
-  (void)new KAction(i18n("View &Encoder Config"), 0, this, SLOT(viewEncoderConfig()), actionCollection(), "view_encoder" );
-  (void)new KAction(i18n("View &Queue"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
+  (void)new KAction(i18n("&Configure KAudioCreator"), 0, this, SLOT(showOptions()), actionCollection(), "configure_kaudiocreator" );
+  (void)new KAction(i18n("View &Jobs"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
   (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, queConfig, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
   (void)new KAction(i18n("&Refresh CD List"), 0, cdConfig, SLOT(timerDone()), actionCollection(), "update_cd" );
@@ -107,9 +108,8 @@ void KAudioCreator::quit(){
  */
 void KAudioCreator::closeEvent(QCloseEvent *e) {
   if(queConfig->numberOfJobsNotFinished() > 0){
-    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"), i18n("&No"), i18n("&Yes"));
-  // This is backwards because we want the default (first item which is YES) to be no. 
-  if( r == KMessageBox::Yes )
+    int r = KMessageBox:: questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"));
+  if( r == KMessageBox::No )
     return;
   }
   QWidget::closeEvent(e);
@@ -128,16 +128,8 @@ void KAudioCreator::viewTracks(){
   janusWidget->showPage( trackPage );
 }
 
-void KAudioCreator::viewCdConfig(){
-  janusWidget->showPage( cdPage );
-}
-
-void KAudioCreator::viewRipConfig(){
-  janusWidget->showPage( ripPage );
-}
-
-void KAudioCreator::viewEncoderConfig(){
-  janusWidget->showPage( encoderPage );
+void KAudioCreator::showOptions(){
+  options->show();
 }
 
 void KAudioCreator::viewQue(){
