@@ -29,7 +29,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 
-#include <klocaleh>
+#include <klocale.h>
 
 void fileWizard::homePressed()
 {
