@@ -25,6 +25,9 @@ EncoderConfigImp::EncoderConfigImp( QObject* parent, const char* name):QObject(p
   loadSettings();
 }
 
+/**
+ * Load the settings for this class.
+ */ 
 void EncoderConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");
@@ -42,6 +45,9 @@ void EncoderConfigImp::loadSettings(){
   encoderExtension = config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(currentItem));
   encoderPercentLenght = config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(currentItem),2);
 
+  config.setGroup("general");
+  replaceInput = config.readEntry("selection");
+  replaceOutput = config.readEntry("replace");
 }
 
 /**
@@ -129,6 +135,10 @@ void EncoderConfigImp::tendToNewJobs(){
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
+
+  // If the user wants anything regexp replaced do it now...
+  desiredFile.replace( QRegExp(replaceInput), replaceOutput );
+  
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
     qDebug("Can not place file, unable to make directories");

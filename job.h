@@ -35,15 +35,14 @@ public:
   // Currently location of file X
   QString location;
 
-  // New location of a file.
+  // New location of a file after current opertation is complete (rip/encode).
   QString newLocation;
 
-  // What was just attempted to do via this job.
+  // What was just attempted to do via this job and is spit out in the event of an error.
   QString errorString;
 
-  // If this is the last song in to be ripped then true 
+  // If this is the last song in to be ripped then value is true. 
   bool lastSongInAlbum;
-
 }; 
 
 #endif

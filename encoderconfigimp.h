@@ -54,6 +54,9 @@ private:
   bool createPlaylist;
   QString playlistFileFormat;
   bool useRelitivePath;
+
+  QString replaceInput;
+  QString replaceOutput;
 };
 
 #endif
