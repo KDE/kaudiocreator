@@ -55,7 +55,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Leave As Wav</string>
+                            <string>Don't Encode</string>
                         </property>
                     </item>
                     <item>

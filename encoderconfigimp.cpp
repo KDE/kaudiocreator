@@ -210,7 +210,7 @@ void EncoderConfigImp::tendToNewJobs(){
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-   qDebug("Can not place file, unable to make directorys");
+   qDebug("Can not place file, unable to make directories");
     return;
   }
 
@@ -222,8 +222,6 @@ void EncoderConfigImp::tendToNewJobs(){
   command.replace(QRegExp("%f"), "\"" + job->location + "\"");
   command.replace(QRegExp("%o"), "\"" + desiredFile + "\"");
   
-  // WHY O WHY DOES THIS HAVE TO BE HERE, WHY CAN'T AUDIOCD:/ MAKE IT +r?
-  system(QString("chmod +r \"%1\"").arg(job->location).latin1());
   updateProgress(job->id, 1);
   
   job->errorString = command;
@@ -252,21 +250,30 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   QString output = buffer;
   int percent = output.find('%');
   if(percent!=-1){
-    output = output.mid(percent-2,2);
+    //output = output.mid(percent-2,2);
 
     Job *job = jobs[(KShellProcess*)process];
     if(job){
       if(job->jobType == ENCODER_OGG) // oggenc outputs 'xx.y%'
         output = output.mid(percent-4,2);
+      else
+        output = output.mid(percent-2,2);
     }
-    else
-      output = output.mid(percent-2,2);
     int percent = output.toInt();
     if(percent > 0 && percent < 100){
       Job *job = jobs[(KShellProcess*)process];
       if(job)
         emit(updateProgress(job->id, percent));
     }
+    else{
+      qDebug(QString("The Percent done (%1) is not > 0 && < 100").arg(percent).latin1());
+      qDebug(output.latin1());
+    }
+  }
+  else{
+    // There was not % symbol in the output
+    qDebug("No Percent symbol in output:");
+    qDebug(output.latin1());
   }
 } 
 

@@ -1,10 +1,28 @@
-TODO file.
+TODO.
+
+Warn on exit if something is encoding.
 
 Correct for special charactors such as / and "
 
 Check to see if CDDB sends / or %2f
 
 Use a proper CDDB library that the rest of kde uses.
+
+Make it so that more then 1000 songs can be inputed in jobs. :-D
+
+Make the ecoder list scriptable.
+
+Move cdConfig/RipperConfig/EncoderConfig to an application options
+Move Cd and Jobs to tabs.
+
+Multiple Artists for 1 album.
+
+Check to see if the binary is valid before encoding
+Check for return error from the binary.
+
+Add extension to Encoder Configuration
+
+Some sort of dialog for the file Format.  
 
 /*  TODO
   song = KURL::decode_string(song);
