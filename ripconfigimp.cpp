@@ -62,7 +62,7 @@ RipConfigImp::~RipConfigImp(){
  * @param id the id number of the job to remove.  
  */
 void RipConfigImp::removeJob(int id){
-  qDebug(QString("Remove Job:%1").arg(id).latin1());
+  //qDebug(QString("Remove Job:%1").arg(id).latin1());
   QMap<KIO::Job*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
     if(it.data()->id == id){
@@ -85,9 +85,8 @@ void RipConfigImp::removeJob(int id){
     pendingJobs.remove(job);
     delete job;
   }
-  qDebug(QString("Done removing Job:%1").arg(id).latin1());
+  //qDebug(QString("Done removing Job:%1").arg(id).latin1());
 }
-
 
 /**
  * Begin to rip the track specified in job.

@@ -74,7 +74,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   (void)new KAction(i18n("&Edit Album"), 0, tracksConfig, SLOT(editInformation()), actionCollection(), "edit_cd");
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
 
-  KStdAction::close( this, SLOT(quit()), actionCollection(), "quit" );
+  KStdAction::quit( this, SLOT(quit()), actionCollection(), "quit" );
  
   createGUI("kaudiocreatorui.rc");
 }
@@ -102,7 +102,8 @@ void KAudioCreator::quit(){
 /**
  * Call quit which will ask the user if they really want to quit.
  */
-void KAudioCreator::closeEvent(QCloseEvent *) {
+void KAudioCreator::closeEvent(QCloseEvent *e) {
+  QWidget::closeEvent(e);
   quit();
 }
 
