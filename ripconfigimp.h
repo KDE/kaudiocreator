@@ -13,7 +13,7 @@
 #include "job.h"
 #include <kio/jobclasses.h>
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KURL;
 class Job;

@@ -10,7 +10,7 @@
 #define ENCODERCONFIGIMP_H
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qmap.h>
 #include <qthread.h>
 #include <qobject.h>

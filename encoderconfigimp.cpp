@@ -12,7 +12,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -64,7 +64,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   connect(encoder, SIGNAL(activated(int)), this, SLOT(loadEncoderConfig(int)));
   connect(playlistWizardButton, SIGNAL(clicked()), this, SLOT(playlistWizard()));
   connect(encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
-  
+
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");
   saveWav->setChecked(config.readBoolEntry("saveWav", false));
@@ -73,7 +73,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   createPlaylistCheckBox->setChecked(config.readBoolEntry("createPlaylist", false));
   playlistFileFormat->setText(config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u"));
   useRelitivePath->setChecked(config.readBoolEntry("useRelitivePath", false));
-  
+
   int totalNumberOfEncoders = config.readNumEntry("numberOfEncoders",0);
   if( totalNumberOfEncoders == 0){
     encoderName.insert(0, i18n("Lame"));
@@ -81,13 +81,13 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
     encoderArgs.insert(0, "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
     encoderExtension.insert(0, "mp3");
     encoderpercentLength.insert(0, 2);
-  
+
     encoderName.insert(1, i18n("OggEnc"));
     encoder->insertItem(i18n("OggEnc"));
     encoderArgs.insert(1, "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
     encoderExtension.insert(1, "ogg");
     encoderpercentLength.insert(1, 4);
-  
+
     encoderName.insert(2, i18n("Leave as Wav"));
     encoder->insertItem(i18n("Leave as Wav"));
     encoderArgs.insert(2, "mv %f %o");
@@ -100,7 +100,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
     encoderExtension.insert(3, "");
     encoderpercentLength.insert(3, 2);
   }
- 
+
   /***
    * The Encoders can be entirly loaded and are not hard coded.  You can add remove them on the fly
    * using the configure file, but a set of default ones are include here.
@@ -111,7 +111,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
    * Arguments - Command line string to encoder a file using that encoder
    * Extension - File extension that is generated.
    * Percent output length.  99.00% == 4, 99.9% == 3, 99% == 2
-   */  
+   */
   for(int i=0; i < totalNumberOfEncoders; i++){
     encoderName.insert(i, config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""));
     encoder->insertItem(config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""),i);
@@ -119,7 +119,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
     encoderExtension.insert(i, config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(i),""));
     encoderpercentLength.insert(i, config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(i),2));
   }
-  
+
   // Set the current item and settings.
   int currentItem = config.readNumEntry("encoderCurrentItem",0);
   encoder->setCurrentItem(currentItem);
@@ -135,7 +135,7 @@ EncoderConfigImp::~EncoderConfigImp(){
 
   QMap<KShellProcess*, Job*>::Iterator pit;
   for( pit = jobs.begin(); pit != jobs.end(); ++pit ){
-    
+
     KShellProcess *process = pit.key();
     Job *job = jobs[pit.key()];
     threads.remove(process);
@@ -247,7 +247,7 @@ void EncoderConfigImp::tendToNewJobs(){
   }
   if(pendingJobs.count() == 0)
     return;
- 
+
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
   job->jobType = encoder->currentItem();
@@ -264,14 +264,14 @@ void EncoderConfigImp::tendToNewJobs(){
   }
 
   job->newLocation = desiredFile;
-  
+
   QString command = encoderCommandLine->text();
   replaceSpecialChars(command, job, true);
   command.replace("%f", KProcess::quote(job->location));
   command.replace("%o", KProcess::quote(desiredFile));
-  
+
   updateProgress(job->id, 1);
-  
+
   job->errorString = command;
   //qDebug(command.latin1());
   KShellProcess *proc = new KShellProcess();
@@ -289,7 +289,7 @@ void EncoderConfigImp::tendToNewJobs(){
 
 /**
  * We have recieved some output from a thread. See if it contains a foo%.
- * @param proc the process that has new output. 
+ * @param proc the process that has new output.
  * @param buffer the output from the process
  * @param buflen the length of the buffer.
  */
@@ -298,7 +298,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   Job *job = jobs[(KShellProcess*)process];
   if(!job){
     qDebug(QString("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line:%1").arg(__LINE__).latin1());
-    return;  
+    return;
   }
 
   // Make sure the output string has a % symble in it.
@@ -307,14 +307,14 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   int percentLocation = output.find('%');
   if(percentLocation==-1){
     qDebug("No Percent symbol found in output, not updating");
-    return;  
+    return;
   }
-  //qDebug(QString("Pre cropped: %1").arg(output).latin1()); 
+  //qDebug(QString("Pre cropped: %1").arg(output).latin1());
   output = output.mid(percentLocation-encodersPercentStringLength,2);
-  //qDebug(QString("Post cropped: %1").arg(output).latin1()); 
+  //qDebug(QString("Post cropped: %1").arg(output).latin1());
   bool conversionSuccessfull = false;
   int percent = output.toInt(&conversionSuccessfull);
-  //qDebug(QString("number: %1").arg(percent).latin1()); 
+  //qDebug(QString("number: %1").arg(percent).latin1());
   if(percent > 0 && percent < 100 && conversionSuccessfull){
     emit(updateProgress(job->id, percent));
   }
@@ -325,7 +325,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   //else{
   //  qDebug(QString("The Percent done (%1) is not > 0 && < 100, conversion ! sucesfull").arg(output).latin1());
   //}
-} 
+}
 
 /**
  * When the thread is done encoding the file this function is called.
@@ -339,7 +339,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
     if(retrunValue!=0)
       qDebug(QString("Process exited with non 0 status: %1").arg(retrunValue).latin1());
   }
-  
+
   Job *job = jobs[(KShellProcess*)process];
   threads.remove((KShellProcess*)process);
   jobs.remove((KShellProcess*)process);
@@ -398,12 +398,12 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
 }
 
 /**
- * Load up the wizard with the playlist string.  Save it if OK is hit. 
+ * Load up the wizard with the playlist string.  Save it if OK is hit.
  */
 void EncoderConfigImp::playlistWizard(){
   fileWizard wizard(this, "Playlist File FormatWizard", true);
   wizard.playlistFormat->setText(playlistFileFormat->text());
-  
+
   // Show dialog and save results if ok is pressed.
   bool okClicked = wizard.exec();
   if(okClicked){
@@ -412,12 +412,12 @@ void EncoderConfigImp::playlistWizard(){
 }
 
 /**
- * Load up the wizard with the encoder playlist string.  Save it if OK is hit. 
+ * Load up the wizard with the encoder playlist string.  Save it if OK is hit.
  */
 void EncoderConfigImp::encoderWizard(){
   fileWizard wizard(this, "Encoder File Format Wizard", true);
   wizard.playlistFormat->setText(fileFormat->text());
-  
+
   // Show dialog and save results if ok is pressed.
   bool okClicked = wizard.exec();
   if(okClicked){

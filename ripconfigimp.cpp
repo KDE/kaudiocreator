@@ -15,7 +15,7 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include <klineedit.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <qdir.h>
 #include <kconfig.h>
 #include <stdlib.h>
@@ -73,7 +73,7 @@ RipConfigImp::~RipConfigImp(){
  * Cancel and remove the job with the matching id.
  * Remove it from the local collection of jobs, delete the temp file if
  * there is one.
- * @param id the id number of the job to remove.  
+ * @param id the id number of the job to remove.
  */
 void RipConfigImp::removeJob(int id){
   QMap<KIO::Job*, Job*>::Iterator it;
@@ -104,7 +104,7 @@ void RipConfigImp::removeJob(int id){
 /**
  * Begin to rip the track specified in job.
  * @param job the new job that this module should take over.
- * @param job the new job that we need to handle. 
+ * @param job the new job that we need to handle.
  */
 void RipConfigImp::ripTrack(Job *job){
   emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->song)));
@@ -123,7 +123,7 @@ void RipConfigImp::tendToNewJobs(){
   }
   if(pendingJobs.count() == 0)
     return;
- 
+
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
 
@@ -137,11 +137,11 @@ void RipConfigImp::tendToNewJobs(){
     desiredFile.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
   else
     desiredFile.replace(QRegExp("%track"), QString("\"%1\"").arg(job->track));
-    
+
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
-   
+
   int lastSlash = desiredFile.findRev('/',-1);
   if( !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
     KMessageBox::sorry(this, i18n("The desired ripping file could not created.\nPlease check your file path option."), i18n("Ripping Failed"));
@@ -157,7 +157,7 @@ void RipConfigImp::tendToNewJobs(){
     wavFile = QString("audiocd:/By Track/Track 0%1.wav").arg(job->track); //lukas: I fear this won't work
   else
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
-  
+
   KURL source(wavFile);
   KURL dest(desiredFile);
 
@@ -178,7 +178,7 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
 
   Job *newJob = jobs[job];
   jobs.remove(job);
- 
+
   if ( copyJob->error() == 0 ){
     emit updateProgress(newJob->id, 100);
     QString newFileLocation = copyJob->destURL().path();
