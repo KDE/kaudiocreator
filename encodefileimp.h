@@ -21,6 +21,7 @@
 #ifndef ENCODEFILEIMP_H
 #define ENCODEFILEIMP_H
 
+#include "libkcddb/genres.h"
 #include "encodefile.h"
 #include "qmap.h"
 
@@ -46,7 +47,7 @@ protected slots:
 
 private:
   // List of genres and i18n versions
-  QMap<QString, QString> genres;
+  KCDDB::Genres m_genres;
 
 };
 
