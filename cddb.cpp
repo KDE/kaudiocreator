@@ -16,7 +16,6 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <qregexp.h>
 #include <config.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
@@ -30,16 +29,20 @@
 #endif
 #include <errno.h>
 #include <unistd.h>
+#include <qdir.h>
+#include <qtextstream.h>
+#include <qregexp.h>
 #include <kdebug.h>
-#define KSOCK_NO_BROKEN
 #include <ksock.h>
+#include <kextsock.h>
 #include <klocale.h>
 
 #include "cddb.h"
 
 CDDB::CDDB()
-  : fd(0), port(0), remote(false)
+  : ks(0), port(0), remote(false), save_local(false)
 {
+  cddb_dirs += ".cddb";
 }
 
 CDDB::~CDDB()
@@ -50,30 +53,22 @@ CDDB::~CDDB()
 bool
 CDDB::set_server(const char *hostname, unsigned short int _port)
 {
-  if (fd)
+  if (ks)
     {
       if (h_name == hostname && port == _port)
         return true;
       deinit();
     }
   remote = (hostname != 0) && (*hostname != 0);
-  kdDebug(7101) << "CDDB: set_server, host=" << hostname << "port=" << _port << endl;
+  kdDebug(7117) << "CDDB: set_server, host=" << hostname << "port=" << _port << endl;
   if (remote)
     {
-      ksockaddr_in addr;
-      memset(&addr, 0, sizeof(addr));
-      if (!KSocket::initSockaddr(&addr, hostname, _port))
-        return false;
-      if ((fd = ::socket(PF_INET, SOCK_STREAM, 0)) < 0)
-        {
-	  fd = 0;
-          return false;
-	}
-      if (::connect(fd, (struct sockaddr*)&addr, sizeof(addr)))
+      ks = new KExtendedSocket(hostname, _port);
+      if (ks->connect() < 0)
 	{
-	  kdDebug(7101) << "CDDB: Can't connect!" << endl;
-	  ::close(fd);
-	  fd = 0;
+	  kdDebug(7117) << "CDDB: Can't connect!" << endl;
+	  delete ks;
+	  ks = 0;
           return false;
 	}
       
@@ -81,7 +76,7 @@ CDDB::set_server(const char *hostname, unsigned short int _port)
       port = _port;
       QCString r;
       readLine(r); // the server greeting
-      writeLine("cddb hello kde-user blubb kio_audiocd 0.3");
+      writeLine("cddb hello kde-user blubb kio_audiocd 0.4");
       readLine(r);
     }
   return true;
@@ -90,17 +85,17 @@ CDDB::set_server(const char *hostname, unsigned short int _port)
 bool
 CDDB::deinit()
 {
-  if (fd)
+  if (ks)
     {
       writeLine("quit");
       QCString r;
       readLine(r);
-      close (fd);
+      ks->close();
     }
   h_name.resize(0);
   port = 0;
   remote = false;
-  fd = 0;
+  ks = 0;
   return true;
 }
 
@@ -109,7 +104,8 @@ CDDB::readLine(QCString& ret)
 {
   int read_length = 0;
   char small_b[128];
-  fd_set set;
+  //fd_set set;
+
   ret.resize(0);
   while (read_length < 40000)
     {
@@ -123,26 +119,21 @@ CDDB::readLine(QCString& ret)
 	  if (ret.length() && ret[ret.length()-1] == '\r')
 	    ret.resize(ret.length());
 	  buf.remove(0, ni+1);
-	  kdDebug(7101) << "CDDB: got  `" << ret << "'" << endl;
+	  kdDebug(7117) << "CDDB: got  `" << ret << "'" << endl;
 	  return true;
 	}
+
       // Try to refill the buffer
-      FD_ZERO(&set);
-      FD_SET(fd, &set);
-      struct timeval tv;
-      tv.tv_sec = 60;
-      tv.tv_usec = 0;
-      if (::select(fd+1, &set, 0, 0, &tv) < 0)
-        return false;
-      ssize_t l = ::read(fd, &small_b, sizeof(small_b));
+      ks->waitForMore(60 * 1000);
+      ssize_t l = ks->readBlock(small_b, sizeof(small_b)-1);
       if (l <= 0)
         {
 	  // l==0 normally means fd got closed, but we really need a lineend
 	  return false;
 	}
+      small_b[l] = 0;
       read_length += l;
-      for (int i = 0; i < l; i++)
-        buf += small_b[i];
+      buf += small_b;
     }
   return false;
 }
@@ -152,10 +143,10 @@ CDDB::writeLine(const QCString& line)
 {
   const char *b = line.data();
   int l = line.length();
-  kdDebug(7101) << "CDDB: send `" << line << "'" << endl;
+  kdDebug(7117) << "CDDB: send `" << line << "'" << endl;
   while (l)
     {
-      ssize_t wl = ::write(fd, b, l);
+      ssize_t wl = ks->writeBlock(b, l);
       if (wl < 0 && errno != EINTR)
         return false;
       if (wl < 0)
@@ -169,7 +160,7 @@ CDDB::writeLine(const QCString& line)
       char c = '\n';
       ssize_t wl;
       do {
-        wl = ::write(fd, &c, 1);
+	wl = ks->writeBlock(&c, 1);
       } while (wl <= 0 && errno == EINTR);
       if (wl<=0 && errno != EINTR)
         return false;
@@ -195,9 +186,8 @@ CDDB::get_discid(QValueList<int>& track_ofs)
 	    n /= 10;
 	  }
       }
-    unsigned int l = track_ofs[num_tracks + 1];
-    l -= track_ofs[num_tracks];
-    l /= 75;
+    unsigned int l = (track_ofs[num_tracks + 1] + 1) / 75;
+    l -= track_ofs[num_tracks] / 75;
     id = ((id % 255) << 24) | (l << 8) | num_tracks;
     return id;
 } 
@@ -242,7 +232,7 @@ CDDB::track(int i) const
 }
 
 bool
-CDDB::parse_read_resp()
+CDDB::parse_read_resp(QTextStream *stream, QTextStream *write_stream)
 {
   /* Note, that m_names and m_title should be empty */
   QCString end = ".";
@@ -255,18 +245,36 @@ CDDB::parse_read_resp()
   while (1)
     {
       QCString r;
-      if (!readLine(r))
-        return false;
+      if (stream)
+        {
+	  if (stream->atEnd())
+	    break;
+	  r = stream->readLine().latin1();
+	}
+      else
+        {
+          if (!readLine(r))
+            return false;
+        }
+      /* Normally the "." is not saved into the local files, but be
+	 tolerant about this.  */
       if (r == end)
         break;
+      if (write_stream)
+        *write_stream << r << endl;
       r = r.stripWhiteSpace();
       if (r.isEmpty() || r[0] == '#')
         continue;
-      if (r.left(7) == "DTITLE=")
+      if (r.left(6) == "CATEG=" )
         {
-	  r.remove(0, 7);
-	  m_title += r.stripWhiteSpace();
-	}
+        r.remove(0, 6);
+        m_category = QString::fromLocal8Bit(r.stripWhiteSpace());
+        }
+      else if (r.left(7) == "DTITLE=")
+        {
+	    r.remove(0, 7);
+	    m_title += QString::fromLocal8Bit(r.stripWhiteSpace());
+	    }
       else if (r.left(6) == "TTITLE")
         {
 	  r.remove(0, 6);
@@ -278,7 +286,7 @@ CDDB::parse_read_resp()
 	      if (ok && i >= 0 && i < m_tracks)
 	        {
 		  r.remove(0, e+1);
-		  m_names[i] += r;
+		  m_names[i] += QString::fromLocal8Bit(r);
 		}
 	    }
 	}
@@ -303,33 +311,110 @@ CDDB::parse_read_resp()
   else
     m_artist.replace(QRegExp("/"), "%2f");
 
-  kdDebug(7101) << "CDDB: found Title: `" << m_title << "'" << endl;
+  kdDebug(7117) << "CDDB: found Title: `" << m_title << "'" << endl;
   for (int i = 0; i < m_tracks; i++)
     {
       if (m_names[i].isEmpty())
         m_names[i] += i18n("Track %1").arg(i);
-        m_names[i].replace(QRegExp("/"), "%2f");
-      kdDebug(7101) << "CDDB: found Track " << i+1 << ": `" << m_names[i]
+      m_names[i].replace(QRegExp("/"), "%2f");
+      kdDebug(7117) << "CDDB: found Track " << i+1 << ": `" << m_names[i]
         << "'" << endl;
     }
   return true;
+}
+
+void
+CDDB::add_cddb_dirs(const QStringList& list)
+{
+  cddb_dirs = list;
+  if (cddb_dirs.isEmpty())
+    cddb_dirs += ".cddb";
+}
+
+/* Locates and opens the local file corresponding to that discid.
+   Returns TRUE, if file is found and ready for reading.
+   Returns FALSE, if file isn't found.  In this case ret_file is initialized
+   with a QFile which resides in the first cddb_dir, and has a temp name
+   (the ID + getpid()).  You can open it for writing.  */
+bool
+CDDB::searchLocal(unsigned int id, QFile *ret_file)
+{
+  QDir dir;
+  QString filename;
+  filename = QString("%1").arg(id, 0, 16).rightJustify(8, '0');
+  QStringList::ConstIterator it;
+  for (it = cddb_dirs.begin(); it != cddb_dirs.end(); ++it)
+    {
+      dir.setPath(*it);
+      if (!dir.exists())
+        continue;
+      /* First look in dir directly.  */
+      ret_file->setName (*it + "/" + filename);
+      if (ret_file->exists() && ret_file->open(IO_ReadOnly))
+        return true;
+      /* And then in the subdirs of dir (representing the categories normally).
+       */
+      const QFileInfoList *subdirs = dir.entryInfoList (QDir::Dirs);
+      QFileInfoListIterator fiit(*subdirs);
+      QFileInfo *fi;
+      while ((fi = fiit.current()) != 0)
+        {
+	  ret_file->setName (*it + "/" + fi->fileName() + "/" + filename);
+	  if (ret_file->exists() && ret_file->open(IO_ReadOnly))
+	    return true;
+	  ++fiit;
+	}
+    }
+  QString pid;
+  pid.setNum(::getpid());
+  ret_file->setName (cddb_dirs[0] + "/" + filename + "." + pid);
+  /* Try to create the save location.  */
+  dir.setPath(cddb_dirs[0]);
+  if (save_local && !dir.exists())
+    {
+      dir = QDir::current();
+      dir.mkdir(cddb_dirs[0]);
+    }
+  return false;
 }
 
 bool
 CDDB::queryCD(QValueList<int>& track_ofs)
 {
   int num_tracks = track_ofs.count() - 2;
-  if (!remote || fd == 0 || num_tracks < 1)
+  if (num_tracks < 1)
     return false;
   unsigned int id = get_discid(track_ofs);
+  QFile file;
+  bool local;
+  /* Already read this ID.  */
   if (id == m_discid)
     return true;
+
+  /* First look for a local file.  */
+  local = searchLocal (id, &file);
+  /* If we have no local file, and no remote connection, barf.  */
+  if (!local && (!remote || ks == 0))
+    return false;
 
   m_tracks = num_tracks;
   m_title = "";
   m_artist = "";
+  m_category = "";
   m_names.clear();
   m_discid = id;
+  if (local)
+    {
+      QTextStream stream(&file);
+      /* XXX Hmm, what encoding is used by CDDB files?  local? Unicode?
+         Nothing?  */
+      stream.setEncoding(QTextStream::Latin1);
+      parse_read_resp(&stream, 0);
+      file.close();
+      return true;
+    }
+
+  /* Remote CDDB query.  */
   unsigned int length = track_ofs[num_tracks+1] - track_ofs[num_tracks];
   QCString q;
   q.sprintf("cddb query %08x %d", id, num_tracks);
@@ -350,7 +435,10 @@ CDDB::queryCD(QValueList<int>& track_ofs)
       /* an exact match */
       r.remove(0, 3);
       parse_query_resp(r, catg, d_id, title);
-      kdDebug(7101) << "CDDB: found exact CD: category=" << catg << " DiscId="
+      m_category = catg;
+      if ( m_category.isEmpty() )
+        m_category = i18n("Unknown");
+      kdDebug(7117) << "CDDB: found exact CD: category=" << catg << " DiscId="
         << d_id << " Title=`" << title << "'" << endl;
       q = "cddb read " + catg + " " + d_id;
       if (!writeLine(q))
@@ -361,7 +449,24 @@ CDDB::queryCD(QValueList<int>& track_ofs)
       code = get_code(r);
       if (code != 210)
         return false;
-      if (!parse_read_resp())
+      if (save_local && file.open(IO_WriteOnly))
+        {
+	  QTextStream stream(&file);
+	  if (!parse_read_resp(0, &stream))
+	    {
+	      file.remove();
+	      return false;
+	    }
+      stream << "CATEG=" << m_category << endl;
+	  file.close();
+	  QString newname (file.name());
+	  newname.truncate(newname.findRev('.'));
+	  if (QDir::current().rename(file.name(), newname)) {
+	    kdDebug(7117) << "CDDB: rename failed" << endl;
+	    file.remove();
+	  }
+	}
+      else if (!parse_read_resp(0, 0))
         return false;
     }
   else if (code == 211)
@@ -378,7 +483,7 @@ CDDB::queryCD(QValueList<int>& track_ofs)
 	    return false;
 	  QCString catg, d_id, title;
 	  parse_query_resp(r, catg, d_id, title);
-	  kdDebug(7101) << "CDDB: found close CD: category=" << catg << " DiscId="
+	  kdDebug(7117) << "CDDB: found close CD: category=" << catg << " DiscId="
 	    << d_id << " Title=`" << title << "'" << endl;
         }
     }
@@ -387,7 +492,7 @@ CDDB::queryCD(QValueList<int>& track_ofs)
       /* 202 - no match found
          403 - Database entry corrupt
 	 409 - no handshake */
-      kdDebug(7101) << "CDDB: query returned code " << code << endl;
+      kdDebug(7117) << "CDDB: query returned code " << code << endl;
       return false;
     }
 
