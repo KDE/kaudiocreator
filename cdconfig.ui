@@ -37,9 +37,6 @@
             <property name="text">
                 <string>&amp;Automatically rip all tracks upon a successful CDDB retrieval</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <spacer>
             <property name="name">
