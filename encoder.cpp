@@ -279,6 +279,7 @@ void Encoder::jobDone(KProcess *process ) {
 	threads.remove((KShellProcess*)process);
 	jobs.remove((KShellProcess*)process);
 
+	bool showDebugBox = false;
 	if ( process->exitStatus() == 127 ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
 		QFile::remove(job->location);
@@ -288,10 +289,12 @@ void Encoder::jobDone(KProcess *process ) {
 		emit(jobIsDone(job, prefs->extension()));
 		QFile::remove(job->location);
 
-		// TODO kill -9 lame or oggenc when processing and see what they return.
-		if ( process->normalExit() && process->exitStatus() != 0 ) {
-			//qDebug("Failed to complete!");
-			qDebug("Process exited with non 0 status: %d", process->exitStatus());
+		// fyi segfaults return 136
+		if ( process->exitStatus() != 0 ) {
+			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes )
+			{
+				showDebugBox = true;
+			}
 		}
 		else{ 
 			//qDebug("Must be done: %d", (process->exitStatus()));
@@ -301,15 +304,21 @@ void Encoder::jobDone(KProcess *process ) {
 				KNotifyClient::event("cd encoded");
 		}
 	}
-	else{
-		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes ) {
-			EncoderOutput dlg(0, "Encoder Output");
-			job->output = job->errorString + "\n\n\n" + job->output;
-			dlg.output->setText(job->output);
-			dlg.exec();
+	else
+	{
+		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes )
+		{
+			showDebugBox = true;
 		}
-		QFile::remove(job->location);
-		emit(updateProgress(job->id, -1));
+		QFile::remove( job->location );
+		emit( updateProgress( job->id, -1 ) );
+	}
+
+	if( showDebugBox ){
+		EncoderOutput dlg( 0, "Encoder Output" );
+		job->output = job->errorString + "\n\n\n" + job->output;
+		dlg.output->setText(job->output);
+		dlg.exec();
 	}
 
 	delete job;
