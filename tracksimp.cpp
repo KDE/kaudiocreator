@@ -155,14 +155,14 @@ void TracksImp::lookupDevice() {
 		emit(hasCD(false));
 		cddbInfo.clear();
 		trackStartFrames.clear();
-		cddbInfo.title = i18n("No disc");
+		cddbInfo.title = i18n("No disk");
 		newAlbum();
 		return;
 	}
 
 	if( status < 0) {
 		QString errstring =
-							 i18n("CDROM read or access error (or no audio disc in drive).\n"\
+							 i18n("CDROM read or access error (or no audio disk in drive).\n"\
 										"Please make sure you have access permissions to:\n%1")
 							 .arg(device);
 		KMessageBox::error(this, errstring, i18n("Error"));
