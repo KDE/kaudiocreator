@@ -29,9 +29,6 @@
             <property name="text">
                 <string>&amp;Beep after each rip is done</string>
             </property>
-            <property name="accel">
-                <string>Alt+B</string>
-            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
