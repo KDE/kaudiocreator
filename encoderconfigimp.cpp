@@ -36,7 +36,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-
+  connect(encoderChoice, SIGNAL(doubleClicked ( QListBoxItem * )),this, SLOT(configureEncoderSlot()));
   KConfig &config = *KGlobal::config();
   config.setGroup("Encoder");
   int lastKnownEncoder = config.readNumEntry("lastKnownEncoder",0);
