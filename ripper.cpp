@@ -191,6 +191,7 @@ void Ripper::tendToNewJobs(){
  */
 void Ripper::copyJobResult(KIO::Job *copyjob){
   KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
+  KNotifyClient::event("track ripped");
 
   Job *newJob = jobs[copyjob];
   jobs.remove(copyjob);
@@ -215,6 +216,7 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
     if(Prefs::autoEjectAfterRip()){
       QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject(newJob->device)));
     }
+    KNotifyClient::event("cd ripped");
   }
   tendToNewJobs();
 }

@@ -1,0 +1,21 @@
+[!Global!]
+IconName=kaudiocreator
+Comment=KAudioCreator
+
+[track ripped]
+Name=Track Ripped
+Comment=Track finished ripping.
+
+[cd ripped]
+Name=CD Ripped
+Comment=CD finished ripping.
+
+[track encoded]
+Name=Track Encoded
+Comment=Track finished encoding.
+
+[cd encoded]
+Name=CD Encoded
+Comment=CD finished encoding.
+
+

@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kedittoolbar.h>
 #include <kstatusbar.h>
+#include <knotifydialog.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
@@ -104,6 +105,13 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
   
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
+  
+  KStdAction::configureNotifications(this, SLOT(configureNotifications()),
+                                       actionCollection());
+	
+  //KStdAction::configureToolbars(guiFactory(), SLOT(configureToolbars() ), actionCollection(), "configuretoolbars");
+  
+
   setStandardToolBarMenuEnabled(true);
 
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
@@ -112,8 +120,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
   connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
   
-  createGUI("kaudiocreatorui.rc");
-  setAutoSaveSettings( "Main Window" );
+  createGUI();
+  setAutoSaveSettings();
 }
 
 /**
@@ -169,8 +177,8 @@ bool KAudioCreator::queryClose() {
  * Allow for the toolbars to be minipulated.
  */
 void KAudioCreator::configuretoolbars(){
-  saveMainWindowSettings(KGlobal::config(), "Main Window");
-  KEditToolbar dlg(actionCollection(), "kaudiocreatorui.rc");
+  saveMainWindowSettings(KGlobal::config());
+  KEditToolbar dlg(actionCollection());
   connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(saveToolbarConfig()));
   dlg.exec();
 }
@@ -179,8 +187,12 @@ void KAudioCreator::configuretoolbars(){
  * Save new toolbarconfig.
  */
 void KAudioCreator::saveToolbarConfig(){
-  createGUI("kaudiocreatorui.rc");
-  applyMainWindowSettings(KGlobal::config(), "Main Window");
+  createGUI();
+  applyMainWindowSettings(KGlobal::config());
+}
+
+void KAudioCreator::configureNotifications() {
+    KNotifyDialog::configure(this);
 }
 
 /**

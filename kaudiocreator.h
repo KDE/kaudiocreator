@@ -51,6 +51,7 @@ private slots:
   void updateStatus();
 
   void hasCD(bool);
+  void configureNotifications();
 
 private:
   KJanusWidget *janusWidget;

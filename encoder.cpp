@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <kdebug.h>
+#include <knotifyclient.h>
 
 /**
  * Constructor, load settings.
@@ -266,6 +267,9 @@ void Encoder::jobDone(KProcess *process){
     else{ 
       //qDebug("Must be done: %d", (process->exitStatus()));
       emit(updateProgress(job->id, 100));
+      KNotifyClient::event("track encoded");
+      if(job->lastSongInAlbum)
+        KNotifyClient::event("cd encoded");
     }
   }
   else{

@@ -28,7 +28,7 @@ SUBDIRS = icons
 xdg_apps_DATA = kaudiocreator.desktop
 kde_kcfg_DATA = kaudiocreator.kcfg kaudiocreator_encoders.kcfg
 
-appdata_DATA = kaudiocreatorui.rc
+appdata_DATA = kaudiocreatorui.rc eventsrc
 appdatadir = $(kde_datadir)/kaudiocreator
 
 conf_DATA = kaudiocreatorrc
