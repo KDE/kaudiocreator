@@ -6,7 +6,6 @@
 #include <qtimer.h>
 
 // eject
-#include <kprocess.h>
 #include <kmessagebox.h>
 
 // beep

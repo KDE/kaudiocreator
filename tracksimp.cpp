@@ -4,9 +4,7 @@
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
-#include <qlineedit.h>
 #include <qspinbox.h>
-#include <qcombobox.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
@@ -25,7 +23,6 @@ extern "C" {
 #include <kapplication.h>
 
 #include <qtimer.h>
-#include <qfile.h>
 #include <qfileinfo.h>
 #include <kcombobox.h>
 #include <kdebug.h>
