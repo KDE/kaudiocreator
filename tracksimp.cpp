@@ -423,7 +423,7 @@ void TracksImp::cddbDone(CDDB::Result result){
  
     bool ok(false); 
     QString res = KInputDialog::getItem(
-            i18n("Select  a CDDB entry - KAudioCreator"),
+            i18n("Select CDDB entry"),
             i18n("Select a CDDB entry:"), list, defaultChoice, false, &ok,
             this );
     if ( ok ) {

@@ -214,7 +214,7 @@ void JobQueImp::removeAllJobs(){
     item = (QueListViewItem*)item->nextSibling();
   }
   if(!finished){
-    if(KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished all of the jobs.  Remove them anyway?"), i18n("Unfinished Job in the queue."), KStdGuiItem::yes(), KStdGuiItem::no())
+    if(KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished all of the jobs. Remove them anyway?"), i18n("Unfinished Job in Queue"), KStdGuiItem::yes(), KStdGuiItem::no())
       == KMessageBox::No )
     return;
   }
