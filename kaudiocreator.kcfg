@@ -12,7 +12,7 @@
       <label>Automatically rip all tracks upon a successful CDDB retrieval</label>
       <default>false</default>
     </entry>
-    <entry name="device" type="String">
+    <entry name="device" type="StringList">
       <label>CD device</label>
       <default code="true">DEFAULT_CD_DEVICE</default>
     </entry>
