@@ -30,7 +30,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),QString::null, SmallIcon("cdaudio_unmount", 32));
   tracks = new TracksImp(frame, "Tracks");
-  
+
   ripper = new Ripper(frame, "Rip");
   encoder = new Encoder(frame, "Encoder");
 
@@ -72,7 +72,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
  * Ask the user if they really want to quit if there are open jobs.
  */
 bool KAudioCreator::queryClose() {
-  if(jobQue->numberOfJobsNotFinished() > 0 && 
+  if(jobQue->numberOfJobsNotFinished() > 0 &&
     (KMessageBox::questionYesNo(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in the queue"))
       == KMessageBox::No ))
     return false;
@@ -103,26 +103,34 @@ void KAudioCreator::saveToolbarConfig(){
 void KAudioCreator::showSettings(){
   if(KAutoConfigDialog::showDialog("settings"))
     return;
-  
+
   KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
   dialog->addPage(new General(0, "General"), i18n("General"), "General", "package_settings", i18n("General Configureation"));
   dialog->addPage(new CdConfig(0, "CD"), i18n("CD"), "CD", "package_system", i18n("CD Configuration"));
-  
+
   // Because WE don't segfault on our users...
-  if(KService::serviceByDesktopPath("Settings/Sound/cddb.desktop") != 0){
-    KCModuleInfo info("Settings/Sound/cddb.desktop", "settings");
-    KCModule *m = KCModuleLoader::loadModule(info);
-    m->load(); 
-    dialog->addPage(m, i18n("CDDB"), "Game", "cdaudio_unmount", i18n("CDDB Configuration"), false);
-    connect(dialog, SIGNAL(okClicked()), m, SLOT(save()));
-    connect(dialog, SIGNAL(applyClicked()), m, SLOT(save()));
-    connect(dialog, SIGNAL(defaultClicked()), m, SLOT(defaults()));
+  KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
+  if (libkcddb->isValid())
+  {
+    KCModuleInfo info(libkcddb->desktopEntryPath(), "settings");
+    if (info.service()->isValid())
+    {
+      KCModule *m = KCModuleLoader::loadModule(info);
+      if (m)
+      {
+        m->load();
+        dialog->addPage(m, i18n("CDDB"), "Game", "cdaudio_unmount", i18n("CDDB Configuration"), false);
+        connect(dialog, SIGNAL(okClicked()), m, SLOT(save()));
+        connect(dialog, SIGNAL(applyClicked()), m, SLOT(save()));
+        connect(dialog, SIGNAL(defaultClicked()), m, SLOT(defaults()));
+      }
+    }
   }
 
   dialog->addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "Ripper", "shredder", i18n("Ripper Configuration") );
   EncoderConfigImp *encoderConfigImp = new EncoderConfigImp(0, "Encoder");
   dialog->addPage(encoderConfigImp, i18n("Encoder"), "Encoder", "filter", i18n("Encoder Configuration") );
-  
+
   connect(encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
 
   connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
