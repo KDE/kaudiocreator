@@ -8,6 +8,8 @@ Plugin system for encoders (user friendly thingys)
 
 If possible restart jobs that have failed.
 
+If encoding failed output error log to a text window?
+
 ---
 Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
 	Tmp files are stored in $KDEHOME/tmp-$HOST/appname
