@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>Id3TagDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>290</width>
-            <height>214</height>
+            <width>342</width>
+            <height>211</height>
         </rect>
     </property>
     <property name="caption">
@@ -41,61 +41,14 @@
             <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>Layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonOk</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
         <widget class="QLineEdit" row="0" column="1">
             <property name="name">
                 <cstring>title</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>artist</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -124,38 +77,6 @@
             <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget class="QLabel" row="4" column="0">
-            <property name="name">
-                <cstring>TextLabel7</cstring>
-            </property>
-            <property name="text">
-                <string>Year</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>Line6</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>artist</cstring>
-            </property>
-        </widget>
         <widget class="QLineEdit" row="3" column="1">
             <property name="name">
                 <cstring>album</cstring>
@@ -172,9 +93,17 @@
                 <number>0</number>
             </property>
         </widget>
-        <widget class="QComboBox" row="5" column="1">
+        <widget class="QLabel" row="4" column="0">
             <property name="name">
-                <cstring>genre</cstring>
+                <cstring>TextLabel7</cstring>
+            </property>
+            <property name="text">
+                <string>Year</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
         <widget class="QLabel" row="5" column="0">
@@ -188,6 +117,76 @@
                 <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QComboBox" row="5" column="1">
+            <property name="name">
+                <cstring>genre</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonPrevious</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Previous</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonNext</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Next</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Line6</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
             </property>
         </widget>
     </grid>

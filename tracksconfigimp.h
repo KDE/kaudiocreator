@@ -13,6 +13,7 @@
 
 class QListViewItem;
 class Job;
+class Id3TagDialog;
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
@@ -41,6 +42,8 @@ private slots:
   void selectAllTracks();
   void deselectAllTracks();
   void keyPressEvent(QKeyEvent *event);
+  void editNextTrack();
+  void editPreviousTrack();
   
 private:
   QString album;
@@ -48,6 +51,7 @@ private:
   QString genre;
   int year;
   QMap<QString, QString> genres;
+  Id3TagDialog* dialog;
 };
 
 #endif

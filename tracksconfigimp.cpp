@@ -195,41 +195,47 @@ void TracksConfigImp::editInformation(){
   }
 
   // Create dialog.
-  Id3TagDialog dialog(this, "Album info editor dialog", true);
-  dialog.artist->setText(group);
-  dialog.album->setText(album);
-  dialog.year->setValue(year);
-  dialog.trackLabel->setText(i18n("Track %1").arg(currentItem->text(HEADER_TRACK)));
-  dialog.title->setText(currentItem->text(HEADER_NAME));
-  dialog.genre->insertStringList(genres.keys());
-  int totalGenres = dialog.genre->count();
+  dialog = new Id3TagDialog(this, "Album info editor dialog", true);
+  dialog->artist->setText(group);
+  dialog->album->setText(album);
+  dialog->year->setValue(year);
+  dialog->trackLabel->setText(i18n("Track %1").arg(currentItem->text(HEADER_TRACK)));
+  dialog->title->setText(currentItem->text(HEADER_NAME));
+  dialog->genre->insertStringList(genres.keys());
+  int totalGenres = dialog->genre->count();
   if(genre == "")
     genre = i18n("Other");
   
   for(int i = 0; i < totalGenres; i++){
-    if(dialog.genre->text(i) == genre){
-      dialog.genre->setCurrentItem(i);
+    if(dialog->genre->text(i) == genre){
+      dialog->genre->setCurrentItem(i);
       break;
     }
   }
 
   // set focus to track title
-  dialog.title->setFocus();
-  dialog.title->selectAll();
+  dialog->title->setFocus();
+  dialog->title->selectAll();
 
-  // Show dialog and save results.
-  bool okClicked = dialog.exec();
+  connect(dialog->buttonPrevious, SIGNAL(clicked()),
+    this, SLOT(editPreviousTrack()));
+  connect(dialog->buttonNext, SIGNAL(clicked()),
+    this, SLOT(editNextTrack()));
+
+  // Show dialog->and save results.
+  bool okClicked = dialog->exec();
   if(okClicked){
-    group = dialog.artist->text();
-    album = dialog.album->text();
-    year = dialog.year->value();
-    currentItem->setText(HEADER_NAME, dialog.title->text());
-    genre = dialog.genre->currentText();
+    group = dialog->artist->text();
+    album = dialog->album->text();
+    year = dialog->year->value();
+    trackListing->currentItem()->setText(HEADER_NAME, dialog->title->text());
+    genre = dialog->genre->currentText();
 
     QString newTitle = QString("%1 - %2").arg(group).arg(album);
     if(albumName->text() != newTitle)
       albumName->setText(newTitle);
   }
+  delete dialog;
 }
 
 /**
@@ -383,6 +389,34 @@ void TracksConfigImp::keyPressEvent(QKeyEvent *event){
   }
   else
     TracksConfig::keyPressEvent(event);
+}
+
+void TracksConfigImp::editNextTrack()
+{
+  QListViewItem* currentItem = trackListing->currentItem();
+  currentItem->setText(HEADER_NAME, dialog->title->text());
+  QListViewItem* newCurrentItem = currentItem->itemBelow();
+  if (newCurrentItem)
+  {
+    trackListing->setCurrentItem(newCurrentItem);
+    dialog->title->setText(newCurrentItem->text(HEADER_NAME));
+  }
+  dialog->title->setFocus();
+  dialog->title->selectAll();
+}
+
+void TracksConfigImp::editPreviousTrack()
+{
+  QListViewItem* currentItem = trackListing->currentItem();
+  currentItem->setText(HEADER_NAME, dialog->title->text());
+  QListViewItem* newCurrentItem = currentItem->itemAbove();
+  if (newCurrentItem)
+  {
+    trackListing->setCurrentItem(newCurrentItem);
+    dialog->title->setText(newCurrentItem->text(HEADER_NAME));
+  }
+  dialog->title->setFocus();
+  dialog->title->selectAll();
 }
 
 #include "tracksconfigimp.moc"
