@@ -24,7 +24,7 @@
                 <cstring>removeCompletedJobs</cstring>
             </property>
             <property name="text">
-                <string>Automaticly remove jobs when finished</string>
+                <string>Automatically remove jobs when finished</string>
             </property>
         </widget>
         <widget class="QGroupBox">
