@@ -70,7 +70,8 @@ private:
   bool createPlaylist;
   QString playlistFileFormat;
   bool useRelitivePath;
-
+  bool fullDecoderDebug;
+  
   QString replaceInput;
   QString replaceOutput;
 };

@@ -71,6 +71,7 @@ void Encoder::loadSettings(){
   }
   else
     setNiceLevel = false;
+  fullDecoderDebug = config.readBoolEntry("FullDecoderDebug", false);
 }
 
 /**
@@ -203,6 +204,9 @@ void Encoder::tendToNewJobs(){
  * @param buflen the length of the buffer.
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
+  if(fullDecoderDebug)
+    qDebug(buffer);
+	
   // Make sure we have a job to send an update too.
   Job *job = jobs[(KShellProcess*)process];
   if(!job){
