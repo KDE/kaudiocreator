@@ -86,8 +86,17 @@ void Ripper::removeJob(int id){
       KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
       QString fileDestination = (copyJob->destURL()).path();
       copyJob->kill();
+      
+      // This here is such a hack, shouldn't kill() do this, or why isn't there a stop()?
+      // TODO add to copyJob a stop() function.
       QFile file( fileDestination );
-      file.remove();
+      if(file.exists())
+        file.remove();
+      else{
+        QFile f( fileDestination+".part" );
+        f.remove();
+      }
+      
       break;
     }
   }
@@ -132,7 +141,10 @@ void Ripper::tendToNewJobs(){
   pendingJobs.remove(job);
 
   QMap<QString, QString> map;
-  KTempFile tmp;
+  QString defaultTempDir;
+  if(Prefs::enableTempDir())
+    defaultTempDir = Prefs::tempDir();
+  KTempFile tmp( defaultTempDir );
   tmp.setAutoDelete(true);
 
   QString wavFile;

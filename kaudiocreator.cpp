@@ -41,6 +41,7 @@
 #include "general.h"
 #include <kcmoduleloader.h>
 #include <kkeydialog.h>
+#include <kurlrequester.h>
 
 /**
  * Constructor.  Connect all of the object and the job control.
@@ -164,8 +165,10 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
       }
     }
   }
+  RipConfig *rip = new RipConfig(0, "Ripper");
+  rip->kcfg_tempDir->setMode(KFile::Directory);
+  addPage(rip, i18n("Ripper"), "shredder", i18n("Ripper Configuration") );
   
-  addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "shredder", i18n("Ripper Configuration") );
   encoderConfigImp = new EncoderConfigImp(0, "Encoder");
   addPage(encoderConfigImp, i18n("Encoder"), "filter", i18n("Encoder Configuration") );
 }

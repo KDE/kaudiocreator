@@ -90,5 +90,13 @@
       <label>Auto-eject delay</label>
       <default>0</default>
     </entry>
+    <entry name="enableTempDir" type="Bool">
+      <label>Specify temporary directory</label>
+      <default>false</default>
+    </entry>
+    <entry name="tempDir" type="String">
+      <label>Location of tempory directory to use</label>
+      <default></default>
+    </entry>
    </group>
 </kcfg>

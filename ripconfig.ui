@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>346</width>
-            <height>233</height>
+            <width>525</width>
+            <height>526</height>
         </rect>
     </property>
     <property name="caption">
@@ -28,6 +28,9 @@
             </property>
             <property name="text">
                 <string>&amp;Beep after each rip is done</string>
+            </property>
+            <property name="accel">
+                <string>Alt+B</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -117,6 +120,30 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>kcfg_enableTempDir</cstring>
+            </property>
+            <property name="title">
+                <string>Default Temporary Directory</string>
+            </property>
+            <property name="checkable">
+                <bool>true</bool>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>kcfg_tempDir</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
         <spacer>
             <property name="name">
                 <cstring>Spacer2</cstring>
@@ -130,7 +157,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>130</height>
+                    <height>280</height>
                 </size>
             </property>
         </spacer>
@@ -157,4 +184,9 @@
     <tabstop>kcfg_autoEjectDelay</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
