@@ -52,7 +52,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
 
     encPrefs = EncoderPrefs::prefs("Encoder_1");
     encPrefs->setEncoderName(i18n("Lame"));
-    encPrefs->setCommandLine("lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
+    encPrefs->setCommandLine("lame --alt-preset --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
     encPrefs->setExtension("mp3");
     encPrefs->setPercentLength(2);
     encPrefs->writeConfig();
