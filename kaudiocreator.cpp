@@ -27,19 +27,19 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   janusWidget = new KJanusWidget(this, name, KJanusWidget::IconList);
   setCentralWidget(janusWidget);
 
-  QVBox * frame = janusWidget->addVBoxPage(QString("Tracks"),"Tracks", SmallIcon("cdaudio_unmount", 32));
+  QVBox * frame = janusWidget->addVBoxPage(QString("Tracks"),i18n("Tracks"), SmallIcon("cdaudio_unmount", 32));
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Cd Config"),"Cd Config", SmallIcon("network", 32));
+  frame = janusWidget->addVBoxPage(QString("Cd Config"),i18n("Cd Config"), SmallIcon("network", 32));
   cdConfig = new CdConfigImp(frame, "CdConfig");
   cdPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Rip Config"),"Rip Config", SmallIcon("shredder", 32));
+  frame = janusWidget->addVBoxPage(QString("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
   ripConfig = new RipConfigImp(frame, "RipConfig");
   ripPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Encoder Config"),"Encoder Config", SmallIcon("filter", 32));
+  frame = janusWidget->addVBoxPage(QString("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
   encoderConfig = new EncoderConfigImp(frame, "EncoderConfig");
   encoderPage = janusWidget->pageIndex(frame);
-  frame = janusWidget->addVBoxPage(QString("Jobs"),"Jobs", SmallIcon("run", 32));
+  frame = janusWidget->addVBoxPage(QString("Jobs"),i18n("Jobs"), SmallIcon("run", 32));
   queConfig = new QueConfigImp(frame, "QueConfig");
   quePage = janusWidget->pageIndex(frame);
 
@@ -61,13 +61,13 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   resize(500, 440);
 
-  (void)new KAction(i18n("&View Tracks"), 0, this, SLOT(viewTracks()), actionCollection(), "view_tracks" );
-  (void)new KAction(i18n("&View CD Config"), 0, this, SLOT(viewCdConfig()), actionCollection(), "view_cd" );
-  (void)new KAction(i18n("&View Rip Config"), 0, this, SLOT(viewRipConfig()), actionCollection(), "view_rip" );
-  (void)new KAction(i18n("&View Encoder Config"), 0, this, SLOT(viewEncoderConfig()), actionCollection(), "view_encoder" );
-  (void)new KAction(i18n("&View Queue"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
-  (void)new KAction(i18n("&Rip Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
-  (void)new KAction(i18n("&Remove Completed Jobs"), 0, queConfig, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
+  (void)new KAction(i18n("View &Tracks"), 0, this, SLOT(viewTracks()), actionCollection(), "view_tracks" );
+  (void)new KAction(i18n("View &CD Config"), 0, this, SLOT(viewCdConfig()), actionCollection(), "view_cd" );
+  (void)new KAction(i18n("View &Rip Config"), 0, this, SLOT(viewRipConfig()), actionCollection(), "view_rip" );
+  (void)new KAction(i18n("View &Encoder Config"), 0, this, SLOT(viewEncoderConfig()), actionCollection(), "view_encoder" );
+  (void)new KAction(i18n("View &Queue"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
+  (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
+  (void)new KAction(i18n("Remove &Completed Jobs"), 0, queConfig, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
   (void)new KAction(i18n("&Refresh CD List"), 0, cdConfig, SLOT(timerDone()), actionCollection(), "update_cd" );
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
 

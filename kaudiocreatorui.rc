@@ -16,6 +16,7 @@
     <Action name="rip"/>
     <Action name="configuretoolbars"/>
     <Action name="update_cd"/>
+    <Action name="clear_done_jobs"/>
     <Separator/>
     <Action name="quit"/>
   </Menu>
