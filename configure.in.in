@@ -1,6 +1,20 @@
+dnl KAudioCreator depends on cdparanoia _and_
+dnl the linux cdrom headers. 
+
+enable_kac=yes
+
+KDE_CHECK_HEADER(linux/cdrom.h,
+	[:],
+	[AC_MSG_WARN([This doesn't seem to be a Linux system. KAudioCreator has been disabled.])
+enable_kac=no])
+
 if test "x$HAVE_CDPARANOIA" = "x1" ; then
 	# It just might work
 	:
 else
+	enable_kac=no
+fi
+
+if test "x$enable_kac" = "xno" ; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE kaudiocreator"
 fi
