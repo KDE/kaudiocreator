@@ -48,8 +48,6 @@ Add audiocd ioslave config (or the cddb lib config) to the configure dialog
 -Auto replace text dialog (replace X with Y such as " " with "_")
 Use same encoding options that audiocd has
 
-Check to see if the ripped (wav) file exists before encoding.
-
 Check to see if the encoded binary exists before encoding (which?).
 
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
