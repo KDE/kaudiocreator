@@ -135,10 +135,11 @@ void JobQueImp::updateProgress(int id, int progress){
   }
   else if(progress == 100){
     // Remove the job if requested.
-    if(removeCompletedJobs)
-      removeJob(currentItem);      
-    else
-      currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
+    if(removeCompletedJobs){
+      removeJob(currentItem);
+      return;
+    }
+    currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
   }
 }
 
