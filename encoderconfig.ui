@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>301</width>
+            <width>307</width>
             <height>393</height>
         </rect>
     </property>
@@ -225,7 +225,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Number of wav file to encode at a time</string>
+                        <string>Number of wav files to encode at a time</string>
                     </property>
                 </widget>
                 <widget>
@@ -277,6 +277,10 @@
             <property stdset="1">
                 <name>text</name>
                 <string>Create an album playlist file (.m3u)</string>
+            </property>
+            <property stdset="1">
+                <name>checked</name>
+                <bool>true</bool>
             </property>
         </widget>
         <widget>

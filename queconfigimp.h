@@ -23,6 +23,7 @@ signals:
 
 public:
   QueConfigImp( QWidget* parent = 0, const char* name = 0);
+  int numberOfJobsNotFinished();
 
 public slots:
   void updateProgress(int id, int progress);
@@ -35,6 +36,7 @@ private slots:
 
 private:
   int currentId;
+
 };
 
 #endif

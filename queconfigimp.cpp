@@ -122,6 +122,22 @@ void QueConfigImp::clearDoneJobs(){
 
 }
 
+/**
+ * Return the number of jobs in the que that don't have 100% or Error marked down.
+ * @param the number of jobs that are in the que that havn't been finished.
+ */
+int QueConfigImp::numberOfJobsNotFinished(){
+  int totalJobsToDo = 0;
+  QListViewItem * currentItem = todoQue->firstChild();
+  while( currentItem != 0 ){
+    if( currentItem->text(2) != "100%" || currentItem->text(2) != i18n("Error") ){
+    }
+    totalJobsToDo++;
+    currentItem = currentItem->itemBelow();
+  }
+  return totalJobsToDo;
+}
+
 #include "queconfigimp.moc"
 
 // queconfigimp.cpp

@@ -17,8 +17,14 @@
 #include <qcombobox.h>
 #include <qregexp.h>
 
+#define ENCODER_LAME 0
+#define ENCODER_WAV 1
+#define ENCODER_OGG 2
+#define ENCODER_OTHER 3
+
 /**
  * A helper function to replace %X with the stuff in the album.
+ * if slash it tru then put "" around the %X
  */
 void replaceSpecialChars(QString &string, Job * job, bool slash){
   if(slash == true){
@@ -39,6 +45,7 @@ void replaceSpecialChars(QString &string, Job * job, bool slash){
     string.replace(QRegExp("%t"), QString("%1").arg(job->track));
     return;
   }
+  // TODO replace all / ' ? etc with a // /' /? etc
 }
 
 /**
@@ -72,23 +79,19 @@ EncoderConfigImp::~EncoderConfigImp(){
   config.writeEntry("createM3uAlbum", createM3uAlbum->isChecked());
   config.writeEntry("m3uFileFormat", m3uFileFormat->text());
   config.writeEntry("useRelitivePath", useRelitivePath->isChecked());
-  if(encoder->currentItem() == 0){
-    // Lame
+  if(encoder->currentItem() == ENCODER_LAME){
     config.writeEntry("encoderExeLame", encoderExe->text());
     config.writeEntry("encoderCommandLineLame", encoderCommandLine->text());
   }
-  if(encoder->currentItem() == 1){
-    // Keep as wav
+  if(encoder->currentItem() == ENCODER_WAV){
     config.writeEntry("encoderExeWave", encoderExe->text());
     config.writeEntry("encoderCommandLineWav", encoderCommandLine->text());
   }
-  if(encoder->currentItem() == 2){
-    // Other
+  if(encoder->currentItem() == ENCODER_OGG){
     config.writeEntry("encoderExeOggEnc", encoderExe->text());
     config.writeEntry("encoderCommandLineExeOggEnc", encoderCommandLine->text());
   }
-  if(encoder->currentItem() == 3){
-    // Other
+  if(encoder->currentItem() == ENCODER_OTHER){
     config.writeEntry("encoderExeOther", encoderExe->text());
     config.writeEntry("encoderCommandLineOther", encoderCommandLine->text());
   }
@@ -96,31 +99,28 @@ EncoderConfigImp::~EncoderConfigImp(){
 
 /**
  * Load the settings for this encoder.
+ * @param index the selected item in the drop down menu.
  */
 void EncoderConfigImp::loadEncoderConfig(int index){
   KConfig &config = *KGlobal::config();
   config.setGroup("encodeconfig");
 
-  if(index == 0){
-    // Lame
+  if(index == ENCODER_LAME){
     encoderExe->setText(config.readEntry("encoderExeLame", "lame"));
     encoderCommandLine->setText(config.readEntry("encoderCommandLineLame", "--r3mix --tt %s --ta %g --tl %a --ty %y --tn %t --tg %l \"%f\" \"%o\""));
     return;
   }
-  if(index == 1){
-    // Keep as wav
+  if(index == ENCODER_WAV){
     encoderExe->setText(config.readEntry("encoderExeWave", "mv"));
     encoderCommandLine->setText(config.readEntry("encoderCommandLineWav", "\"%f\" \"%o\""));
     return;
   }
-  if(index == 2){
-    // Other
+  if(index == ENCODER_OGG){
     encoderExe->setText(config.readEntry("encoderExeOggEcc", "oggenc"));
     encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o %o -a \"%A\" -l \"%d\" -t \"%n\" %f"));
     return;
   }
-  if(index == 3){
-    // Other
+  if(index == ENCODER_OTHER){
     encoderExe->setText(config.readEntry("encoderExeOther", ""));
     encoderCommandLine->setText(config.readEntry("encoderCommandLineOther", ""));
     return;
@@ -281,14 +281,14 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(this, i18n("The desired encoded file could not created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
+    KMessageBox::sorry(this, i18n("The desired encoded file could not be created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
     QFile::remove(job->location);
     return;
   }
 
   QFile f(desiredFile);
   if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(this, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist addition failed."));
+    KMessageBox::sorry(this, i18n("The desired playlist file could not be opened for writing too.\nPlease check your file path option."), i18n("Playlist addition Failed"));
     return;
   }
 

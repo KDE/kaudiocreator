@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>341</width>
+            <width>337</width>
             <height>368</height>
         </rect>
     </property>
@@ -145,6 +145,10 @@
             <property stdset="1">
                 <name>text</name>
                 <string>Auto-eject cd after last song is ripped</string>
+            </property>
+            <property stdset="1">
+                <name>checked</name>
+                <bool>true</bool>
             </property>
         </widget>
         <widget>
