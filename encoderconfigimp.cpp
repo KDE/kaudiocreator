@@ -67,9 +67,23 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
 }
 
 /**
- * Deconstructor, save settings.
+ * Deconstructor, remove pending jobs, remove current jobs, save settings.
  */ 
 EncoderConfigImp::~EncoderConfigImp(){
+  pendingJobs.clear();
+  
+  QMap<KProcess*, Job*>::Iterator it;
+  for( it = jobs.begin(); it != jobs.end(); ++it ){
+    KProcess *process = it.key();
+    Job *job = jobs[it.key()];
+    threads.remove(process);
+    process->kill();
+    jobs.remove(process);
+    QFile::remove(job->newLocation);
+    delete job;
+    delete process;
+  }
+
   KConfig &config = *KGlobal::config();
   config.setGroup("encodeconfig");
   config.writeEntry("encoder", encoder->currentItem());

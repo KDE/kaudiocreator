@@ -31,10 +31,21 @@ RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,
 }
 
 /**
- * Deconstructor, save settings.
+ * Deconstructor, remove pending jobs, remove current jobs, save settings.
  */
 RipConfigImp::~RipConfigImp(){
   pendingJobs.clear();
+  
+  QMap<KIO::Job*, Job*>::Iterator it;
+  for( it = jobs.begin(); it != jobs.end(); ++it ){
+    jobs.remove(it.key());
+    KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
+    QString fileDestination = (copyJob->destURL()).path();
+    copyJob->kill();
+    QFile file( fileDestination );
+    file.remove();
+  }
+
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
   config.writeEntry("fileFormat", fileFormat->text());
@@ -57,8 +68,9 @@ void RipConfigImp::removeJob(int id){
     if(it.data()->id == id){
       jobs.remove(it.key());
       KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
+      QString fileDestination = (copyJob->destURL()).path();
       copyJob->kill();
-      QFile file( (copyJob->destURL()).path());
+      QFile file( fileDestination );
       file.remove();
       break;
     }
