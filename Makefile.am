@@ -1,4 +1,4 @@
-INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir)/libkcddb $(all_includes)
+INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir) -I$(top_srcdir)/libkcddb $(all_includes)
 
 bin_PROGRAMS = kaudiocreator
 
