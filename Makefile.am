@@ -15,7 +15,7 @@ messages: rc.cpp
 
 AM_CPPFLAGS = -static -Wall
 
-kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS) $(top_builddir)/libkcddb/libkcddb.la $(top_builddir)/kscd/libwm/libworkman.la
+kaudiocreator_LDADD = $(LIB_KIO) $(top_builddir)/libkcddb/libkcddb.la $(top_builddir)/kscd/libwm/libworkman.la
 
 updatedir = $(kde_datadir)/kconf_update
 update_DATA = kaudiocreator-libkcddb.upd
