@@ -297,7 +297,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   // Make sure we have a job to send an update too.
   Job *job = jobs[(KShellProcess*)process];
   if(!job){
-    qDebug(QString("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line:%1").arg(__LINE__).latin1());
+    qDebug("EncoderConfigImp::receivedThreadOutput Job doesn't exists. Line: %d", __LINE__);
     return;
   }
 
@@ -320,7 +320,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   }
   // If it was just some random output that couldn't be converted then don't report the error.
   else if(conversionSuccessfull){
-    qDebug(QString("The Percent done (%1) is not > 0 && < 100").arg(percent).latin1());
+    qDebug("The Percent done (%d) is not > 0 && < 100", percent);
   }
   //else{
   //  qDebug(QString("The Percent done (%1) is not > 0 && < 100, conversion ! sucesfull").arg(output).latin1());
@@ -337,7 +337,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
   if(process->normalExit()){
     int retrunValue = process->exitStatus();
     if(retrunValue!=0)
-      qDebug(QString("Process exited with non 0 status: %1").arg(retrunValue).latin1());
+      qDebug("Process exited with non 0 status: %d", retrunValue);
   }
 
   Job *job = jobs[(KShellProcess*)process];
