@@ -203,7 +203,7 @@ void TracksConfigImp::editInformation(){
   dialog->title->setText(currentItem->text(HEADER_NAME));
   dialog->genre->insertStringList(genres.keys());
   int totalGenres = dialog->genre->count();
-  if(genre == "")
+  if(genre.isEmpty())
     genre = i18n("Other");
   
   for(int i = 0; i < totalGenres; i++){
@@ -257,25 +257,25 @@ void TracksConfigImp::startSession(){
   }
 
   QString list = "";
-  if( genre == "" )
+  if( genre.isEmpty() )
     list += "Genre";
   
   if( year == 0 ){
-    if(list != "")
+    if(!list.isEmpty())
       list += ", ";
     list += "Year";
   }
   if( group == "Unknown Artist"){
-    if(list != "")
+    if(!list.isEmpty())
       list += ", ";
     list += "Artist";
   }
   if( album == "Unknown Album"){
-    if(list != "")
+    if(!list.isEmpty())
       list += ", ";
     list += "Album";
   }
-  if( list != ""){
+  if( !list.isEmpty() ){
     int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information Incomplete"));
     if( r == KMessageBox::No )
       return;
