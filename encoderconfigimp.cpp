@@ -137,11 +137,11 @@ void EncoderConfigImp::removeEncoderSlot(){
     return;
   }	
   if(encoderList->count() <= 1){
-    KMessageBox:: sorry(this, i18n("There must exist at least one encoder."), i18n("Can't remove."));
+    KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can't remove."));
     return;
   }
   if(currentEncoderName->text() == encoderList->currentText()){
-    KMessageBox:: sorry(this, i18n("Encoder is currently set as current.\nPlease select a different encoder as current before this one can be removed."), i18n("Can't remove."));
+    KMessageBox:: sorry(this, i18n("Encoder is currently set as current.\nYou must select a different encoder as current before this one can be removed."), i18n("Can't remove."));
     return;
   }
 

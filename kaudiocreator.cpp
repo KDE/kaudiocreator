@@ -105,7 +105,7 @@ void KAudioCreator::showSettings(){
     return;
 
   KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
-  dialog->addPage(new General(0, "General"), i18n("General"), "General", "package_settings", i18n("General Configureation"));
+  dialog->addPage(new General(0, "General"), i18n("General"), "General", "package_settings", i18n("General Configuration"));
   dialog->addPage(new CdConfig(0, "CD"), i18n("CD"), "CD", "package_system", i18n("CD Configuration"));
 
   // Because WE don't segfault on our users...

@@ -241,7 +241,7 @@ void TracksImp::timerDone(){
   
   if(status < 0) {
     QString errstring =
-               i18n("CD-ROM read or access error (or no audio disc in drive).\n"\
+               i18n("CDROM read or access error (or no audio disc in drive).\n"\
                     "Please make sure you have access permissions to:\n%1")
                .arg(device);
     KMessageBox::error(this, errstring, i18n("Error"));
@@ -296,7 +296,7 @@ void TracksImp::changeDevice(const QString &file){
 void TracksImp::performCDDB(){
   int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
   if(WM_CDS_NO_DISC(status)){
-    KMessageBox::sorry(this, i18n("Please put in a disk."), i18n("CDDB failed."));
+    KMessageBox::sorry(this, i18n("Please insert a disk."), i18n("CDDB failed."));
     wm_cd_destroy();
     return;
   }
@@ -616,12 +616,12 @@ void TracksImp::eject(){
 void TracksImp::ejectDone(KProcess *proc){
   int returnValue = proc->exitStatus();
   if(returnValue == 127){
-    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Can not eject"));
+    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Cannot eject"));
     return;
   }
   if(returnValue != 0){
     kdDebug() << "Eject failed and returned: " << returnValue << endl;
-    KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Can not eject"));
+    KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot eject"));
     return;
   }
   delete proc;

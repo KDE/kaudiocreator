@@ -32,7 +32,7 @@
                 <cstring>autoRip</cstring>
             </property>
             <property name="text">
-                <string>Automatically rip all songs upon a successfull CDDB retrieval</string>
+                <string>Automatically rip all songs upon a successful CDDB retrieval</string>
             </property>
         </widget>
         <spacer>

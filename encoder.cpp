@@ -28,7 +28,7 @@ void Encoder::loadSettings(){
   config.setGroup("Encoder");
   QString currentEncoder = config.readEntry("currentEncoder");
   if(!config.hasGroup(currentEncoder)){
-    KMessageBox::sorry(0, i18n("No Encoder has been selected.\nPlease select an encoder in the configuation."), i18n("No Encoder Selected"));
+    KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
   }
   else{
     config.setGroup(currentEncoder);
@@ -218,7 +218,7 @@ void Encoder::jobDone(KProcess *process){
   jobs.remove((KShellProcess*)process);
 
   if(process->exitStatus() == 127){
-    KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }
@@ -238,7 +238,7 @@ void Encoder::jobDone(KProcess *process){
       appendToPlaylist(job);
   }
   else{
-    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }
@@ -261,7 +261,7 @@ void Encoder::appendToPlaylist(Job* job){
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n."), i18n("Playlist Creation Failed"));
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n"), i18n("Playlist Creation Failed"));
     return;
   }
 
