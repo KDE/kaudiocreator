@@ -66,3 +66,5 @@ void EncodeFileImp::encode(){
  i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
+
+#include "encodefileimp.moc"
