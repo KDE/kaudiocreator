@@ -39,17 +39,17 @@ public:
   QString device;
   int id; 
 
-  QString genre;		
+  QString track_title;
+  QString track_artist;
+  int track;
+  QString track_comment;
+  int year;
+  QString genre;
+  
   QString group;
   QString album;
   QString comment;
-  int track;
-  int year;
   
-  QString track_title;
-  QString track_comment;
-  QString track_artist;
- 
   // Currently location of file X
   QString location;
 

@@ -18,9 +18,6 @@ AM_CPPFLAGS = -static -Wall
 
 kaudiocreator_LDADD = $(LIB_KIO) $(top_builddir)/libkcddb/libkcddb.la $(top_builddir)/kscd/libwm/libworkman.la
 
-updatedir = $(kde_datadir)/kconf_update
-update_DATA = kaudiocreator-libkcddb.upd
-
 KDE_ICON = AUTO
 
 SUBDIRS = icons
@@ -33,3 +30,7 @@ appdatadir = $(kde_datadir)/kaudiocreator
 
 conf_DATA = kaudiocreatorrc
 confdir = $(kde_confdir)
+
+updatedir = $(kde_datadir)/kconf_update
+update_DATA = kaudiocreator-meta.upd kaudiocreator-libkcddb.upd
+update_SCRIPTS = upgrade-kaudiocreator-metadata.sh

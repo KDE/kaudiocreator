@@ -37,29 +37,9 @@ void fileWizard::homePressed()
     playlistFormat->insert("~");
 }
 
-void fileWizard::albumPressed()
-{
-    playlistFormat->insert("%{album}");
-}
-
-void fileWizard::artistPressed()
-{
-    playlistFormat->insert("%{artist}");
-}
-
 void fileWizard::extensionPressed()
 {
     playlistFormat->insert("%{extension}");
-}
-
-void fileWizard::genrePressed()
-{
-    playlistFormat->insert("%{genre}");
-}
-
-void fileWizard::trackNumberPressed()
-{
-    playlistFormat->insert("%{track}");
 }
 
 void fileWizard::trackTitlePressed()
@@ -67,31 +47,50 @@ void fileWizard::trackTitlePressed()
     playlistFormat->insert("%{title}");
 }
 
+void fileWizard::trackArtistPressed()
+{
+    playlistFormat->insert("%{artist}");
+}
+
+void fileWizard::trackNumberPressed()
+{
+    playlistFormat->insert("%{number}");
+}
+
+void fileWizard::trackCommentPressed()
+{
+    playlistFormat->insert("%{comment}");
+}
+
 void fileWizard::yearPressed()
 {
     playlistFormat->insert("%{year}");
 }
 
-void fileWizard::trackCommentPressed()
+void fileWizard::genrePressed()
 {
-    playlistFormat->insert("%{track_comment}");
+    playlistFormat->insert("%{genre}");
 }
 
-void fileWizard::trackArtistPressed()
+void fileWizard::albumPressed()
 {
-    playlistFormat->insert("%{track_artist}");
+    playlistFormat->insert("%{albumtitle}");
+}
+
+void fileWizard::artistPressed()
+{
+    playlistFormat->insert("%{albumartist}");
 }
 
 void fileWizard::commentPressed()
 {
-    playlistFormat->insert("%{comment}");
+    playlistFormat->insert("%{albumcomment}");
 }
 
 void fileWizard::fileFormatTextChanged(const QString& text)
 {
   QString string = text;
   string.replace(QRegExp("~"), "/home/foo");
-  string.replace(QRegExp("%extension"), "mp3");
 
   Job job;
   job.genre = "Rock";

@@ -38,16 +38,16 @@ static QString sanitize(const QString &s)
 void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _map){
   QMap<QString,QString> map = _map;
   
-  map.insert("album", sanitize(album));
-  map.insert("genre", sanitize(genre));
-  map.insert("artist", sanitize(group));
-  map.insert("comment", sanitize(comment));
-  map.insert("year", QString::number(year));
-  map.insert("track", QString().sprintf("%02d", track));
-
-  map.insert("track_artist", sanitize(track_artist));
-  map.insert("track_comment", sanitize(track_comment));
   map.insert("title", sanitize(track_title));
+  map.insert("artist", sanitize(track_artist));
+  map.insert("number", QString().sprintf("%02d", track));
+  map.insert("comment", sanitize(track_comment));
+  map.insert("year", QString::number(year));
+  map.insert("genre", sanitize(genre));
+  
+  map.insert("albumtitle", sanitize(album));
+  map.insert("albumcomment", sanitize(comment));
+  map.insert("albumartist", sanitize(group));
   
   if (quote)
       str = KMacroExpander::expandMacrosShellQuote(str, map);

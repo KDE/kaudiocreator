@@ -1,0 +1,3 @@
+Id=2
+File=kaudiocreatorrc
+Script=upgrade-kaudiocreator-metadata.sh,bash

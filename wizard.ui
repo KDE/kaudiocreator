@@ -46,7 +46,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the track should be used within that text.  There are eight special words starting with a % that will be replaced with the corresponding track's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
+                <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the track should be used within that text.  There are eleven special words starting with a % that will be replaced with the corresponding track's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
             </property>
             <property name="textFormat">
                 <enum>RichText</enum>
