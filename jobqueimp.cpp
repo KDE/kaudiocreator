@@ -88,6 +88,8 @@ QString JobQueImp::getStringFromNumber(int number){
  * @param name the name of the job.
  */
 void JobQueImp::addJob(Job*job, const QString &name ){
+	if(!job)
+		return;
 	job->id = ++currentId;
 	QueListViewItem *currentItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
 	currentItem->setPixmap(ICON_LOC, SmallIcon("player_pause", currentItem->height()-2));
@@ -269,7 +271,7 @@ int JobQueImp::numberOfJobsNotFinished(){
  * @param encoder extension
  */
 void JobQueImp::appendToPlaylist(Job* job, const QString &extension){
-	if(!Prefs::createPlayList())
+	if(!Prefs::createPlayList() || !job)
 		return;
 	QString desiredFile = Prefs::playlistFileFormat();
 	QMap <QString,QString> map;

@@ -67,14 +67,14 @@ Ripper::~Ripper(){
 	jobs.clear();
 }
 
-/** 
+/**
  * @return The number of active jobs
  */
 int Ripper::activeJobCount() {
 	return jobs.count();
 }
 
-/** 
+/**
  * @return The number of pending jobs
  */
 int Ripper::pendingJobCount() {
@@ -93,19 +93,19 @@ void Ripper::removeJob(int id){
 		if(it.data()->id == id){
 			jobs.remove(it.key());
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
-			QString fileDestination = (copyJob->destURL()).path();
-			copyJob->kill();
-
-			// This here is such a hack, shouldn't kill() do this, or why isn't there a stop()?
-			// TODO add to copyJob a stop() function.
-			QFile file( fileDestination );
-			if(file.exists())
-				file.remove();
-			else {
-				QFile f( fileDestination+".part" );
-				f.remove();
+			if(copyJob){
+				QString fileDestination = (copyJob->destURL()).path();
+				copyJob->kill();
+				// This here is such a hack, shouldn't kill() do this, or why isn't there a stop()?
+				// TODO add to copyJob a stop() function.
+				QFile file( fileDestination );
+				if(file.exists())
+					file.remove();
+				else {
+					QFile f( fileDestination+".part" );
+					f.remove();
+				}
 			}
-
 			break;
 		}
 	}
@@ -129,6 +129,8 @@ void Ripper::removeJob(int id){
  * @param job the new job that we need to handle.
  */
 void Ripper::ripTrack(Job *job){
+	if(!job)
+		return;
 	emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->track_title)));
 	pendingJobs.append(job);
 	tendToNewJobs();
@@ -151,6 +153,8 @@ void Ripper::tendToNewJobs(){
 	}
 
 	Job *job = pendingJobs.first();
+	if(!job)
+		return;
 	pendingJobs.remove(job);
 
 	QMap<QString, QString> map;
@@ -186,21 +190,25 @@ void Ripper::tendToNewJobs(){
  * @param copyjob the IO job to copy from
  */
 void Ripper::copyJobResult(KIO::Job *copyjob){
+	if(!copyjob)
+		return;
 	KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
-	KNotifyClient::event("track ripped");
-
+	
 	Job *newJob = jobs[copyjob];
+	if(!newJob)
+		return;
 	jobs.remove(copyjob);
 
 	if(Prefs::beepAfterRip())
 		KNotifyClient::beep();
-	 
+
 	if ( copyJob->error() == 0 ){
 		emit updateProgress(newJob->id, 100);
 		newJob->location = copyJob->destURL().path();
 		emit( encodeWav(newJob));
 	}
 	else{
+		KNotifyClient::event("track ripped");
 		copyJob->showErrorDialog(0);
 		QFile file( (copyJob->destURL()).path());
 		file.remove();

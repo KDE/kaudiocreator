@@ -229,7 +229,7 @@ void Encoder::tendToNewJobs() {
  * @param buflen the length of the buffer.
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length ) {
-	if ( Prefs::fullDecoderDebug())
+	if ( Prefs::fullDecoderDebug() && buffer)
 		kdDebug(60002) << buffer << endl;
 	
 	// Make sure we have a job to send an update too.
