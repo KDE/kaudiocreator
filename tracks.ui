@@ -139,9 +139,6 @@
                     <property name="text">
                         <string>&amp;Deselect All Tracks</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">

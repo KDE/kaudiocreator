@@ -29,9 +29,6 @@
             <property name="text">
                 <string>&amp;Automatically remove jobs when finished</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QGroupBox">
             <property name="name">

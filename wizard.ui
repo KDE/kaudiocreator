@@ -128,9 +128,6 @@
                     <property name="text">
                         <string>&amp;Track</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="1">
                     <property name="name">
@@ -138,9 +135,6 @@
                     </property>
                     <property name="text">
                         <string>Al&amp;bum</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="3">
@@ -150,9 +144,6 @@
                     <property name="text">
                         <string>&amp;Genre</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+G</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="2">
                     <property name="name">
@@ -160,9 +151,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Song</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="0">
@@ -172,9 +160,6 @@
                     <property name="text">
                         <string>&amp;Extension</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+E</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="0">
                     <property name="name">
@@ -182,9 +167,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Home Folder</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+H</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="1">
@@ -194,9 +176,6 @@
                     <property name="text">
                         <string>&amp;Artist</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="3">
                     <property name="name">
@@ -204,9 +183,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Year</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+Y</string>
                     </property>
                 </widget>
             </grid>
@@ -263,9 +239,6 @@
                     <property name="text">
                         <string>&amp;OK</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>true</bool>
                     </property>
@@ -279,9 +252,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

@@ -34,9 +34,6 @@
             <property name="text">
                 <string>&amp;Add...</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="1" column="1" rowspan="1" colspan="2">
             <property name="name">
@@ -45,9 +42,6 @@
             <property name="text">
                 <string>&amp;Remove</string>
             </property>
-            <property name="accel">
-                <string>Alt+R</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
@@ -55,9 +49,6 @@
             </property>
             <property name="text">
                 <string>&amp;Configure...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
             </property>
         </widget>
         <widget class="Line" row="4" column="0" rowspan="1" colspan="3">
@@ -160,9 +151,6 @@
             <property name="text">
                 <string>Create an album &amp;playlist file</string>
             </property>
-            <property name="accel">
-                <string>Alt+P</string>
-            </property>
             <property name="checked">
                 <bool>false</bool>
             </property>
@@ -233,9 +221,6 @@
                     </property>
                     <property name="text">
                         <string>Use relative path</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
                     </property>
                 </widget>
             </vbox>
