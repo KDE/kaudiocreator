@@ -131,7 +131,7 @@ void EncoderConfigImp::loadEncoderConfig(int index){
   }
   if(index == ENCODER_OGG){
     encoderExe->setText(config.readEntry("encoderExeOggEcc", "oggenc"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o \"%o\" -a \"%artist\" -l \"%album\" -t \"%song\" \"%f\""));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o \"%o\" -a \"%artist\" -l \"%album\" -t \"%song\" -N \"%track\" \"%f\""));
     return;
   }
   if(index == ENCODER_OTHER){
