@@ -31,7 +31,7 @@ void Ripper::loadSettings(){
   config.setGroup("Ripper");
   maxWavFiles = config.readNumEntry("maxWavFiles", 1);
   beepAfterRip = config.readBoolEntry("beepAfterRip", true);
-  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", false);
+  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", true);
   autoEjectDelay = config.readNumEntry("autoEjectDelay", 0);
 }
 
@@ -178,6 +178,7 @@ void Ripper::copyJobResult(KIO::Job *job){
  */
 void Ripper::eject(){
   int returnValue = system("eject");
+  qDebug("%i", returnValue);
   if(returnValue == 127){
     KMessageBox:: sorry(0, i18n("\"eject\" command not installed."), i18n("Can not eject"));
     return;
@@ -185,7 +186,7 @@ void Ripper::eject(){
   if(returnValue != 0){
     KMessageBox:: sorry(0, i18n("\"eject\" command failed."), i18n("Can not eject"));
     return;
-  } 
+  }
 }
 
 /**
