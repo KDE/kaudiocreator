@@ -152,8 +152,8 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
     return;
   }
   
-  p->setPen(cg.dark());
-  //p->drawRect(0,0,width,height());
+  p->setPen(cg.base());
+  p->drawRect(0,0,width,height());
   if(!this->isSelected())
     p->fillRect(1,1,width-2,height()-2,cg.base());
   else
