@@ -15,8 +15,6 @@ METASOURCES = AUTO
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/kaudiocreator.pot
 
-AM_CPPFLAGS = -static -Wall
-
 kaudiocreator_LDADD = $(LIB_KIO) $(top_builddir)/libkcddb/libkcddb.la $(top_builddir)/kscd/libwm/libworkman.la
 
 KDE_ICON = AUTO
