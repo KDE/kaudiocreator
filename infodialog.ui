@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>423</width>
-            <height>363</height>
+            <height>365</height>
         </rect>
     </property>
     <property name="caption">
@@ -39,36 +39,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>trackLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Title:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Artist:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>track_comment</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0" rowspan="2" colspan="1">
+                <widget class="QLabel" row="2" column="0" rowspan="2" colspan="1">
                     <property name="name">
                         <cstring>textLabel2</cstring>
                     </property>
@@ -81,12 +52,41 @@
                 </widget>
                 <widget class="QLineEdit" row="3" column="1">
                     <property name="name">
-                        <cstring>track_artist</cstring>
+                        <cstring>track_comment</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1" rowspan="2" colspan="1">
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>trackLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Title:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="2" colspan="1">
                     <property name="name">
                         <cstring>track_title</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Artist:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>track_artist</cstring>
                     </property>
                 </widget>
             </grid>
@@ -292,9 +292,9 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>track_artist</tabstop>
     <tabstop>track_title</tabstop>
     <tabstop>track_comment</tabstop>
-    <tabstop>track_artist</tabstop>
     <tabstop>artist</tabstop>
     <tabstop>album</tabstop>
     <tabstop>year</tabstop>

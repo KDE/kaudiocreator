@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>381</width>
-            <height>427</height>
+            <width>339</width>
+            <height>435</height>
         </rect>
     </property>
     <property name="caption">
@@ -32,7 +32,10 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>File to encode:</string>
+                        <string>&amp;File to encode:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>file</cstring>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -56,56 +59,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>trackLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Title:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>track_title</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Comment:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>track_comment</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>track_artist</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Artist:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
                 <widget class="QSpinBox" row="3" column="1">
                     <property name="name">
                         <cstring>track</cstring>
@@ -123,6 +76,56 @@
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Comment:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="4" column="1">
+                    <property name="name">
+                        <cstring>track_comment</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>trackLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Title:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Artist:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>track_title</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>track_artist</cstring>
                     </property>
                 </widget>
             </grid>
@@ -248,6 +251,20 @@
                 </size>
             </property>
         </spacer>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout4</cstring>
@@ -306,13 +323,21 @@
         <receiver>EncodeFile</receiver>
         <slot>accept()</slot>
     </connection>
-    <connection>
-        <sender>pushButton6</sender>
-        <signal>clicked()</signal>
-        <receiver>EncodeFile</receiver>
-        <slot>encode()</slot>
-    </connection>
 </connections>
+<tabstops>
+    <tabstop>file</tabstop>
+    <tabstop>track_artist</tabstop>
+    <tabstop>track_title</tabstop>
+    <tabstop>track</tabstop>
+    <tabstop>track_comment</tabstop>
+    <tabstop>artist</tabstop>
+    <tabstop>album</tabstop>
+    <tabstop>year</tabstop>
+    <tabstop>genre</tabstop>
+    <tabstop>comment</tabstop>
+    <tabstop>pushButton6</tabstop>
+    <tabstop>pushButton5</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kurlrequester.h</includehint>
