@@ -18,6 +18,19 @@ class QPainter;
 class QColorGroup;
 class QListView;
 
+/**
+ * Helper class to allow for progress bars in list view items.
+ */
+class QueListViewItem : public QListViewItem {
+
+public:
+  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString=0);
+  virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
+	    int width,int align);
+  double percentDone;
+};
+
+
 class QueConfigImp : public QueConfig  {
 
 Q_OBJECT
@@ -33,29 +46,19 @@ public slots:
   void updateProgress(int id, int progress);
   void addJob(Job* job, QString name);
   void clearDoneJobs();
-
+  void loadSettings();
+  
 private slots:
   void removeSelectedJob();
   void removeAllJobs();
 
 private:
+  void removeJob(QueListViewItem *item);
   QString getStringFromNumber(int number);
   int highestNumber;
 
   int currentId;
-
-};
-
-/**
- * Helper class to allow for progress bars in list view items.
- */
-class QueListViewItem : public QListViewItem {
-
-public:
-  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString=0);
-  virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
-	    int width,int align);
-  double percentDone;
+  bool removeCompletedJobs;
 };
 
 #endif

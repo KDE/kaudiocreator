@@ -5,6 +5,8 @@
 #include <qlabel.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
@@ -21,6 +23,16 @@ QueConfigImp::QueConfigImp( QWidget* parent, const char* name):QueConfig(parent,
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
   connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
+  loadSettings();
+}
+
+/**
+ * Loads the settings
+ */
+void QueConfigImp::loadSettings(){
+  KConfig &config = *KGlobal::config();
+  config.setGroup("general");
+  removeCompletedJobs = config.readBoolEntry("removeCompletedJobs", false);
 }
 
 /***
@@ -56,7 +68,7 @@ QString QueConfigImp::getStringFromNumber(int number){
  */
 void QueConfigImp::addJob(Job*job, QString name ){
   job->id = ++currentId;
-  QueListViewItem * newItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
+  (void)new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
   queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
@@ -79,6 +91,8 @@ void QueConfigImp::updateProgress(int id, int progress){
     if(currentItem->percentDone != progress){
       currentItem->percentDone = progress;
       currentItem->repaint();
+      if(removeCompletedJobs && progress == 100)
+	removeJob(currentItem);      
     }
   }
   else{
@@ -87,22 +101,16 @@ void QueConfigImp::updateProgress(int id, int progress){
 }
 
 /**
- * Remove the currently selected Job
- */
-void QueConfigImp::removeSelectedJob(){
-  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-  while( currentItem != 0 ){
-    if(currentItem->isSelected()){
-      emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
-      QueListViewItem *t = currentItem;
-      currentItem = (QueListViewItem*)currentItem->nextSibling();
-      todoQue->takeItem(t);
-      delete(t);
-    }
-    else
-      currentItem = (QueListViewItem*)currentItem->nextSibling();
-  }
+ * Remove job listed in item
+ * @param item to remove.  Note that it WILL be deleted and set to NULL.
+ */ 
+void QueConfigImp::removeJob(QueListViewItem *item){
+  emit (removeJob(item->text(HEADER_JOB).toInt()));
+  todoQue->takeItem(item);
+  delete(item);
+  item = NULL;
 
+  // See if the Que needs to be updated...
   if(todoQue->childCount() == 0){
     queLabel->setText(i18n("No jobs are in the queue"));
     highestNumber = DEFAULT_HIGHEST_NUMBER;
@@ -113,20 +121,31 @@ void QueConfigImp::removeSelectedJob(){
 }
 
 /**
+ * Remove the currently selected Job
+ */
+void QueConfigImp::removeSelectedJob(){
+  QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
+  if( currentItem == NULL )
+    return;
+
+  if(currentItem->isSelected()){
+    QueListViewItem *t = currentItem;
+    currentItem = (QueListViewItem*)currentItem->nextSibling();
+    removeJob(t);
+  }
+  else
+    currentItem = (QueListViewItem*)currentItem->nextSibling();
+}
+
+/**
  * Remove all of the jobs in the list.
  */
 void QueConfigImp::removeAllJobs(){
-  queLabel->setText(i18n("No jobs are in the queue"));
-
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-  while( currentItem != 0 ){
-    emit (removeJob(currentItem->text(HEADER_JOB).toInt()));
-    todoQue->takeItem(currentItem);
-    delete(currentItem);
+  while( currentItem != NULL ){
+    removeJob(currentItem);
     currentItem = (QueListViewItem*)todoQue->firstChild();
   }
-  highestNumber = DEFAULT_HIGHEST_NUMBER;
-  currentId = 0;
 }
 
 /**
@@ -212,6 +231,4 @@ QueListViewItem::QueListViewItem(QListView *parent, QString id, QString p , QStr
 }
 
 #include "queconfigimp.moc"
-
-// queconfigimp.cpp
 

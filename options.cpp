@@ -3,6 +3,7 @@
 #include "cdconfig.h"
 #include "ripconfig.h"
 #include "encoderconfig.h"
+#include "general.h"
 
 #include <kautoconfig.h>
 #include <kdialogbase.h>
@@ -18,6 +19,9 @@
 #include <kconfig.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
+
+#include <kcmoduleloader.h>
+#include <kcmoduleinfo.h>
 
 #define ENCODER_EXE_STRING "encoderExe_"
 #define ENCODER_ARGS_STRING "encoderCommandLine_"
@@ -35,7 +39,11 @@ Options::Options(QObject* parent, const char* name) : QObject(parent, name), old
   connect(options, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
   connect(options, SIGNAL(defaultClicked()), this, SLOT(defaultClicked()));
   
-  QVBox *frame = options->addVBoxPage(i18n("CD Config"),i18n("CD Config"), SmallIcon("network", 32));
+  QVBox *frame = options->addVBoxPage(i18n("General"),i18n("General"), SmallIcon("package_settings", 32));
+  General *general = new General(frame, "general");
+  kautoconfig->addWidget(general, "general");
+
+  frame = options->addVBoxPage(i18n("CD Config"),i18n("CD Config"), SmallIcon("network", 32));
   cdConfig = new CdConfig(frame, "CdConfig");
   connect(cdConfig->configureAudioCDButton, SIGNAL(clicked()), this, SLOT(configureAudioCD()));
   kautoconfig->addWidget(cdConfig, "cdconfig");
@@ -48,6 +56,19 @@ Options::Options(QObject* parent, const char* name) : QObject(parent, name), old
   encoderConfig = new EncoderConfig(frame, "EncoderConfig");
   kautoconfig->addWidget(encoderConfig, "encoderconfig");
   kautoconfig->ignoreSubWidget((QWidget*)(encoderConfig->EncoderConfigGroupBox));
+  
+  // Because WE don't segfault on our users...
+  if(KService::serviceByDesktopPath("Settings/Sound/cddb.desktop") != 0){
+    frame = options->addVBoxPage(i18n("CDDB Config"),i18n("CDDB Config"), SmallIcon("cdaudio_unmount", 32));
+    KCModuleInfo info("Settings/Sound/cddb.desktop", "settings");
+    KCModule *m = KCModuleLoader::loadModule(info);
+    m->reparent(((QWidget*)frame), 0, QPoint());
+    m->load();
+    connect(options, SIGNAL(okClicked()), m, SLOT(save()));
+    connect(options, SIGNAL(applyClicked()), m, SLOT(save()));
+    connect(options, SIGNAL(defaultClicked()), m, SLOT(defaults()));
+  }
+
   connect(encoderConfig->playlistWizardButton, SIGNAL(clicked()), this, SLOT(playlistWizard()));
   connect(encoderConfig->encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
 

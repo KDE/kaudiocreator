@@ -109,6 +109,7 @@ void KAudioCreator::showOptions(){
   connect(optionsDialog, SIGNAL(readNewOptions()), cdConfig, SLOT(loadSettings()));
   connect(optionsDialog, SIGNAL(readNewOptions()), ripConfig, SLOT(loadSettings()));
   connect(optionsDialog, SIGNAL(readNewOptions()), encoderConfig, SLOT(loadSettings()));
+  connect(optionsDialog, SIGNAL(readNewOptions()), queConfig, SLOT(loadSettings()));
 }
 
 /**
