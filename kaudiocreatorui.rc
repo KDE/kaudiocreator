@@ -2,9 +2,7 @@
 <kpartgui name="kaudiocreator" version="1">
 <ActionProperties>
   <Action name="rip" icon="shredder"/>
-  <Action name="view_tracks" icon="cdaudio_unmount"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
-  <Action name="view_que" icon="run"/>
   <Action name="clear_done_jobs" icon="edittrash"/>
   <Action name="update_cd" icon="rotate_cw"/>
   <Action name="edit_cd" icon="edit"/>
@@ -20,10 +18,6 @@
     <Action name="clear_done_jobs"/>
     <Separator/>
     <Action name="quit"/>
-  </Menu>
-  <Menu name="view"><Text>&amp;View</Text>
-    <Action name="view_tracks"/>
-    <Action name="view_que"/>
   </Menu>
   <Menu name="settings"><Text>&amp;Settings</Text>
     <Action name="configuretoolbars"/>

@@ -33,8 +33,6 @@ protected:
   virtual bool queryClose();
 
 private slots:
-  void viewTracks();
-  void viewQue();
   void configuretoolbars();
   void newToolbarConfig();
   void quit();

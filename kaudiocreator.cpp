@@ -34,7 +34,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   options = new KDialogBase(KDialogBase::IconList, i18n("Options"), 0x00000004,KDialogBase::Ok,this, "Options Dialog");
 
-  QVBox * frame = janusWidget->addVBoxPage(i18n("CD Tracks"),i18n("CD Tracks"), SmallIcon("cdaudio_unmount", 32));
+  QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),QString::null, SmallIcon("cdaudio_unmount", 32));
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
 
@@ -47,7 +47,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   frame = options->addVBoxPage(i18n("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
   encoderConfig = new EncoderConfigImp(frame, "EncoderConfig");
 
-  frame = janusWidget->addVBoxPage(i18n("Jobs"),i18n("Jobs"), SmallIcon("run", 32));
+  frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
   queConfig = new QueConfigImp(frame, "QueConfig");
   quePage = janusWidget->pageIndex(frame);
 
@@ -69,9 +69,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   resize(500, 440);
 
-  (void)new KAction(i18n("View &Tracks"), 0, this, SLOT(viewTracks()), actionCollection(), "view_tracks" );
   (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showOptions()), actionCollection(), "configure_kaudiocreator" );
-  (void)new KAction(i18n("View &Jobs"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
   (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, queConfig, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
   (void)new KAction(i18n("&Refresh CD List"), 0, cdConfig, SLOT(timerDone()), actionCollection(), "update_cd" );
@@ -118,16 +116,8 @@ void KAudioCreator::newToolbarConfig(){
   applyMainWindowSettings(KGlobal::config(), "Main Window");
 }
 
-void KAudioCreator::viewTracks(){
-  janusWidget->showPage( trackPage );
-}
-
 void KAudioCreator::showOptions(){
   options->show();
-}
-
-void KAudioCreator::viewQue(){
-  janusWidget->showPage( quePage );
 }
 
 #include "kaudiocreator.moc"
