@@ -29,7 +29,6 @@ private slots:
   void addEncoderSlot();
   void removeEncoderSlot();
   void configureEncoderSlot();
-  void setCurrentEncoderSlot();
 
   void updateEncoder(QObject * obj);
   void updateEncoder(const char *dialogName);

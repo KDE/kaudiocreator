@@ -16,7 +16,6 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-  connect(setCurrentEncoder, SIGNAL(clicked()), this, SLOT(setCurrentEncoderSlot()));
 
   KConfig &config = *KGlobal::config();
   config.setGroup("Encoder");
@@ -62,7 +61,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
  */ 
 void EncoderConfigImp::loadEncoderList(){
   encoderNames.clear();
-  encoderList->clear();
+  encoderChoice->clear();
   
   KConfig &config = *KGlobal::config();
   config.setGroup("Encoder");
@@ -79,9 +78,9 @@ void EncoderConfigImp::loadEncoderList(){
       lastEncoder = i;
       config.setGroup(currentGroup);
       QString encoderName = config.readEntry("encoderName", i18n("Unknown Encoder"));
-      encoderList->insertItem(encoderName);
+      encoderChoice->insertItem(encoderName);
       encoderNames.insert(encoderName, currentGroup);
-      if(currentEncoderString == currentGroup)
+      if(currentEncoderString == encoderName)
 	foundCurrentEncoder = true;    
     }
   }
@@ -91,10 +90,8 @@ void EncoderConfigImp::loadEncoderList(){
   }
   
   // Make sure that the current encoder is valid.
-  if(foundCurrentEncoder){
-    config.setGroup(currentEncoderString);
-    currentEncoderName->setText(config.readEntry("encoderName"));
-  }
+  if(!foundCurrentEncoder && encoderChoice->count() > 0)
+    encoderChoice->setCurrentItem(0);
 }
 
 /**
@@ -132,27 +129,22 @@ void EncoderConfigImp::addEncoderSlot(){
  * Deleted from the config.
  */ 
 void EncoderConfigImp::removeEncoderSlot(){
-  if(!encoderList->selectedItem()){
+  if(!encoderChoice->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }	
-  if(encoderList->count() <= 1){
+  if(encoderChoice->count() <= 1){
     KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can't remove."));
     return;
   }
-  if(currentEncoderName->text() == encoderList->currentText()){
-    KMessageBox:: sorry(this, i18n("Encoder is currently set as current.\nYou must select a different encoder as current before this one can be removed."), i18n("Can't remove."));
-    return;
-  }
-
   if(KMessageBox::questionYesNo(this, i18n("Delete Encoder?"), i18n("Delete Encoder"))
       == KMessageBox::No )
     return;
   
-  QString groupName = encoderNames[encoderList->currentText()];
+  QString groupName = encoderNames[encoderChoice->currentText()];
   KConfig &config = *KGlobal::config();
   config.deleteGroup(groupName);
-  encoderList->removeItem(encoderList->currentItem());
+  encoderChoice->removeItem(encoderChoice->currentItem());
 }
 
 /**
@@ -163,11 +155,11 @@ void EncoderConfigImp::removeEncoderSlot(){
  * Bring up dialog
  */ 
 void EncoderConfigImp::configureEncoderSlot() {
-  if(!encoderList->selectedItem()){
+  if(!encoderChoice->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }
-  QString groupName = encoderNames[encoderList->currentText()];
+  QString groupName = encoderNames[encoderChoice->currentText()];
   KConfig &config = *KGlobal::config();
   if(!config.hasGroup(groupName))
     return;
@@ -181,18 +173,6 @@ void EncoderConfigImp::configureEncoderSlot() {
   connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
   dialog->show();
-}
-
-void EncoderConfigImp::setCurrentEncoderSlot(){
-  if(!encoderList->selectedItem()){
-    KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
-    return;
-  }
-  currentEncoderName->setText(encoderList->currentText());
-
-  KConfig &config = *KGlobal::config();
-  config.setGroup("Encoder");
-  config.writeEntry("currentEncoder", encoderNames[encoderList->currentText()]);
 }
 
 /**
@@ -235,13 +215,11 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   if(newName == encoderName)
     return;
   
-  QListBoxItem *item = encoderList->findItem(encoderName);
+  QListBoxItem *item = encoderChoice->findItem(encoderName);
   if(!item)
     return;
-  encoderList->changeItem(newName, encoderList->index(item));
+  encoderChoice->changeItem(newName, encoderChoice->index(item));
 
-  if(currentEncoderName->text() == encoderName)
-    currentEncoderName->setText(newName);
   encoderNames.insert(newName, groupName);
   encoderNames.erase(encoderName);
 }

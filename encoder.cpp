@@ -26,12 +26,13 @@ void Encoder::loadSettings(){
   replaceOutput = config.readEntry("replace");
   
   config.setGroup("Encoder");
-  QString currentEncoder = config.readEntry("currentEncoder");
-  if(!config.hasGroup(currentEncoder)){
+  uint currentEncoder = config.readNumEntry("encoderChoice", 0);
+  QString currentEncoderGroup = QString("Encoder_%1").arg(currentEncoder);
+  if(!config.hasGroup(currentEncoderGroup)){
     KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
   }
   else{
-    config.setGroup(currentEncoder);
+    config.setGroup(currentEncoderGroup);
     encoderCommandLine = config.readEntry("commandLine");
     encoderExtension = config.readEntry("extension");
     encoderPercentLength = config.readNumEntry("percentLength");

@@ -19,98 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget" row="3" column="0">
-                    <property name="name">
-                        <cstring>layout4</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>currentEncoderText</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Current encoder:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>currentEncoderName</cstring>
-                            </property>
-                            <property name="frameShape">
-                                <enum>Box</enum>
-                            </property>
-                            <property name="lineWidth">
-                                <number>1</number>
-                            </property>
-                            <property name="readOnly">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QPushButton" row="3" column="1">
-                    <property name="name">
-                        <cstring>setCurrentEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Set As Current</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>configureEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Configure...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>removeEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Remove</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>addEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Add...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
-                </widget>
-                <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
-                    <property name="name">
-                        <cstring>encoderList</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="3">
+        <widget class="Line" row="4" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>line1</cstring>
             </property>
@@ -124,7 +33,7 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="8" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>GroupBox2</cstring>
             </property>
@@ -194,7 +103,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
+        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>createPlaylistCheckBox</cstring>
             </property>
@@ -205,7 +114,7 @@
                 <bool>false</bool>
             </property>
         </widget>
-        <spacer row="6" column="0">
+        <spacer row="9" column="1">
             <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
@@ -222,7 +131,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QLabel" row="6" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>TextLabel1_2</cstring>
             </property>
@@ -230,7 +139,7 @@
                 <string>Number of wav files to encode at a time:</string>
             </property>
         </widget>
-        <widget class="QSpinBox" row="3" column="1">
+        <widget class="QSpinBox" row="6" column="2">
             <property name="name">
                 <cstring>numberOfCpus</cstring>
             </property>
@@ -238,7 +147,7 @@
                 <number>1</number>
             </property>
         </widget>
-        <spacer row="3" column="2">
+        <spacer row="6" column="3">
             <property name="name">
                 <cstring>Spacer4_2</cstring>
             </property>
@@ -255,7 +164,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>GroupBox3</cstring>
             </property>
@@ -298,6 +207,66 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QPushButton" row="2" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>configureEncoder</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Configure...</string>
+            </property>
+            <property name="accel">
+                <string>Alt+C</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>removeEncoder</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Remove</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="0" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>addEncoder</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Add...</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+        </widget>
+        <widget class="QListBox" row="0" column="0" rowspan="3" colspan="2">
+            <property name="name">
+                <cstring>encoderChoice</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>currentEncoderText</cstring>
+            </property>
+            <property name="text">
+                <string>Current encoder:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>currentEncoderName</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>Box</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -319,14 +288,19 @@
         <receiver>EncoderConfig</receiver>
         <slot>encoderWizard()</slot>
     </connection>
+    <connection>
+        <sender>encoderChoice</sender>
+        <signal>highlighted(const QString&amp;)</signal>
+        <receiver>currentEncoderName</receiver>
+        <slot>setText(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
-    <tabstop>encoderList</tabstop>
+    <tabstop>encoderChoice</tabstop>
     <tabstop>currentEncoderName</tabstop>
     <tabstop>addEncoder</tabstop>
     <tabstop>removeEncoder</tabstop>
     <tabstop>configureEncoder</tabstop>
-    <tabstop>setCurrentEncoder</tabstop>
     <tabstop>fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
     <tabstop>numberOfCpus</tabstop>
