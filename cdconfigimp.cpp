@@ -70,7 +70,7 @@ extern "C"
 
 // Many Linux systems do not define LINUX. It's something else that I
 // can't be bothered to look up just right now.
-#ifdef LINUX
+#if defined(LINUX) || defined(__linux__)
 extern "C"
 {
 /* This is in support for the Mega Hack, if cdparanoia ever is fixed, or we
@@ -254,8 +254,8 @@ CdConfigImp::CdConfigImp( QWidget* parent, const char* name):CdConfig(parent,nam
   databaseServer->setText(config.readEntry("databaseServer", "freedb.freedb.org"));
   databasePort->setValue(config.readNumEntry("databasePort", 8880));
   performCDDBauto->setChecked(config.readBoolEntry("performCDDBauto", false));
-  bool constantlyScan = config.readBoolEntry("constantlyScan", false); 
- 
+  bool constantlyScan = config.readBoolEntry("constantlyScan", false);
+
   //attemptToListAlbu/m();
   updating = false;
 
@@ -331,7 +331,7 @@ CdConfigImp::initRequest(const KURL & url)
 
   if (0 == drive)
   {
-    
+
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return 0;
   }
@@ -463,7 +463,7 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
   //BEN TODO
   //if (id == d->discid)
   //  return -1;
-  
+
   d->discid = id;
   d->tracks = cdda_tracks(drive);
   d->cd_title = i18n("Unknown Album");
@@ -524,7 +524,7 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
 
 /**
  * Attempt to list the files.
- */ 
+ */
 void CdConfigImp::attemptToListAlbum(){
   KURL url = "/";
   struct cdrom_drive *drive = pickDrive();
@@ -708,8 +708,8 @@ void CdConfigImp::getParameters() {
 
   int method = config->readNumEntry("encmethod",0);
 
-  if (method == 0) { 
-    
+  if (method == 0) {
+
     // Constant Bitrate Encoding
     lame_set_VBR(d->gf, vbr_off);
     lame_set_brate(d->gf,config->readNumEntry("cbrbitrate",160));
@@ -717,9 +717,9 @@ void CdConfigImp::getParameters() {
     lame_set_quality(d->gf, quality);
 
   } else {
-    
+
     // Variable Bitrate Encoding
-    
+
     if (config->readBoolEntry("set_vbr_avr",true)) {
 
       lame_set_VBR(d->gf,vbr_abr);
@@ -731,16 +731,16 @@ void CdConfigImp::getParameters() {
 
       if (lame_get_VBR(d->gf) == vbr_off) lame_set_VBR(d->gf, vbr_default);
 
-      if (config->readBoolEntry("set_vbr_min",true)) 
+      if (config->readBoolEntry("set_vbr_min",true))
 	lame_set_VBR_min_bitrate_kbps(d->gf, config->readNumEntry("vbr_min_bitrate",0));
       if (config->readBoolEntry("vbr_min_hard",true))
 	lame_set_VBR_hard_min(d->gf, 1);
-      if (config->readBoolEntry("set_vbr_max",true)) 
+      if (config->readBoolEntry("set_vbr_max",true))
 	lame_set_VBR_max_bitrate_kbps(d->gf, config->readNumEntry("vbr_max_bitrate",0));
 
       d->bitrate = 128;
       lame_set_VBR_q(d->gf, quality);
-      
+
     }
 
     lame_set_bWriteVbrTag(d->gf, config->readBoolEntry("write_xing_tag",true));
