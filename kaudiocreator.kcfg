@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
-  <kcfgfile name="kaudiocreatorrc"/>
   <include>kaudiocreator_workman.h</include>
+  <kcfgfile name="kaudiocreatorrc"/>
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
       <label>Perform automatic CDDB lookups.</label>
