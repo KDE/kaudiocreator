@@ -30,8 +30,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   ripper = new Ripper(frame, "Rip");
   encoder = new Encoder(frame, "Encoder");
 
-  frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
-  jobQue = new JobQueImp(frame, "Que");
+  QFrame *f = janusWidget->addPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
+  jobQue = new JobQueImp(f, "Que");
 
   connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
   connect(ripper, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));

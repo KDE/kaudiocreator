@@ -178,7 +178,6 @@ void Ripper::copyJobResult(KIO::Job *job){
  */
 void Ripper::eject(){
   int returnValue = system("eject");
-  qDebug("%i", returnValue);
   if(returnValue == 127){
     KMessageBox:: sorry(0, i18n("\"eject\" command not installed."), i18n("Can not eject"));
     return;

@@ -44,7 +44,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
 
     config.setGroup("Encoder_3");
     config.writeEntry("encoderName", i18n("FLAC"));
-    config.writeEntry("commandLine", "flac --best -o %o --tag=title=%artist --tag=album=%album --tag=title=%song --tag=tracknumber=%track -tag=genre=%genre %f");
+    config.writeEntry("commandLine", "flac --best -o %o --tag=artist=%artist --tag=album=%album --tag=title=%song --tag=tracknumber=%track -tag=genre=%genre %f");
     config.writeEntry("extension", "flac");
     config.writeEntry("percentLength", 2);
 

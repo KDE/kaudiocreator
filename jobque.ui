@@ -19,6 +19,42 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QPushButton" row="2" column="2">
+            <property name="name">
+                <cstring>removeAll</cstring>
+            </property>
+            <property name="text">
+                <string>Remove All Jobs</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="3">
+            <property name="name">
+                <cstring>removeSelected</cstring>
+            </property>
+            <property name="text">
+                <string>Remove Selected Jobs</string>
+            </property>
+        </widget>
+        <spacer row="2" column="0">
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QListView" row="1" column="0" rowspan="1" colspan="4">
             <column>
                 <property name="text">
@@ -63,47 +99,6 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QPushButton" row="2" column="1">
-            <property name="name">
-                <cstring>removeDoneJobs</cstring>
-            </property>
-            <property name="text">
-                <string>Remove Completed Jobs</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="2" column="2">
-            <property name="name">
-                <cstring>removeAll</cstring>
-            </property>
-            <property name="text">
-                <string>Remove All Jobs</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="2" column="3">
-            <property name="name">
-                <cstring>removeSelected</cstring>
-            </property>
-            <property name="text">
-                <string>Remove Selected Jobs</string>
-            </property>
-        </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>queLabel</cstring>
@@ -115,6 +110,14 @@
                 <set>AlignCenter</set>
             </property>
             <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>removeDoneJobs</cstring>
+            </property>
+            <property name="text">
+                <string>Remove Completed Jobs</string>
             </property>
         </widget>
     </grid>
