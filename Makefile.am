@@ -2,7 +2,7 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) $(all_includes)
 
 bin_PROGRAMS = kaudiocreator
 
-kaudiocreator_SOURCES = kmacroexpander.cpp cddb.cpp main.cpp kaudiocreator.cpp cdconfigimp.cpp  encoderconfigimp.cpp  job.cpp  queconfigimp.cpp  ripconfigimp.cpp  tracksconfigimp.cpp  cdconfig.ui  encoderconfig.ui  queconfig.ui  ripconfig.ui  tracksconfig.ui id3tagdialog.ui wizard.ui
+kaudiocreator_SOURCES = cddb.cpp main.cpp kaudiocreator.cpp cdconfigimp.cpp  encoderconfigimp.cpp  job.cpp  queconfigimp.cpp  ripconfigimp.cpp  tracksconfigimp.cpp  cdconfig.ui  encoderconfig.ui  queconfig.ui  ripconfig.ui  tracksconfig.ui id3tagdialog.ui wizard.ui
 
 EXTRA_DIST = kaudiocreator.h kaudiocreator.desktop cdconfigimp.h  encoderconfigimp.h  queconfigimp.h  ripconfigimp.h  tracksconfigimp.h cddb.h
 
@@ -13,7 +13,7 @@ METASOURCES = AUTO
 messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/kaudiocreator.pot
 
-AM_CPPFLAGS =  -static -Wall -DDATADIR=\"$(kde_datadir)/kaudiocreator\"
+AM_CPPFLAGS = -static -Wall
 
 kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS)
 
