@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>407</width>
-            <height>484</height>
+            <height>486</height>
         </rect>
     </property>
     <property name="caption">
@@ -113,7 +113,7 @@
                 <string>&amp;Number of wav files to encode at a time:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>numberOfCpus</cstring>
+                <cstring>kcfg_numberOfCpus</cstring>
             </property>
         </widget>
         <widget class="QSpinBox" row="6" column="1">

@@ -29,6 +29,8 @@
 #include <qstring.h>
 #include <qregexp.h>
 
+#include <klocaleh>
+
 void fileWizard::homePressed()
 {
     playlistFormat->insert("~");
@@ -82,5 +84,5 @@ void fileWizard::fileFormatTextChanged(const QString& text)
     string.replace(QRegExp("%extension"), "mp3");
     string.replace(QRegExp("%track"), "9");
     string.replace(QRegExp("~"), "/home/foo");
-    exampleLabel->setText("Example: " + string);
+    exampleLabel->setText(i18n("Example: %1").arg(string));
 }
