@@ -143,6 +143,8 @@ void KAudioCreator::showSettings(){
         connect(dialog, SIGNAL(okClicked()), m, SLOT(save()));
         connect(dialog, SIGNAL(applyClicked()), m, SLOT(save()));
         connect(dialog, SIGNAL(defaultClicked()), m, SLOT(defaults()));
+	// TODO someday...
+	//connect(dialog, SIGNAL(), dialog, SLOT(settingModified()));
       }
     }
   }
@@ -157,7 +159,7 @@ void KAudioCreator::showSettings(){
   connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
   connect(dialog, SIGNAL(settingsChanged()), jobQue, SLOT(loadSettings()));
   connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
-  dialog->show();
+  dialog->show(false);
 }
 
 #include "kaudiocreator.moc"

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CdConfig</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>482</width>
-            <height>142</height>
+            <height>148</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,12 +19,18 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>performCDDBauto</cstring>
             </property>
             <property name="text">
-                <string>Perform CDDB lookup automatically</string>
+                <string>&amp;Perform CDDB lookup automatically</string>
+            </property>
+            <property name="accel">
+                <string>Alt+P</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -32,7 +38,10 @@
                 <cstring>autoRip</cstring>
             </property>
             <property name="text">
-                <string>Automatically rip all songs upon a successful CDDB retrieval</string>
+                <string>&amp;Automatically rip all songs upon a successful CDDB retrieval</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
         <spacer>

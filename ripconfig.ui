@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>RipConfig</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,19 +9,28 @@
             <x>0</x>
             <y>0</y>
             <width>346</width>
-            <height>227</height>
+            <height>230</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>RipConfig</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>beepAfterRip</cstring>
             </property>
             <property name="text">
-                <string>Beep after each rip is done</string>
+                <string>&amp;Beep after each rip is done</string>
+            </property>
+            <property name="accel">
+                <string>Alt+B</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -46,7 +55,10 @@
                         <cstring>TextLabel14</cstring>
                     </property>
                     <property name="text">
-                        <string>Number of tracks to rip at a time:</string>
+                        <string>&amp;Number of tracks to rip at a time:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>maxWavFiles</cstring>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
@@ -67,7 +79,10 @@
                 <cstring>autoEjectAfterRip</cstring>
             </property>
             <property name="text">
-                <string>Auto-eject CD after last song is ripped</string>
+                <string>&amp;Auto-eject CD after last song is ripped</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -92,7 +107,10 @@
                         <cstring>TextLabel15</cstring>
                     </property>
                     <property name="text">
-                        <string>Auto-eject delay:</string>
+                        <string>Auto-&amp;eject delay:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>autoEjectDelay</cstring>
                     </property>
                 </widget>
                 <widget class="QSpinBox">

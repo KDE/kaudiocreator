@@ -38,7 +38,8 @@
  * @param parent - parent widget
  * @param name - widget name
  */
-JobQueImp::JobQueImp( QWidget* parent, const char* name):JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
+JobQueImp::JobQueImp( QWidget* parent, const char* name) : 
+      JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
   connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
@@ -55,7 +56,8 @@ void JobQueImp::loadSettings(){
 }
 
 /***
- * Return a buffer of "000" so that new, updated jobs strings will be able to sort via the columns.
+ * Return a buffer of "000" so that new, updated jobs strings will be able to
+ * sort via the columns.
  * Based upon a highest number that is kept. 
  * @param number the number to fill out.
  */ 
@@ -213,6 +215,17 @@ int JobQueImp::numberOfJobsNotFinished(){
  */
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	    int width,int align){
+  
+  /*
+
+  QColorGroup newCG = cg;
+  if(percentDone == 0)
+    newCG.setColor(QColorGroup::Text, startColor);
+  else if(percentDone < 100 && percentDone > 0)
+    newCG.setColor(QColorGroup::Text, middleColor);
+  else
+    newCG.setColor(QColorGroup::Text, endColor);
+  */
   
   if(column != HEADER_PROGRESS){
     QListViewItem::paintCell(p,cg,column,width,align);

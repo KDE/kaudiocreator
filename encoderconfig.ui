@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EncoderConfig</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,13 +8,19 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>357</width>
-            <height>447</height>
+            <width>407</width>
+            <height>489</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>EncoderConfig</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
             <property name="name">
@@ -116,7 +122,10 @@
                 <cstring>TextLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>Number of wav files to encode at a time:</string>
+                <string>&amp;Number of wav files to encode at a time:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>numberOfCpus</cstring>
             </property>
         </widget>
         <widget class="QSpinBox" row="6" column="1">
@@ -149,7 +158,10 @@
                 <cstring>createPlaylist</cstring>
             </property>
             <property name="text">
-                <string>Create an album playlist file</string>
+                <string>Create an album &amp;playlist file</string>
+            </property>
+            <property name="accel">
+                <string>Alt+P</string>
             </property>
             <property name="checked">
                 <bool>false</bool>
@@ -221,6 +233,9 @@
                     </property>
                     <property name="text">
                         <string>Use relative path</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
                     </property>
                 </widget>
             </vbox>
