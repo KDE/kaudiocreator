@@ -4,18 +4,26 @@ Comment=KAudioCreator
 
 [track ripped]
 Name=Track Ripped
+Name[ta]=தடம் பிரிக்கப்பட்டது
 Comment=Track finished ripping.
+Comment[ta]=தடம் பிரித்தலை முடித்தது
 
 [cd ripped]
 Name=CD Ripped
+Name[ta]=CD பிரிக்கப்பட்டது
 Comment=CD finished ripping.
+Comment[ta]=CD பிரித்தல் முடிந்தது
 
 [track encoded]
 Name=Track Encoded
+Name[ta]=தடம் மறையாக்கப் பட்டது
 Comment=Track finished encoding.
+Comment[ta]=தடம் மறையாக்கத்தை முடித்தது
 
 [cd encoded]
 Name=CD Encoded
+Name[ta]=CD மறையாக்கப் பட்டது
 Comment=CD finished encoding.
+Comment[ta]=CD மறையாக்கத்தை முடித்தது.
 default_presentation=17
 default_sound=KDE_ClockChime.wav
