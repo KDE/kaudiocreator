@@ -58,6 +58,7 @@ Options::Options(QObject* parent, const char* name) : QObject(parent, name), old
 
   frame = options->addVBoxPage(i18n("Encoder"),i18n("Encoder Configuration"), SmallIcon("filter", 32));
   encoderConfigImp = new EncoderConfigImp(frame, "EncoderConfig");
+  connect(encoderConfigImp, SIGNAL(encoderUpdated()), this, SIGNAL(readNewOptions()));
   kautoconfig->addWidget(encoderConfigImp, "Encoder");
   
   connect(encoderConfigImp->playlistWizardButton, SIGNAL(clicked()), this, SLOT(playlistWizard()));

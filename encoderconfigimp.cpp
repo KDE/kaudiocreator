@@ -26,7 +26,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   if( lastKnownEncoder == 0){
     config.setGroup("Encoder_0");
     config.writeEntry("encoderName", i18n("OggEnc"));
-    config.writeEntry("commandLine", "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
+    config.writeEntry("commandLine", "oggenc -o %o --artist %artist --album %album --title %song --tracknum %track --genre %genre %f");
     config.writeEntry("extension", "ogg");
     config.writeEntry("percentLength", 4);
 
@@ -40,6 +40,12 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     config.writeEntry("encoderName", i18n("Leave as a wav file"));
     config.writeEntry("commandLine", "mv %f %o");
     config.writeEntry("extension", "wav");
+    config.writeEntry("percentLength", 2);
+
+    config.setGroup("Encoder_3");
+    config.writeEntry("encoderName", i18n("FLAC"));
+    config.writeEntry("commandLine", "flac --best -o %o --tag=title=%artist --tag=album=%album --tag=title=%song --tag=tracknumber=%track -tag=genre=%genre %f");
+    config.writeEntry("extension", "flac");
     config.writeEntry("percentLength", 2);
 
     config.setGroup("Encoder");
@@ -172,6 +178,7 @@ void EncoderConfigImp::configureEncoderSlot() {
   KAutoConfigDialog *dialog = new KAutoConfigDialog(this, groupName.latin1(), KDialogBase::Swallow);
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), groupName, "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
+  connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
   dialog->show();
 }

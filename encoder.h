@@ -48,7 +48,6 @@ private:
   QString encoderCommandLine;
   QString encoderExtension;
   int encoderPercentLength;
-  bool saveWav;
   uint numberOfCpus;
   QString fileFormat;
   bool createPlaylist;

@@ -37,7 +37,6 @@ void Encoder::loadSettings(){
     encoderPercentLength = config.readNumEntry("percentLength");
   }
 	  
-  saveWav =  config.readBoolEntry("saveWav", false);
   numberOfCpus = config.readNumEntry("numberOfCpus", 1);
   fileFormat = config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
   createPlaylist = config.readBoolEntry("createPlaylist", false);
@@ -224,8 +223,7 @@ void Encoder::jobDone(KProcess *process){
     emit(updateProgress(job->id, -1));
   }
   else if( QFile::exists(job->newLocation)){
-    if(!saveWav)
-      QFile::remove(job->location);
+    QFile::remove(job->location);
     
     // TODO kill -9 lame or oggenc when processing and see what they return.
     if(process->normalExit() && process->exitStatus() != 0){

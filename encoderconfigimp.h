@@ -19,6 +19,9 @@ class EncoderConfigImp : public EncoderConfig {
 
 Q_OBJECT
 
+signals:
+  void encoderUpdated();
+	
 public:
   EncoderConfigImp( QWidget* parent = 0, const char* name = 0);
 

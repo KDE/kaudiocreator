@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>380</width>
-            <height>474</height>
+            <width>445</width>
+            <height>405</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,15 +19,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>saveWav</cstring>
-            </property>
-            <property name="text">
-                <string>Save wav file as well as encoded file</string>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="8" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>GroupBox3</cstring>
             </property>
@@ -70,7 +62,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="3">
+        <widget class="QCheckBox" row="9" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>createPlaylistCheckBox</cstring>
             </property>
@@ -81,7 +73,7 @@
                 <bool>false</bool>
             </property>
         </widget>
-        <widget class="QGroupBox" row="7" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="10" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>GroupBox2</cstring>
             </property>
@@ -151,7 +143,7 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer row="8" column="0">
+        <spacer row="11" column="0">
             <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
@@ -164,11 +156,11 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>40</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QSpinBox" row="3" column="1">
+        <widget class="QSpinBox" row="6" column="1">
             <property name="name">
                 <cstring>numberOfCpus</cstring>
             </property>
@@ -176,7 +168,29 @@
                 <number>1</number>
             </property>
         </widget>
-        <spacer row="3" column="2">
+        <widget class="QLabel" row="6" column="0">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Number of wav files to encode at a time:</string>
+            </property>
+        </widget>
+        <widget class="Line" row="4" column="0" rowspan="2" colspan="3">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <spacer row="5" column="2" rowspan="2" colspan="1">
             <property name="name">
                 <cstring>Spacer4_2</cstring>
             </property>
@@ -193,7 +207,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
                 <cstring>layout4</cstring>
             </property>
@@ -223,122 +237,56 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>80</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
             </hbox>
         </widget>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
             <property name="name">
-                <cstring>TextLabel1_2</cstring>
+                <cstring>encoderList</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>configureEncoder</cstring>
             </property>
             <property name="text">
-                <string>Number of wav files to encode at a time:</string>
+                <string>&amp;Configure...</string>
+            </property>
+            <property name="accel">
+                <string>Alt+C</string>
             </property>
         </widget>
-        <widget class="Line" row="2" column="0" rowspan="1" colspan="3">
+        <widget class="QPushButton" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>line1</cstring>
+                <cstring>removeEncoder</cstring>
             </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
+            <property name="text">
+                <string>&amp;Remove</string>
             </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
+            <property name="accel">
+                <string>Alt+R</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QPushButton" row="1" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>addEncoder</cstring>
             </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>addEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Add...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="3" column="1">
-                    <property name="name">
-                        <cstring>removeEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Remove</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>setCurrentEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Set As Current</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
-                </widget>
-                <widget class="QListBox" row="0" column="0" rowspan="5" colspan="1">
-                    <property name="name">
-                        <cstring>encoderList</cstring>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>configureEncoder</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Configure...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
-                </widget>
-                <spacer row="4" column="1">
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>16</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
+            <property name="text">
+                <string>&amp;Add...</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>setCurrentEncoder</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Set As Current</string>
+            </property>
+            <property name="accel">
+                <string>Alt+S</string>
+            </property>
         </widget>
     </grid>
 </widget>
@@ -352,12 +300,12 @@
 </connections>
 <tabstops>
     <tabstop>encoderList</tabstop>
-    <tabstop>setCurrentEncoder</tabstop>
     <tabstop>configureEncoder</tabstop>
     <tabstop>addEncoder</tabstop>
     <tabstop>removeEncoder</tabstop>
+    <tabstop>setCurrentEncoder</tabstop>
+    <tabstop>currentEncoderName</tabstop>
     <tabstop>numberOfCpus</tabstop>
-    <tabstop>saveWav</tabstop>
     <tabstop>fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
     <tabstop>createPlaylistCheckBox</tabstop>
