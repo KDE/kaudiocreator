@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) $(LAME_INCS)
+INCLUDES = $(all_includes) $(LAME_INCS) $(CDPARANOIA_INCS)
 
 bin_PROGRAMS = kaudiocreator
 
@@ -15,7 +15,7 @@ messages: rc.cpp
 
 AM_CPPFLAGS =  -static -Wall -DDATADIR=\"$(kde_datadir)/kaudiocreator\"
 
-kaudiocreator_LDADD = $(LIB_KIO) -lcdda_paranoia -lcdda_interface $(LAME_LIBS)
+kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS)
 
 KDE_ICON = AUTO
 
