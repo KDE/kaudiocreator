@@ -65,7 +65,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
 	connect(cddb, SIGNAL(finished(CDDB::Result)),
-	                          this, SLOT(cddbDone(CDDB::Result)));
+	                  this, SLOT(cddbDone(CDDB::Result)));
 
 	trackListing->setSorting(-1, false);
 	// DON't i18n this! It is to catch stupid people who don't bother
@@ -249,7 +249,7 @@ TracksImp::~TracksImp() {
 
 /**
  * Load the class settings. 
- */ 
+ */
 void TracksImp::loadSettings() {
 	QStringList list;
 
@@ -282,7 +282,7 @@ bool TracksImp::hasCD(){
 
 /**
  * Check for changes in the cd.
- */ 
+ */
 void TracksImp::timerDone() {
 	int status = wm_cd_init( WM_CDIN,
 			(char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
@@ -320,7 +320,7 @@ void TracksImp::timerDone() {
 
 	// A new album
 	struct cdtext_info *info = wm_cd_get_cdtext();
-  QString trackName;
+	QString trackName;
 	QString artistName;
 	if( info != NULL && info->valid == 1 ){
 		artistName = (char*)(info->blocks[0]->name[0]);
@@ -349,10 +349,10 @@ void TracksImp::timerDone() {
 }
 
 /**
- * The device text has changed.  If valid different file from device
+ * The device text has changed. If valid different file from device
  * then call timerDone() to re-initialize the cd library and check its status.
  * @param file - the new text to check.
- */ 
+ */
 void TracksImp::changeDevice(const QString &file ) {
 	if( file == device ) {
 		//qDebug("Device names match, returning");
@@ -364,7 +364,7 @@ void TracksImp::changeDevice(const QString &file ) {
 		//qDebug("Device file !exist or isDir or !file");
 		return;
 	}
- 
+
 	device = file;
 
 	KApplication::setOverrideCursor(Qt::waitCursor);
@@ -448,7 +448,7 @@ void TracksImp::cddbDone(CDDB::Result result ) {
 			}
 			c++;
 		}
- 
+
 		bool ok(false); 
 		QString res = KInputDialog::getItem(
 						i18n("Select CDDB entry"),
@@ -537,9 +537,12 @@ void TracksImp::editInformation( ) {
 	bool okClicked = dialog->exec();
 	if( okClicked ) {
 		QListViewItem *ci = trackListing->currentItem();
-		ci->setText(HEADER_TRACK_NAME, dialog->track_title->text());
-		ci->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
-		ci->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
+		// Just to be safe
+		if(ci != NULL ){
+			ci->setText(HEADER_TRACK_NAME, dialog->track_title->text());
+			ci->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
+			ci->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
+		}
 		if( group != dialog->artist->text() ) {
 			int r = KMessageBox::questionYesNo(this, i18n("You have changed the "\
 			"album artist. Would you like all of the track artists that had the "\
@@ -548,7 +551,7 @@ void TracksImp::editInformation( ) {
 
 			if( r == KMessageBox::Yes ) {
 				QListViewItem * currentItem = trackListing->firstChild();
-				while( currentItem != 0 ) {
+				while( currentItem != NULL ) {
 					if( group == currentItem->text(HEADER_TRACK_ARTIST))
 						currentItem->setText(HEADER_TRACK_ARTIST, dialog->artist->text());
 					currentItem = currentItem->nextSibling();
@@ -613,7 +616,7 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
 
 	info.trackInfoList.clear();
 	QListViewItem * currentItem = trackListing->firstChild();
-	while( currentItem != 0 )
+	while( currentItem != NULL )
 	{
 		KCDDB::TrackInfo t;
 		t.title = currentItem->text(HEADER_TRACK_NAME);
@@ -630,7 +633,7 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
  * If any album information is not set, notify the user first.
  */
 void TracksImp::startSession() {
-  startSession(-1);
+	startSession(-1);
 }
 void TracksImp::startSession( int encoder ) {
 	if( trackListing->childCount() == 0 ) {
@@ -657,7 +660,7 @@ void TracksImp::startSession( int encoder ) {
 	QListViewItem * currentItem = trackListing->firstChild();
 	Job *lastJob = NULL;
 	int counter = 0;
-	while( currentItem != 0 ) {
+	while( currentItem != NULL ) {
 		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
 			Job *newJob = new Job();
 			newJob->encoder = encoder;
@@ -715,7 +718,7 @@ void TracksImp::selectTrack(QListViewItem *currentItem ) {
  */
 void TracksImp::selectAllTracks() {
 	QListViewItem *currentItem = trackListing->firstChild();
-	while( currentItem != 0 ) {
+	while( currentItem != NULL ) {
 		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
 		currentItem = currentItem->nextSibling();
 	}
@@ -727,7 +730,7 @@ void TracksImp::selectAllTracks() {
 void TracksImp::deselectAllTracks() {
 	QListViewItem *currentItem = trackListing->firstChild();
 	QPixmap empty;
-	while( currentItem != 0 ) {
+	while( currentItem != NULL ) {
 		currentItem->setPixmap(HEADER_RIP, empty);
 		currentItem = currentItem->nextSibling();
 	}
@@ -748,7 +751,6 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
 	revision = newRevision;
 	category = newCategory;
 	comment = newComment;
-
 
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
@@ -806,7 +808,7 @@ void TracksImp::keyPressEvent(QKeyEvent *event) {
 }
 
 /**
- * Edit a differnt track
+ * Edit a different track
  */
 void TracksImp::editOtherTrack(bool nextOneUp ) {
 	QListViewItem* currentItem = trackListing->currentItem();
@@ -853,7 +855,15 @@ void TracksImp::eject() {
  * @param deviceToEject the device to eject.
  */
 void TracksImp::ejectDevice(const QString &deviceToEject) {
- KProcess *proc = new KProcess();
+	/*
+	// not sure if this will fly...
+	// And either way the rest has to be here
+	if( deviceToEject == device ) {
+		wm_cd_eject();
+		return;
+	}
+	 */
+	KProcess *proc = new KProcess();
 #ifdef __FreeBSD__
 	*proc << "cdcontrol" << "-f" << deviceToEject << "eject";
 #else

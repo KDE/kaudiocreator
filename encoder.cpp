@@ -211,9 +211,9 @@ void Encoder::tendToNewJobs() {
  
 	*proc << QFile::encodeName(command);
 	connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-	      this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
+		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
 	connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
-	      this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
+		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
 	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(jobDone(KProcess *)));
 	jobs.insert(proc, job);
 	threads.append(proc);
