@@ -245,6 +245,7 @@ TracksImp::~TracksImp() {
 
 	Prefs::setDevice(list);
 	Prefs::writeConfig();
+	wm_cd_destroy();
 }
 
 /**
@@ -284,12 +285,10 @@ bool TracksImp::hasCD(){
  * Check for changes in the cd.
  */
 void TracksImp::timerDone() {
-	int status = wm_cd_init( WM_CDIN,
-			(char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
-	if( status == dstatus ) {
-		wm_cd_destroy();
+  int status = wm_cd_status();
+	if( status == dstatus )
 		return;
-	}
+	
 	kdDebug(60002) << "Drive initialization return status: " << status << endl;
 	dstatus = status;
 
@@ -298,7 +297,6 @@ void TracksImp::timerDone() {
 		emit(hasCD(false));
 		newAlbum();
 		CDid = 0;
-		wm_cd_destroy();
 		return;
 	}
 
@@ -308,13 +306,11 @@ void TracksImp::timerDone() {
 										"Please make sure you have access permissions to:\n%1")
 							 .arg(device);
 		KMessageBox::error(this, errstring, i18n("Error"));
-		wm_cd_destroy();
 		return;
 	}
 
 	unsigned long currentDistID = cddb_discid();
 	if( currentDistID == CDid ) {
-		wm_cd_destroy();
 		return;
 	}
 
@@ -345,7 +341,7 @@ void TracksImp::timerDone() {
 	if( Prefs::performCDDBauto())
 		cddbCD();
 
-	wm_cd_destroy();
+	//wm_cd_destroy();
 }
 
 /**
@@ -368,6 +364,7 @@ void TracksImp::changeDevice(const QString &file ) {
 	device = file;
 
 	KApplication::setOverrideCursor(Qt::waitCursor);
+	wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
 	timerDone();
 	KApplication::restoreOverrideCursor();
 }
