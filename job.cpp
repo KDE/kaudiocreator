@@ -17,7 +17,7 @@
  **/
 
 #include "job.h"
-#include "kmacroexpander.h"
+#include <kmacroexpander.h>
 
 // Clean up the string so that it doesn't wander off to unexpected directories
 static QString sanitize(const QString &s)
@@ -49,7 +49,7 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
       map.insert("track", QString::number(track) );
 
   if (quote)
-      KAudioCreatorNS::KHandDelimitedMacroMapExpander::expandMacrosShellQuote(str, map);
+      str = KMacroExpander::expandMacrosShellQuote(str, map);
   else
-      KAudioCreatorNS::KHandDelimitedMacroMapExpander::expandMacros(str, map);
+      str = KMacroExpander::expandMacros(str, map);
 }
