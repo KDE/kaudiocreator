@@ -31,21 +31,25 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false){};
+  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),comment(""), track(-1),year(-1),song(""), song_comment(""), song_artist(""), lastSongInAlbum(false){};
 
   void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
-  // The device to obtain the file such as /dev/cdrom/ (only used when ripping)
+  // The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
   QString device;
-
   int id; 
+
   QString genre;		
   QString group;
   QString album;
-  QString song;
+  QString comment;
   int track;
   int year;
-
+  
+  QString song;
+  QString song_comment;
+  QString song_artist;
+  
   // Currently location of file X
   QString location;
 

@@ -71,7 +71,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
 
   connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
-  connect(ripper, SIGNAL(eject()), tracks, SLOT(eject()));
+  connect(ripper, SIGNAL(eject(const QString &)), tracks, SLOT(ejectDevice(const QString &)));
 
 
   connect(ripper, SIGNAL(encodeWav(Job *)), encoder, SLOT(encodeWav(Job *)));

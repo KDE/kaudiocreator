@@ -30,10 +30,12 @@
 #include <kurl.h>
 #include <qregexp.h>
 
-#define HEADER_TRACK 1
-#define HEADER_NAME 3
-#define HEADER_LENGTH 2
 #define HEADER_RIP 0
+#define HEADER_TRACK 1
+#define HEADER_LENGTH 2
+#define HEADER_TRACK_NAME 3
+#define HEADER_TRACK_ARTIST 4
+#define HEADER_TRACK_COMMENT 5
 
 #include "kaudiocreator_workman.h"
 
@@ -211,7 +213,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
   loadSettings();
   QTimer *timer = new QTimer( this );
   connect( timer, SIGNAL(timeout()), this, SLOT(timerDone()) );
-  timer->start( 1500, false ); // 1 seconds forever timer
+  timer->start( 1500, false ); // 1.5 seconds forever timer
 }
 
 /**
@@ -384,12 +386,15 @@ void TracksImp::editInformation(){
   }
 
   // Create dialog.
-  dialog = new Id3TagDialog(this, "Album info editor dialog", true);
+  dialog = new AlbumEditor(this, "Album info editor dialog", true);
   dialog->artist->setText(group);
   dialog->album->setText(album);
   dialog->year->setValue(year);
+  dialog->comment->setText(comment);
   dialog->trackLabel->setText(i18n("Track %1").arg(currentItem->text(HEADER_TRACK)));
-  dialog->title->setText(currentItem->text(HEADER_NAME));
+  dialog->track_title->setText(currentItem->text(HEADER_TRACK_NAME));
+  dialog->track_artist->setText(currentItem->text(HEADER_TRACK_ARTIST));
+  dialog->track_comment->setText(currentItem->text(HEADER_TRACK_COMMENT));
   dialog->genre->insertStringList(genres.keys());
   int totalGenres = dialog->genre->count();
   if(genre.isEmpty())
@@ -403,8 +408,8 @@ void TracksImp::editInformation(){
   }
 
   // set focus to track title
-  dialog->title->setFocus();
-  dialog->title->selectAll();
+  dialog->track_title->setFocus();
+  dialog->track_title->selectAll();
 
   connect(dialog->buttonPrevious, SIGNAL(clicked()),
     this, SLOT(editPreviousTrack()));
@@ -414,10 +419,25 @@ void TracksImp::editInformation(){
   // Show dialog->and save results.
   bool okClicked = dialog->exec();
   if(okClicked){
-    group = dialog->artist->text();
+    trackListing->currentItem()->setText(HEADER_TRACK_NAME, dialog->track_title->text());
+    trackListing->currentItem()->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
+    trackListing->currentItem()->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
+    
+    if( group != dialog->artist->text()){
+      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist.  Would you like me to change all of the song artists that had the old name to the new name?"), i18n("Album Artist Changed"));
+      if( r == KMessageBox::Yes ){
+        QListViewItem * currentItem = trackListing->firstChild();
+        while( currentItem != 0 ){
+          if(group == currentItem->text(HEADER_TRACK_ARTIST))
+	    currentItem->setText(HEADER_TRACK_ARTIST, dialog->artist->text());
+          currentItem = currentItem->nextSibling();
+        }
+      }
+      group = dialog->artist->text();
+    }
     album = dialog->album->text();
     year = dialog->year->value();
-    trackListing->currentItem()->setText(HEADER_NAME, dialog->title->text());
+    comment = dialog->comment->text();
     genre = dialog->genre->currentText();
 
     QString newTitle = QString("%1 - %2").arg(group).arg(album);
@@ -480,9 +500,13 @@ void TracksImp::startSession(){
       newJob->album = album;
       newJob->genre = genres[genre];
       newJob->group = group;
-      newJob->song = currentItem->text(HEADER_NAME);
-      newJob->track = currentItem->text(HEADER_TRACK).toInt();
+      newJob->comment = comment;
       newJob->year = year;
+      newJob->track = currentItem->text(HEADER_TRACK).toInt();
+      
+      newJob->song = currentItem->text(HEADER_TRACK_NAME);
+      newJob->song_artist = currentItem->text(HEADER_TRACK_ARTIST);
+      newJob->song_comment = currentItem->text(HEADER_TRACK_COMMENT);
       lastJob = newJob;
       emit( ripTrack(newJob) ); 
     counter++;
@@ -569,15 +593,14 @@ void TracksImp::newSong(int track, const QString &newsong, int length){
   song = KURL::decode_string(song);
   song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
-  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song);
-  newItem->setRenameEnabled(HEADER_NAME, TRUE);
+  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song, group);
+  newItem->setRenameEnabled(HEADER_TRACK_NAME, TRUE);
   trackListing->setCurrentItem(trackListing->firstChild());
 
   selectAllTracksButton->setEnabled(true);
   deselectAllTracksButton->setEnabled(true);
   emit(hasTracks(true));
 }
-
 
 /**
  * If the user presses the F2 key, trigger renaming of the title.
@@ -586,60 +609,64 @@ void TracksImp::newSong(int track, const QString &newsong, int length){
 void TracksImp::keyPressEvent(QKeyEvent *event){
   if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
     event->accept();
-    trackListing->selectedItem()->startRename(HEADER_NAME);
+    trackListing->selectedItem()->startRename(HEADER_TRACK_NAME);
   }
   else
     Tracks::keyPressEvent(event);
 }
 
 /**
- * 
+ * Edit a differnt track
  */
-void TracksImp::editNextTrack() {
+void TracksImp::editOtherTrack(bool nextOneUp){
   QListViewItem* currentItem = trackListing->currentItem();
   if(!currentItem)
     return;
-  currentItem->setText(HEADER_NAME, dialog->title->text());
-  QListViewItem* newCurrentItem = currentItem->itemBelow();
+  currentItem->setText(HEADER_TRACK_NAME, dialog->track_title->text());
+  currentItem->setText(HEADER_TRACK_ARTIST, dialog->track_artist->text());
+  currentItem->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
+  QListViewItem* newCurrentItem;
+  if(nextOneUp)
+    newCurrentItem = currentItem->itemAbove();
+  else
+    newCurrentItem = currentItem->itemBelow();
+  
   if (newCurrentItem)
   {
     trackListing->setCurrentItem(newCurrentItem);
-    dialog->title->setText(newCurrentItem->text(HEADER_NAME));
+    dialog->track_title->setText(newCurrentItem->text(HEADER_TRACK_NAME));
+    dialog->track_artist->setText(newCurrentItem->text(HEADER_TRACK_ARTIST));
+    dialog->track_comment->setText(newCurrentItem->text(HEADER_TRACK_COMMENT));
     dialog->trackLabel->setText(i18n("Track %1").arg(newCurrentItem->text(HEADER_TRACK)));
   }
-  dialog->title->setFocus();
-  dialog->title->selectAll();
+  dialog->track_title->setFocus();
+  dialog->track_title->selectAll();
 }
-
-/**
- *
- */ 
+void TracksImp::editNextTrack() {
+  editOtherTrack(false);
+}
 void TracksImp::editPreviousTrack() {
-  QListViewItem* currentItem = trackListing->currentItem();
-  if(!currentItem)
-    return;
-  currentItem->setText(HEADER_NAME, dialog->title->text());
-  QListViewItem* newCurrentItem = currentItem->itemAbove();
-  if (newCurrentItem)
-  {
-    trackListing->setCurrentItem(newCurrentItem);
-    dialog->title->setText(newCurrentItem->text(HEADER_NAME));
-    dialog->trackLabel->setText(i18n("Track %1").arg(newCurrentItem->text(HEADER_TRACK)));
-  }
-  dialog->title->setFocus();
-  dialog->title->selectAll();
+  editOtherTrack(true);
 }
 
 /**
  * Eject the current cd device
  */
 void TracksImp::eject(){
-  KProcess *proc = new KProcess();
-  *proc << "eject" << device;
+  ejectDevice(device);
+}
+
+/**
+ * Eject a device
+ * @param deviceToEject the device to eject.
+ */
+void TracksImp::ejectDevice(const QString &deviceToEject){
+ KProcess *proc = new KProcess();
+  *proc << "eject" << deviceToEject;
   connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
   proc->start(KProcess::NotifyOnExit,  KShellProcess::NoCommunication);
 }
-
+  
 /**
  * When it is done ejecting, report any errors.
  * @param proc pointer to the process that ended.

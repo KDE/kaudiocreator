@@ -36,7 +36,6 @@ void fileWizard::homePressed()
     playlistFormat->insert("~");
 }
 
-
 void fileWizard::albumPressed()
 {
     playlistFormat->insert("%album");
@@ -72,17 +71,35 @@ void fileWizard::yearPressed()
     playlistFormat->insert("%year");
 }
 
+void fileWizard::songCommentPressed()
+{
+    playlistFormat->insert("%song_comment");
+}
+
+void fileWizard::songArtistPressed()
+{
+    playlistFormat->insert("%song_artist");
+}
+
+void fileWizard::commentPressed()
+{
+    playlistFormat->insert("%comment");
+}
 
 void fileWizard::fileFormatTextChanged(const QString& text)
 {
    QString string = text;
     string.replace(QRegExp("%album"), "Why Rain");
+    string.replace(QRegExp("%comment"), "This Album Rocks!");
     string.replace(QRegExp("%genre"), "Rock");
     string.replace(QRegExp("%artist"), "J Rocker");
     string.replace(QRegExp("%year"), "2002");
+    string.replace(QRegExp("%song_comment"), "This Song Rocks!");
+    string.replace(QRegExp("%song_artist"), "John Rocker");
     string.replace(QRegExp("%song"), "Time");
     string.replace(QRegExp("%extension"), "mp3");
     string.replace(QRegExp("%track"), "09");
     string.replace(QRegExp("~"), "/home/foo");
     exampleLabel->setText(i18n("Example: %1").arg(string));
 }
+

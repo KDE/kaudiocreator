@@ -41,10 +41,14 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
   map.insert("album", sanitize(album));
   map.insert("genre", sanitize(genre));
   map.insert("artist", sanitize(group));
+  map.insert("comment", sanitize(comment));
   map.insert("year", QString::number(year));
-  map.insert("song", sanitize(song));
   map.insert("track", QString().sprintf("%02d", track));
 
+  map.insert("song_artist", sanitize(song_artist));
+  map.insert("song_comment", sanitize(song_comment));
+  map.insert("song", sanitize(song));
+  
   if (quote)
       str = KMacroExpander::expandMacrosShellQuote(str, map);
   else

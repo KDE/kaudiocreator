@@ -213,7 +213,7 @@ void Ripper::copyJobResult(KIO::Job *job){
 
   if(newJob->lastSongInAlbum){
     if(Prefs::autoEjectAfterRip()){
-      QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject()));
+      QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject(newJob->device)));
     }
   }
   tendToNewJobs();

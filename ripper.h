@@ -36,7 +36,7 @@ signals:
   void addJob(Job *job, const QString &name);
   void updateProgress(int id, int progress);
   void encodeWav(Job *job);
-  void eject();
+  void eject(const QString &device);
   void jobsChanged();
 
 public:

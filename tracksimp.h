@@ -26,7 +26,7 @@
 
 class QListViewItem;
 class Job;
-class Id3TagDialog;
+class AlbumEditor;
 class KProcess;
 
 /**
@@ -52,6 +52,7 @@ public slots:
   void startSession();
   void editInformation();
   void performCDDB();
+  void ejectDevice(const QString &deviceToEject);
   void eject();
   void selectAllTracks();
   void deselectAllTracks();
@@ -67,14 +68,16 @@ private slots:
   void changeDevice(const QString &file);
 
 private:
+
   bool cddbCD();
   void newAlbum(const QString &group = i18n("Unknown Artist"),
 		const QString &album = i18n("Unknown Album"),
 		uint year = 0, const QString &genre = "");
   void newSong(int track, const QString &song, int length); 
   void ripWholeAlbum();
-   
-  Id3TagDialog *dialog;
+  void editOtherTrack(bool nextOneUp);
+  
+  AlbumEditor *dialog;
   QMap<QString, QString> genres;
   unsigned long CDid;
   int dstatus;
@@ -83,6 +86,7 @@ private:
   QString album;
   QString group;
   QString genre;
+  QString comment;
   int year;
   
   // Settings
