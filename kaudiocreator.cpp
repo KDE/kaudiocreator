@@ -110,7 +110,7 @@ void KAudioCreator::showSettings(){
 
   // Because WE don't segfault on our users...
   KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
-  if (libkcddb->isValid())
+  if (libkcddb && libkcddb->isValid())
   {
     KCModuleInfo info(libkcddb->desktopEntryPath(), "settings");
     if (info.service()->isValid())
@@ -126,7 +126,7 @@ void KAudioCreator::showSettings(){
       }
     }
   }
-
+  
   dialog->addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "Ripper", "shredder", i18n("Ripper Configuration") );
   EncoderConfigImp *encoderConfigImp = new EncoderConfigImp(0, "Encoder");
   dialog->addPage(encoderConfigImp, i18n("Encoder"), "Encoder", "filter", i18n("Encoder Configuration") );
