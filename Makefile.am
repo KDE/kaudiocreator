@@ -10,8 +10,8 @@ kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 METASOURCES = AUTO
 
-messages:
-	$(XGETTEXT) $(kaudiocreator_SOURCES) -o $(podir)/kaudiocreator.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp $(kaudiocreator_SOURCES) -o $(podir)/kaudiocreator.pot
 
 AM_CPPFLAGS =  -static -Wall -DDATADIR=\"$(kde_datadir)/kaudiocreator\"
 
