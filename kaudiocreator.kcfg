@@ -9,7 +9,7 @@
       <default>false</default>
     </entry>
     <entry name="autoRip" type="Bool">
-      <label>Automatically rip all songs upon a succesful CDDB retrieval</label>
+      <label>Automatically rip all songs upon a successful CDDB retrieval</label>
       <default>false</default>
     </entry>
     <entry name="device" type="String">
