@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
 
   // about data
   KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "0.1",
-    I18N_NOOP("Cd ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2002, Benjamin Meyer",
+    I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2002, Benjamin Meyer",
     0, "http://www.csh.rit.edu/~benjamin/");
     aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben@meyerhome.net");
 
