@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>575</width>
-            <height>469</height>
+            <width>623</width>
+            <height>325</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -36,6 +36,14 @@
         <widget class="QLabel">
             <property name="name">
                 <cstring>TextLabel8</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
                 <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the song should be used within that text.  There are eight special words starting with a % that will be replaced with the corresponding song's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
