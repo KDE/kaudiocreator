@@ -27,8 +27,8 @@
 int main(int argc, char *argv[]){
   KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.12",
     I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2004, Benjamin Meyer",
-    0, "http://www.csh.rit.edu/~benjamin/");
-    aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.csh.rit.edu/~benjamin/");
+    0, "http://www.icefox.net/");
+    aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
 
   // command line
   KCmdLineArgs::init(argc, argv, &aboutData);
