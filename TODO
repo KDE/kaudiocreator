@@ -14,7 +14,11 @@ Make it possible to stop and start encoding jobs:
 
    <lypanov> well if its mid process
    <lypanov> you could have a warning sying "please wait until following jobs are complete..."
-   
+
+BUG: a cd with several tracks named the same
+     changed both the encoder location and the rip location, and it didn't help?
+     yet a possible problem. resarch
+
 Possiblity to use "nice" when calling encode jobs.
 
 Remove the magical "Rip" list header action which (de)selects all jobs.
