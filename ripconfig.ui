@@ -144,7 +144,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Auto-eject cd after last song is ripped</string>
+                <string>Auto-eject CD after last song is ripped</string>
             </property>
             <property stdset="1">
                 <name>checked</name>

@@ -135,7 +135,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Automaticly rip every song on new CD</string>
+                <string>Automatically rip every song on to a new CD</string>
             </property>
         </widget>
         <spacer>
