@@ -34,6 +34,11 @@ class Job;
 class AlbumEditor;
 class KProcess;
 
+namespace KCDDB
+{
+  class CDInfo;
+} ;
+
 /**
  * This class handles the display of the tracks. It also starts off the job que.
  */
@@ -78,10 +83,14 @@ private:
   void cddbCD();
   void newAlbum(const QString &group = i18n("Unknown Artist"),
 		const QString &album = i18n("Unknown Album"),
-		uint year = 0, const QString &genre = "");
-  void newSong(int track, const QString &song, int length); 
+		uint year = 0, const QString &genre = "",
+		uint revision = 0, const QString &category = "",
+		const QString& comment = "");
+  void newSong(int track, const QString &song, int length, const QString& comment); 
   void ripWholeAlbum();
+
   void editOtherTrack(bool nextOneUp);
+  void setCdInfo(KCDDB::CDInfo &info);
   
   AlbumEditor *dialog;
   KCDDB::Client* cddb;
@@ -95,6 +104,10 @@ private:
   QString genre;
   QString comment;
   int year;
+  // CDDB data, which we keep loaded so it doesn't
+  // get lost when saving new cddb-information
+  int revision;
+  QString category;
   
   // Settings
   QString device;

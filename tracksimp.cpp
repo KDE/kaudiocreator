@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <qregexp.h>
+#include <kinputdialog.h>
 
 #define HEADER_RIP 0
 #define HEADER_TRACK 1
@@ -285,9 +286,9 @@ void TracksImp::timerDone(){
   int numberOfTracks = wm_cd_getcountoftracks();
   for(int i=numberOfTracks; i>0; i--){
     if( i < 10 )
-      newSong(i, QString("0%1").arg(i), (cd->trk[i-1]).length);
+      newSong(i, QString("0%1").arg(i), (cd->trk[i-1]).length, "");
     else
-      newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length);
+      newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length, "");
   }
   if(Prefs::performCDDBauto())
     cddbCD();
@@ -411,7 +412,7 @@ void TracksImp::cddbDone(CDDB::Result result){
   }
 
   // Fill in all album data
-  newAlbum(info.artist, info.title, info.year, info.genre);  
+  newAlbum(info.artist, info.title, info.year, info.genre, info.revision, info.category, info.extd);  
       
   KCDDB::TrackInfoList t = info.trackInfoList;
   for (unsigned i = t.count(); i > 0; i--)
@@ -420,7 +421,7 @@ void TracksImp::cddbDone(CDDB::Result result){
     {
       QString n;
       n.sprintf("%02d ", i-1 + 1);
-      newSong(i, (n + t[i-1].title), cd->trk[i-1].length);
+      newSong(i, (n + t[i-1].title), cd->trk[i-1].length, t[i-1].extt);
     }
   }
 
@@ -499,6 +500,12 @@ void TracksImp::editInformation(){
     QString newTitle = QString("%1 - %2").arg(group).arg(album);
     if(albumName->text() != newTitle)
       albumName->setText(newTitle);
+
+    KCDDB::CDInfo info;
+    setCdInfo(info);
+
+    if (!info.category.isEmpty())
+      KCDDB::Cache::store(info);
   }
   delete dialog;
 }
@@ -510,6 +517,48 @@ void TracksImp::editInformation(){
 void TracksImp::ripWholeAlbum(){
   selectAllTracks();
   startSession();
+}
+
+void TracksImp::setCdInfo(KCDDB::CDInfo &info)
+{
+  info.artist = group;
+  info.title = album;
+  info.genre = genre;
+  if (category.isEmpty())
+  {
+    QStringList catlist;
+    catlist << "blues" << "classical" << "country"
+	    << "data" << "folk" << "jazz" << "misc" << "newage" << "reggae"
+	    << "rock" << "soundtrack";
+
+    bool ok;
+
+    category = KInputDialog::getItem( i18n( "Select Album Category" ),
+        i18n( "Select a category for this album:" ), catlist, 0,
+        false, &ok, this );
+
+    if ( !ok )
+      return;
+  }
+  info.category = category;
+  info.id = QString::number(CDid, 16);
+  info.extd = comment;
+  info.year = year;
+  info.length = ((cd->trk[wm_cd_getcountoftracks()]).start - (cd->trk[0]).start) / 75;
+  info.revision = revision;
+
+  info.trackInfoList.clear();
+  QListViewItem * currentItem = trackListing->firstChild();
+  while( currentItem != 0 )
+  {
+    KCDDB::TrackInfo t;
+    t.title = currentItem->text(HEADER_TRACK_NAME);
+    t.extt = currentItem->text(HEADER_TRACK_COMMENT);
+
+    info.trackInfoList.append(t);
+
+    currentItem = currentItem->nextSibling();
+  }
 }
 
 /**
@@ -617,13 +666,18 @@ void TracksImp::deselectAllTracks(){
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
-                         uint newYear, const QString &newGenre){
+			uint newYear, const QString &newGenre, uint newRevision,
+			const QString& newCategory, const QString& newComment){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
   trackListing->clear();
   album = newAlbum;
   group = newGroup;
   year = newYear;
   genre = newGenre;
+  revision = newRevision;
+  category = newCategory;
+  comment = newComment;
+
 
   selectAllTracksButton->setEnabled(false);
   deselectAllTracksButton->setEnabled(false);
@@ -637,12 +691,12 @@ void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
  * @param song the name of the song.
  * @param length the lenght of song.
  */
-void TracksImp::newSong(int track, const QString &newsong, int length){
+void TracksImp::newSong(int track, const QString &newsong, int length, const QString &comment){
   QString song = newsong.mid(newsong.find(' ',0)+1);
   song = KURL::decode_string(song);
   song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);
-  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song, group);
+  QListViewItem * newItem = new QListViewItem(trackListing, "", QString("%1").arg(track), songLength, song, group, comment);
   newItem->setRenameEnabled(HEADER_TRACK_NAME, TRUE);
   trackListing->setCurrentItem(trackListing->firstChild());
 
