@@ -458,7 +458,7 @@ void TracksImp::cddbDone(CDDB::Result result ) {
 				if( *it == res)	break;
 				c++;
 			}
-			if( cddb_info.size() <= c)
+			if( c < cddb_info.size() )
 				info = cddb_info[c];
 		} else {
 			return;
