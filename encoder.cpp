@@ -276,10 +276,10 @@ void Encoder::appendToPlaylist(Job* job){
 
   bool relWorked = false;
   if(useRelitivePath){
-    KURL audioFile(job->newLocation);
+    QFileInfo audioFile(job->newLocation);
     QString relative;
     KURL d(desiredFile);
-    relWorked = relativeURL(d.directory(), audioFile.directory(), relative);
+    relWorked = relativeURL(d.directory(), audioFile.filePath(), relative);
     if(relWorked)
       t << relative << audioFile.fileName() << endl;
   }

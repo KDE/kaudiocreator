@@ -109,7 +109,7 @@ void KAudioCreator::showSettings(){
   dialog->addPage(new CdConfig(0, "CD"), i18n("CD"), "CD", "package_system", i18n("CD Configuration"));
 
   // Because WE don't segfault on our users...
-  KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
+  KService::Ptr libkcddb = KService::serviceByDesktopName("cddb");
   if (libkcddb && libkcddb->isValid())
   {
     KCModuleInfo info(libkcddb->desktopEntryPath(), "settings");
