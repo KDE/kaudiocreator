@@ -282,7 +282,7 @@ void JobQueImp::appendToPlaylist(Job* job, const QString &extension){
     QFileInfo audioFile(job->newLocation);
     KURL d(desiredFile);
     QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
-    t << relative << audioFile.fileName() << endl;
+    t << relative << endl;
   }
   else
     t << job->newLocation << endl;
