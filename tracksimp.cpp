@@ -230,14 +230,14 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
  */
 TracksImp::~TracksImp(){
   QStringList list;
-  int count = deviceCombo->count();
-  if(count > 5)
-	  count = 5;
-  for(int i=0; i<count;i++){
+  for(int i=0; i<deviceCombo->count();i++){
     QString text = deviceCombo->text(i);
-    if(!list.contains(text))
-      list.append(deviceCombo->text(i));
+    if(list.find(text) == list.end())
+      list.append(text);
+    if(list.count() == 5)
+      break;
   }
+
   Prefs::setDevice(list);
   Prefs::writeConfig();
 }
@@ -250,17 +250,16 @@ void TracksImp::loadSettings(){
   QStringList list;
   for(int i=0; i<deviceCombo->count();i++){
     QString text = deviceCombo->text(i);
-    if(!list.contains(text))
-      list.append(deviceCombo->text(i));
+    if(list.find(text) == list.end())
+      list.append(text);
   }
   // Add the saved list, no dups
   QStringList prefsList = Prefs::device();
-  for(int i=0; i<prefsList.count();i++){
-    QString text = prefsList[i];
-    if(!list.contains(text))
-      list.append(prefsList[i]);
+  for ( QStringList::Iterator it = prefsList.begin(); it != prefsList.end(); ++it ) {
+    if(list.find( *it ) == list.end())
+      list.append(*it);
   }
-
+  
   // Set list, get top one
   deviceCombo->clear();
   deviceCombo->insertStringList(list);
