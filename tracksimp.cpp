@@ -62,6 +62,9 @@ TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CD
   connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
   
   trackListing->setSorting(-1, false);
+  // DON't i18n this!  It is to catch stupid people who don't bother setting the genre and
+  // encoders that barf on empty strings for the genre (e.g. lame).
+  genres.insert("Unknown", "Pop");
   genres.insert(i18n("A Cappella"), "A Cappella");
   genres.insert(i18n("Acid Jazz"), "Acid Jazz");
   genres.insert(i18n("Acid Punk"), "Acid Punk");
@@ -466,27 +469,18 @@ void TracksImp::startSession(){
     return;
   }
 
-  QString list = "";
-  if( genre.isEmpty() )
+  QStringList list;
+  if( genre == "Unknown" )
     list += "Genre";
-  
-  if( year == 0 ){
-    if(!list.isEmpty())
-      list += ", ";
+  if( year == 0 )
     list += "Year";
-  }
-  if( group == "Unknown Artist"){
-    if(!list.isEmpty())
-      list += ", ";
+  if( group == "Unknown Artist")
     list += "Artist";
-  }
-  if( album == "Unknown Album"){
-    if(!list.isEmpty())
-      list += ", ";
+  if( album == "Unknown Album")
     list += "Album";
-  }
-  if( Prefs::promptIfIncompleteInfo() && !list.isEmpty() ){
-    int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information Incomplete"));
+  
+  if( Prefs::promptIfIncompleteInfo() && list.count()>0 ){
+    int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"));
     if( r == KMessageBox::No )
       return;
   }
@@ -509,7 +503,7 @@ void TracksImp::startSession(){
       newJob->song_comment = currentItem->text(HEADER_TRACK_COMMENT);
       lastJob = newJob;
       emit( ripTrack(newJob) ); 
-    counter++;
+      counter++;
     }
     currentItem = currentItem->nextSibling();
   }
