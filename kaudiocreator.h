@@ -70,7 +70,7 @@ class SettingsDialog: public KConfigDialog {
 Q_OBJECT
 
 public:
-  SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
+  SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
   
 protected slots:
   void updateSettings();
