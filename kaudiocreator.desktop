@@ -50,6 +50,7 @@ Name[pl]=Kreator audio
 Name[pt_BR]=Criação de Áudio
 Name[sv]=Kaudiocreator
 Name[ven]=MuitiwazwamibvumoyaK
+GenericName=CD Ripper
 MimeType=
 Exec=kaudiocreator
 Icon=kaudiocreator
