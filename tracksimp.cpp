@@ -341,9 +341,11 @@ bool TracksImp::cddbCD(){
   KCDDB::TrackInfoList t = info.trackInfoList;
   for (unsigned i = t.count(); i > 0; i--)
   {
-    QString n;
-    n.sprintf("%02d ", i-1 + 1);
-    newSong(i, (n + t[i-1].title), cd->trk[i-1].length);
+    if(cd->trk[i-1].data == 0){
+      QString n;
+      n.sprintf("%02d ", i-1 + 1);
+      newSong(i, (n + t[i-1].title), cd->trk[i-1].length);
+    }
   }
   KApplication::restoreOverrideCursor();
   return true;
