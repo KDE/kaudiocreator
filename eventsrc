@@ -2,6 +2,7 @@
 IconName=kaudiocreator
 Comment=KAudioCreator
 Comment[sv]=Kaudiocreator
+Comment[tg]=KОфарандаи Садо
 
 [track ripped]
 Name=Track Ripped
@@ -15,6 +16,7 @@ Name[pt_BR]=Faixa Extraida
 Name[ru]=Дорожка считана
 Name[sv]=Spår lagrat
 Name[ta]=தடம் பிரிக்கப்பட்டது
+Name[tg]=Шиор Канда шудааст
 Comment=Track finished ripping.
 Comment[bg]=Завършване на запис на пътечка
 Comment[da]=Spor færdig med at blive rippet.
@@ -24,6 +26,7 @@ Comment[hu]=A hangsáv kimásolása befejeződött.
 Comment[ru]=Считывание дорожки завершено.
 Comment[sv]=Spåret har lagrats klart.
 Comment[ta]=தடம் பிரித்தலை முடித்தது
+Comment[tg]=Шиор кандашавиро ба охир расонд.
 
 [cd ripped]
 Name=CD Ripped
@@ -36,6 +39,7 @@ Name[pt_BR]=CD Extraido
 Name[ru]=CD считан
 Name[sv]=Cd lagrad
 Name[ta]=CD பிரிக்கப்பட்டது
+Name[tg]=Диски Фишурда Канда шудааст
 Name[uz]=Компакт-диск риппер
 Comment=CD finished ripping.
 Comment[bg]=Завършване на запис на аудиодиск
@@ -46,6 +50,7 @@ Comment[hu]=A CD kimásolása befejeződött.
 Comment[ru]=Считывание CD завершено.
 Comment[sv]=Cd:n har lagrats klart.
 Comment[ta]=CD பிரித்தல் முடிந்தது
+Comment[tg]=Диски Фишурда кандашавиро ба охир расонд.
 
 [track encoded]
 Name=Track Encoded
@@ -59,6 +64,7 @@ Name[pt_BR]=Faixa Codificada
 Name[ru]=Дорожка преобразована
 Name[sv]=Spår kodat
 Name[ta]=தடம் மறையாக்கப் பட்டது
+Name[tg]=Шиор Рамзӣ кунонида шудааст
 Comment=Track finished encoding.
 Comment[bg]=Завършване на кодиране на пътечка
 Comment[da]=Spor færdig med at blive indkodet.
@@ -68,6 +74,7 @@ Comment[hu]=A hangsáv kódolása befejeződött.
 Comment[ru]=Преобразование дорожки завершено
 Comment[sv]=Spåret har kodats klart.
 Comment[ta]=தடம் மறையாக்கத்தை முடித்தது
+Comment[tg]=Шиор рамзикунониро ба охир расонд.
 
 [cd encoded]
 Name=CD Encoded
@@ -81,6 +88,7 @@ Name[pt_BR]=CD Codificado
 Name[ru]=Преобразование CD завершено
 Name[sv]=Cd kodad
 Name[ta]=CD மறையாக்கப் பட்டது
+Name[tg]=Диски Фишурда Рамзӣ кунонида шудааст
 Comment=CD finished encoding.
 Comment[bg]=Завършване на кодиране на аудиодиск
 Comment[da]=CD færdig med at blive indkodet.
@@ -90,5 +98,6 @@ Comment[hu]=A CD kódolása befejeződött.
 Comment[ru]=Преобразование диска завершено
 Comment[sv]=Cd:n har kodats klart.
 Comment[ta]=CD மறையாக்கத்தை முடித்தது.
+Comment[tg]=Диски Фишурда рамзикунониро ба охир расонд.
 default_presentation=17
 default_sound=KDE_ClockChime.wav
