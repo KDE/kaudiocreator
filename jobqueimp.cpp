@@ -42,7 +42,7 @@
  * @param parent - parent widget
  * @param name - widget name
  */
-JobQueImp::JobQueImp( QWidget* parent, const char* name) : 
+JobQueImp::JobQueImp( QWidget* parent, const char* name) :
       JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
@@ -59,9 +59,9 @@ void JobQueImp::loadSettings(){
 /**
  * Return a buffer of "000" so that new, updated jobs strings will be able to
  * sort via the columns.
- * Based upon a highest number that is kept. 
+ * Based upon a highest number that is kept.
  * @param number the number to fill out.
- */ 
+ */
 QString JobQueImp::getStringFromNumber(int number){
   if(number > highestNumber){
     int diff = QString("%1").arg(number).length() - QString("%1").arg(highestNumber).length();
@@ -83,7 +83,7 @@ QString JobQueImp::getStringFromNumber(int number){
   return buffer;
 }
 
-/** 
+/**
  * Add a new job to the que
  * @param id the id of the job.
  * @param name the name of the job.
@@ -104,7 +104,7 @@ void JobQueImp::updateProgress(int id, int progress){
   QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
   QString buffer = getStringFromNumber(id);
   buffer += QString("%1").arg(id);
-  
+
   // Find the current item
   while( currentItem != 0 ){
     if(currentItem->text(HEADER_JOB) == buffer)
@@ -119,7 +119,7 @@ void JobQueImp::updateProgress(int id, int progress){
   // Only update the % if it changed.
   if(currentItem->percentDone == progress)
     return;
-  
+
   currentItem->percentDone = progress;
   currentItem->repaint();
 
@@ -144,17 +144,17 @@ void JobQueImp::updateProgress(int id, int progress){
 /**
  * Remove job listed in item
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
- */ 
+ */
 void JobQueImp::removeJob(QueListViewItem *item){
   if(!item)
     return;
-  if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator isn't finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
+  if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator is not finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
       == KMessageBox::No ))
     return;
 
   // "Thread" safe
   if(!item) return;
-  
+
   emit (removeJob(item->text(HEADER_JOB).toInt()));
   todoQue->takeItem(item);
   delete(item);
@@ -250,14 +250,14 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
     QListViewItem::paintCell(p,cg,column,width,align);
     return;
   }
-  
+
   p->setPen(cg.base());
   p->drawRect(0,0,width,height());
   if(this->isSelected())
     p->fillRect(1,1,width-2,height()-2,cg.highlight());
   else
     p->fillRect(1,1,width-2,height()-2,cg.base());
-  
+
   int percent = (int)(((double)(width-2)) * (percentDone/100));
 
   p->fillRect(1,1,percent,height()-2,cg.mid());

@@ -23,17 +23,14 @@
 #include "prefs.h"
 
 #include <qfile.h>
-#include <ktempfile.h>
 #include <qtimer.h>
+#include <ktempfile.h>
 
 // eject
 #include <kmessagebox.h>
 
 // beep
 #include <knotifyclient.h>
-
-// settings
-#include <kconfig.h>
 
 /**
  * Constructor, load settings.
@@ -46,6 +43,8 @@ Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
  * Loads the settings
  */
 void Ripper::loadSettings(){
+  for(uint i=0; i<(uint)Prefs::maxWavFiles(); i++)
+    tendToNewJobs();
 }
 
 /**
@@ -103,6 +102,7 @@ void Ripper::removeJob(int id){
     delete job;
   }
   //qDebug(QString("Done removing Job:%1").arg(id).latin1());
+  tendToNewJobs();
 }
 
 /**
@@ -121,13 +121,11 @@ void Ripper::ripTrack(Job *job){
  * then just loop.
  */
 void Ripper::tendToNewJobs(){
-  // If we are currently ripping the max try again in a little bit.
-  if(jobs.count() >= (uint)Prefs::maxWavFiles()){
-    QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
-    return;
-  }
-  // Just to make sure in the event something goes wrong
   if(pendingJobs.count() == 0)
+    return;
+  
+  // If we are currently ripping the max try again in a little bit.
+  if(jobs.count() >= (uint)Prefs::maxWavFiles())
     return;
 
   Job *job = pendingJobs.first();
@@ -187,6 +185,7 @@ void Ripper::copyJobResult(KIO::Job *job){
       QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SIGNAL(eject()));
     }
   }
+  tendToNewJobs();
 }
 
 /**
