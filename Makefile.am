@@ -15,7 +15,7 @@ messages: rc.cpp
 
 AM_CPPFLAGS = -static -Wall
 
-kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS) -L../libkcddb -lkcddb
+kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS) -L$(top_builddir)/libkcddb -lkcddb
 
 KDE_ICON = AUTO
 
