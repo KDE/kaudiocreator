@@ -2,9 +2,9 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir)/libkcddb $(all_includ
 
 bin_PROGRAMS = kaudiocreator
 
-kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp cdconfigimp.cpp  encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksconfigimp.cpp  cdconfig.ui  encoderconfig.ui  encoderedit.ui jobque.ui  ripconfig.ui  tracksconfig.ui id3tagdialog.ui wizard.ui general.ui
+kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp  cdconfig.ui  encoderconfig.ui  encoderedit.ui jobque.ui  ripconfig.ui  tracks.ui id3tagdialog.ui wizard.ui general.ui
 
-EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop cdconfigimp.h encoder.h encoderconfigimp.h  jobqueimp.h  ripper.h  tracksconfigimp.h 
+EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoder.h encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
 
 kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH) -lkutils
 
@@ -15,7 +15,7 @@ messages: rc.cpp
 
 AM_CPPFLAGS = -static -Wall
 
-kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS) $(top_builddir)/libkcddb/libkcddb.la
+kaudiocreator_LDADD = $(LIB_KIO) $(CDPARANOIA_LIBS) $(LAME_LIBS) $(top_builddir)/libkcddb/libkcddb.la $(top_builddir)/kscd/libwm/libworkman.la
 
 updatedir = $(kde_datadir)/kconf_update
 update_DATA = kaudiocreator-libkcddb.upd

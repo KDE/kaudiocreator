@@ -14,7 +14,6 @@
 #include <qmap.h>
 #include <qptrlist.h>
 
-class KURL;
 class Job;
 
 class Ripper : public QObject {
@@ -25,6 +24,7 @@ signals:
   void addJob(Job *job, QString name);
   void updateProgress(int id, int progress);
   void encodeWav(Job *job);
+  void eject();
 
 public:
   Ripper( QObject* parent = 0, const char* name = 0);
@@ -39,7 +39,6 @@ private slots:
   void copyJobResult(KIO::Job *job);
   void updateProgress( KIO::Job *job, unsigned long percent);
   void tendToNewJobs();
-  void eject();
 
 private:
   // Jobs that we are currently doing.
@@ -51,6 +50,7 @@ private:
   bool beepAfterRip;
   bool autoEjectAfterRip;
   int autoEjectDelay;
+
 };
 
 #endif

@@ -12,13 +12,10 @@
 #include <kmainwindow.h>
 
 class KJanusWidget;
-class TracksConfigImp;
-class CdConfigImp;
+class TracksImp;
+class JobQueImp;
 class Ripper;
 class Encoder;
-class JobQueImp;
-class QCloseEvent;
-class KDialogBase;
 
 class KAudioCreator : public KMainWindow {
 
@@ -39,11 +36,10 @@ private slots:
 
 private:
   KJanusWidget *janusWidget;
-  TracksConfigImp *tracksConfig;
-  CdConfigImp *cdConfig;
+  TracksImp *tracks;
+  JobQueImp *jobQue;
   Ripper *ripper;
   Encoder *encoder;
-  JobQueImp *jobQue;
 
 };
 

@@ -8,15 +8,15 @@
 #include <kaction.h>
 #include <kedittoolbar.h>
 
-#include "tracksconfigimp.h"
-#include "cdconfigimp.h"
+#include "tracksimp.h"
+#include "jobqueimp.h"
 #include "ripper.h"
 #include "encoder.h"
-#include "jobqueimp.h"
 
 // Settings
 #include <kautoconfigdialog.h>
 #include "ripconfig.h"
+#include "cdconfig.h"
 #include "encoderconfigimp.h"
 #include "general.h"
 #include <kcmoduleloader.h>
@@ -29,9 +29,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   setCentralWidget(janusWidget);
 
   QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),QString::null, SmallIcon("cdaudio_unmount", 32));
-  tracksConfig = new TracksConfigImp(frame, "Tracks");
+  tracks = new TracksImp(frame, "Tracks");
   
-  cdConfig = new CdConfigImp(frame, "Cd");
   ripper = new Ripper(frame, "Rip");
   encoder = new Encoder(frame, "Encoder");
 
@@ -45,23 +44,21 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   connect(jobQue, SIGNAL(removeJob(int)), encoder, SLOT(removeJob(int)));
   connect(encoder, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));
   connect(encoder, SIGNAL(addJob(Job*, QString)), jobQue, SLOT(addJob(Job*, QString)));
-  connect(tracksConfig, SIGNAL(refreshCd()), cdConfig, SLOT(timerDone()));
 
-  connect(cdConfig, SIGNAL(newAlbum(QString, QString, int, QString)), tracksConfig, SLOT(newAlbum(QString, QString, int, QString)));
-  connect(cdConfig, SIGNAL(newSong(int, QString, int)), tracksConfig, SLOT(newSong(int, QString, int)));
-  connect(tracksConfig, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
+  connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
+  connect(ripper, SIGNAL(eject()), tracks, SLOT(eject()));
+
 
   connect(ripper, SIGNAL(encodeWav(Job *)), encoder, SLOT(encodeWav(Job *)));
-  connect(cdConfig, SIGNAL(ripAlbum()), tracksConfig, SLOT(ripWholeAlbum()));
 
   resize(500, 440);
 
+  (void)new KAction(i18n("&Eject CD"), 0, tracks, SLOT(eject()), actionCollection(), "eject" );
   (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
-  (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
+  (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracks, SLOT(startSession()), actionCollection(), "rip" );
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
-  (void)new KAction(i18n("&Refresh CD List"), 0, cdConfig, SLOT(timerDone()), actionCollection(), "update_cd" );
-  (void)new KAction(i18n("&Edit Album"), 0, tracksConfig, SLOT(editInformation()), actionCollection(), "edit_cd");
-  (void)new KAction(i18n("&Perform CDDB Lookup"), 0, cdConfig, SLOT(cddbNow()), actionCollection(), "cddb_now");
+  (void)new KAction(i18n("&Edit Album"), 0, tracks, SLOT(editInformation()), actionCollection(), "edit_cd");
+  (void)new KAction(i18n("&Perform CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
   setStandardToolBarMenuEnabled(true);
 
@@ -128,10 +125,10 @@ void KAudioCreator::showSettings(){
   
   connect(encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
 
-  connect(dialog, SIGNAL(settingsChanged()), cdConfig, SLOT(loadSettings()));
   connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
   connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
   connect(dialog, SIGNAL(settingsChanged()), jobQue, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
   dialog->show();
 }
 

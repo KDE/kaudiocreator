@@ -23,6 +23,9 @@ public:
 
   void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
+  // The device to obtain the file such as /dev/cdrom/ (only used when ripping)
+  QString device;
+
   int id; 
   QString genre;		
   QString group;

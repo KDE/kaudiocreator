@@ -6,7 +6,7 @@
 #include <qtimer.h>
 
 // eject
-#include <stdlib.h>
+#include <kprocess.h>
 #include <kmessagebox.h>
 
 // beep
@@ -124,10 +124,13 @@ void Ripper::tendToNewJobs(){
   tmp.setAutoDelete(true);
 
   QString wavFile;
+  QString jobDevice = job->device;
+  if(!jobDevice.isEmpty())
+    jobDevice = QString("?device=%1").arg(jobDevice);
   if(job->track < 10)
-    wavFile = QString("audiocd:/By Track/Track 0%1.wav").arg(job->track); //lukas: I fear this won't work
+    wavFile = QString("audiocd:/By Track/Track 0%1.wav%2").arg(job->track).arg(jobDevice); //lukas: I fear this won't work (Works for kde2)
   else
-    wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
+    wavFile = QString("audiocd:/By Track/Track %1.wav%2").arg(job->track).arg(jobDevice);
 
   KURL source(wavFile);
   KURL dest(tmp.name());
@@ -150,6 +153,9 @@ void Ripper::copyJobResult(KIO::Job *job){
   Job *newJob = jobs[job];
   jobs.remove(job);
 
+  if(beepAfterRip)
+    KNotifyClient::beep();
+   
   if ( copyJob->error() == 0 ){
     emit updateProgress(newJob->id, 100);
     newJob->location = copyJob->destURL().path();
@@ -164,26 +170,9 @@ void Ripper::copyJobResult(KIO::Job *job){
   }
 
   if(newJob->lastSongInAlbum){
-    if(autoEjectAfterRip)
-      QTimer::singleShot( autoEjectDelay*1000, this, SLOT(eject()));
-  }
-  if(beepAfterRip){
-    KNotifyClient::beep();
-  }
-}
-
-/**
- * Eject the cd
- */
-void Ripper::eject(){
-  int returnValue = system("eject");
-  if(returnValue == 127){
-    KMessageBox:: sorry(0, i18n("\"eject\" command not installed."), i18n("Can not eject"));
-    return;
-  }
-  if(returnValue != 0){
-    KMessageBox:: sorry(0, i18n("\"eject\" command failed."), i18n("Can not eject"));
-    return;
+    if(autoEjectAfterRip){
+      QTimer::singleShot( autoEjectDelay*1000 + 500, this, SIGNAL(eject()));
+    }
   }
 }
 

@@ -1,9 +1,6 @@
-Move to use the kcd cd library to get the CD TOC information.
 BUG? encoding with different genre's
 Possiblity to use "nice" when calling encoding jobs. (todo once kprocess gets that feature)
-Add audiocd ioslave CDDA options to the configure dialog
 Multiple Artists for 1 album.
 Add the ability to encode files.
-Rip from more then 1 cd-rom drive.
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 Plugin system for encoders (user friendly thingys)

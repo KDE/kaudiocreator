@@ -1,4 +1,4 @@
-#include "tracksconfigimp.h"
+#include "tracksimp.h"
 #include "job.h"
 #include "id3tagdialog.h"
 #include <qlabel.h>
@@ -17,18 +17,34 @@
 #define HEADER_LENGTH 2
 #define HEADER_RIP 0
 
+extern "C" {
+#include "../kscd/libwm/include/workman.h"
+}
+#include "client.h"
+#include <kconfig.h>
+#include <kapplication.h>
+
+#include <qtimer.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <kcombobox.h>
+#include <kdebug.h>
+#include <kprocess.h>
+
 /**
  * Constructor, connect up slots and signals.
  */
-TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfig(parent,name), album(""), group(""), genre(""), year(-1){
+TracksImp::TracksImp( QWidget* parent, const char* name):Tracks(parent,name), CDid(0), album(""), group(""), genre(""), year(-1){
   connect(ripSelectedTracks, SIGNAL(clicked()), this, SLOT(startSession()));
   connect(editTag, SIGNAL(clicked()), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*))); 
   connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
   connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
-  connect(refreshList, SIGNAL(clicked()), this, SIGNAL(refreshCd()));
   connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
   connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
+  
+  connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
+  
   trackListing->setSorting(-1, false);
   genres.insert(i18n("A Cappella"), "A Cappella");
   genres.insert(i18n("Acid Jazz"), "Acid Jazz");
@@ -178,6 +194,160 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
   genres.insert(i18n("Tribal"), "Tribal");
   genres.insert(i18n("Trip-Hop"), "Trip-Hop");
   genres.insert(i18n("Vocal"), "Vocal");
+  loadSettings();
+  QTimer *timer = new QTimer( this );
+  connect( timer, SIGNAL(timeout()), this, SLOT(timerDone()) );
+  timer->start( 1500, false ); // 1 seconds forever timer
+}
+
+/**
+ * store the current device from the combo.
+ */
+TracksImp::~TracksImp(){
+  KConfig &config = *KGlobal::config();
+  config.setGroup("CD");
+  config.writeEntry("device", deviceCombo->currentText());
+}
+
+/**
+ * Load the class settings. 
+ */ 
+void TracksImp::loadSettings(){
+  KConfig &config = *KGlobal::config();
+  config.setGroup("CD");
+  performCDDBauto = config.readBoolEntry("performCDDBauto", false);
+  autoRip = config.readBoolEntry("autoRip", false);
+
+  device = config.readEntry("device", DEFAULT_CD_DEVICE);
+  deviceCombo->setCurrentText(device);
+}
+
+/**
+ * Check for changes in the cd.
+ */ 
+void TracksImp::timerDone(){
+  
+  int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
+  if(status == dstatus){
+    wm_cd_destroy();
+    return;
+  }
+  kdDebug() << "Drive initialization return status: " << status << endl;
+  dstatus = status;
+  
+  if(WM_CDS_NO_DISC(status)){
+    kdDebug() << "No disk." << endl;
+    newAlbum("Unknown Artist", "Unknown Album", 0, "");
+    CDid = 0;
+    wm_cd_destroy();
+    return;
+  }
+  
+  if(status < 0) {
+    QString errstring =
+               i18n("CD-ROM read or access error (or no audio disc in drive).\n"\
+                    "Please make sure you have access permissions to:\n%1")
+               .arg(device);
+    KMessageBox::error(this, errstring, i18n("Error"));
+    return;
+  }
+
+  unsigned long currentDistID = cddb_discid();
+  if(currentDistID == CDid){
+    wm_cd_destroy();
+    return;
+  }
+  
+  // A new album
+  newAlbum("Unknown Artist", "Unknown Album", 0, "");
+  CDid = currentDistID;
+  kdDebug() << "New disk.  Disk id: " << CDid << endl;
+  int numberOfTracks = wm_cd_getcountoftracks();
+  for(int i=numberOfTracks; i>0; i--){
+    if( i < 10 )
+      newSong(i, QString("0%1").arg(i), (cd->trk[i-1]).length);
+    else
+      newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length);
+  }
+  if(performCDDBauto)
+    if(cddbCD() && autoRip)
+      ripWholeAlbum();
+
+  wm_cd_destroy();
+}
+
+/**
+ * The device text has changed.  If valid different file
+ * then re-initialize the cd library and check its status.
+ */ 
+void TracksImp::changeDevice(const QString &file){
+  if(file == device)
+    return;
+  
+  QFileInfo fileInfo(file);
+  if(!fileInfo.exists() || fileInfo.isDir() || !fileInfo.isFile())
+    return;
+ 
+  device = file;
+  timerDone();
+}
+
+/**
+ * Helper function for users.
+ **/ 
+void TracksImp::performCDDB(){
+  int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
+  if(WM_CDS_NO_DISC(status)){
+    KMessageBox::sorry(this, i18n("Please put in a disk."), i18n("CDDB failed."));
+    return;
+  }
+
+  if(!cddbCD())
+    KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB failed."));
+  wm_cd_destroy();
+}
+
+/**
+ * See if we can't get the cddb value for this cd.
+ * wm_cd_init must be called before this.
+ * @return true if sucessfull.
+ */ 
+bool TracksImp::cddbCD(){
+  KCDDB::TrackOffsetList qvl;
+
+  int numberOfTracks = wm_cd_getcountoftracks();
+  for(int i=0; i<numberOfTracks; i++){
+    qvl.append((cd->trk[i]).start);
+    //qDebug("Track:%i %i", i, (cd->trk[i]).start);
+  }
+
+  qvl.append((cd->trk[0]).start - 150 );
+  //qDebug("%i", (cd->trk[0]).start - 150 );
+  qvl.append((cd->trk[numberOfTracks]).start - 150 );
+  //qDebug("%i", (cd->trk[numberOfTracks]).start - 150 );
+  
+  KApplication::setOverrideCursor(Qt::waitCursor);
+
+  KCDDB::Client c;
+  KCDDB::CDDB::Result result = c.lookup(qvl);
+
+  if (result != KCDDB::CDDB::Success){
+    KApplication::restoreOverrideCursor();
+    return false;
+  }
+	  
+  KCDDB::CDInfo info = c.lookupResponse().first();
+  newAlbum(info.artist, info.title, info.year, info.genre);  
+      
+  KCDDB::TrackInfoList t = info.trackInfoList;
+  for (unsigned i = t.count(); i > 0; i--)
+  {
+    QString n;
+    n.sprintf("%02d ", i-1 + 1);
+    newSong(i, (n + t[i-1].title), cd->trk[i-1].length);
+  }
+  KApplication::restoreOverrideCursor();
+  return true;
 }
 
 /**
@@ -185,7 +355,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
-void TracksConfigImp::editInformation(){
+void TracksImp::editInformation(){
   QListViewItem * currentItem = trackListing->currentItem();
   if( currentItem == 0 ){
     KMessageBox::sorry(this, i18n("Please select a track."), i18n("No Track Selected"));
@@ -239,7 +409,7 @@ void TracksConfigImp::editInformation(){
 /**
  * Helper function.  Checks all tracks and then calls startSession to rip them all.
  */
-void TracksConfigImp::ripWholeAlbum(){
+void TracksImp::ripWholeAlbum(){
   selectAllTracks();
   startSession();
 }
@@ -248,7 +418,7 @@ void TracksConfigImp::ripWholeAlbum(){
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksConfigImp::startSession(){
+void TracksImp::startSession(){
   if(trackListing->childCount() == 0){
     KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No Tracks Selected"));
     return;
@@ -284,6 +454,7 @@ void TracksConfigImp::startSession(){
   while( currentItem != 0 ){
     if(currentItem->pixmap(HEADER_RIP) != NULL ){
       Job *newJob = new Job();
+      newJob->device = deviceCombo->currentText();
       newJob->album = album;
       newJob->genre = genres[genre];
       newJob->group = group;
@@ -313,7 +484,7 @@ void TracksConfigImp::startSession(){
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksConfigImp::selectTrack(QListViewItem *currentItem){
+void TracksImp::selectTrack(QListViewItem *currentItem){
   if(!currentItem)
     return;
   if(currentItem->pixmap(HEADER_RIP) != NULL){
@@ -327,7 +498,7 @@ void TracksConfigImp::selectTrack(QListViewItem *currentItem){
 /**
  * Turn on all of the tracks.
  */
-void TracksConfigImp::selectAllTracks(){
+void TracksImp::selectAllTracks(){
   QListViewItem *currentItem = trackListing->firstChild();
   while( currentItem != 0 ){
     currentItem->setPixmap(HEADER_RIP, SmallIcon("check"));
@@ -338,7 +509,7 @@ void TracksConfigImp::selectAllTracks(){
 /**
  * Turn off all of the tracks.
  */
-void TracksConfigImp::deselectAllTracks(){
+void TracksImp::deselectAllTracks(){
   QListViewItem *currentItem = trackListing->firstChild();
   QPixmap empty;
   while( currentItem != 0 ){
@@ -350,7 +521,7 @@ void TracksConfigImp::deselectAllTracks(){
 /**
  * Set the current stats for the new album being displayed.
  */
-void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, QString newGenre){
+void TracksImp::newAlbum(QString newGroup, QString newAlbum, int newYear, QString newGenre){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
   trackListing->clear();
   album = newAlbum;
@@ -365,7 +536,7 @@ void TracksConfigImp::newAlbum(QString newGroup, QString newAlbum, int newYear, 
  * @param track the track number for the song.
  * @param song the name of the song.
  */
-void TracksConfigImp::newSong(int track, QString song, int length){
+void TracksImp::newSong(int track, QString song, int length){
   song = song.mid(song.find(' ',0)+1, song.length());
   song = KURL::decode_string(song);
   song.replace(QRegExp("/"), "-");
@@ -380,16 +551,16 @@ void TracksConfigImp::newSong(int track, QString song, int length){
  * If the user presses the F2 key, trigger renaming of the title.
  * @param event the QKeyEvent passed to this event handler.
  */
-void TracksConfigImp::keyPressEvent(QKeyEvent *event){
+void TracksImp::keyPressEvent(QKeyEvent *event){
   if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
     event->accept();
     trackListing->selectedItem()->startRename(HEADER_NAME);
   }
   else
-    TracksConfig::keyPressEvent(event);
+    Tracks::keyPressEvent(event);
 }
 
-void TracksConfigImp::editNextTrack()
+void TracksImp::editNextTrack()
 {
   QListViewItem* currentItem = trackListing->currentItem();
   currentItem->setText(HEADER_NAME, dialog->title->text());
@@ -404,7 +575,7 @@ void TracksConfigImp::editNextTrack()
   dialog->title->selectAll();
 }
 
-void TracksConfigImp::editPreviousTrack()
+void TracksImp::editPreviousTrack()
 {
   QListViewItem* currentItem = trackListing->currentItem();
   currentItem->setText(HEADER_NAME, dialog->title->text());
@@ -419,5 +590,32 @@ void TracksConfigImp::editPreviousTrack()
   dialog->title->selectAll();
 }
 
-#include "tracksconfigimp.moc"
+/**
+ * Eject the cd
+ */
+void TracksImp::eject(){
+  KProcess *proc = new KProcess();
+  *proc << "eject" << device;
+  connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
+  proc->start(KProcess::NotifyOnExit,  KShellProcess::NoCommunication);
+}
+
+/**
+ * When it is done ejecting, report any errors.
+ */ 
+void TracksImp::ejectDone(KProcess *proc){
+  int returnValue = proc->exitStatus();
+  if(returnValue == 127){
+    KMessageBox:: sorry(this, i18n("\"eject\" command not installed."), i18n("Can not eject"));
+    return;
+  }
+  if(returnValue != 0){
+    qDebug("%i", returnValue);
+    KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Can not eject"));
+    return;
+  }
+  delete proc;
+}
+
+#include "tracksimp.moc"
 
