@@ -91,7 +91,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
     config.writeEntry( ENCODER_ARGS_STRING "0", "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
     config.writeEntry( ENCODER_EXTENSION_STRING "0", "mp3");
     config.writeEntry( ENCODER_PERCENTLENGTH_STRING "0", 2);
-    
+
     config.writeEntry( ENCODER_EXE_STRING "2", "Leave As Wav");
     config.writeEntry( ENCODER_ARGS_STRING "2", "mv %f %o");
     config.writeEntry( ENCODER_EXTENSION_STRING "2", "wav");

@@ -74,7 +74,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   resize(500, 440);
 
   (void)new KAction(i18n("View &Tracks"), 0, this, SLOT(viewTracks()), actionCollection(), "view_tracks" );
-  (void)new KAction(i18n("&Configure KAudioCreator"), 0, this, SLOT(showOptions()), actionCollection(), "configure_kaudiocreator" );
+  (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showOptions()), actionCollection(), "configure_kaudiocreator" );
   (void)new KAction(i18n("View &Jobs"), 0, this, SLOT(viewQue()), actionCollection(), "view_que" );
   (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, queConfig, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
