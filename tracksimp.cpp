@@ -348,7 +348,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
  */
 void TracksImp::editInformation( ) {
 	// Create dialog.
-	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Database Editor" ),
+	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Editor" ),
 										   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true );
 	CDInfoDialogBase *base = new CDInfoDialogBase(dialog, "Album info editor dialog");
 	base->setInfo(cddbInfo, trackStartFrames);
