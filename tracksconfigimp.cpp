@@ -130,12 +130,12 @@ void TracksConfigImp::startSession(){
     lastJob->lastSongInAlbum = true;
 
   if(counter == 0){
-    KMessageBox:: sorry(this, i18n("No tracks are selected to rip.  Please select at least 1 track before ripping."), i18n("No tracks selected."));
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip.  Please select at least 1 track before ripping."), i18n("No tracks selected"));
     return;
   }
 
   KMessageBox::information(this,
-  i18n(QString("%1 Jobs have been started.  You can watch their progress in the jobs section.").arg(counter).latin1()),
+  i18n(QString("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter).latin1()),
  i18n("Jobs have started"), "Jobs have started");
 }
 

@@ -72,9 +72,9 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
 EncoderConfigImp::~EncoderConfigImp(){
   pendingJobs.clear();
   
-  QMap<KProcess*, Job*>::Iterator it;
+  QMap<KShellProcess*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
-    KProcess *process = it.key();
+    KShellProcess *process = it.key();
     Job *job = jobs[it.key()];
     threads.remove(process);
     process->kill();
@@ -146,10 +146,10 @@ void EncoderConfigImp::loadEncoderConfig(int index){
  * @param id the id number of the job to stop.
  */
 void EncoderConfigImp::removeJob(int id){
-  QMap<KProcess*, Job*>::Iterator it;
+  QMap<KShellProcess*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
     if(it.data()->id == id){
-      KProcess *process = it.key();
+      KShellProcess *process = it.key();
       Job *job = jobs[it.key()];
       threads.remove(process);
       process->kill();
@@ -221,8 +221,9 @@ void EncoderConfigImp::tendToNewJobs(){
   
   job->errorString = command;
   //qDebug(command.latin1());
-  KProcess *proc = new KProcess();
-  *proc << "bash" << "-c" << command.latin1();
+  KShellProcess *proc = new KShellProcess();
+  //*proc << "bash" << "-c" << command.latin1();
+  *proc << command.latin1();
   connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
                        this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
   connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
@@ -231,7 +232,7 @@ void EncoderConfigImp::tendToNewJobs(){
   jobs.insert(proc, job);
   threads.append(proc);
 
-  proc->start(KProcess::NotifyOnExit,  KProcess::AllOutput);
+  proc->start(KShellProcess::NotifyOnExit,  KShellProcess::AllOutput);
 }
 
 /**
@@ -247,7 +248,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *proc, char *buffer, int){
     output = output.mid(percent-2,2);
     int percent = output.toInt();
     if(percent > 0 && percent < 100){
-      Job *job = jobs[proc];
+      Job *job = jobs[(KShellProcess*)proc];
       if(job)
         emit(updateProgress(job->id, percent));
     }
@@ -262,9 +263,9 @@ void EncoderConfigImp::jobDone(KProcess *process){
   if(!process)
     return;
 
-  Job *job = jobs[process];
-  threads.remove(process);
-  jobs.remove(process);
+  Job *job = jobs[(KShellProcess*)process];
+  threads.remove((KShellProcess*)process);
+  jobs.remove((KShellProcess*)process);
 
   if( QFile::exists(job->newLocation)){
     if(deleteWav->isChecked())

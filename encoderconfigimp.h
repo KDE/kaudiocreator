@@ -42,8 +42,8 @@ private slots:
 
 private:
   QList<Job> pendingJobs;
-  QList<KProcess> threads;
-  QMap<KProcess*, Job*> jobs;
+  QList<KShellProcess> threads;
+  QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
 
 };
