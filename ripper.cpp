@@ -157,7 +157,7 @@ void Ripper::tendToNewJobs(){
 	QString defaultTempDir;
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
-	KTempFile tmp( defaultTempDir );
+	KTempFile tmp( defaultTempDir, ".wav" );
 	tmp.setAutoDelete(true);
 
 	QString wavFile;
