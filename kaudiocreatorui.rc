@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kaudiocreator" version="3">
 <ActionProperties>
-  <Action name="rip" icon="shredder"/>
+  <Action name="rip" icon="gear"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
   <Action name="clear_done_jobs" icon="edittrash"/>
   <Action name="eject" icon="down"/>
@@ -27,12 +27,11 @@
 </MenuBar>
 
 <ToolBar name="Main ToolBar">
-  <Action name="eject"/>
   <Action name="cddb_now"/>
   <Action name="edit_cd"/>
   <Action name="rip"/>
   <Action name="clear_done_jobs"/>
-  <Action name="quit"/>
+  <Action name="eject"/>
 </ToolBar>
 
 </kpartgui>

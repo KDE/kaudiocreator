@@ -30,3 +30,6 @@ kde_kcfg_DATA = kaudiocreator.kcfg kaudiocreator_encoders.kcfg
 
 appdata_DATA = kaudiocreatorui.rc
 appdatadir = $(kde_datadir)/kaudiocreator
+
+conf_DATA = kaudiocreatorrc
+confdir = $(kde_confdir)
