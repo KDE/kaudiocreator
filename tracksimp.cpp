@@ -274,6 +274,13 @@ void TracksImp::loadSettings() {
 }
 
 /**
+ * @return if there is a cd inserted or not.
+ */
+bool TracksImp::hasCD(){
+	return (CDid != 0);
+}
+
+/**
  * Check for changes in the cd.
  */ 
 void TracksImp::timerDone() {
@@ -312,13 +319,28 @@ void TracksImp::timerDone() {
 	}
 
 	// A new album
-	newAlbum();
+	struct cdtext_info *info = wm_cd_get_cdtext();
+  QString trackName;
+	QString artistName;
+	if( info != NULL && info->valid == 1 ){
+		artistName = (char*)(info->blocks[0]->name[0]);
+		trackName = (char*)info->blocks[0]->performer[0];
+	}
+	newAlbum(trackName, artistName);
+	
+	// A new album
 	emit(hasCD(true));
 	CDid = currentDistID;
 	kdDebug(60002) << "New disk. Disk id: " << CDid << endl;
 	int numberOfTracks = wm_cd_getcountoftracks();
 	for ( int i=numberOfTracks; i>0; i-- ) {
-		newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
+		if(cd->trk[i-1].data != 0)
+			continue;
+		if( info != NULL && info->valid == 1 )
+			newSong(i, QString((char*)(info->blocks[0]->name[i])),
+											(cd->trk[i-1]).length, "");
+		else
+			newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
 	}
 	if( Prefs::performCDDBauto())
 		cddbCD();
@@ -442,6 +464,7 @@ void TracksImp::cddbDone(CDDB::Result result ) {
 			if( cddb_info.size() <= c)
 				info = cddb_info[c];
 		} else {
+			return;
 			// user pressed Cancel
 		}
 	}
@@ -606,7 +629,10 @@ void TracksImp::setCdInfo(KCDDB::CDInfo &info)
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession( ) {
+void TracksImp::startSession() {
+  startSession(-1);
+}
+void TracksImp::startSession( int encoder ) {
 	if( trackListing->childCount() == 0 ) {
 		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
 		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
@@ -634,6 +660,7 @@ void TracksImp::startSession( ) {
 	while( currentItem != 0 ) {
 		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
 			Job *newJob = new Job();
+			newJob->encoder = encoder;
 			newJob->device = device;
 			newJob->album = album;
 			newJob->genre = genres[genre];

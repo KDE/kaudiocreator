@@ -31,6 +31,7 @@ class Ripper;
 class Encoder;
 class KCModule;
 class EncoderConfigImp;
+class KPopupMenu;
 
 class KAudioCreator : public KMainWindow {
 
@@ -52,12 +53,16 @@ private slots:
   void configureNotifications();
   void encodeFile();
 
+	void slotRipSelection(int);
+	void getRipMenu();
+	
 private:
   KJanusWidget *janusWidget;
   TracksImp *tracks;
   JobQueImp *jobQue;
   Ripper *ripper;
   Encoder *encoder;
+	KPopupMenu *ripMenu;
 
 };
 

@@ -31,7 +31,7 @@
 class Job{
 
 public:
-	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false){};
+	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), encoder(-1) {};
 
 	void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
@@ -65,6 +65,8 @@ public:
 
 	// output from the processing.
 	QString output;
+
+	int encoder;
 }; 
 
 #endif // JOB_H

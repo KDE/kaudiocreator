@@ -45,16 +45,19 @@ Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),report
  * Load the settings for this class.
  */ 
 void Encoder::loadSettings() {
-	QString currentEncoderGroup = QString("Encoder_%1").arg(Prefs::currentEncoder());
+	loadEncoder(Prefs::currentEncoder());
+	// If the cpu count change then try
+	for(uint i=0; i<(uint)Prefs::numberOfCpus(); i++)
+		tendToNewJobs();
+}
+
+void Encoder::loadEncoder( int encoder ){
+	QString currentEncoderGroup = QString("Encoder_%1").arg(encoder);
 	prefs = EncoderPrefs::prefs(currentEncoderGroup);
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString::null);
-	}
-
-	// If the cpu count change then try
-	for(uint i=0; i<(uint)Prefs::numberOfCpus(); i++)
-		tendToNewJobs();
+	}				
 }
 
 /**
@@ -149,7 +152,12 @@ void Encoder::tendToNewJobs() {
 
 	Job *job = pendingJobs.first();
 	pendingJobs.remove(job);
-
+	
+	// if encoder is selected load it.
+	if ( job->encoder != -1 ){
+		loadEncoder(job->encoder);
+	}
+	
 	QString desiredFile = Prefs::fileFormat();
 	{
 		QMap <QString,QString> map;
@@ -161,11 +169,11 @@ void Encoder::tendToNewJobs() {
 	// If the user wants anything regexp replaced do it now...
 	desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
 
-  while ( QFile::exists( desiredFile ) ) {
+	while ( QFile::exists( desiredFile ) ) {
 		bool ok;
 		QString text = KInputDialog::getText(
-		    i18n("KAudioCreator - File already exists"), i18n("Sorry, file already exists, please pick a new name:"),
-		    desiredFile, &ok );
+			i18n("KAudioCreator - File already exists"), i18n("Sorry, file already exists, please pick a new name:"),
+			desiredFile, &ok );
 		if ( ok && !text.isEmpty() )
 		 	desiredFile = text;
 		else {	
@@ -203,9 +211,9 @@ void Encoder::tendToNewJobs() {
  
 	*proc << QFile::encodeName(command);
 	connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-	                    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
+	      this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
 	connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
-	                    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
+	      this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
 	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(jobDone(KProcess *)));
 	jobs.insert(proc, job);
 	threads.append(proc);

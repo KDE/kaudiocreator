@@ -36,85 +36,87 @@ class KProcess;
 
 namespace KCDDB
 {
-  class CDInfo;
+	class CDInfo;
 } ;
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
  */
-class TracksImp : public Tracks  {
+class TracksImp : public Tracks {
 
 Q_OBJECT
 
 signals:
-  void ripTrack(Job *job);
-  void hasCD(bool);
-  void hasTracks(bool);
+	void ripTrack(Job *job);
+	void hasCD(bool);
+	void hasTracks(bool);
  
 public:
-  TracksImp( QWidget* parent = 0, const char* name = 0);
-  ~TracksImp();
+	TracksImp( QWidget* parent = 0, const char* name = 0);
+	~TracksImp();
 
-  // This is public so the file encoder can use it
-  QMap<QString, QString> genres;
+	// This is public so the file encoder can use it
+	QMap<QString, QString> genres;
+	bool hasCD();
 
 public slots:
-  void loadSettings();
-  
-  // Toolbar Buttons
-  void startSession();
-  void editInformation();
-  void performCDDB();
-  void ejectDevice(const QString &deviceToEject);
-  void eject();
-  void selectAllTracks();
-  void deselectAllTracks();
+	void loadSettings();
+
+	// Toolbar Buttons
+	void startSession();
+	void startSession( int encoder );
+	void editInformation();
+	void performCDDB();
+	void ejectDevice(const QString &deviceToEject);
+	void eject();
+	void selectAllTracks();
+	void deselectAllTracks();
 
 private slots:
-  void ejectDone(KProcess *proc);
-  void selectTrack(QListViewItem *);
-  void keyPressEvent(QKeyEvent *event);
-  void editNextTrack();
-  void editPreviousTrack();
+	void ejectDone(KProcess *proc);
+	void selectTrack(QListViewItem *);
+	void keyPressEvent(QKeyEvent *event);
+	void editNextTrack();
+	void editPreviousTrack();
  
-  void timerDone();
-  void changeDevice(const QString &file);
-  void cddbDone(CDDB::Result result);
+	void timerDone();
+	void changeDevice(const QString &file);
+	void cddbDone(CDDB::Result result);
 
 private:
 
-  void cddbCD();
-  void newAlbum(const QString &group = i18n("Unknown Artist"),
-		const QString &album = i18n("Unknown Album"),
-		uint year = 0, const QString &genre = "",
-		uint revision = 0, const QString &category = "",
-		const QString& comment = "");
-  void newSong(int track, const QString &title, int length, const QString& comment); 
-  void ripWholeAlbum();
+	void cddbCD();
+	void newAlbum(const QString &group = i18n("Unknown Artist"),
+	const QString &album = i18n("Unknown Album"),
+	uint year = 0, const QString &genre = "",
+	uint revision = 0, const QString &category = "",
+	const QString& comment = "");
+	void newSong(int track, const QString &title, int length, const QString& comment); 
+	void ripWholeAlbum();
 
-  void editOtherTrack(bool nextOneUp);
-  void setCdInfo(KCDDB::CDInfo &info);
-  
-  AlbumEditor *dialog;
-  KCDDB::Client* cddb;
-  
-  unsigned long CDid;
-  int dstatus;
-  
-  // Current album
-  QString album;
-  QString group;
-  QString genre;
-  QString comment;
-  int year;
-  // CDDB data, which we keep loaded so it doesn't
-  // get lost when saving new cddb-information
-  int revision;
-  QString category;
-  
-  // Settings
-  QString device;
+	void editOtherTrack(bool nextOneUp);
+	void setCdInfo(KCDDB::CDInfo &info);
+
+	AlbumEditor *dialog;
+	KCDDB::Client* cddb;
+
+	unsigned long CDid;
+	int dstatus;
+
+	// Current album
+	QString album;
+	QString group;
+	QString genre;
+	QString comment;
+	int year;
+	// CDDB data, which we keep loaded so it doesn't
+	// get lost when saving new cddb-information
+	int revision;
+	QString category;
+
+	// Settings
+	QString device;
 };
 
-#endif
+#endif // TRACKSIMP_H
 

@@ -50,6 +50,7 @@ public slots:
   void removeJob(int id);
   void encodeWav(Job *job);
   void loadSettings();
+	void loadEncoder( int encoder );
 
 private slots:
   void receivedThreadOutput(KProcess *process, char *buffer, int buflen);

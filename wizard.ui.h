@@ -34,78 +34,77 @@
 
 void fileWizard::homePressed()
 {
-    playlistFormat->insert("~");
+	playlistFormat->insert("~");
 }
 
 void fileWizard::extensionPressed()
 {
-    playlistFormat->insert("%{extension}");
+	playlistFormat->insert("%{extension}");
 }
 
 void fileWizard::trackTitlePressed()
 {
-    playlistFormat->insert("%{title}");
+	playlistFormat->insert("%{title}");
 }
 
 void fileWizard::trackArtistPressed()
 {
-    playlistFormat->insert("%{artist}");
+	playlistFormat->insert("%{artist}");
 }
 
 void fileWizard::trackNumberPressed()
 {
-    playlistFormat->insert("%{number}");
+	playlistFormat->insert("%{number}");
 }
 
 void fileWizard::trackCommentPressed()
 {
-    playlistFormat->insert("%{comment}");
+	playlistFormat->insert("%{comment}");
 }
 
 void fileWizard::yearPressed()
 {
-    playlistFormat->insert("%{year}");
+	playlistFormat->insert("%{year}");
 }
 
 void fileWizard::genrePressed()
 {
-    playlistFormat->insert("%{genre}");
+	playlistFormat->insert("%{genre}");
 }
 
 void fileWizard::albumPressed()
 {
-    playlistFormat->insert("%{albumtitle}");
+	playlistFormat->insert("%{albumtitle}");
 }
 
 void fileWizard::artistPressed()
 {
-    playlistFormat->insert("%{albumartist}");
+	playlistFormat->insert("%{albumartist}");
 }
 
 void fileWizard::commentPressed()
 {
-    playlistFormat->insert("%{albumcomment}");
+	playlistFormat->insert("%{albumcomment}");
 }
 
 void fileWizard::fileFormatTextChanged(const QString& text)
 {
-  QString string = text;
-  string.replace(QRegExp("~"), "/home/foo");
-
-  Job job;
-  job.genre = "Rock";
-  job.group = "J Rocker";
-  job.album = "Why Rain";
-  job.year = 2002;
-  job.track = 9;
-  job.comment = "This Album rocks!";
-   
-  job.track_title = "Time";
-  job.track_artist = "John Rocker"; 
-  job.track_comment = "This Song Rocks!";
-  QMap<QString,QString> map;
-  map.insert("extension", "mp3");
-  job.replaceSpecialChars(string, false,  map);
-  exampleLabel->setText(i18n("Example: %1").arg(string));
+	QString string = text;
+	string.replace(QRegExp("~"), "/home/foo");
+	Job job;
+	job.genre = "Rock";
+	job.group = "J Rocker";
+	job.album = "Why Rain";
+	job.year = 2002;
+	job.track = 9;
+	job.comment = "This Album rocks!";
+ 
+	job.track_title = "Time";
+	job.track_artist = "John Rocker"; 
+	job.track_comment = "This Song Rocks!";
+	QMap<QString,QString> map;
+	map.insert("extension", "mp3");
+	job.replaceSpecialChars(string, false, map);
+	exampleLabel->setText(i18n("Example: %1").arg(string));
 }
 
