@@ -22,7 +22,6 @@
 #include <kprocess.h>
 #include <kmessagebox.h>
 
-#define HAVE_LAME 0
 
 #include <config.h>
 
@@ -61,12 +60,8 @@ extern "C"
    use another ripping library we can remove this.  */
 #include <linux/cdrom.h>
 #include <sys/ioctl.h>
-
-#if HAVE_LAME
-#include <lame/lame.h>
-#endif
-
 }
+
 #include <kdebug.h>
 #include <kurl.h>
 #include <kprotocolmanager.h>
@@ -207,12 +202,6 @@ class CdConfigImp::Private
     QString s_mp3;
     QString s_vorbis;
 
-#if HAVE_LAME
-  lame_global_flags *gf;
-  int bitrate;
-  bool write_id3;
-#endif
-
     Which_dir which_dir;
     int req_track;
     QString fname;
@@ -282,17 +271,7 @@ void CdConfigImp::configureAudioCD(){
   proc.start(KShellProcess::DontCare,  KShellProcess::NoCommunication);
 }
 
-struct cdrom_drive *
-CdConfigImp::initRequest(const KURL & url)
-{
-
-#if HAVE_LAME
-  if (NULL == (d->gf = lame_init())) { // init the lame_global_flags structure with defaults
-    //error(KIO::ERR_DOES_NOT_EXIST, url.path());
-    return 0;
-  }
-  id3tag_init (d->gf);
-#endif
+struct cdrom_drive * CdConfigImp::initRequest(const KURL & url) {
 
 	// first get the parameters from the Kontrol Center Module
   getParameters();
@@ -303,21 +282,19 @@ CdConfigImp::initRequest(const KURL & url)
 
   struct cdrom_drive *drive = pickDrive();
 
-  if (0 == drive)
-  {
-    
+  if (0 == drive){
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return 0;
   }
 
-  if (0 != cdda_open(drive))
-  {
+  if (0 != cdda_open(drive)) {
     //error(KIO::ERR_CANNOT_OPEN_FOR_READING, url.path());
     return 0;
   }
 
-  if(updateCD(drive) == -1)
+  if(updateCD(drive) == -1){
     return 0;
+  }
 
   d->fname = url.filename(false);
   QString dname = url.directory(true, false);
@@ -407,9 +384,7 @@ CdConfigImp::initRequest(const KURL & url)
   return drive;
 }
 
-  unsigned int
-CdConfigImp::get_discid(struct cdrom_drive * drive)
-{
+unsigned int CdConfigImp::get_discid(struct cdrom_drive * drive) {
   unsigned int id = 0;
   for (int i = 1; i <= drive->tracks; i++)
     {
@@ -430,9 +405,7 @@ CdConfigImp::get_discid(struct cdrom_drive * drive)
   return id;
 }
 
-int
-CdConfigImp::updateCD(struct cdrom_drive * drive)
-{
+int CdConfigImp::updateCD(struct cdrom_drive * drive){
   unsigned int id = get_discid(drive);
   //BEN TODO
   //if (id == d->discid)
@@ -503,8 +476,7 @@ void CdConfigImp::attemptToListAlbum(){
   KURL url = "/";
   struct cdrom_drive *drive = pickDrive();
 
-  if (0 == drive)
-  {
+  if (0 == drive) {
     emit(newAlbum(i18n("Unknown Artist"),i18n("Unknown Album"), 0, i18n("Other")));
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return;
@@ -516,6 +488,7 @@ void CdConfigImp::attemptToListAlbum(){
     //error(KIO::ERR_CANNOT_OPEN_FOR_READING, url.path());
     return;
   }
+  cdda_close(drive);
 
   drive = initRequest(url);
   if (!drive){
@@ -671,100 +644,7 @@ void CdConfigImp::getParameters() {
     d->cddbPort = cddbserver.mid(portPos + 1).toInt();
   }
 
-#if HAVE_LAME
-
-  config->setGroup("MP3");
-
-  int quality = config->readNumEntry("quality",2);
-
-  if (quality < 0 ) quality = 0;
-  if (quality > 9) quality = 9;
-
-  int method = config->readNumEntry("encmethod",0);
-
-  if (method == 0) { 
-    
-    // Constant Bitrate Encoding
-    lame_set_VBR(d->gf, vbr_off);
-    lame_set_brate(d->gf,config->readNumEntry("cbrbitrate",160));
-    d->bitrate = lame_get_brate(d->gf);
-    lame_set_quality(d->gf, quality);
-
-  } else {
-    
-    // Variable Bitrate Encoding
-    
-    if (config->readBoolEntry("set_vbr_avr",true)) {
-
-      lame_set_VBR(d->gf,vbr_abr);
-      lame_set_VBR_mean_bitrate_kbps(d->gf, config->readNumEntry("vbr_average_bitrate",0));
-
-      d->bitrate = lame_get_VBR_mean_bitrate_kbps(d->gf);
-
-    } else {
-
-      if (lame_get_VBR(d->gf) == vbr_off) lame_set_VBR(d->gf, vbr_default);
-
-      if (config->readBoolEntry("set_vbr_min",true)) 
-	lame_set_VBR_min_bitrate_kbps(d->gf, config->readNumEntry("vbr_min_bitrate",0));
-      if (config->readBoolEntry("vbr_min_hard",true))
-	lame_set_VBR_hard_min(d->gf, 1);
-      if (config->readBoolEntry("set_vbr_max",true)) 
-	lame_set_VBR_max_bitrate_kbps(d->gf, config->readNumEntry("vbr_max_bitrate",0));
-
-      d->bitrate = 128;
-      lame_set_VBR_q(d->gf, quality);
-      
-    }
-
-    lame_set_bWriteVbrTag(d->gf, config->readBoolEntry("write_xing_tag",true));
-
-  }
-
-  switch (   config->readNumEntry("mode",0) ) {
-
-    case 0: lame_set_mode(d->gf, STEREO);
-                break;
-    case 1: lame_set_mode(d->gf, JOINT_STEREO);
-                break;
-    case 2: lame_set_mode(d->gf,DUAL_CHANNEL);
-                break;
-    case 3: lame_set_mode(d->gf,MONO);
-                break;
-    default: lame_set_mode(d->gf,STEREO);
-                break;
-  }
-
-  lame_set_copyright(d->gf, config->readBoolEntry("copyright",false));
-  lame_set_original(d->gf, config->readBoolEntry("original",true));
-  lame_set_strict_ISO(d->gf, config->readBoolEntry("iso",false));
-  lame_set_error_protection(d->gf, config->readBoolEntry("crc",false));
-
-  d->write_id3 = config->readBoolEntry("id3",true);
-
-  if ( config->readBoolEntry("enable_lowpassfilter",false) ) {
-
-    lame_set_lowpassfreq(d->gf, config->readNumEntry("lowpassfilter_freq",0));
-
-    if (config->readBoolEntry("set_lowpassfilter_width",false)) {
-      lame_set_lowpasswidth(d->gf, config->readNumEntry("lowpassfilter_width",0));
-    }
-
-  }
-
-  if ( config->readBoolEntry("enable_highpassfilter",false) ) {
-
-    lame_set_highpassfreq(d->gf, config->readNumEntry("highpassfilter_freq",0));
-
-    if (config->readBoolEntry("set_highpassfilter_width",false)) {
-      lame_set_highpasswidth(d->gf, config->readNumEntry("highpassfilter_width",0));
-    }
-
-  }
-#endif // HAVE_LAME
-
   delete config;
-  return;
 }
 
 #include "cdconfigimp.moc"
