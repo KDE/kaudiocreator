@@ -88,8 +88,8 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
     encoderExtension.insert(1, "ogg");
     encoderpercentLength.insert(1, 4);
   
-    encoderName.insert(2, i18n("Leave As Wav"));
-    encoder->insertItem(i18n("Leave As Wav"));
+    encoderName.insert(2, i18n("Leave as Wav"));
+    encoder->insertItem(i18n("Leave as Wav"));
     encoderArgs.insert(2, "mv %f %o");
     encoderExtension.insert(2, "wav");
     encoderpercentLength.insert(2, 2);
