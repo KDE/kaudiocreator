@@ -26,8 +26,8 @@
     <Action name="view_que"/>
   </Menu>
   <Menu name="settings"><Text>&amp;Settings</Text>
-    <Action name="configure_kaudiocreator"/>
     <Action name="configuretoolbars"/>
+    <Action name="configure_kaudiocreator"/>
   </Menu>
 </MenuBar>
 
