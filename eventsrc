@@ -21,6 +21,10 @@ Name[ta]=தடம் பிரிக்கப்பட்டது
 Name[tg]=Шиор Канда шудааст
 Name[xx]=xxTrack Rippedxx
 Comment=Track finished ripping
+Comment[de]=Das Stück ist fertig ausgelesen.
+Comment[et]=Raja rippimine lõpetatud
+Comment[pt]=A faixa foi extraida
+Comment[pt_BR]=A faixa foi extraida
 
 [cd ripped]
 Name=CD Ripped
@@ -39,6 +43,10 @@ Name[tg]=Диски Фишурда Канда шудааст
 Name[uz]=Компакт-диск риппер
 Name[xx]=xxCD Rippedxx
 Comment=CD finished ripping
+Comment[de]=Die CD ist fertig ausgelesen.
+Comment[et]=CD rippimine lõpetatud
+Comment[pt]=O CD foi extraido
+Comment[pt_BR]=O CD foi extraido
 
 [track encoded]
 Name=Track Encoded
@@ -56,6 +64,10 @@ Name[ta]=தடம் மறையாக்கப் பட்டது
 Name[tg]=Шиор Рамзӣ кунонида шудааст
 Name[xx]=xxTrack Encodedxx
 Comment=Track finished encoding
+Comment[de]=Das Stück ist fertig kodiert.
+Comment[et]=Raja kodeerimine lõpetatud
+Comment[pt]=A faixa foi codificada
+Comment[pt_BR]=A faixa foi codificada
 
 [cd encoded]
 Name=CD Encoded
@@ -73,5 +85,9 @@ Name[ta]=CD மறையாக்கப் பட்டது
 Name[tg]=Диски Фишурда Рамзӣ кунонида шудааст
 Name[xx]=xxCD Encodedxx
 Comment=CD finished encoding
+Comment[de]=Die CD ist fertig kodiert.
+Comment[et]=CD kodeerimine lõpetatud
+Comment[pt]=O CD foi codificado
+Comment[pt_BR]=O CD foi codificado
 default_presentation=17
 default_sound=KDE_ClockChime.wav
