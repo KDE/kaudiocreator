@@ -6,6 +6,7 @@ Comment[sv]=Kaudiocreator
 [track ripped]
 Name=Track Ripped
 Name[da]=Spor rippet
+Name[et]=Rada ripitud
 Name[hu]=Hangsáv kimásolva
 Name[pt]=Faixa Extraida
 Name[pt_BR]=Faixa Extraida
@@ -21,6 +22,7 @@ Comment[ta]=தடம் பிரித்தலை முடித்தது
 [cd ripped]
 Name=CD Ripped
 Name[da]=CD rippet
+Name[et]=CD ripitud
 Name[hu]=CD kimásolva
 Name[pt]=CD Extraido
 Name[pt_BR]=CD Extraido
@@ -37,6 +39,7 @@ Comment[ta]=CD பிரித்தல் முடிந்தது
 [track encoded]
 Name=Track Encoded
 Name[da]=Spor indkodet
+Name[et]=Rada kodeeritud
 Name[hu]=Hangsáv kódolása kész
 Name[pt]=Faixa Codificada
 Name[pt_BR]=Faixa Codificada
@@ -52,6 +55,7 @@ Comment[ta]=தடம் மறையாக்கத்தை முடித்
 [cd encoded]
 Name=CD Encoded
 Name[da]=CD indkodet
+Name[et]=CD kodeeritud
 Name[hu]=CD kódolása kész
 Name[pt]=CD Codificado
 Name[pt_BR]=CD Codificado
