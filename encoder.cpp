@@ -33,16 +33,16 @@ void Encoder::loadSettings(){
   }
   else{
     config.setGroup(currentEncoderGroup);
-    encoderCommandLine = config.readEntry("commandLine");
+    encoderCommandLine = config.readPathEntry("commandLine");
     encoderExtension = config.readEntry("extension");
     encoderPercentLength = config.readNumEntry("percentLength");
   }
 	  
   config.setGroup("Encoder");
   numberOfCpus = config.readNumEntry("numberOfCpus", 1);
-  fileFormat = config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
+  fileFormat = config.readPathEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
   createPlaylist = config.readBoolEntry("createPlaylist", false);
-  playlistFileFormat = config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
+  playlistFileFormat = config.readPathEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
   useRelitivePath = config.readBoolEntry("useRelitivePath", false);
 }
 
