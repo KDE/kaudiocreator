@@ -40,6 +40,7 @@
 #include "encoderconfigimp.h"
 #include "general.h"
 #include <kcmoduleloader.h>
+#include <kkeydialog.h>
 
 /**
  * Constructor.  Connect all of the object and the job control.
@@ -84,9 +85,15 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   setStandardToolBarMenuEnabled(true);
 
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
+  KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
 
   createGUI("kaudiocreatorui.rc");
   setAutoSaveSettings( "Main Window" );
+}
+
+void KAudioCreator::slotConfigureKeys()
+{
+  KKeyDialog::configure( actionCollection(), this );
 }
 
 /**
