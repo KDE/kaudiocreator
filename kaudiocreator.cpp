@@ -14,7 +14,12 @@
 #include "encoder.h"
 #include "jobqueimp.h"
 
-#include "options.h"
+// Settings
+#include <kautoconfigdialog.h>
+#include "ripconfig.h"
+#include "encoderconfigimp.h"
+#include "general.h"
+#include <kcmoduleloader.h>
 
 /**
  * Constructor.  Connect all of the object and the job control.
@@ -30,8 +35,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   ripper = new Ripper(frame, "Rip");
   encoder = new Encoder(frame, "Encoder");
 
-  QFrame *f = janusWidget->addPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
-  jobQue = new JobQueImp(f, "Que");
+  frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
+  jobQue = new JobQueImp(frame, "Que");
 
   connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
   connect(ripper, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));
@@ -51,7 +56,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   resize(500, 440);
 
-  (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showOptions()), actionCollection(), "configure_kaudiocreator" );
+  (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
   (void)new KAction(i18n("Rip &Selected Tracks"), 0, tracksConfig, SLOT(startSession()), actionCollection(), "rip" );
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
   (void)new KAction(i18n("&Refresh CD List"), 0, cdConfig, SLOT(timerDone()), actionCollection(), "update_cd" );
@@ -96,23 +101,38 @@ void KAudioCreator::saveToolbarConfig(){
 }
 
 /**
- * Show KAudioCreator Options.
+ * Show Settings dialog.
  */
-void KAudioCreator::showOptions(){
-  optionsDialog = new Options(this, "Options");
-  connect(optionsDialog, SIGNAL(closeOptions()), this, SLOT(closeOptions()));
+void KAudioCreator::showSettings(){
+  if(KAutoConfigDialog::showDialog("settings"))
+    return;
+  
+  KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
+  dialog->addPage(new General(0, "General"), i18n("General"), "General", "package_settings", i18n("General Configureation"));
+  dialog->addPage(new CdConfig(0, "CD"), i18n("CD"), "CD", "package_system", i18n("CD Configuration"));
+  
+  // Because WE don't segfault on our users...
+  if(KService::serviceByDesktopPath("Settings/Sound/cddb.desktop") != 0){
+    KCModuleInfo info("Settings/Sound/cddb.desktop", "settings");
+    KCModule *m = KCModuleLoader::loadModule(info);
+    m->load(); 
+    dialog->addPage(m, i18n("CDDB"), "Game", "cdaudio_unmount", i18n("CDDB Configuration"), false);
+    connect(dialog, SIGNAL(okClicked()), m, SLOT(save()));
+    connect(dialog, SIGNAL(applyClicked()), m, SLOT(save()));
+    connect(dialog, SIGNAL(defaultClicked()), m, SLOT(defaults()));
+  }
 
-  connect(optionsDialog, SIGNAL(readNewOptions()), cdConfig, SLOT(loadSettings()));
-  connect(optionsDialog, SIGNAL(readNewOptions()), ripper, SLOT(loadSettings()));
-  connect(optionsDialog, SIGNAL(readNewOptions()), encoder, SLOT(loadSettings()));
-  connect(optionsDialog, SIGNAL(readNewOptions()), jobQue, SLOT(loadSettings()));
-}
+  dialog->addPage(new RipConfig(0, "Ripper"), i18n("Ripper"), "Ripper", "shredder", i18n("Ripper Configuration") );
+  EncoderConfigImp *encoderConfigImp = new EncoderConfigImp(0, "Encoder");
+  dialog->addPage(encoderConfigImp, i18n("Encoder"), "Encoder", "filter", i18n("Encoder Configuration") );
+  
+  connect(encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
 
-/**
- * Close KAudioCreator Options.
- */
-void KAudioCreator::closeOptions(){
-  delete optionsDialog;
+  connect(dialog, SIGNAL(settingsChanged()), cdConfig, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
+  connect(dialog, SIGNAL(settingsChanged()), jobQue, SLOT(loadSettings()));
+  dialog->show();
 }
 
 #include "kaudiocreator.moc"

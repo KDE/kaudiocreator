@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>445</width>
-            <height>405</height>
+            <width>427</width>
+            <height>469</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,61 +19,112 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox" row="8" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>GroupBox3</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <property name="title">
-                <string>Encoded File Location</string>
-            </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
+                <widget class="QLayoutWidget" row="3" column="0">
                     <property name="name">
-                        <cstring>TextLabel2_2</cstring>
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>currentEncoderText</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Current encoder:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>currentEncoderName</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>Box</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QPushButton" row="3" column="1">
+                    <property name="name">
+                        <cstring>setCurrentEncoder</cstring>
                     </property>
                     <property name="text">
-                        <string>Location:</string>
+                        <string>&amp;Set As Current</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="QPushButton" row="2" column="1">
                     <property name="name">
-                        <cstring>fileFormat</cstring>
+                        <cstring>configureEncoder</cstring>
                     </property>
                     <property name="text">
-                        <string>~/%extension/%artist/%album/%artist - %song.%extension</string>
+                        <string>&amp;Configure...</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
                 </widget>
-                <widget class="QPushButton">
+                <widget class="QPushButton" row="1" column="1">
                     <property name="name">
-                        <cstring>encoderWizardButton</cstring>
+                        <cstring>removeEncoder</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Wizard...</string>
+                        <string>&amp;Remove</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>addEncoder</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Add...</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+                <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
+                    <property name="name">
+                        <cstring>encoderList</cstring>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="QCheckBox" row="9" column="0" rowspan="1" colspan="3">
+        <widget class="Line" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>createPlaylistCheckBox</cstring>
+                <cstring>line1</cstring>
             </property>
-            <property name="text">
-                <string>Create an album playlist file</string>
+            <property name="frameShape">
+                <enum>HLine</enum>
             </property>
-            <property name="checked">
-                <bool>false</bool>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="QGroupBox" row="10" column="0" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>GroupBox2</cstring>
             </property>
@@ -143,7 +194,18 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer row="11" column="0">
+        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>createPlaylistCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Create an album playlist file</string>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <spacer row="6" column="0">
             <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
@@ -160,15 +222,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QSpinBox" row="6" column="1">
-            <property name="name">
-                <cstring>numberOfCpus</cstring>
-            </property>
-            <property name="minValue">
-                <number>1</number>
-            </property>
-        </widget>
-        <widget class="QLabel" row="6" column="0">
+        <widget class="QLabel" row="3" column="0">
             <property name="name">
                 <cstring>TextLabel1_2</cstring>
             </property>
@@ -176,21 +230,15 @@
                 <string>Number of wav files to encode at a time:</string>
             </property>
         </widget>
-        <widget class="Line" row="4" column="0" rowspan="2" colspan="3">
+        <widget class="QSpinBox" row="3" column="1">
             <property name="name">
-                <cstring>line1</cstring>
+                <cstring>numberOfCpus</cstring>
             </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
+            <property name="minValue">
+                <number>1</number>
             </property>
         </widget>
-        <spacer row="5" column="2" rowspan="2" colspan="1">
+        <spacer row="3" column="2">
             <property name="name">
                 <cstring>Spacer4_2</cstring>
             </property>
@@ -202,91 +250,53 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>50</width>
+                    <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget" row="3" column="0">
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>GroupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>Encoded File Location</string>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>currentEncoderText</cstring>
+                        <cstring>TextLabel2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Current encoder:</string>
+                        <string>Location:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
-                        <cstring>currentEncoderName</cstring>
+                        <cstring>fileFormat</cstring>
                     </property>
-                    <property name="frameShape">
-                        <enum>Box</enum>
+                    <property name="text">
+                        <string>~/%extension/%artist/%album/%artist - %song.%extension</string>
                     </property>
-                    <property name="lineWidth">
-                        <number>1</number>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>encoderWizardButton</cstring>
                     </property>
-                    <property name="readOnly">
-                        <bool>true</bool>
+                    <property name="text">
+                        <string>&amp;Wizard...</string>
                     </property>
                 </widget>
             </hbox>
-        </widget>
-        <widget class="QListBox" row="0" column="0" rowspan="3" colspan="1">
-            <property name="name">
-                <cstring>encoderList</cstring>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="0" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>configureEncoder</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Configure...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="2" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>removeEncoder</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Remove</string>
-            </property>
-            <property name="accel">
-                <string>Alt+R</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>addEncoder</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Add...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="3" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>setCurrentEncoder</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Set As Current</string>
-            </property>
-            <property name="accel">
-                <string>Alt+S</string>
-            </property>
         </widget>
     </grid>
 </widget>
@@ -297,21 +307,40 @@
         <receiver>GroupBox2</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>playlistWizardButton</sender>
+        <signal>clicked()</signal>
+        <receiver>EncoderConfig</receiver>
+        <slot>playlistWizard()</slot>
+    </connection>
+    <connection>
+        <sender>encoderWizardButton</sender>
+        <signal>clicked()</signal>
+        <receiver>EncoderConfig</receiver>
+        <slot>encoderWizard()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>encoderList</tabstop>
-    <tabstop>configureEncoder</tabstop>
+    <tabstop>currentEncoderName</tabstop>
     <tabstop>addEncoder</tabstop>
     <tabstop>removeEncoder</tabstop>
+    <tabstop>configureEncoder</tabstop>
     <tabstop>setCurrentEncoder</tabstop>
-    <tabstop>currentEncoderName</tabstop>
-    <tabstop>numberOfCpus</tabstop>
     <tabstop>fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
+    <tabstop>numberOfCpus</tabstop>
     <tabstop>createPlaylistCheckBox</tabstop>
     <tabstop>playlistFileFormat</tabstop>
     <tabstop>playlistWizardButton</tabstop>
     <tabstop>useRelitivePath</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">encoderconfig.ui.h</include>
+</includes>
+<slots>
+    <slot>playlistWizard()</slot>
+    <slot>encoderWizard()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

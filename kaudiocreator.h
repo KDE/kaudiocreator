@@ -20,8 +20,6 @@ class JobQueImp;
 class QCloseEvent;
 class KDialogBase;
 
-class Options;
-
 class KAudioCreator : public KMainWindow {
 
 Q_OBJECT
@@ -37,8 +35,7 @@ protected:
 private slots:
   void configuretoolbars();
   void saveToolbarConfig();
-  void showOptions();
-  void closeOptions();
+  void showSettings();
 
 private:
   KJanusWidget *janusWidget;
@@ -48,7 +45,6 @@ private:
   Encoder *encoder;
   JobQueImp *jobQue;
 
-  Options *optionsDialog;
 };
 
 #endif

@@ -14,7 +14,6 @@
 
 // settings
 #include <kconfig.h>
-#include <kstandarddirs.h>
 
 /**
  * Constructor, load settings.
