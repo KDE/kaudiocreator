@@ -40,7 +40,7 @@ private slots:
 
 private:
   bool relativeURL(const QString &path1, const QString &path2,
-				QString &relativePath );
+				QString &relativePath ) const;
   
   QPtrList<Job> pendingJobs;
   QPtrList<KShellProcess> threads;

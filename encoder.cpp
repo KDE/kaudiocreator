@@ -289,8 +289,12 @@ void Encoder::appendToPlaylist(Job* job){
   f.close();
 }
 
+/**
+ * Finds the relative path from path1 to path2
+ * returns true is successfull.
+ */
 bool Encoder::relativeURL(const QString &path1, const QString &path2,
-				QString &relativePath ){
+				QString &relativePath ) const {
   QDir p1(QDir::cleanDirPath(path1));
   QDir p2(QDir::cleanDirPath(path2));
   if(!p1.exists() || !p2.exists())
