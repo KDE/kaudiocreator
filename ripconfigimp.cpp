@@ -154,7 +154,8 @@ void RipConfigImp::tendToNewJobs(){
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
 
   KURL source(wavFile);
-  KURL dest(desiredFile);
+  KURL dest;
+  dest.setPath(desiredFile);
 
   KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, FALSE, TRUE, FALSE, FALSE);
   connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
