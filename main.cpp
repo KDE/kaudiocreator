@@ -25,7 +25,7 @@
 #include <kaboutdata.h>
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.10",
+  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.11",
     I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2003, Benjamin Meyer",
     0, "http://www.csh.rit.edu/~benjamin/");
     aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.csh.rit.edu/~benjamin/");
