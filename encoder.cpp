@@ -24,7 +24,6 @@
 #include "encoder_prefs.h"
 
 #include <qregexp.h>
-#include <qtimer.h>
 #include <qdir.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
@@ -49,6 +48,10 @@ void Encoder::loadSettings(){
     KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
     prefs->setCommandLine(QString::null);
   }
+
+  // If the cpu count change then try
+  for(int i=0; i<(uint)Prefs::numberOfCpus(); i++)
+    tendToNewJobs();
 }
 
 /**
@@ -98,6 +101,7 @@ void Encoder::removeJob(int id){
     pendingJobs.remove(job);
     delete job;
   }
+  tendToNewJobs();
 }
 
 /**
@@ -115,13 +119,11 @@ void Encoder::encodeWav(Job *job){
  * then just loop back in a few seconds and check agian.
  */
 void Encoder::tendToNewJobs(){
-  // If we are currently ripping the max try again in a little bit.
-  if((int)threads.count() >= Prefs::numberOfCpus()){
-    QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
-    return;
-  }
-  // Just to make sure in the event something goes wrong or we are exiting
   if(pendingJobs.count() == 0)
+    return;
+  
+  // If we are currently ripping the max try again in a little bit.
+  if((int)threads.count() >= Prefs::numberOfCpus())
     return;
 
   Job *job = pendingJobs.first();
@@ -254,6 +256,7 @@ void Encoder::jobDone(KProcess *process){
 
   delete job;
   delete process;
+  tendToNewJobs();
 }
 
 /**
@@ -284,13 +287,10 @@ void Encoder::appendToPlaylist(Job* job){
 
   QTextStream t( &f );        // use a text stream
 
-  bool relWorked = false;
   if(Prefs::useRelativePath()){
-    
     QFileInfo audioFile(job->newLocation);
-    QString relative;
     KURL d(desiredFile);
-    relative = KURL::relativePath(d.directory(), audioFile.filePath());
+    QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
     t << relative << audioFile.fileName() << endl;
   }
   else
