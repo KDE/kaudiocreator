@@ -130,7 +130,7 @@ void TracksConfigImp::startSession(){
     lastJob->lastSongInAlbum = true;
 
   if(counter == 0){
-    KMessageBox:: sorry(this, i18n("No tracks are selected to rip.  Please select at least 1 track before ripping."), i18n("No tracks selected"));
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No tracks selected"));
     return;
   }
 
