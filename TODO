@@ -1,4 +1,5 @@
 TODO.
+Should it really say Ripping when it is at 0% and qued?  What else could we say?
 
 Make it possible to stop and start encoding jobs:
 
@@ -41,14 +42,9 @@ Option to automaticly remove completed jobs.
 
 By default have the temp dir when ripping removed.
 
-Add cancel button to options (i.e remove the functionality from those widgets).
+Add cancel button to options (i.e seperate the functionality from the widgets).
 
 When printing encoding, it would be nice if it would say it's encoding to what (mp3, ogg, whatever)
-
-I found a bug in kaudiocreator from the kdemultimedia-20020809 snapshot:
-If the file format in the Ripper Config contains something like ".../%track - 
-%song.wav", the ripper save the file with " around the track number and lame 
-can't find this file because it search for a file without the ".
 
 - Album Editor: Button for next and previous Track.
 

@@ -320,7 +320,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
   output = output.mid(0,length);
   int percentLocation = output.find('%');
   if(percentLocation==-1){
-    qDebug("No Percent symbol found in output, not updating");
+    qDebug("No Percent symbol found in output, not updating.  Please report this as a bug with your encoder command line options if you do not get any updates at all ever.");
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
@@ -351,9 +351,10 @@ void EncoderConfigImp::jobDone(KProcess *process){
   bool normalExit = true;
   if(process->normalExit()){
     int retrunValue = process->exitStatus();
-    if(retrunValue!=0)
+    if(retrunValue!=0){
       qDebug("Process exited with non 0 status: %d", retrunValue);
-    normalExit = false;
+      normalExit = false;
+    }
   }
 
   Job *job = jobs[(KShellProcess*)process];
