@@ -30,7 +30,7 @@
 Options::Options(QObject* parent, const char* name) : QObject(parent, name), oldEncoderSelection(-1){
 
   kautoconfig = new KAutoConfig(this, "Settings");
-  options = new KDialogBase(KDialogBase::IconList, i18n("Settings"), KDialogBase::Default | KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel ,KDialogBase::Ok,0, "Settings Dialog");
+  options = new KDialogBase(KDialogBase::IconList, i18n("Settings"), KDialogBase::Default | KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel ,KDialogBase::Ok, 0, "Settings Dialog", true, true);
   connect(options, SIGNAL(okClicked()), this, SLOT(okClicked()));
   connect(options, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
   connect(options, SIGNAL(defaultClicked()), this, SLOT(defaultClicked()));

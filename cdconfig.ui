@@ -66,7 +66,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Database Server</string>
+                        <string>Database server:</string>
                     </property>
                 </widget>
                 <widget row="1"  column="0" >
@@ -77,7 +77,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Port</string>
+                        <string>Port:</string>
                     </property>
                 </widget>
                 <widget row="1"  column="1" >

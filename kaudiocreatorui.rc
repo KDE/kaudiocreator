@@ -4,7 +4,7 @@
   <Action name="rip" icon="shredder"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
   <Action name="clear_done_jobs" icon="edittrash"/>
-  <Action name="update_cd" icon="rotate_cw"/>
+  <Action name="update_cd" icon="reload"/>
   <Action name="edit_cd" icon="edit"/>
   <Action name="cddb_now" icon="cdaudio_mount"/>
 </ActionProperties>
