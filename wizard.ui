@@ -181,7 +181,7 @@
                         <cstring>homeDirButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Home Directory</string>
+                        <string>&amp;Home Folder</string>
                     </property>
                     <property name="accel">
                         <string>Alt+H</string>
