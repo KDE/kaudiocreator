@@ -98,7 +98,7 @@
                     <class>QLineEdit</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>encoderExtension</cstring>
+                        <cstring>encoderExtensionLineEdit</cstring>
                     </property>
                 </widget>
             </grid>

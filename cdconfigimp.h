@@ -33,7 +33,8 @@ public:
 public slots:
   void timerDone();
   void cddbNow();
-
+  void configureAudioCD();
+  
 private slots:
   void attemptToListAlbum();
 

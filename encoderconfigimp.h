@@ -50,6 +50,12 @@ private:
   void replaceSpecialChars(QString &string, Job * job, bool slash);
   int encodersPercentStringLength;
   int oldEncoderSelection;
+
+  bool save;
+  QMap<int, QString> encoderName;
+  QMap<int, QString> encoderArgs;
+  QMap<int, QString> encoderExtension;
+  QMap<int, int> encoderpercentLength;
 };
 
 #endif

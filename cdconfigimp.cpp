@@ -19,6 +19,8 @@
 */
 
 #include <qpushbutton.h>
+#include <kprocess.h>
+#include <kmessagebox.h>
 
 #define HAVE_LAME 0
 
@@ -219,6 +221,7 @@ class CdConfigImp::Private
 CdConfigImp::CdConfigImp( QWidget* parent, const char* name):CdConfig(parent,name){
   d = new Private;
   //connect(getNow, SIGNAL(clicked()), this, SLOT(attemptToListAlbum()));
+  connect(configureAudioCDButton, SIGNAL(clicked()), this, SLOT(configureAudioCD()));
   KConfig &config = *KGlobal::config();
   config.setGroup("cdconfig");
   autoRip->setChecked(config.readBoolEntry("autoRip", false));
@@ -268,6 +271,15 @@ void CdConfigImp::timerDone(){
   updating = true;
   attemptToListAlbum();
   updating = false;
+}
+
+void CdConfigImp::configureAudioCD(){
+  KMessageBox::information(this,
+    i18n("The CDDA tab is the only one that is utilized at this time."),
+    i18n("CDDA Tab"), i18n("CDDA Tab"));
+  KShellProcess proc;
+  proc << "kcmshell" << "audiocd";
+  proc.start(KShellProcess::DontCare,  KShellProcess::NoCommunication);
 }
 
 struct cdrom_drive *

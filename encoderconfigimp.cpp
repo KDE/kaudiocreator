@@ -35,7 +35,7 @@ void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slas
     string.replace(QRegExp("%artist"), QString("\"%1\"").arg(job->group));
     string.replace(QRegExp("%year"), QString("\"%1\"").arg(job->year));
     string.replace(QRegExp("%song"), QString("\"%1\"").arg(job->song));
-    string.replace(QRegExp("%extension"), QString("\"%1\"").arg(encoderExtension->text()));
+    string.replace(QRegExp("%extension"), QString("\"%1\"").arg(encoderExtensionLineEdit->text()));
     if( job->track < 10 )
       string.replace(QRegExp("%track"), QString("\"0%1\"").arg(job->track));
     else
@@ -48,7 +48,7 @@ void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slas
     string.replace(QRegExp("%artist"), QString("%1").arg(job->group));
     string.replace(QRegExp("%year"), QString("%1").arg(job->year));
     string.replace(QRegExp("%song"), QString("%1").arg(job->song));
-    string.replace(QRegExp("%extension"), QString("%1").arg(encoderExtension->text()));
+    string.replace(QRegExp("%extension"), QString("%1").arg(encoderExtensionLineEdit->text()));
     if( job->track < 10 )
       string.replace(QRegExp("%track"), QString("0%1").arg(job->track));
     else
@@ -60,7 +60,7 @@ void EncoderConfigImp::replaceSpecialChars(QString &string, Job * job, bool slas
 /**
  * Constructor, load settings.  Set the up the pull down menu with the correct item.
  */
-EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderConfig(parent,name), encodersPercentStringLength(2), oldEncoderSelection(-1){
+EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderConfig(parent,name), encodersPercentStringLength(2), oldEncoderSelection(-1), save(false){
   connect(encoder, SIGNAL(activated(int)), this, SLOT(loadEncoderConfig(int)));
   connect(playlistWizardButton, SIGNAL(clicked()), this, SLOT(playlistWizard()));
   connect(encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
@@ -73,7 +73,33 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   createPlaylistCheckBox->setChecked(config.readBoolEntry("createPlaylist", false));
   playlistFileFormat->setText(config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u"));
   useRelitivePath->setChecked(config.readBoolEntry("useRelitivePath", false));
+  
   int totalNumberOfEncoders = config.readNumEntry("numberOfEncoders",0);
+  if( totalNumberOfEncoders == 0){
+    encoderName.insert(0, i18n("Lame"));
+    encoder->insertItem(i18n("Lame"));
+    encoderArgs.insert(0, "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
+    encoderExtension.insert(0, "mp3");
+    encoderpercentLength.insert(0, 2);
+  
+    encoderName.insert(1, i18n("OggEnc"));
+    encoder->insertItem(i18n("OggEnc"));
+    encoderArgs.insert(1, "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
+    encoderExtension.insert(1, "ogg");
+    encoderpercentLength.insert(1, 4);
+  
+    encoderName.insert(2, i18n("Leave As Wav"));
+    encoder->insertItem(i18n("Leave As Wav"));
+    encoderArgs.insert(2, "mv %f %o");
+    encoderExtension.insert(2, "wav");
+    encoderpercentLength.insert(2, 2);
+
+    encoderName.insert(3, i18n("Other"));
+    encoder->insertItem(i18n("Other"));
+    encoderArgs.insert(3, "");
+    encoderExtension.insert(3, "");
+    encoderpercentLength.insert(3, 2);
+  }
  
   /***
    * The Encoders can be entirly loaded and are not hard coded.  You can add remove them on the fly
@@ -86,39 +112,19 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
    * Extension - File extension that is generated.
    * Percent output length.  99.00% == 4, 99.9% == 3, 99% == 2
    */  
-  if(totalNumberOfEncoders==0){
-    config.writeEntry( ENCODER_EXE_STRING "0", "Lame");
-    config.writeEntry( ENCODER_ARGS_STRING "0", "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
-    config.writeEntry( ENCODER_EXTENSION_STRING "0", "mp3");
-    config.writeEntry( ENCODER_PERCENTLENGTH_STRING "0", 2);
-
-    config.writeEntry( ENCODER_EXE_STRING "2", "Leave As Wav");
-    config.writeEntry( ENCODER_ARGS_STRING "2", "mv %f %o");
-    config.writeEntry( ENCODER_EXTENSION_STRING "2", "wav");
-    config.writeEntry( ENCODER_PERCENTLENGTH_STRING "2", 2);
-    
-    config.writeEntry( ENCODER_EXE_STRING "1", "OggEnc");
-    config.writeEntry( ENCODER_ARGS_STRING "1", "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
-    config.writeEntry( ENCODER_EXTENSION_STRING "1", "ogg");
-    config.writeEntry( ENCODER_PERCENTLENGTH_STRING "1", 4);
-    
-    config.writeEntry( ENCODER_EXE_STRING "3", "Other");
-    config.writeEntry( ENCODER_ARGS_STRING "3", "");
-    config.writeEntry( ENCODER_EXTENSION_STRING "3", "");
-    config.writeEntry( ENCODER_PERCENTLENGTH_STRING "3", 2);
-    
-    totalNumberOfEncoders = 4;
-    config.writeEntry("numberOfEncoders",4);
-  }
-
   for(int i=0; i < totalNumberOfEncoders; i++){
+    encoderName.insert(i, config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""));
     encoder->insertItem(config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""),i);
+    encoderArgs.insert(i, config.readEntry(QString(ENCODER_ARGS_STRING "%1").arg(i),""));
+    encoderExtension.insert(i, config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(i),""));
+    encoderpercentLength.insert(i, config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(i),2));
   }
   
   // Set the current item and settings.
   int currentItem = config.readNumEntry("encoderCurrentItem",0);
   encoder->setCurrentItem(currentItem);
   loadEncoderConfig(encoder->currentItem());
+
 }
 
 /**
@@ -127,11 +133,11 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
 EncoderConfigImp::~EncoderConfigImp(){
   pendingJobs.clear();
 
-  QMap<KShellProcess*, Job*>::Iterator it;
-  for( it = jobs.begin(); it != jobs.end(); ++it ){
+  QMap<KShellProcess*, Job*>::Iterator pit;
+  for( pit = jobs.begin(); pit != jobs.end(); ++pit ){
     
-	  KShellProcess *process = it.key();
-    Job *job = jobs[it.key()];
+    KShellProcess *process = pit.key();
+    Job *job = jobs[pit.key()];
     threads.remove(process);
     process->kill();
     QFile::remove(job->newLocation);
@@ -150,9 +156,21 @@ EncoderConfigImp::~EncoderConfigImp(){
   config.writeEntry("playlistFileFormat", playlistFileFormat->text());
   config.writeEntry("useRelitivePath", useRelitivePath->isChecked());
 
-  int index = encoder->currentItem();
-  config.writeEntry(QString(ENCODER_ARGS_STRING "%1").arg(index), encoderCommandLine->text());
-  config.writeEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(index), encoderExtension->text());
+  if(!save)
+    return;
+  QMap<int, QString>::Iterator it;
+  for( it = encoderName.begin(); it != encoderName.end(); ++it )
+    config.writeEntry(QString(ENCODER_EXE_STRING "%1").arg(it.key()), it.data());
+  for( it = encoderArgs.begin(); it != encoderArgs.end(); ++it )
+    config.writeEntry(QString(ENCODER_ARGS_STRING "%1").arg(it.key()), it.data());
+  for( it = encoderExtension.begin(); it != encoderExtension.end(); ++it )
+    config.writeEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(it.key()), it.data());
+  QMap<int, int>::Iterator nit;
+  for( nit = encoderpercentLength.begin(); nit != encoderpercentLength.end(); ++nit )
+    config.writeEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(nit.key()), nit.data());
+
+  config.writeEntry("encoderCurrentItem",encoder->currentItem());
+  config.writeEntry("numberOfEncoders", encoder->count());
 }
 
 /**
@@ -160,20 +178,22 @@ EncoderConfigImp::~EncoderConfigImp(){
  * @param index the selected item in the drop down menu.
  */
 void EncoderConfigImp::loadEncoderConfig(int index){
-  KConfig &config = *KGlobal::config();
-  config.setGroup("encoderconfig");
-  
-  // You have to save the old one first.
-  if(oldEncoderSelection != -1){
-    config.writeEntry(QString(ENCODER_ARGS_STRING "%1").arg(oldEncoderSelection), encoderCommandLine->text());
-    config.writeEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(oldEncoderSelection), encoderExtension->text());
+  if(encoderArgs[oldEncoderSelection] != encoderCommandLine->text() && oldEncoderSelection != -1){
+    //encoderArgs.remove(index);
+    encoderArgs.insert(oldEncoderSelection, encoderCommandLine->text());
+    save = true;
+  }
+  if(encoderExtension[oldEncoderSelection] != encoderExtensionLineEdit->text() && oldEncoderSelection != -1){
+    //encoderExtension.remove(index);
+    encoderExtension.insert(oldEncoderSelection, encoderExtensionLineEdit->text());
+    save = true;
   }
   oldEncoderSelection = index;
 
   // Now you can load the new settings.
-  encoderCommandLine->setText(config.readEntry(QString(ENCODER_ARGS_STRING "%1").arg(index), ""));
-  encoderExtension->setText(config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(index), ""));
-  encodersPercentStringLength = config.readNumEntry( QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(index),2);
+  encoderCommandLine->setText(encoderArgs[index]);
+  encoderExtensionLineEdit->setText(encoderExtension[index]);
+  encodersPercentStringLength = encoderpercentLength[index];
 }
 
 /**

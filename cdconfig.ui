@@ -1,146 +1,227 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI>
 <class>CdConfig</class>
-<widget class="QWidget">
-    <property name="name">
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
         <cstring>CdConfig</cstring>
     </property>
-    <property name="geometry">
+    <property stdset="1">
+        <name>geometry</name>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>383</width>
-            <height>320</height>
+            <width>260</width>
+            <height>270</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form2</string>
+    <property stdset="1">
+        <name>caption</name>
+        <string>CdConfig</string>
     </property>
     <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
         </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
+        <property stdset="1">
+            <name>spacing</name>
             <number>6</number>
         </property>
-        <widget class="QCheckBox">
-            <property name="name">
+        <widget>
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>performCDDBauto</cstring>
             </property>
-            <property name="text">
+            <property stdset="1">
+                <name>text</name>
                 <string>Perform CDDB lookup automatically</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>GroupBox1</cstring>
             </property>
-            <property name="title">
+            <property stdset="1">
+                <name>title</name>
                 <string>CDDB Server</string>
             </property>
             <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
+                <property stdset="1">
+                    <name>margin</name>
                     <number>11</number>
                 </property>
-                <property name="spacing">
+                <property stdset="1">
+                    <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>TextLabel3</cstring>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
                     </property>
-                    <property name="text">
-                        <string>Database server:</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>databaseServer</cstring>
-                    </property>
-                    <property name="text">
-                        <string>freedb.freedb.org</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Database Server</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="1" column="1">
-                    <property name="name">
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Port</string>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
                         <cstring>databasePort</cstring>
                     </property>
-                    <property name="maxValue">
-                        <number>99999</number>
+                    <property stdset="1">
+                        <name>maxValue</name>
+                        <number>65535</number>
                     </property>
-                    <property name="value">
+                    <property stdset="1">
+                        <name>value</name>
                         <number>8880</number>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>TextLabel2</cstring>
+                <widget row="0"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>databaseServer</cstring>
                     </property>
-                    <property name="text">
-                        <string>Port:</string>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>freedb.freedb.org</string>
                     </property>
                 </widget>
             </grid>
         </widget>
-        <widget class="Line">
-            <property name="name">
+        <widget>
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>autoRip</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Automatially rip every song on to a new CD</string>
+            </property>
+        </widget>
+        <widget>
+            <class>Line</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>Line1</cstring>
             </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
+            <property stdset="1">
+                <name>orientation</name>
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>autoRip</cstring>
+        <widget>
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
             </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
-                <string>Automatically rip every song on to a new CD</string>
-            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>configureAudioCDButton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Configure AudioCD ioslave</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
         </widget>
         <spacer>
-            <property name="name">
+            <property>
+                <name>name</name>
                 <cstring>Spacer1</cstring>
             </property>
-            <property name="orientation">
+            <property stdset="1">
+                <name>orientation</name>
                 <enum>Vertical</enum>
             </property>
-            <property name="sizeType">
+            <property stdset="1">
+                <name>sizeType</name>
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
+            <property>
+                <name>sizeHint</name>
                 <size>
-                    <width>0</width>
+                    <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
     </vbox>
 </widget>
-<connections>
-    <connection>
-        <sender>performCDDBauto</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GroupBox1</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<layoutdefaults spacing="6" margin="11"/>
+<customwidgets>
+    <customwidget>
+        <class>QWidget</class>
+        <header location="local">qwidget.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>7</verdata>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="45">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523250004143a55a6b2e0026630c4f</data>
+    </image>
+</images>
 </UI>
