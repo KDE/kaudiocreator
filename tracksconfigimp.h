@@ -47,6 +47,7 @@ private:
   QString group;
   QString genre;
   int year;
+  QMap<QString, QString> genres;
 };
 
 #endif
