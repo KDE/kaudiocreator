@@ -1,16 +1,14 @@
-Pick sounds that are installed by kdebase for events
-
 Use libwm to eject for bsd fun
 
-BUG? encoding with different genre's
 Multiple Artists for 1 album.
 Add the ability to encode files.
-Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
-Plugin system for encoders (user friendly thingys)
+
+Rip and encode only 1 song at a time. (i.e. using audiocd:/ ioslave).
+Plugin system for encoders (user friendly things, again use audiocd plugin system)
 
 If possible restart jobs that have failed.
 
-If encoding failed output error log to a text window?
+If encoding failed output error log to a text window
 
 ---
 Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
