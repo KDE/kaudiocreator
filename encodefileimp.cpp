@@ -31,7 +31,7 @@ EncodeFileImp::EncodeFileImp( QMap<QString, QString> g, QWidget* parent,
 		const char* name) : EncodeFile(parent, name), genres(g) {
   genre->insertStringList(genres.keys());
   // Specify to only accept wav files
-  file->setFilter("*.wav|Wav files");
+  file->setFilter("*.wav|Wav Files");
 }
 
 /**
@@ -40,9 +40,9 @@ EncodeFileImp::EncodeFileImp( QMap<QString, QString> g, QWidget* parent,
  */
 void EncodeFileImp::encode(){
   Job *newJob = new Job();
-  
+
   newJob->location = file->url();
-  
+
   newJob->album = album->text();
   newJob->genre = genres[genre->currentText()];
   if(newJob->genre.isEmpty())
@@ -51,13 +51,13 @@ void EncodeFileImp::encode(){
   newJob->comment = comment->text();
   newJob->year = year->value();
   newJob->track = track->value();
-     
+
   newJob->track_title = track_title->text();
   newJob->track_artist = track_artist->text();
   newJob->track_comment = track_comment->text();
 
   emit(startJob(newJob));
-  
+
   // Same message and *strings* from tracksimp.cpp
   int counter(1);
   KMessageBox::information(this,

@@ -85,34 +85,34 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks, SLOT(eject()), actionCollection(), "eject" );
   connect(tracks, SIGNAL(hasTracks(bool)), eject, SLOT(setEnabled(bool)));
-  
+
   (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
 
   KAction *selectAll = new KAction(i18n("Select &All Tracks"), 0, tracks, SLOT(selectAllTracks()), actionCollection(), "select_all" );
   connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
-  
+
   KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), 0, tracks, SLOT(deselectAllTracks()), actionCollection(), "deselect_all" );
   connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
-  
+
   KAction *rip = new KAction(i18n("Rip &Selection"), 0, tracks, SLOT(startSession()), actionCollection(), "rip" );
   connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
-  
+
   (void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue, SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
-  
+
   KAction *edit = new KAction(i18n("&Edit Album"), 0, tracks, SLOT(editInformation()), actionCollection(), "edit_cd");
   connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
-  
-  (void)new KAction(i18n("Encode &File"), 0, this, SLOT(encodeFile()), actionCollection(), "encode_file");
+
+  (void)new KAction(i18n("Encode &File..."), 0, this, SLOT(encodeFile()), actionCollection(), "encode_file");
 
   KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
   connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
-  
+
   KStdAction::configureNotifications(this, SLOT(configureNotifications()),
                                        actionCollection());
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
   statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
   connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
-  
+
   setupGUI();
 }
 
@@ -122,14 +122,14 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 void KAudioCreator::hasCD(bool cd){
   if(cd)
     statusBar()->changeItem(i18n("CD Inserted"), 0 );
-  else	  
+  else
     statusBar()->changeItem(i18n("No Audio CD detected"), 0 );
 }
 
 void KAudioCreator::updateStatus() {
   QString status = i18n("Idle.");
   QString rippingStatus;
-  QString encodingStatus;	
+  QString encodingStatus;
   int activeRippingJobs = ripper->activeJobCount();
   int pendingRippingJobs = ripper->pendingJobCount();
   int activeEncodingJobs = encoder->activeJobCount();
@@ -172,7 +172,7 @@ void KAudioCreator::configureNotifications() {
 
 void KAudioCreator::encodeFile(){
   EncodeFileImp *file = new EncodeFileImp(tracks->genres, this, "EncodeFile");
-  connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*))); 
+  connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
   file->show();
 }
 
@@ -218,7 +218,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
   RipConfig *rip = new RipConfig(0, "Ripper");
   rip->kcfg_tempDir->setMode(KFile::Directory);
   addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
-  
+
   encoderConfigImp = new EncoderConfigImp(0, "Encoder");
   addPage(encoderConfigImp, i18n("Encoder"), "filter", i18n("Encoder Configuration") );
 }
