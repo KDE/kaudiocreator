@@ -19,18 +19,6 @@
 #include "job.h"
 #include <kmacroexpander.h>
 
-// Clean up the string so that it doesn't wander off to unexpected directories
-static QString sanitize(const QString &s)
-{
-  QString result = s;
-  result.replace('/', ":");
-  if (result.isEmpty())
-    result = "(empty)";
-  if (result[0] == '.')
-    result[0] = '_';
-  return result;
-}
-
 /**
  * A helper function to replace %X with the stuff in the album.
  * if quote is true then put "" around the %X
@@ -38,18 +26,18 @@ static QString sanitize(const QString &s)
 void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _map){
   QMap<QString,QString> map = _map;
   
-  map.insert("title", sanitize(track_title));
-  map.insert("artist", sanitize(track_artist));
+  map.insert("title", track_title);
+  map.insert("artist", track_artist);
   map.insert("number", QString().sprintf("%02d", track));
-  map.insert("comment", sanitize(track_comment));
+  map.insert("comment", track_comment);
   map.insert("year", QString::number(year));
 	map.insert("genre", genre);
 	
-  map.insert("albumtitle", sanitize(album));
-  map.insert("albumcomment", sanitize(comment));
-  map.insert("albumartist", sanitize(group));
+  map.insert("albumtitle", album);
+  map.insert("albumcomment", comment);
+  map.insert("albumartist", group);
   
-  if (quote)
+	if (quote)
       str = KMacroExpander::expandMacrosShellQuote(str, map);
   else
       str = KMacroExpander::expandMacros(str, map);
