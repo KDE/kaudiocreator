@@ -137,7 +137,8 @@ void JobQueImp::updateProgress(int id, int progress){
     // Remove the job if requested.
     if(removeCompletedJobs)
       removeJob(currentItem);      
-    currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
+    else
+      currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
   }
 }
 
@@ -146,6 +147,8 @@ void JobQueImp::updateProgress(int id, int progress){
  * @param item to remove.  Note that it WILL be deleted and set to NULL.
  */ 
 void JobQueImp::removeJob(QueListViewItem *item){
+  if(!item)
+    return;
   if(item->percentDone < 100 && item->percentDone > -1 && (KMessageBox::questionYesNo(this, i18n("KAudioCreator isn't finished %1.  Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in the queue."))
       == KMessageBox::No ))
     return;
