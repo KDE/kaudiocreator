@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>260</width>
-            <height>270</height>
+            <width>328</width>
+            <height>145</height>
         </rect>
     </property>
     <property stdset="1">
@@ -38,75 +38,6 @@
                 <name>text</name>
                 <string>Perform CDDB lookup automatically</string>
             </property>
-        </widget>
-        <widget>
-            <class>QGroupBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>GroupBox1</cstring>
-            </property>
-            <property stdset="1">
-                <name>title</name>
-                <string>CDDB Server</string>
-            </property>
-            <grid>
-                <property stdset="1">
-                    <name>margin</name>
-                    <number>11</number>
-                </property>
-                <property stdset="1">
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <widget row="0"  column="0" >
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TextLabel1</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Database server:</string>
-                    </property>
-                </widget>
-                <widget row="1"  column="0" >
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>TextLabel2</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Port:</string>
-                    </property>
-                </widget>
-                <widget row="1"  column="1" >
-                    <class>QSpinBox</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>databasePort</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>maxValue</name>
-                        <number>65535</number>
-                    </property>
-                    <property stdset="1">
-                        <name>value</name>
-                        <number>8880</number>
-                    </property>
-                </widget>
-                <widget row="0"  column="1" >
-                    <class>QLineEdit</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>databaseServer</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>freedb.freedb.org</string>
-                    </property>
-                </widget>
-            </grid>
         </widget>
         <widget>
             <class>QCheckBox</class>
