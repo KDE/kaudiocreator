@@ -65,7 +65,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
   numberOfCpus->setValue(config.readNumEntry("numberOfCpus", 1));
   mp3FileFormat->setText(config.readEntry("mp3FileFormat", "~/mp3/%artist/%album/%artist - %song.mp3"));
   createM3uAlbum->setChecked(config.readBoolEntry("createM3uAlbum", false));
-  m3uFileFormat->setText(config.readEntry("mpuFileFormat", "~/mp3/%artist/%album/%artist - %album.m3u"));
+  m3uFileFormat->setText(config.readEntry("m3uFileFormat", "~/mp3/%artist/%album/%artist - %album.m3u"));
   useRelitivePath->setChecked(config.readBoolEntry("useRelitivePath", false));
   encoder->setCurrentItem(config.readNumEntry("encoder",0));
   loadEncoderConfig(encoder->currentItem());
@@ -73,10 +73,10 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
 
 /**
  * Deconstructor, remove pending jobs, remove current jobs, save settings.
- */ 
+ */
 EncoderConfigImp::~EncoderConfigImp(){
   pendingJobs.clear();
-  
+
   QMap<KShellProcess*, Job*>::Iterator it;
   for( it = jobs.begin(); it != jobs.end(); ++it ){
     KShellProcess *process = it.key();
@@ -108,7 +108,7 @@ EncoderConfigImp::~EncoderConfigImp(){
   }
   if(encoder->currentItem() == ENCODER_OGG){
     config.writeEntry("encoderExeOggEnc", encoderExe->text());
-    config.writeEntry("encoderCommandLineExeOggEnc", encoderCommandLine->text());
+    config.writeEntry("encoderCommandLineOggEnc", encoderCommandLine->text());
   }
   if(encoder->currentItem() == ENCODER_OTHER){
     config.writeEntry("encoderExeOther", encoderExe->text());
@@ -135,9 +135,9 @@ void EncoderConfigImp::loadEncoderConfig(int index){
     return;
   }
   if(index == ENCODER_OGG){
-    encoderExe->setText(config.readEntry("encoderExeOggEcc", "oggenc"));
-    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEcc", "-o %o -a %artist -l %album -t %song -N %track %f"));
-    return;
+    encoderExe->setText(config.readEntry("encoderExeOggEnc", "oggenc"));
+    encoderCommandLine->setText(config.readEntry("encoderCommandLineOggEnc", "-o %o -a %artist -l %album -t %song -N %track %f"));
+     return;
   }
   if(index == ENCODER_OTHER){
     encoderExe->setText(config.readEntry("encoderExeOther", ""));
