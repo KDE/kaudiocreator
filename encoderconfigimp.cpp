@@ -318,7 +318,7 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
 
   QFile f(desiredFile);
   if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(this, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist addition Failed"));
+    KMessageBox::sorry(this, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist Addition Failed"));
     return;
   }
 

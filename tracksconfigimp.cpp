@@ -40,7 +40,7 @@ TracksConfigImp::TracksConfigImp( QWidget* parent, const char* name):TracksConfi
 void TracksConfigImp::editInformation(){
   QListViewItem * currentItem = trackListing->currentItem();
   if( currentItem == 0 ){
-    KMessageBox::sorry(this, i18n("Please select a track"), i18n("No track selected"));
+    KMessageBox::sorry(this, i18n("Please select a track"), i18n("No Track Selected"));
     return;
   }
 
@@ -115,7 +115,7 @@ void TracksConfigImp::startSession(){
     list += "Album";
   }
   if( list != ""){
-    int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information incomplete"));
+    int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information Incomplete"));
     if( r == KMessageBox::No )
       return;
   }
@@ -141,13 +141,13 @@ void TracksConfigImp::startSession(){
     lastJob->lastSongInAlbum = true;
 
   if(counter == 0){
-    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No tracks selected"));
+    KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please select at least 1 track before ripping."), i18n("No Tracks Selected"));
     return;
   }
 
   KMessageBox::information(this,
   i18n("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter),
- i18n("Jobs have started"), "Jobs have started");
+ i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
 /**
