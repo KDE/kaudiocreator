@@ -241,8 +241,8 @@ void EncoderConfigImp::encodeWav(Job *job){
  * then just loop back in 5 seconds and check agian.
  */
 void EncoderConfigImp::tendToNewJobs(){
-  while(threads.count() >= (uint)numberOfCpus->value()){
-    QTimer::singleShot( threads.count()*2*1000, this, SLOT(tendToNewJobs()));
+  if(threads.count() >= (uint)numberOfCpus->value()){
+    QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
   if(pendingJobs.count() == 0)

@@ -117,8 +117,8 @@ void RipConfigImp::ripTrack(Job *job){
  * then just loop.
  */
 void RipConfigImp::tendToNewJobs(){
-  while(jobs.count() >= (uint)maxWavFiles->value()){
-    QTimer::singleShot( jobs.count()*2*1000, this, SLOT(tendToNewJobs()));
+  if(jobs.count() >= (uint)maxWavFiles->value()){
+    QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
   if(pendingJobs.count() == 0)
