@@ -21,8 +21,7 @@ KDE_ICON = AUTO
 
 SUBDIRS = icons
 
-appsdir = $(kde_appsdir)/Multimedia
-apps_DATA = kaudiocreator.desktop
+xdg_apps_DATA = kaudiocreator.desktop
 
-data_DATA = kaudiocreatorui.rc
-datadir = $(kde_datadir)/kaudiocreator
+appdata_DATA = kaudiocreatorui.rc
+appdatadir = $(kde_datadir)/kaudiocreator
