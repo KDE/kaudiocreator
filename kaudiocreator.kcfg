@@ -58,7 +58,7 @@
       <label>Location pattern for playlist files</label>
       <default>~/%extension/%artist/%album/%artist - %album.m3u</default>
     </entry>
-    <entry name="useRelativePath" type="Bool" key="useRelitivePath">
+    <entry name="useRelativePath" type="Bool" key="useRelativePath">
       <label>Use relative path for playlists</label>
       <default>false</default>
     </entry>

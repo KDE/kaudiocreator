@@ -286,51 +286,17 @@ void Encoder::appendToPlaylist(Job* job){
 
   bool relWorked = false;
   if(Prefs::useRelativePath()){
+    
     QFileInfo audioFile(job->newLocation);
     QString relative;
     KURL d(desiredFile);
-    relWorked = relativeURL(d.directory(), audioFile.filePath(), relative);
-    if(relWorked)
-      t << relative << audioFile.fileName() << endl;
+    relative = KURL::relativePath(d.directory(), audioFile.filePath());
+    t << relative << audioFile.fileName() << endl;
   }
-  if(!relWorked)
+  else
     t << job->newLocation << endl;
   
   f.close();
-}
-
-/**
- * Finds the relative path from path1 to path2
- * returns true is successful.
- */
-bool Encoder::relativeURL(const QString &path1, const QString &path2,
-                          QString &relativePath ) const {
-  QDir p1(QDir::cleanDirPath(path1));
-  QDir p2(QDir::cleanDirPath(path2));
-  if(!p1.exists() || !p2.exists())
-    return false;
- 
-  // If they are the same
-  if(p1.path() == p2.path()){
-    relativePath = "./";
-    return true;
-  }
-  
-  QStringList list1 = QStringList::split('/', p1.path());
-  QStringList list2 = QStringList::split('/', p2.path());
- 
-  // Find where they meet
-  uint level = 0;
-  while(list1[level] == list2[++level]);
-
-  // Need to go down out of the first path to the common branch.
-  for(uint i=level; i < list1.count(); i++)
-    relativePath += "../";
- 
-  // Now up up from the common branch to the second path.
-  for(; level < list2.count(); level++)
-    relativePath += list2[level] + "/";
-  return true;
 }
 
 #include "encoder.moc"

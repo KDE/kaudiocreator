@@ -236,9 +236,7 @@ void TracksImp::loadSettings(){
  * Check for changes in the cd.
  */ 
 void TracksImp::timerDone(){
-  KApplication::setOverrideCursor(Qt::waitCursor);
   int status = wm_cd_init( WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
-  KApplication::restoreOverrideCursor();
   if(status == dstatus){
     wm_cd_destroy();
     return;
@@ -306,7 +304,10 @@ void TracksImp::changeDevice(const QString &file){
   }
  
   device = file;
+  
+  KApplication::setOverrideCursor(Qt::waitCursor);
   timerDone();
+  KApplication::restoreOverrideCursor();
 }
 
 /**
