@@ -310,10 +310,7 @@ void TracksImp::timerDone(){
   kdDebug(60002) << "New disk.  Disk id: " << CDid << endl;
   int numberOfTracks = wm_cd_getcountoftracks();
   for(int i=numberOfTracks; i>0; i--){
-    if( i < 10 )
-      newSong(i, QString("0%1").arg(i), (cd->trk[i-1]).length, "");
-    else
-      newSong(i, QString("%1").arg(i), (cd->trk[i-1]).length, "");
+      newSong(i, QString::number(i).rightJustify(2, '0'), (cd->trk[i-1]).length, "");
   }
   if(Prefs::performCDDBauto())
     cddbCD();
