@@ -95,7 +95,7 @@
       <default>false</default>
     </entry>
     <entry name="tempDir" type="String">
-      <label>Location of tempory directory to use</label>
+      <label>Location of temporary directory to use</label>
       <default></default>
     </entry>
    </group>

@@ -427,7 +427,7 @@ void TracksImp::editInformation(){
     trackListing->currentItem()->setText(HEADER_TRACK_COMMENT, dialog->track_comment->text());
     
     if( group != dialog->artist->text()){
-      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist.  Would you like me to change all of the song artists that had the old name to the new name?"), i18n("Album Artist Changed"));
+      int r = KMessageBox::questionYesNo(this, i18n("You have changed the album artist. Would you like all of the song artists that had the old name to be changed to the new name?"), i18n("Album Artist Changed"));
       if( r == KMessageBox::Yes ){
         QListViewItem * currentItem = trackListing->firstChild();
         while( currentItem != 0 ){
