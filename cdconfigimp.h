@@ -9,7 +9,7 @@
 #ifndef CDCONFIGIMP_H
 #define CDCONFIGIMP_H
 
-#include <qwidget.h>
+#include <qobject.h>
 #include "cdconfig.h"
 #include <kjanuswidget.h>
 #include <kurl.h>
@@ -17,7 +17,7 @@
 
 class Job;
 
-class CdConfigImp : public CdConfig  {
+class CdConfigImp : public QObject  {
 
 Q_OBJECT
 
@@ -27,18 +27,25 @@ signals:
   void ripAlbum();
 
 public:
-  CdConfigImp( QWidget* parent = 0, const char* name = 0);
+  CdConfigImp( QObject* parent = 0, const char* name = 0);
   ~CdConfigImp();
 
 public slots:
   void timerDone();
   void cddbNow();
-  void configureAudioCD();
-  
+  void loadSettings();
+
 private slots:
   void attemptToListAlbum();
 
 private:
+  bool autoRip;
+  QString databaseServer;
+  int databasePort;
+  bool performCDDBauto;
+  bool constantlyScan;
+  
+  
   bool overrideCddb;
   QTimer *timer;
 

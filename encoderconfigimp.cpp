@@ -1,12 +1,6 @@
 #include "encoderconfigimp.h"
-#include "wizard.h"
 
 #include <qapplication.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qfile.h>
@@ -27,82 +21,37 @@
 /**
  * Constructor, load settings.  Set the up the pull down menu with the correct item.
  */
-EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderConfig(parent,name), encodersPercentStringLength(2), oldEncoderSelection(-1), save(false){
-  connect(encoder, SIGNAL(activated(int)), this, SLOT(loadEncoderConfig(int)));
-  connect(playlistWizardButton, SIGNAL(clicked()), this, SLOT(playlistWizard()));
-  connect(encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
+EncoderConfigImp::EncoderConfigImp( QObject* parent, const char* name):QObject(parent,name) {
+  loadSettings();
+}
 
+void EncoderConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");
-  saveWav->setChecked(config.readBoolEntry("saveWav", false));
-  numberOfCpus->setValue(config.readNumEntry("numberOfCpus", 1));
-  fileFormat->setText(config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension"));
-  createPlaylistCheckBox->setChecked(config.readBoolEntry("createPlaylist", false));
-  playlistFileFormat->setText(config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u"));
-  useRelitivePath->setChecked(config.readBoolEntry("useRelitivePath", false));
-
-  int totalNumberOfEncoders = config.readNumEntry("numberOfEncoders",0);
-  if( totalNumberOfEncoders == 0){
-    encoderName.insert(0, i18n("Lame"));
-    encoder->insertItem(i18n("Lame"));
-    encoderArgs.insert(0, "lame --r3mix --tt %song --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
-    encoderExtension.insert(0, "mp3");
-    encoderpercentLength.insert(0, 2);
-
-    encoderName.insert(1, i18n("OggEnc"));
-    encoder->insertItem(i18n("OggEnc"));
-    encoderArgs.insert(1, "oggenc -o %o -a %artist -l %album -t %song -N %track %f");
-    encoderExtension.insert(1, "ogg");
-    encoderpercentLength.insert(1, 4);
-
-    encoderName.insert(2, i18n("Leave as Wav"));
-    encoder->insertItem(i18n("Leave as Wav"));
-    encoderArgs.insert(2, "mv %f %o");
-    encoderExtension.insert(2, "wav");
-    encoderpercentLength.insert(2, 2);
-
-    encoderName.insert(3, i18n("Other"));
-    encoder->insertItem(i18n("Other"));
-    encoderArgs.insert(3, "");
-    encoderExtension.insert(3, "");
-    encoderpercentLength.insert(3, 2);
-  }
-
-  /***
-   * The Encoders can be entirly loaded and are not hard coded.  You can add remove them on the fly
-   * using the configure file, but a set of default ones are include here.
-   *
-   * If you would like to add a default value to here contact ben@meyerhome.net with apropriate values
-   *
-   * Encoder name - name of the encoder
-   * Arguments - Command line string to encoder a file using that encoder
-   * Extension - File extension that is generated.
-   * Percent output length.  99.00% == 4, 99.9% == 3, 99% == 2
-   */
-  for(int i=0; i < totalNumberOfEncoders; i++){
-    encoderName.insert(i, config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""));
-    encoder->insertItem(config.readEntry(QString(ENCODER_EXE_STRING "%1").arg(i),""),i);
-    encoderArgs.insert(i, config.readEntry(QString(ENCODER_ARGS_STRING "%1").arg(i),""));
-    encoderExtension.insert(i, config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(i),""));
-    encoderpercentLength.insert(i, config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(i),2));
-  }
+  saveWav =  config.readBoolEntry("saveWav", false);
+  numberOfCpus = config.readNumEntry("numberOfCpus", 1);
+  fileFormat = config.readEntry("fileFormat", "~/%extension/%artist/%album/%artist - %song.%extension");
+  createPlaylist = config.readBoolEntry("createPlaylist", false);
+  playlistFileFormat = config.readEntry("playlistFileFormat", "~/%extension/%artist/%album/%artist - %album.m3u");
+  useRelitivePath = config.readBoolEntry("useRelitivePath", false);
 
   // Set the current item and settings.
   int currentItem = config.readNumEntry("encoderCurrentItem",0);
-  encoder->setCurrentItem(currentItem);
-  loadEncoderConfig(encoder->currentItem());
+
+  encoderCommandLine = config.readEntry(QString(ENCODER_ARGS_STRING "%1").arg(currentItem),"");
+  encoderExtension = config.readEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(currentItem));
+  encoderPercentLenght = config.readNumEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(currentItem),2);
 
 }
 
 /**
- * Deconstructor, remove pending jobs, remove current jobs, save settings.
+ * Deconstructor, remove pending jobs, remove current jobs.
  */
 EncoderConfigImp::~EncoderConfigImp(){
   pendingJobs.clear();
 
   QMap<KShellProcess*, Job*>::Iterator pit;
   for( pit = jobs.begin(); pit != jobs.end(); ++pit ){
-
     KShellProcess *process = pit.key();
     Job *job = jobs[pit.key()];
     threads.remove(process);
@@ -112,55 +61,6 @@ EncoderConfigImp::~EncoderConfigImp(){
     delete process;
   }
   jobs.clear();
-
-  KConfig &config = *KGlobal::config();
-  config.setGroup("encoderconfig");
-  config.writeEntry("encoderCurrentItem", encoder->currentItem());
-  config.writeEntry("saveWav", saveWav->isChecked());
-  config.writeEntry("numberOfCpus", numberOfCpus->value());
-  config.writeEntry("fileFormat", fileFormat->text());
-  config.writeEntry("createPlaylist", createPlaylistCheckBox->isChecked());
-  config.writeEntry("playlistFileFormat", playlistFileFormat->text());
-  config.writeEntry("useRelitivePath", useRelitivePath->isChecked());
-
-  if(!save)
-    return;
-  QMap<int, QString>::Iterator it;
-  for( it = encoderName.begin(); it != encoderName.end(); ++it )
-    config.writeEntry(QString(ENCODER_EXE_STRING "%1").arg(it.key()), it.data());
-  for( it = encoderArgs.begin(); it != encoderArgs.end(); ++it )
-    config.writeEntry(QString(ENCODER_ARGS_STRING "%1").arg(it.key()), it.data());
-  for( it = encoderExtension.begin(); it != encoderExtension.end(); ++it )
-    config.writeEntry(QString(ENCODER_EXTENSION_STRING "%1").arg(it.key()), it.data());
-  QMap<int, int>::Iterator nit;
-  for( nit = encoderpercentLength.begin(); nit != encoderpercentLength.end(); ++nit )
-    config.writeEntry(QString(ENCODER_PERCENTLENGTH_STRING "%1").arg(nit.key()), nit.data());
-
-  config.writeEntry("encoderCurrentItem",encoder->currentItem());
-  config.writeEntry("numberOfEncoders", encoder->count());
-}
-
-/**
- * Load the settings for this encoder.
- * @param index the selected item in the drop down menu.
- */
-void EncoderConfigImp::loadEncoderConfig(int index){
-  if(encoderArgs[oldEncoderSelection] != encoderCommandLine->text() && oldEncoderSelection != -1){
-    //encoderArgs.remove(index);
-    encoderArgs.insert(oldEncoderSelection, encoderCommandLine->text());
-    save = true;
-  }
-  if(encoderExtension[oldEncoderSelection] != encoderExtensionLineEdit->text() && oldEncoderSelection != -1){
-    //encoderExtension.remove(index);
-    encoderExtension.insert(oldEncoderSelection, encoderExtensionLineEdit->text());
-    save = true;
-  }
-  oldEncoderSelection = index;
-
-  // Now you can load the new settings.
-  encoderCommandLine->setText(encoderArgs[index]);
-  encoderExtensionLineEdit->setText(encoderExtension[index]);
-  encodersPercentStringLength = encoderpercentLength[index];
 }
 
 /**
@@ -209,7 +109,7 @@ void EncoderConfigImp::encodeWav(Job *job){
  */
 void EncoderConfigImp::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
-  if(threads.count() >= (uint)numberOfCpus->value()){
+  if(threads.count() >= numberOfCpus){
     QTimer::singleShot( (threads.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
@@ -219,12 +119,12 @@ void EncoderConfigImp::tendToNewJobs(){
 
   Job *job = pendingJobs.first();
   pendingJobs.remove(job);
-  job->jobType = encoder->currentItem();
+  //job->jobType = encoder->currentItem();
 
-  QString desiredFile = fileFormat->text();
+  QString desiredFile = fileFormat;
   {
     QMap <QString,QString> map;
-    map.insert("extension", encoderExtensionLineEdit->text());
+    map.insert("extension", encoderExtension);
     job->replaceSpecialChars(desiredFile, false, map);
   }
   if(desiredFile[0] == '~'){
@@ -238,10 +138,10 @@ void EncoderConfigImp::tendToNewJobs(){
 
   job->newLocation = desiredFile;
 
-  QString command = encoderCommandLine->text();
+  QString command = encoderCommandLine;
   {
     QMap <QString,QString> map;
-    map.insert("extension", encoderExtensionLineEdit->text());
+    map.insert("extension", encoderExtension);
     map.insert("f", job->location);
     map.insert("o", desiredFile);
     job->replaceSpecialChars(command, true, map);
@@ -285,7 +185,7 @@ void EncoderConfigImp::receivedThreadOutput(KProcess *process, char *buffer, int
     return;
   }
   //qDebug(QString("Pre cropped: %1").arg(output).latin1());
-  output = output.mid(output.find('%')-encodersPercentStringLength,2);
+  output = output.mid(output.find('%')-encoderPercentLenght,2);
   //qDebug(QString("Post cropped: %1").arg(output).latin1());
   bool conversionSuccessfull = false;
   int percent = output.toInt(&conversionSuccessfull);
@@ -315,7 +215,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
   jobs.remove((KShellProcess*)process);
 
   if( QFile::exists(job->newLocation)){
-    if(!saveWav->isChecked())
+    if(!saveWav)
       QFile::remove(job->location);
     
     // TODO kill -9 lame or oggenc when processing and see what they return.
@@ -327,11 +227,11 @@ void EncoderConfigImp::jobDone(KProcess *process){
       //qDebug("Must be done: %d", (process->exitStatus()));
       emit(updateProgress(job->id, 100));
     }
-    if(createPlaylistCheckBox->isChecked())
+    if(createPlaylist)
       appendToPlaylist(job);
   }
   else{
-    KMessageBox::sorry(this, i18n("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }
@@ -345,29 +245,29 @@ void EncoderConfigImp::jobDone(KProcess *process){
  * @param job too append to the playlist.
  */
 void EncoderConfigImp::appendToPlaylist(Job* job){
-  QString desiredFile = playlistFileFormat->text();
+  QString desiredFile = playlistFileFormat;
   QMap <QString,QString> map;
-  map.insert("extension", encoderExtensionLineEdit->text());
+  map.insert("extension", encoderExtension);
   job->replaceSpecialChars(desiredFile, false, map);
   if(desiredFile[0] == '~'){
     desiredFile.replace(0,1, QDir::homeDirPath());
   }
   int lastSlash = desiredFile.findRev('/',-1);
   if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(this, i18n("The desired encoded file could not be created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
+    KMessageBox::sorry(0, i18n("The desired encoded file could not be created.\nPlease check your file path option.\nThe wav file has been removed."), i18n("Encoding Failed"));
     QFile::remove(job->location);
     return;
   }
 
   QFile f(desiredFile);
   if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(this, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist Addition Failed"));
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check your file path option."), i18n("Playlist Addition Failed"));
     return;
   }
 
   QTextStream t( &f );        // use a text stream
 
-  if(useRelitivePath->isChecked()){
+  if(useRelitivePath){
     KURL audioFile(job->newLocation);
     t << "./" << audioFile.fileName() << endl;
   }
@@ -377,36 +277,5 @@ void EncoderConfigImp::appendToPlaylist(Job* job){
   f.close();
 }
 
-/**
- * Load up the wizard with the playlist string.  Save it if OK is hit.
- */
-void EncoderConfigImp::playlistWizard(){
-  fileWizard wizard(this, "Playlist File FormatWizard", true);
-  wizard.playlistFormat->setText(playlistFileFormat->text());
-
-  // Show dialog and save results if ok is pressed.
-  bool okClicked = wizard.exec();
-  if(okClicked){
-    playlistFileFormat->setText(wizard.playlistFormat->text());
-  }
-}
-
-/**
- * Load up the wizard with the encoder playlist string.  Save it if OK is hit.
- */
-void EncoderConfigImp::encoderWizard(){
-  fileWizard wizard(this, "Encoder File Format Wizard", true);
-  wizard.playlistFormat->setText(fileFormat->text());
-
-  // Show dialog and save results if ok is pressed.
-  bool okClicked = wizard.exec();
-  if(okClicked){
-    fileFormat->setText(wizard.playlistFormat->text());
-  }
-}
-
-
 #include "encoderconfigimp.moc"
-
-// encoderconfigimp.cpp
 

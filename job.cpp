@@ -53,3 +53,4 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
   else
       str = KMacroExpander::expandMacros(str, map);
 }
+

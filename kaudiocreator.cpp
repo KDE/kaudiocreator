@@ -1,13 +1,8 @@
-
 #include "kaudiocreator.h"
-#include <kjanuswidget.h>
-#include <qframe.h>
-#include <qvbox.h>
-#include <qstring.h>
-#include <kiconloader.h>
 
-#include <qglobal.h>
-#include <kapplication.h>
+#include <kjanuswidget.h>
+#include <qvbox.h>
+#include <kiconloader.h>
 
 #include <kmessagebox.h>
 
@@ -15,8 +10,6 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kedittoolbar.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
 
 #include "tracksconfigimp.h"
 #include "cdconfigimp.h"
@@ -25,6 +18,8 @@
 #include "queconfigimp.h"
 #include "job.h"
 
+#include "options.h"
+
 /**
  * Constructor.  Connect all of the object and the job control.
  */
@@ -32,24 +27,15 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
   setCentralWidget(janusWidget);
 
-  options = new KDialogBase(KDialogBase::IconList, i18n("Options"), 0x00000004,KDialogBase::Ok,this, "Options Dialog");
-
   QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),QString::null, SmallIcon("cdaudio_unmount", 32));
-  tracksConfig = new TracksConfigImp(frame, "TracksConfig");
-  trackPage = janusWidget->pageIndex(frame);
-
-  frame = options->addVBoxPage(i18n("CD Config"),i18n("CD Config"), SmallIcon("network", 32));
+  tracksConfig = new TracksConfigImp(frame, "Tracks");
+  
   cdConfig = new CdConfigImp(frame, "CdConfig");
-
-  frame = options->addVBoxPage(i18n("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
   ripConfig = new RipConfigImp(frame, "RipConfig");
-
-  frame = options->addVBoxPage(i18n("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
   encoderConfig = new EncoderConfigImp(frame, "EncoderConfig");
 
   frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null, SmallIcon("run", 32));
-  queConfig = new QueConfigImp(frame, "QueConfig");
-  quePage = janusWidget->pageIndex(frame);
+  queConfig = new QueConfigImp(frame, "Que");
 
   connect(queConfig, SIGNAL(removeJob(int)), ripConfig, SLOT(removeJob(int)));
   connect(ripConfig, SIGNAL(updateProgress(int, int)), queConfig, SLOT(updateProgress(int,int)));
@@ -77,21 +63,14 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   (void)new KAction(i18n("&Perform CDDB Lookup"), 0, cdConfig, SLOT(cddbNow()), actionCollection(), "cddb_now");
   KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
 
-  KStdAction::quit( this, SLOT(quit()), actionCollection(), "quit" );
+  KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
 
   createGUI("kaudiocreatorui.rc");
   setAutoSaveSettings( "Main Window" );
 }
 
 /**
- * If there are jobs in the que promt the user before quiting.
- */
-void KAudioCreator::quit(){
-  this->close(true);
-}
-
-/**
- * Ask the user if they really want to quit.
+ * Ask the user if they really want to quit if there are open jobs.
  */
 bool KAudioCreator::queryClose() {
   if(queConfig->numberOfJobsNotFinished() > 0 && 
@@ -107,20 +86,36 @@ bool KAudioCreator::queryClose() {
 void KAudioCreator::configuretoolbars(){
   saveMainWindowSettings(KGlobal::config(), "Main Window");
   KEditToolbar dlg(actionCollection(), "kaudiocreatorui.rc");
-  connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(newToolbarConfig()));
+  connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(saveToolbarConfig()));
   dlg.exec();
 }
 
-void KAudioCreator::newToolbarConfig(){
+/**
+ * Save new toolbarconfig.
+ */
+void KAudioCreator::saveToolbarConfig(){
   createGUI("kaudiocreatorui.rc");
   applyMainWindowSettings(KGlobal::config(), "Main Window");
 }
 
+/**
+ * Show KAudioCreator Options.
+ */
 void KAudioCreator::showOptions(){
-  options->show();
+  optionsDialog = new Options(this, "Options");
+  connect(optionsDialog, SIGNAL(closeOptions()), this, SLOT(closeOptions()));
+
+  connect(optionsDialog, SIGNAL(readNewOptions()), cdConfig, SLOT(loadSettings()));
+  connect(optionsDialog, SIGNAL(readNewOptions()), ripConfig, SLOT(loadSettings()));
+  connect(optionsDialog, SIGNAL(readNewOptions()), encoderConfig, SLOT(loadSettings()));
+}
+
+/**
+ * Close KAudioCreator Options.
+ */
+void KAudioCreator::closeOptions(){
+  delete optionsDialog;
 }
 
 #include "kaudiocreator.moc"
-
-/// kaudiocreator.cpp
 

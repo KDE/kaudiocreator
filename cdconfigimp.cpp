@@ -17,34 +17,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <qpushbutton.h>
-#include <kprocess.h>
-#include <kmessagebox.h>
-
-
 #include <config.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdlib.h>
-
-#include <qglobal.h>
-#include <kapplication.h>
-
-#include <qfile.h>
-#include <qstrlist.h>
-#include <qdatetime.h>
-#include <qregexp.h>
-
-typedef Q_INT16 size16;
-typedef Q_INT32 size32;
 
 #include <kconfig.h>
 #include <kglobal.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
+
+#include <qfile.h>
+
+typedef Q_INT16 size16;
+typedef Q_INT32 size32;
 
 extern "C"
 {
@@ -62,7 +47,6 @@ typedef unsigned long long  __u64;
 }
 
 #include <kdebug.h>
-#include <kurl.h>
 #include <kprotocolmanager.h>
 #include <kinstance.h>
 #include <klocale.h>
@@ -206,38 +190,35 @@ class CdConfigImp::Private
     QString fname;
 };
 
-CdConfigImp::CdConfigImp( QWidget* parent, const char* name):CdConfig(parent,name){
+CdConfigImp::CdConfigImp( QObject* parent, const char* name) : QObject(parent,name){
   d = new Private;
   //connect(getNow, SIGNAL(clicked()), this, SLOT(attemptToListAlbum()));
-  connect(configureAudioCDButton, SIGNAL(clicked()), this, SLOT(configureAudioCD()));
-  KConfig &config = *KGlobal::config();
-  config.setGroup("cdconfig");
-  autoRip->setChecked(config.readBoolEntry("autoRip", false));
-  databaseServer->setText(config.readEntry("databaseServer", "freedb.freedb.org"));
-  databasePort->setValue(config.readNumEntry("databasePort", 8880));
-  performCDDBauto->setChecked(config.readBoolEntry("performCDDBauto", false));
-  bool constantlyScan = config.readBoolEntry("constantlyScan", false); 
- 
+  loadSettings();
+
   //attemptToListAlbu/m();
   updating = false;
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerDone()));
-  if(constantlyScan){
+  if(constantlyScan)
     timer->start(3000, false);
-    config.writeEntry("constantlyScan", constantlyScan);
-  }
   overrideCddb = false;
 }
 
-CdConfigImp::~CdConfigImp()
-{
+/**
+ * Loads the settings
+ */
+void CdConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("cdconfig");
-  config.writeEntry("databaseServer",databaseServer->text());
-  config.writeEntry("databasePort",databasePort->value());
-  config.writeEntry("performCDDBauto", performCDDBauto->isChecked());
-  config.writeEntry("autoRip", autoRip->isChecked());
+  autoRip = config.readBoolEntry("autoRip", false);
+  databaseServer = config.readEntry("databaseServer", "freedb.freedb.org");
+  databasePort = config.readNumEntry("databasePort", 8880);
+  performCDDBauto = config.readBoolEntry("performCDDBauto", false);
+  constantlyScan = config.readBoolEntry("constantlyScan", false); 
+}
+
+CdConfigImp::~CdConfigImp(){
   delete d;
 }
 
@@ -259,15 +240,6 @@ void CdConfigImp::timerDone(){
   updating = true;
   attemptToListAlbum();
   updating = false;
-}
-
-void CdConfigImp::configureAudioCD(){
-  KMessageBox::information(this,
-    i18n("The CDDA tab is the only one that is utilized at this time."),
-    i18n("CDDA Tab"), i18n("CDDA Tab"));
-  KShellProcess proc;
-  proc << "kcmshell" << "audiocd";
-  proc.start(KShellProcess::DontCare,  KShellProcess::NoCommunication);
 }
 
 struct cdrom_drive * CdConfigImp::initRequest(const KURL & url) {
@@ -428,11 +400,11 @@ int CdConfigImp::updateCD(struct cdrom_drive * drive){
   qvl.append(cdda_disc_firstsector(drive));
   qvl.append(my_last_sector(drive));
 
-  if (performCDDBauto->isChecked() || overrideCddb)
+  if (performCDDBauto || overrideCddb)
   {
     d->cddb = new CDDB;
     KApplication::setOverrideCursor(Qt::waitCursor);
-    d->cddb->set_server(databaseServer->text().latin1(), databasePort->value());
+    d->cddb->set_server(databaseServer.latin1(), databasePort);
 
     if (d->cddb->queryCD(qvl))
     {
@@ -504,7 +476,7 @@ void CdConfigImp::attemptToListAlbum(){
       emit(newSong(i,(d->titles[i-1]),length_seconds));
     }
   }
-  if(autoRip->isChecked())
+  if(autoRip)
     emit(ripAlbum());
   cdda_close(drive);
 }

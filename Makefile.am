@@ -2,9 +2,9 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) $(all_includes)
 
 bin_PROGRAMS = kaudiocreator
 
-kaudiocreator_SOURCES = cddb.cpp main.cpp kaudiocreator.cpp cdconfigimp.cpp  encoderconfigimp.cpp  job.cpp  queconfigimp.cpp  ripconfigimp.cpp  tracksconfigimp.cpp  cdconfig.ui  encoderconfig.ui  queconfig.ui  ripconfig.ui  tracksconfig.ui id3tagdialog.ui wizard.ui
+kaudiocreator_SOURCES = options.cpp cddb.cpp main.cpp kaudiocreator.cpp cdconfigimp.cpp  encoderconfigimp.cpp  job.cpp  queconfigimp.cpp  ripconfigimp.cpp  tracksconfigimp.cpp  cdconfig.ui  encoderconfig.ui  queconfig.ui  ripconfig.ui  tracksconfig.ui id3tagdialog.ui wizard.ui
 
-EXTRA_DIST = kaudiocreator.h kaudiocreator.desktop cdconfigimp.h  encoderconfigimp.h  queconfigimp.h  ripconfigimp.h  tracksconfigimp.h cddb.h
+EXTRA_DIST = options.h kaudiocreator.h kaudiocreator.desktop cdconfigimp.h  encoderconfigimp.h  queconfigimp.h  ripconfigimp.h  tracksconfigimp.h cddb.h
 
 kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 

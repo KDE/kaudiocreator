@@ -9,7 +9,6 @@
 #ifndef RIPCONFIGIMP_H
 #define RIPCONFIGIMP_H
 
-#include "ripconfig.h"
 #include "job.h"
 #include <kio/jobclasses.h>
 #include <qmap.h>
@@ -18,7 +17,7 @@
 class KURL;
 class Job;
 
-class RipConfigImp : public RipConfig  {
+class RipConfigImp : public QObject {
 
 Q_OBJECT
 
@@ -28,10 +27,11 @@ signals:
   void encodeWav(Job *job);
 
 public:
-  RipConfigImp( QWidget* parent = 0, const char* name = 0);
+  RipConfigImp( QObject* parent = 0, const char* name = 0);
   ~RipConfigImp();
-
+  
 public slots:
+  void loadSettings();
   void ripTrack(Job *);
   void removeJob(int id);
 
@@ -47,9 +47,11 @@ private:
   // Jobs that we want to do , but havn't done yet
   QList<Job> pendingJobs;
 
+  int maxWavFiles;
+  bool beepAfterRip;
+  bool autoEjectAfterRip;
+  int autoEjectDelay;
 };
 
 #endif
-
-// ripconfig.h
 

@@ -20,6 +20,8 @@ class QueConfigImp;
 class QCloseEvent;
 class KDialogBase;
 
+class Options;
+
 class KAudioCreator : public KMainWindow {
 
 Q_OBJECT
@@ -34,24 +36,20 @@ protected:
 
 private slots:
   void configuretoolbars();
-  void newToolbarConfig();
-  void quit();
+  void saveToolbarConfig();
   void showOptions();
+  void closeOptions();
 
 private:
   KJanusWidget *janusWidget;
-  KDialogBase* options;
   TracksConfigImp *tracksConfig;
-  int trackPage;
   CdConfigImp *cdConfig;
   RipConfigImp *ripConfig;
   EncoderConfigImp *encoderConfig;
   QueConfigImp *queConfig;
-  int quePage;
 
+  Options *optionsDialog;
 };
 
 #endif
-
-// kaudiocreator.h
 

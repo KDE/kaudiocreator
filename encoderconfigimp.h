@@ -9,16 +9,14 @@
 #ifndef ENCODERCONFIGIMP_H
 #define ENCODERCONFIGIMP_H
 
-#include <qwidget.h>
+#include <qobject.h>
+
 #include <qptrlist.h>
 #include <qmap.h>
-#include <qthread.h>
-#include <qobject.h>
-#include "encoderconfig.h"
 #include "job.h"
 #include <kprocess.h>
 
-class EncoderConfigImp : public EncoderConfig {
+class EncoderConfigImp : public QObject {
 
 Q_OBJECT
 
@@ -27,37 +25,36 @@ signals:
   void updateProgress(int id, int progress);
 
 public:
-  EncoderConfigImp( QWidget* parent = 0, const char* name = 0);
+  EncoderConfigImp( QObject* parent = 0, const char* name = 0);
   ~EncoderConfigImp();
 
 public slots:
   void removeJob(int id);
   void encodeWav(Job *job);
+  void loadSettings();
 
 private slots:
   void receivedThreadOutput(KProcess *process, char *buffer, int buflen);
   void jobDone(KProcess *process);
   void tendToNewJobs();
-  void loadEncoderConfig(int index);
-  void playlistWizard();
-  void encoderWizard();
 
 private:
   QList<Job> pendingJobs;
   QList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
   void appendToPlaylist(Job* job);
-  int encodersPercentStringLength;
-  int oldEncoderSelection;
 
-  bool save;
-  QMap<int, QString> encoderName;
-  QMap<int, QString> encoderArgs;
-  QMap<int, QString> encoderExtension;
-  QMap<int, int> encoderpercentLength;
+  // Class KConfig Settings
+  QString encoderCommandLine;
+  QString encoderExtension;
+  int encoderPercentLenght;
+  bool saveWav;
+  uint numberOfCpus;
+  QString fileFormat;
+  bool createPlaylist;
+  QString playlistFileFormat;
+  bool useRelitivePath;
 };
 
 #endif
-
-// encoderconfigimp.h
 

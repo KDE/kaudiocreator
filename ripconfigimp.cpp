@@ -1,34 +1,38 @@
 #include "ripconfigimp.h"
 
 #include "job.h"
+
 #include <qfile.h>
 #include <ktempfile.h>
-#include <qfileinfo.h>
-#include <qglobal.h>
-#include <kapplication.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
 #include <qtimer.h>
-#include <qregexp.h>
-#include <klineedit.h>
-#include <kstandarddirs.h>
-#include <qdir.h>
-#include <kconfig.h>
+
+// eject
 #include <stdlib.h>
-#include <klocale.h>
-#include <kmessagebox.h>
+
+// beep
 #include <knotifyclient.h>
+
+// settings
+#include <kconfig.h>
+#include <kstandarddirs.h>
 
 /**
  * Constructor, load settings.
  */
-RipConfigImp::RipConfigImp( QWidget* parent, const char* name):RipConfig(parent,name){
+RipConfigImp::RipConfigImp( QObject* parent, const char* name) : QObject(parent,name) {
+  loadSettings();
+}
+
+/**
+ * Loads the settings
+ */
+void RipConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("ripconfig");
-  maxWavFiles->setValue(config.readNumEntry("maxWavFiles", 1));
-  beepAfterRip->setChecked(config.readBoolEntry("beepAfterRip", true));
-  autoEjectAfterRip->setChecked(config.readBoolEntry("autoEjectAfterRip", false));
-  autoEjectDelay->setValue(config.readNumEntry("autoEjectDelay", 0));
+  maxWavFiles = config.readNumEntry("maxWavFiles", 1);
+  beepAfterRip = config.readBoolEntry("beepAfterRip", true);
+  autoEjectAfterRip = config.readBoolEntry("autoEjectAfterRip", false);
+  autoEjectDelay = config.readNumEntry("autoEjectDelay", 0);
 }
 
 /**
@@ -54,13 +58,6 @@ RipConfigImp::~RipConfigImp(){
     }
   }
   jobs.clear();
-
-  KConfig &config = *KGlobal::config();
-  config.setGroup("ripconfig");
-  config.writeEntry("maxWavFiles",maxWavFiles->value());
-  config.writeEntry("beepAfterRip", beepAfterRip->isChecked());
-  config.writeEntry("autoEjectAfterRip", autoEjectAfterRip->isChecked());
-  config.writeEntry("autoEjectDelay", autoEjectDelay->value());
 }
 
 /**
@@ -112,7 +109,7 @@ void RipConfigImp::ripTrack(Job *job){
  */
 void RipConfigImp::tendToNewJobs(){
   // If we are currently ripping the max try again in a little bit.
-  if(jobs.count() >= (uint)maxWavFiles->value()){
+  if(jobs.count() >= (uint)maxWavFiles){
     QTimer::singleShot( (jobs.count()+1)*2*1000, this, SLOT(tendToNewJobs()));
     return;
   }
@@ -160,7 +157,7 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
     emit( encodeWav(newJob));
   }
   else{
-    copyJob->showErrorDialog(this);
+    copyJob->showErrorDialog(0);
     QFile file( (copyJob->destURL()).path());
     file.remove();
     emit updateProgress(newJob->id, -1);
@@ -168,10 +165,10 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
   }
 
   if(newJob->lastSongInAlbum){
-    if(autoEjectAfterRip->isChecked())
-      QTimer::singleShot( autoEjectDelay->value()*1000, this, SLOT(eject()));
+    if(autoEjectAfterRip)
+      QTimer::singleShot( autoEjectDelay*1000, this, SLOT(eject()));
   }
-  if(beepAfterRip->isChecked()){
+  if(beepAfterRip){
     KNotifyClient::beep();
   }
 }

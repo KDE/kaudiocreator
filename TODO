@@ -1,3 +1,6 @@
+Add flac preset
+Global replace regexp?  i.e. reaplce all " " with "_"
+
 10.5263     QString::~QString()
 15.7895     QueConfigImp::updateProgress(int, int)
 21.0526     EncoderConfigImp::receivedThreadOutput(KProcess*, char*, int)
@@ -5,14 +8,14 @@
 21.0526     QueListViewItem::paintCell(QPainter*, QColorGroup const&, int, int, int)
 
 TODO.
+
 Should it really say Ripping when it is at 0% and qued?  What else could we say?
 
 Make it possible to stop and start encoding jobs:
 
-   <W0rf>    hmm - maybe it would be cool to save the joblist, so you can quit and continue later
-             - would eliminate the need for what i discussed above (encode wav's allready ripped)
+Save the joblist, so you can quit and continue later
 
-   <lypanov> therefore being able to "queue" the encodes would be really nice
+<lypanov> therefore being able to "queue" the encodes would be really nice
              i.e when you rip the ripper lives some state info in a .wav.state file
 
    <icefox>  W0rf: hmm I might be able to save the state asuming the current processes can finish
@@ -52,8 +55,6 @@ Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but wi
 Add the ability to encode files
 
 Option to automaticly remove completed jobs.
-
-Add cancel button to options (i.e seperate the functionality from the widgets).
 
 When printing encoding, it would be nice if it would say it's encoding to what (mp3, ogg, whatever)
 
