@@ -3,3 +3,4 @@ Multiple Artists for 1 album.
 Add the ability to encode files.
 Rip and encode only 1 song at a time. (i.e. what the audioslave does now, but with a gui).
 Plugin system for encoders (user friendly thingys)
+Use KURL relativePath() function rather then selfmade one.
