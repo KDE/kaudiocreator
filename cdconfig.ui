@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>482</width>
+            <width>517</width>
             <height>148</height>
         </rect>
     </property>
@@ -35,7 +35,10 @@
                 <cstring>kcfg_autoRip</cstring>
             </property>
             <property name="text">
-                <string>&amp;Automatically rip all songs upon a successful CDDB retrieval</string>
+                <string>&amp;Automatically rip all tracks upon a successful CDDB retrieval</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
             </property>
         </widget>
         <spacer>

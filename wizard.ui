@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>546</width>
-            <height>410</height>
+            <width>582</width>
+            <height>244</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -46,7 +46,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the song should be used within that text.  There are eight special words starting with a % that will be replaced with the corresponding song's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
+                <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the track should be used within that text.  There are eight special words starting with a % that will be replaced with the corresponding track's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
             </property>
             <property name="textFormat">
                 <enum>RichText</enum>
@@ -117,43 +117,87 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout6</cstring>
+                <cstring>layout15</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QPushButton" row="2" column="2">
+                <widget class="QPushButton" row="0" column="1">
                     <property name="name">
-                        <cstring>songArtistButton</cstring>
+                        <cstring>artistButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Song Artist</string>
+                        <string>&amp;Artist</string>
                     </property>
                     <property name="accel">
-                        <string></string>
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="2">
+                    <property name="name">
+                        <cstring>homeDirButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Home Folder</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="3">
+                    <property name="name">
+                        <cstring>trackNumberButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Track Number</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="2" column="1">
                     <property name="name">
-                        <cstring>songCommentButton</cstring>
+                        <cstring>extensionButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Song Comment</string>
+                        <string>&amp;Extension</string>
                     </property>
                     <property name="accel">
-                        <string></string>
+                        <string>Alt+E</string>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="1">
+                <widget class="QPushButton" row="1" column="0">
                     <property name="name">
-                        <cstring>albumButton</cstring>
+                        <cstring>trackTitleButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Al&amp;bum</string>
+                        <string>Track T&amp;itle</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+B</string>
+                        <string>Alt+I</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>trackCommentButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>T&amp;rack Comment</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>genreButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Genre</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+G</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="3">
@@ -167,48 +211,26 @@
                         <string>Alt+Y</string>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="3">
-                    <property name="name">
-                        <cstring>genreButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Genre</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+G</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>extensionButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Extension</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+E</string>
-                    </property>
-                </widget>
                 <widget class="QPushButton" row="0" column="0">
                     <property name="name">
-                        <cstring>homeDirButton</cstring>
+                        <cstring>albumButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Home Folder</string>
+                        <string>Al&amp;bum</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+H</string>
+                        <string>Alt+B</string>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="2" column="0">
+                <widget class="QPushButton" row="1" column="1">
                     <property name="name">
-                        <cstring>songButton</cstring>
+                        <cstring>trackArtistButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Song</string>
+                        <string>Trac&amp;k Artist</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+S</string>
+                        <string>Alt+K</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="2">
@@ -216,32 +238,10 @@
                         <cstring>commentButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Comment</string>
+                        <string>Co&amp;mment</string>
                     </property>
                     <property name="accel">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>artistButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Artist</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="2">
-                    <property name="name">
-                        <cstring>trackButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Track</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
+                        <string>Alt+M</string>
                     </property>
                 </widget>
             </grid>
@@ -298,6 +298,9 @@
                     <property name="text">
                         <string>&amp;OK</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
                     <property name="autoDefault">
                         <bool>true</bool>
                     </property>
@@ -311,6 +314,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -346,10 +352,10 @@
         <slot>artistPressed()</slot>
     </connection>
     <connection>
-        <sender>songButton</sender>
+        <sender>trackNumberButton</sender>
         <signal>clicked()</signal>
         <receiver>fileWizard</receiver>
-        <slot>songPressed()</slot>
+        <slot>trackNumberPressed()</slot>
     </connection>
     <connection>
         <sender>yearButton</sender>
@@ -370,10 +376,10 @@
         <slot>albumPressed()</slot>
     </connection>
     <connection>
-        <sender>trackButton</sender>
+        <sender>trackTitleButton</sender>
         <signal>clicked()</signal>
         <receiver>fileWizard</receiver>
-        <slot>trackPressed()</slot>
+        <slot>trackTitlePressed()</slot>
     </connection>
     <connection>
         <sender>genreButton</sender>
@@ -388,16 +394,16 @@
         <slot>fileFormatTextChanged(const QString&amp;)</slot>
     </connection>
     <connection>
-        <sender>songArtistButton</sender>
+        <sender>trackArtistButton</sender>
         <signal>clicked()</signal>
         <receiver>fileWizard</receiver>
-        <slot>songArtistPressed()</slot>
+        <slot>trackArtistPressed()</slot>
     </connection>
     <connection>
-        <sender>songCommentButton</sender>
+        <sender>trackCommentButton</sender>
         <signal>clicked()</signal>
         <receiver>fileWizard</receiver>
-        <slot>songCommentPressed()</slot>
+        <slot>trackCommentPressed()</slot>
     </connection>
     <connection>
         <sender>commentButton</sender>
@@ -408,14 +414,17 @@
 </connections>
 <tabstops>
     <tabstop>playlistFormat</tabstop>
-    <tabstop>homeDirButton</tabstop>
-    <tabstop>artistButton</tabstop>
-    <tabstop>songButton</tabstop>
-    <tabstop>yearButton</tabstop>
-    <tabstop>extensionButton</tabstop>
     <tabstop>albumButton</tabstop>
-    <tabstop>trackButton</tabstop>
+    <tabstop>artistButton</tabstop>
+    <tabstop>commentButton</tabstop>
+    <tabstop>yearButton</tabstop>
+    <tabstop>trackNumberButton</tabstop>
+    <tabstop>trackArtistButton</tabstop>
+    <tabstop>trackCommentButton</tabstop>
+    <tabstop>trackTitleButton</tabstop>
     <tabstop>genreButton</tabstop>
+    <tabstop>extensionButton</tabstop>
+    <tabstop>homeDirButton</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>
@@ -428,13 +437,13 @@
     <slot>artistPressed()</slot>
     <slot>extensionPressed()</slot>
     <slot>genrePressed()</slot>
-    <slot access="private">songPressed()</slot>
-    <slot access="private">trackPressed()</slot>
+    <slot access="private">trackNumberPressed()</slot>
+    <slot access="private">trackTitlePressed()</slot>
     <slot access="private">yearPressed()</slot>
-    <slot>fileFormatTextChanged( const QString &amp; text )</slot>
-    <slot>songCommentPressed()</slot>
-    <slot>songArtistPressed()</slot>
+    <slot>trackCommentPressed()</slot>
+    <slot>trackArtistPressed()</slot>
     <slot>commentPressed()</slot>
+    <slot>fileFormatTextChanged( const QString &amp; text )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

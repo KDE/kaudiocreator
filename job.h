@@ -46,6 +46,13 @@ public:
   int track;
   int year;
   
+  /**
+   * TODO
+   * Change to:
+   * track_title
+   * track_comment
+   * track_artist;
+   */
   QString song;
   QString song_comment;
   QString song_artist;

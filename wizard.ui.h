@@ -57,14 +57,14 @@ void fileWizard::genrePressed()
     playlistFormat->insert("%{genre}");
 }
 
-void fileWizard::songPressed()
-{
-    playlistFormat->insert("%{song}");
-}
-
-void fileWizard::trackPressed()
+void fileWizard::trackNumberPressed()
 {
     playlistFormat->insert("%{track}");
+}
+
+void fileWizard::trackTitlePressed()
+{
+    playlistFormat->insert("%{title}");
 }
 
 void fileWizard::yearPressed()
@@ -72,14 +72,14 @@ void fileWizard::yearPressed()
     playlistFormat->insert("%{year}");
 }
 
-void fileWizard::songCommentPressed()
+void fileWizard::trackCommentPressed()
 {
-    playlistFormat->insert("%{song_comment}");
+    playlistFormat->insert("%{track_comment}");
 }
 
-void fileWizard::songArtistPressed()
+void fileWizard::trackArtistPressed()
 {
-    playlistFormat->insert("%{song_artist}");
+    playlistFormat->insert("%{track_artist}");
 }
 
 void fileWizard::commentPressed()
