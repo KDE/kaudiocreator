@@ -213,22 +213,22 @@
                     <class>QPushButton</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>ripSelectedTracks</cstring>
+                        <cstring>selectAllTracksButton</cstring>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Rip Selected Tracks</string>
+                        <string>Select All Tracks</string>
                     </property>
                 </widget>
                 <widget>
                     <class>QPushButton</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>selectAllTracksButton</cstring>
+                        <cstring>ripSelectedTracks</cstring>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Select All Tracks</string>
+                        <string>Rip Selected Tracks</string>
                     </property>
                 </widget>
             </hbox>

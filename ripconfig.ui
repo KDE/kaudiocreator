@@ -44,7 +44,7 @@
                         <cstring>TextLabel9</cstring>
                     </property>
                     <property name="text">
-                        <string>Rip file format:</string>
+                        <string>Rip file format</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -90,7 +90,7 @@
                         <cstring>TextLabel14</cstring>
                     </property>
                     <property name="text">
-                        <string>Number of tracks to rip at a time:</string>
+                        <string>Number of tracks to rip at a time</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
@@ -147,7 +147,7 @@
                         <cstring>TextLabel15</cstring>
                     </property>
                     <property name="text">
-                        <string>Auto eject delay:</string>
+                        <string>Auto eject delay</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox">

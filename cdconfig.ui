@@ -58,7 +58,7 @@
                         <cstring>TextLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Database server:</string>
+                        <string>Database server</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="0" column="1">
@@ -85,7 +85,7 @@
                         <cstring>TextLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Port:</string>
+                        <string>Port</string>
                     </property>
                 </widget>
             </grid>

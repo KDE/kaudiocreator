@@ -33,7 +33,7 @@
                 <cstring>trackLabel</cstring>
             </property>
             <property name="text">
-                <string>Track:</string>
+                <string>Track</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -103,7 +103,7 @@
                 <cstring>TextLabel5</cstring>
             </property>
             <property name="text">
-                <string>Artist:</string>
+                <string>Artist</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -116,7 +116,7 @@
                 <cstring>TextLabel6</cstring>
             </property>
             <property name="text">
-                <string>Album:</string>
+                <string>Album</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -129,7 +129,7 @@
                 <cstring>TextLabel7</cstring>
             </property>
             <property name="text">
-                <string>Year:</string>
+                <string>Year</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -922,7 +922,7 @@
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Genre:</string>
+                <string>Genre</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>

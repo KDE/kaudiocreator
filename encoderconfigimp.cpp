@@ -62,7 +62,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name):EncoderCo
 
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");
-  deleteWav->setChecked(config.readBoolEntry("deleteWav", true));
+  saveWav->setChecked(config.readBoolEntry("saveWav", false));
   numberOfCpus->setValue(config.readNumEntry("numberOfCpus", 1));
   mp3FileFormat->setText(config.readEntry("mp3FileFormat", "~/mp3/%artist/%album/%artist - %song.mp3"));
   createM3uAlbum->setChecked(config.readBoolEntry("createM3uAlbum", false));
@@ -93,7 +93,7 @@ EncoderConfigImp::~EncoderConfigImp(){
   KConfig &config = *KGlobal::config();
   config.setGroup("encoderconfig");
   config.writeEntry("encoder", encoder->currentItem());
-  config.writeEntry("deleteWav", deleteWav->isChecked());
+  config.writeEntry("saveWav", saveWav->isChecked());
   config.writeEntry("numberOfCpus", numberOfCpus->value());
   config.writeEntry("mp3FileFormat", mp3FileFormat->text());
   config.writeEntry("createM3uAlbum", createM3uAlbum->isChecked());
@@ -283,7 +283,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
   jobs.remove((KShellProcess*)process);
 
   if( QFile::exists(job->newLocation)){
-    if(deleteWav->isChecked())
+    if(!saveWav->isChecked())
       QFile::remove(job->location);
     emit(updateProgress(job->id, 100));
     if(createM3uAlbum->isChecked())

@@ -44,7 +44,7 @@
                         <cstring>TextLabel16</cstring>
                     </property>
                     <property name="text">
-                        <string>Encoder:</string>
+                        <string>Encoder</string>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -96,7 +96,7 @@
                         <cstring>TextLabel17</cstring>
                     </property>
                     <property name="text">
-                        <string>Executable:</string>
+                        <string>Executable</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -104,7 +104,7 @@
                         <cstring>TextLabel18</cstring>
                     </property>
                     <property name="text">
-                        <string>Command line:</string>
+                        <string>Command line</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="0" column="1">
@@ -144,7 +144,7 @@
                         <cstring>TextLabel19</cstring>
                     </property>
                     <property name="text">
-                        <string>Encoded file format:</string>
+                        <string>Encoded file format</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -190,7 +190,7 @@
                         <cstring>TextLabel20</cstring>
                     </property>
                     <property name="text">
-                        <string>Number of wav files to encode at a time:</string>
+                        <string>Number of wav files to encode at a time</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
@@ -214,10 +214,10 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>deleteWav</cstring>
+                <cstring>saveWav</cstring>
             </property>
             <property name="text">
-                <string>Delete wav file after encoding</string>
+                <string>Save wav file as well as encoded file</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -281,7 +281,7 @@
                                 <cstring>TextLabel22</cstring>
                             </property>
                             <property name="text">
-                                <string>File format:</string>
+                                <string>File format</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">

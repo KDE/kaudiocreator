@@ -1,0 +1,14 @@
+TODO file.
+
+Correct for special charactors such as / and "
+
+Check to see if CDDB sends / or %2f
+
+Use a proper CDDB library that the rest of kde uses.
+
+/*  TODO
+  song = KURL::decode_string(song);
+  song.replace(QRegExp("/"), "-");
+  song.replace(QRegExp("\""), "");
+*/
+
