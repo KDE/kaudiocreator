@@ -37,6 +37,7 @@ Q_OBJECT
 signals:
   void addJob(Job *job, const QString &name);
   void updateProgress(int id, int progress);
+  void jobIsDone(Job *job, const QString &extension);
   void jobsChanged();
 
 public:
@@ -59,7 +60,6 @@ private:
   QPtrList<Job> pendingJobs;
   QPtrList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
-  void appendToPlaylist(Job* job);
 
   EncoderPrefs *prefs;
 

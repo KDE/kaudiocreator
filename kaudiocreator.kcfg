@@ -6,7 +6,7 @@
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
       <label>Perform automatic CDDB lookups.</label>
-      <default>false</default>
+      <default>true</default>
     </entry>
     <entry name="autoRip" type="Bool">
       <label>Automatically rip all songs upon a successful CDDB retrieval</label>

@@ -253,6 +253,7 @@ void Encoder::jobDone(KProcess *process){
     emit(updateProgress(job->id, -1));
   }
   else if( QFile::exists(job->newLocation)){
+    emit(jobIsDone(job, prefs->extension()));
     QFile::remove(job->location);
     
     // TODO kill -9 lame or oggenc when processing and see what they return.
@@ -264,8 +265,6 @@ void Encoder::jobDone(KProcess *process){
       //qDebug("Must be done: %d", (process->exitStatus()));
       emit(updateProgress(job->id, 100));
     }
-    if(Prefs::createPlayList())
-      appendToPlaylist(job);
   }
   else{
     KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
@@ -276,46 +275,6 @@ void Encoder::jobDone(KProcess *process){
   delete job;
   delete process;
   tendToNewJobs();
-}
-
-/**
- * Append the job to the playlist as specified in the options.
- * @param job too append to the playlist.
- */
-void Encoder::appendToPlaylist(Job* job){
-  QString desiredFile = Prefs::playlistFileFormat();
-  QMap <QString,QString> map;
-  map.insert("extension", prefs->extension());
-  job->replaceSpecialChars(desiredFile, false, map);
-  
-  desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
-  // If the user wants anything regexp replaced do it now...
-  desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
-  
-  int lastSlash = desiredFile.findRev('/',-1);
-  if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-    KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n"), i18n("Playlist Creation Failed"));
-    return;
-  }
-
-  QFile f(desiredFile);
-  if ( !f.open(IO_WriteOnly|IO_Append) ){
-    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check the file path option."), i18n("Playlist Addition Failed"));
-    return;
-  }
-
-  QTextStream t( &f );        // use a text stream
-
-  if(Prefs::useRelativePath()){
-    QFileInfo audioFile(job->newLocation);
-    KURL d(desiredFile);
-    QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
-    t << relative << audioFile.fileName() << endl;
-  }
-  else
-    t << job->newLocation << endl;
-  
-  f.close();
 }
 
 #include "encoder.moc"

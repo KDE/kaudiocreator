@@ -67,6 +67,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   connect(jobQue, SIGNAL(removeJob(int)), encoder, SLOT(removeJob(int)));
   connect(encoder, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));
   connect(encoder, SIGNAL(addJob(Job*, const QString &)), jobQue, SLOT(addJob(Job*, const QString &)));
+  connect(encoder, SIGNAL(jobIsDone(Job*,const QString &)), jobQue, SLOT(appendToPlaylist(Job*, const QString &)));
+
 
   connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
   connect(ripper, SIGNAL(eject()), tracks, SLOT(eject()));
@@ -221,14 +223,14 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
       if (cddb)
       {
         cddb->load();
-        addPage(cddb, i18n("CDDB"), "cdaudio_unmount", i18n("CDDB Configuration"), false);
+        addPage(cddb, i18n("CDDB"), "cdaudio_mount", i18n("CDDB Configuration"), false);
 	connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
       }
     }
   }
   RipConfig *rip = new RipConfig(0, "Ripper");
   rip->kcfg_tempDir->setMode(KFile::Directory);
-  addPage(rip, i18n("Ripper"), "shredder", i18n("Ripper Configuration") );
+  addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
   
   encoderConfigImp = new EncoderConfigImp(0, "Encoder");
   addPage(encoderConfigImp, i18n("Encoder"), "filter", i18n("Encoder Configuration") );

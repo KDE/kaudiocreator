@@ -29,6 +29,12 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kurl.h>
+#include <qfile.h>
+#include <qregexp.h>
+#include <qfileinfo.h>
+#include <kstandarddirs.h>
+#include <qdir.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
@@ -239,6 +245,49 @@ int JobQueImp::numberOfJobsNotFinished(){
     currentItem = (QueListViewItem*)currentItem->itemBelow();
   }
   return totalJobsToDo;
+}
+
+/**
+ * Append the job to the playlist as specified in the options.
+ * @param job too append to the playlist.
+ * @param encoder extension
+ */
+void JobQueImp::appendToPlaylist(Job* job, const QString &extension){
+  if(!Prefs::createPlayList())
+    return;
+  QString desiredFile = Prefs::playlistFileFormat();
+  QMap <QString,QString> map;
+  map.insert("extension", extension);
+  job->replaceSpecialChars(desiredFile, false, map);
+  
+  desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+  // If the user wants anything regexp replaced do it now...
+  desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
+  
+  int lastSlash = desiredFile.findRev('/',-1);
+  if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n"), i18n("Playlist Creation Failed"));
+    return;
+  }
+
+  QFile f(desiredFile);
+  if ( !f.open(IO_WriteOnly|IO_Append) ){
+    KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check the file path option."), i18n("Playlist Addition Failed"));
+    return;
+  }
+
+  QTextStream t( &f );        // use a text stream
+
+  if(Prefs::useRelativePath()){
+    QFileInfo audioFile(job->newLocation);
+    KURL d(desiredFile);
+    QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
+    t << relative << audioFile.fileName() << endl;
+  }
+  else
+    t << job->newLocation << endl;
+  
+  f.close();
 }
 
 /**
