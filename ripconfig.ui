@@ -122,7 +122,7 @@
                 <cstring>autoEjectAfterRip</cstring>
             </property>
             <property name="text">
-                <string>Auto eject CD after last song is ripped</string>
+                <string>Auto-eject CD after last song is ripped</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -147,7 +147,7 @@
                         <cstring>TextLabel15</cstring>
                     </property>
                     <property name="text">
-                        <string>Auto eject delay:</string>
+                        <string>Auto-eject delay:</string>
                     </property>
                 </widget>
                 <widget class="QSpinBox">
