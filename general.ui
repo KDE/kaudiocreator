@@ -29,9 +29,6 @@
             <property name="text">
                 <string>&amp;Automatically remove jobs when finished</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
@@ -151,7 +148,7 @@
                 <cstring>kcfg_seperateMultiArtist</cstring>
             </property>
             <property name="title">
-                <string>Automatically seperate multi-artist CDDB entries</string>
+                <string>Automatically Separate Multi-Artist CDDB Entries</string>
             </property>
             <property name="checkable">
                 <bool>true</bool>
@@ -216,7 +213,7 @@
                                 <cstring>genArtistLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Generic Artist:</string>
+                                <string>Generic artist:</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit" row="1" column="1">
