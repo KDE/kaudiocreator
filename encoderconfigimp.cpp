@@ -45,14 +45,14 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     
     encPrefs = EncoderPrefs::prefs("Encoder_0");
     encPrefs->setEncoderName(i18n("OggEnc"));
-    encPrefs->setCommandLine("oggenc -o %o --artist %artist --album %album --title %title --date %year --tracknum %track --genre %genre %f");
+    encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
     encPrefs->setExtension("ogg");
     encPrefs->setPercentLength(4);
     encPrefs->writeConfig();
 
     encPrefs = EncoderPrefs::prefs("Encoder_1");
     encPrefs->setEncoderName(i18n("Lame"));
-    encPrefs->setCommandLine("lame --preset standard --tt %title --ta %artist --tl %album --ty %year --tn %track --tg %genre %f %o");
+    encPrefs->setCommandLine("lame --preset standard --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
     encPrefs->setExtension("mp3");
     encPrefs->setPercentLength(2);
     encPrefs->writeConfig();
@@ -66,7 +66,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
 
     encPrefs = EncoderPrefs::prefs("Encoder_3");
     encPrefs->setEncoderName(i18n("FLAC"));
-    encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%artist --tag=Album=%album --tag=Title=%title --tag=Tracknumber=%track --tag=Genre=%genre %f");
+    encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%{artist} --tag=Album=%{albumtitle} --tag=Title=%{title} --tag=Tracknumber=%{number} --tag=Genre=%{genre} %f");
     encPrefs->setExtension("flac");
     encPrefs->setPercentLength(2);
     encPrefs->writeConfig();
