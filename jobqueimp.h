@@ -36,46 +36,45 @@ class QListView;
 class QueListViewItem : public QListViewItem {
 
 public:
-  QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString c=0, QString d=0, QString e=0);
-  virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
-	    int width,int align);
-  double percentDone;
-  // Has the percentDone gone beyond 0
-  // Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
-  bool progressing;
+	QueListViewItem (QListView * p = NULL, QString a=0, QString b=0, QString c=0, QString d=0, QString e=0);
+	virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
+      int width,int align);
+	double percentDone;
+	// Has the percentDone gone beyond 0
+	// Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
+	bool progressing;
 };
 
 
-class JobQueImp : public JobQue  {
+class JobQueImp : public JobQue {
 
 Q_OBJECT
 
 signals:
-  void removeJob( int idNumber );
+	void removeJob( int idNumber );
 
 public:
-  JobQueImp( QWidget* parent = 0, const char* name = 0);
-  int numberOfJobsNotFinished();
+	JobQueImp( QWidget* parent = 0, const char* name = 0 );
+	int numberOfJobsNotFinished();
 
 public slots:
-  void loadSettings();
-  void updateProgress(int id, int progress);
-  void addJob(Job* job, const QString &name);
-  void appendToPlaylist(Job* job, const QString &extension);
-  
-  // Toolbar Button
-  void clearDoneJobs();
-  
+	void updateProgress( int id, int progress );
+	void addJob( Job* job, const QString &name );
+	void appendToPlaylist( Job* job, const QString &extension );
+
+	// Toolbar Button
+	void clearDoneJobs();
+
 private slots:
-  void removeSelectedJob();
-  void removeAllJobs();
+	void removeSelectedJob();
+	void removeAllJobs();
 
 private:
-  bool removeJob(QueListViewItem *item, bool kill=true, bool prompt=true);
-  QString getStringFromNumber(int number);
-  int highestNumber;
+	bool removeJob( QueListViewItem *item, bool kill=true, bool prompt=true );
+	QString getStringFromNumber( int number );
+	int highestNumber;
 
-  int currentId;
+	int currentId;
 };
 
 #endif

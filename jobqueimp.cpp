@@ -53,13 +53,6 @@ JobQueImp::JobQueImp( QWidget* parent, const char* name) :
   connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
   connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
   connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
-  loadSettings();
-}
-
-/**
- * Loads the settings
- */
-void JobQueImp::loadSettings(){
 }
 
 /**
