@@ -102,7 +102,7 @@
                         <cstring>playlistFormat</cstring>
                     </property>
                     <property name="text">
-                        <string>~/%extension/%artist/%album/%artist - %album.m3u</string>
+                        <string>~/%{extension}/%{artist}/%{album}/%{artist} - %{album}.m3u</string>
                     </property>
                 </widget>
             </hbox>

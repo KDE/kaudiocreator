@@ -7,9 +7,6 @@ Rip and encode only 1 song at a time. (i.e. using audiocd:/ ioslave).
 Plugin system for encoders (user friendly things, again use audiocd plugin system)
 
 If possible restart jobs that have failed.
-
-If encoding failed output error log to a text window
-
 ---
 Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
 	Tmp files are stored in $KDEHOME/tmp-$HOST/appname

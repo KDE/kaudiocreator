@@ -19,17 +19,12 @@
  */
 
 #include "ripper.h"
-
 #include "prefs.h"
 
 #include <qfile.h>
 #include <qtimer.h>
 #include <ktempfile.h>
-
-// eject
 #include <kmessagebox.h>
-
-// beep
 #include <knotifyclient.h>
 
 /**

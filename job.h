@@ -49,18 +49,22 @@ public:
   QString song;
   QString song_comment;
   QString song_artist;
-  
+ 
   // Currently location of file X
   QString location;
 
   // New location of a file after current opertation is complete (rip/encode).
   QString newLocation;
 
-  // What was just attempted to do via this job and is spit out in the event of an error.
+  // What was just attempted to do via this job and is spit out in the event
+  // of an error.
   QString errorString;
 
   // If this is the last song in to be ripped then value is true. 
   bool lastSongInAlbum;
+
+  // output from the processing.
+  QString output;
 }; 
 
 #endif

@@ -22,7 +22,8 @@
 
 #include "prefs.h"
 #include "encoder_prefs.h"
-
+#include "encoderoutput.h"
+ 
 #include <qregexp.h>
 #include <qdir.h>
 #include <kstandarddirs.h>
@@ -30,6 +31,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <knotifyclient.h>
+#include <qtextedit.h>
 
 /**
  * Constructor, load settings.
@@ -213,6 +215,9 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length){
     return;
   }
 
+  // Keep the output in the event it fails.
+  job->output += QString(buffer).mid(0,length);  
+  
   // Make sure the output string has a % symble in it.
   QString output = QString(buffer).mid(0,length);
   if( output.find('%') == -1 && reportCount < 5){
@@ -273,7 +278,12 @@ void Encoder::jobDone(KProcess *process){
     }
   }
   else{
-    KMessageBox::sorry(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+    if(KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes){
+      EncoderOutput dlg(0, "Encoder Output");
+      job->output = job->errorString + "\n\n\n" + job->output;
+      dlg.output->setText(job->output);
+      dlg.exec();
+    }
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }

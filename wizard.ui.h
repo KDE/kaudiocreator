@@ -28,8 +28,9 @@
 
 #include <qstring.h>
 #include <qregexp.h>
-
+#include <qmap.h>
 #include <klocale.h>
+#include "job.h"
 
 void fileWizard::homePressed()
 {
@@ -38,68 +39,74 @@ void fileWizard::homePressed()
 
 void fileWizard::albumPressed()
 {
-    playlistFormat->insert("%album");
+    playlistFormat->insert("%{album}");
 }
 
 void fileWizard::artistPressed()
 {
-    playlistFormat->insert("%artist");
+    playlistFormat->insert("%{artist}");
 }
 
 void fileWizard::extensionPressed()
 {
-    playlistFormat->insert("%extension");
+    playlistFormat->insert("%{extension}");
 }
 
 void fileWizard::genrePressed()
 {
-    playlistFormat->insert("%genre");
+    playlistFormat->insert("%{genre}");
 }
 
 void fileWizard::songPressed()
 {
-    playlistFormat->insert("%song");
+    playlistFormat->insert("%{song}");
 }
 
 void fileWizard::trackPressed()
 {
-    playlistFormat->insert("%track");
+    playlistFormat->insert("%{track}");
 }
 
 void fileWizard::yearPressed()
 {
-    playlistFormat->insert("%year");
+    playlistFormat->insert("%{year}");
 }
 
 void fileWizard::songCommentPressed()
 {
-    playlistFormat->insert("%song_comment");
+    playlistFormat->insert("%{song_comment}");
 }
 
 void fileWizard::songArtistPressed()
 {
-    playlistFormat->insert("%song_artist");
+    playlistFormat->insert("%{song_artist}");
 }
 
 void fileWizard::commentPressed()
 {
-    playlistFormat->insert("%comment");
+    playlistFormat->insert("%{comment}");
 }
 
 void fileWizard::fileFormatTextChanged(const QString& text)
 {
-   QString string = text;
-    string.replace(QRegExp("%album"), "Why Rain");
-    string.replace(QRegExp("%comment"), "This Album Rocks!");
-    string.replace(QRegExp("%genre"), "Rock");
-    string.replace(QRegExp("%artist"), "J Rocker");
-    string.replace(QRegExp("%year"), "2002");
-    string.replace(QRegExp("%song_comment"), "This Song Rocks!");
-    string.replace(QRegExp("%song_artist"), "John Rocker");
-    string.replace(QRegExp("%song"), "Time");
-    string.replace(QRegExp("%extension"), "mp3");
-    string.replace(QRegExp("%track"), "09");
-    string.replace(QRegExp("~"), "/home/foo");
-    exampleLabel->setText(i18n("Example: %1").arg(string));
+  QString string = text;
+  string.replace(QRegExp("~"), "/home/foo");
+  string.replace(QRegExp("%extension"), "mp3");
+
+  Job job;
+  job.genre = "Rock";
+  job.group = "J Rocker";
+  job.album = "Why Rain";
+  job.year = 2002;
+  job.track = 9;
+  job.comment = "This Album rocks!";
+   
+  job.song = "Time";
+  job.song_artist = "John Rocker"; 
+  job.song_comment = "This Song Rocks!";
+  QMap<QString,QString> map;
+  map.insert("extension", "mp3");
+  job.replaceSpecialChars(string, false,  map);
+  exampleLabel->setText(i18n("Example: %1").arg(string));
 }
 

@@ -3,7 +3,7 @@ INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) -I$(top_srcdir) -I$(top_srcdir)/libkc
 bin_PROGRAMS = kaudiocreator
 
 kaudiocreator_SOURCES = main.cpp kaudiocreator.cpp encoder.cpp encoderconfigimp.cpp  job.cpp  jobqueimp.cpp  ripper.cpp  tracksimp.cpp encoderedit.ui jobque.ui  tracks.ui infodialog.ui wizard.ui \
-general.ui cdconfig.ui ripconfig.ui encoderconfig.ui prefs.kcfgc encoder_prefs.kcfgc
+general.ui cdconfig.ui ripconfig.ui encoderoutput.ui encoderconfig.ui prefs.kcfgc encoder_prefs.kcfgc
 
 EXTRA_DIST = encoder.h kaudiocreator.h kaudiocreator.desktop encoderconfigimp.h  jobqueimp.h  ripper.h  tracksimp.h 
 
