@@ -7,11 +7,7 @@
  ***************************************************************************/
 
 #include <qglobal.h>
-#if QT_VERSION < 300
-#include <kapp.h>
-#else
 #include <kapplication.h>
-#endif
 
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
