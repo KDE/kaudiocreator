@@ -85,7 +85,7 @@ QString JobQueImp::getStringFromNumber(int number){
  * @param id the id of the job.
  * @param name the name of the job.
  */
-void JobQueImp::addJob(Job*job, QString name ){
+void JobQueImp::addJob(Job*job, const QString &name ){
   job->id = ++currentId;
   (void)new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
   queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));

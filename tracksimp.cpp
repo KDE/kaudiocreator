@@ -542,7 +542,8 @@ void TracksImp::deselectAllTracks(){
 /**
  * Set the current stats for the new album being displayed.
  */
-void TracksImp::newAlbum(QString newGroup, QString newAlbum, uint newYear, QString newGenre){
+void TracksImp::newAlbum(const QString &newGroup, const QString &newAlbum,
+		uint newYear, const QString &newGenre){
   albumName->setText(QString("%1 - %2").arg(newGroup).arg(newAlbum));
   trackListing->clear();
   album = newAlbum;
@@ -558,8 +559,8 @@ void TracksImp::newAlbum(QString newGroup, QString newAlbum, uint newYear, QStri
  * @param song the name of the song.
  * @param length the lenght of song.
  */
-void TracksImp::newSong(int track, QString song, int length){
-  song = song.mid(song.find(' ',0)+1);
+void TracksImp::newSong(int track, const QString &newsong, int length){
+  QString song = newsong.mid(newsong.find(' ',0)+1);
   song = KURL::decode_string(song);
   song.replace(QRegExp("/"), "-");
   QString songLength = QString("%1:%2%3").arg(length/60).arg((length % 60)/10).arg((length % 60)%10);

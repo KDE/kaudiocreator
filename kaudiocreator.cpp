@@ -59,11 +59,11 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
   connect(ripper, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));
-  connect(ripper, SIGNAL(addJob(Job*, QString)), jobQue, SLOT(addJob(Job*, QString)));
+  connect(ripper, SIGNAL(addJob(Job*, const QString &)), jobQue, SLOT(addJob(Job*, const QString &)));
 
   connect(jobQue, SIGNAL(removeJob(int)), encoder, SLOT(removeJob(int)));
   connect(encoder, SIGNAL(updateProgress(int, int)), jobQue, SLOT(updateProgress(int,int)));
-  connect(encoder, SIGNAL(addJob(Job*, QString)), jobQue, SLOT(addJob(Job*, QString)));
+  connect(encoder, SIGNAL(addJob(Job*, const QString &)), jobQue, SLOT(addJob(Job*, const QString &)));
 
   connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
   connect(ripper, SIGNAL(eject()), tracks, SLOT(eject()));

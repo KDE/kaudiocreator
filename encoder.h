@@ -33,7 +33,7 @@ class Encoder : public QObject {
 Q_OBJECT
 
 signals:
-  void addJob(Job *job, QString name);
+  void addJob(Job *job, const QString &name);
   void updateProgress(int id, int progress);
 
 public:

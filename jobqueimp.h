@@ -57,7 +57,7 @@ public:
 public slots:
   void loadSettings();
   void updateProgress(int id, int progress);
-  void addJob(Job* job, QString name);
+  void addJob(Job* job, const QString &name);
   
   // Toolbar Button
   void clearDoneJobs();

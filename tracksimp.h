@@ -66,10 +66,10 @@ private slots:
 
 private:
   bool cddbCD();
-  void newAlbum(QString group = i18n("Unknown Artist"),
-		QString album = i18n("Unknown Album"),
-		uint year = 0, QString genre = "");
-  void newSong(int track, QString song, int length); 
+  void newAlbum(const QString &group = i18n("Unknown Artist"),
+		const QString &album = i18n("Unknown Album"),
+		uint year = 0, const QString &genre = "");
+  void newSong(int track, const QString &song, int length); 
   void ripWholeAlbum();
    
   Id3TagDialog *dialog;

@@ -33,7 +33,7 @@ class Ripper : public QObject {
 Q_OBJECT
 
 signals:
-  void addJob(Job *job, QString name);
+  void addJob(Job *job, const QString &name);
   void updateProgress(int id, int progress);
   void encodeWav(Job *job);
   void eject();
