@@ -1,0 +1,37 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kmp3creator" version="1">
+<ActionProperties>
+  <Action name="rip" icon="shredder"/>
+  <Action name="view_tracks" icon="cdaudio_unmount"/>
+  <Action name="view_cd" icon="network"/>
+  <Action name="view_rip" icon="shredder"/>
+  <Action name="view_encoder" icon="filter"/>
+  <Action name="view_que" icon="run"/>
+  <Action name="clear_done_jobs" icon="edittrash"/>
+  <Action name="update_cd" icon="rotate_cw"/>
+</ActionProperties>
+
+<MenuBar>
+  <Menu name="file"><Text>&amp;File</Text>
+    <Action name="rip"/>
+    <Action name="configuretoolbars"/>
+    <Action name="update_cd"/>
+    <Separator/>
+    <Action name="quit"/>
+  </Menu>
+  <Menu name="view"><Text>&amp;View</Text>
+    <Action name="view_tracks"/>
+    <Action name="view_cd"/>
+    <Action name="view_rip"/>
+    <Action name="view_encoder"/>
+    <Action name="view_que"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="Main ToolBar">
+  <Action name="rip"/>
+  <Action name="clear_done_jobs"/>
+  <Action name="update_cd"/>
+</ToolBar>
+
+</kpartgui>
