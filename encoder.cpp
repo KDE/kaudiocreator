@@ -290,7 +290,7 @@ void Encoder::appendToPlaylist(Job* job){
     QFileInfo audioFile(job->newLocation);
     KURL d(desiredFile);
     QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
-    t << relative << audioFile.fileName() << endl;
+    t << relative << endl;
   }
   else
     t << job->newLocation << endl;
