@@ -22,9 +22,12 @@
 #include <kprocess.h>
 #include <kmessagebox.h>
 
-#define HAVE_LAME 0
-
 #include <config.h>
+
+// Moved the HAVE_LAME define in order to avoid redefined-warnings.
+#ifndef HAVE_LAME
+#define HAVE_LAME 0
+#endif
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -52,21 +55,32 @@ typedef Q_INT32 size32;
 #include <qlineedit.h>
 #include <qcheckbox.h>
 
+#if HAVE_LAME
+extern "C"
+{
+#include <lame/lame.h>
+}
+#endif
+
 extern "C"
 {
 #include <cdda_interface.h>
 #include <cdda_paranoia.h>
+}
 
+// Many Linux systems do not define LINUX. It's something else that I
+// can't be bothered to look up just right now.
+#ifdef LINUX
+extern "C"
+{
 /* This is in support for the Mega Hack, if cdparanoia ever is fixed, or we
    use another ripping library we can remove this.  */
 #include <linux/cdrom.h>
 #include <sys/ioctl.h>
 
-#if HAVE_LAME
-#include <lame/lame.h>
+}
 #endif
 
-}
 #include <kdebug.h>
 #include <kurl.h>
 #include <kprotocolmanager.h>
@@ -91,6 +105,16 @@ extern "C"
 
 int start_of_first_data_as_in_toc;
 int hack_track;
+
+#ifdef __FreeBSD__
+/* The code found in FreeBSD's port of cdparanoia 3.9.8_4 has
+** pretty much the same functionality, except it is documented.
+** In addition, the multisession hack stuff is #ifdeffed out
+** in the port, so presumably (a) it never happes or (b) the
+** TOC returned by the BSD driver works differently or (c) we
+** just don't care over there.
+*/
+#else
 /* Mega hack.  This function comes from libcdda_interface, and is called by
    it.  We need to override it, so we implement it ourself in the hope, that
    shared lib semantics make the calls in libcdda_interface to FixupTOC end
@@ -151,6 +175,7 @@ int FixupTOC(cdrom_drive *d, int tracks)
   }
   return 0;
 }
+#endif
 
 /* libcdda returns for cdda_disc_lastsector() the last sector of the last
    _audio_ track.  How broken.  For CDDB Disc-ID we need the real last sector
@@ -159,6 +184,7 @@ long my_last_sector(cdrom_drive *drive)
 {
   return cdda_track_lastsector(drive, drive->tracks);
 }
+
 
 enum Which_dir { Unknown = 0, Device, ByName, ByTrack, Title, Info, Root,
                  MP3, Vorbis };
