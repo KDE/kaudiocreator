@@ -85,7 +85,7 @@ EncoderConfigImp::~EncoderConfigImp(){
   }
 
   KConfig &config = *KGlobal::config();
-  config.setGroup("encodeconfig");
+  config.setGroup("encoderconfig");
   config.writeEntry("encoder", encoder->currentItem());
   config.writeEntry("deleteWav", deleteWav->isChecked());
   config.writeEntry("numberOfCpus", numberOfCpus->value());
