@@ -521,7 +521,7 @@ void TracksImp::newAlbum() {
 			title = t[i].title.mid(delimiter + 3);
 		}
 		else {
-			trackArtist = "";
+			trackArtist = cddbInfo.artist;
 			title = t[i].title;
 		}
 
