@@ -30,14 +30,17 @@ public:
   KAudioCreator( QWidget* parent = 0, const char* name = 0);
   ~KAudioCreator();
 
+protected:
+  virtual bool queryClose();
+
 private slots:
   void viewTracks();
   void viewQue();
   void configuretoolbars();
+  void newToolbarConfig();
   void quit();
-  void closeEvent(QCloseEvent *);
   void showOptions();
-  
+
 private:
   KJanusWidget *janusWidget;
   KDialogBase* options;
