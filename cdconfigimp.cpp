@@ -52,15 +52,13 @@ typedef unsigned long long  __u64;
 #include <klocale.h>
 
 #include "cdconfigimp.h"
-#include "cddb.h"
+#include "client.h"
 
 //using namespace KIO;
 
 #define MAX_IPC_SIZE (1024*32)
 
 #define DEFAULT_CD_DEVICE "/dev/cdrom"
-
-#define DEFAULT_CDDB_SERVER "freedb.freedb.org:8880"
 
 extern "C"
 {
@@ -149,7 +147,6 @@ class CdConfigImp::Private
     {
       clear();
       discid = 0;
-      cddb = 0;
       based_on_cddb = false;
       s_byname = i18n("By Name");
       s_bytrack = i18n("By Track");
@@ -168,15 +165,12 @@ class CdConfigImp::Private
     QString path;
     int paranoiaLevel;
     bool useCDDB;
-    QString cddbServer;
-    int cddbPort;
     unsigned int discid;
     int tracks;
     QString cd_title;
     QString cd_artist;
     QStringList titles;
     bool is_audio[100];
-    CDDB *cddb;
     bool based_on_cddb;
     QString s_byname;
     QString s_bytrack;
@@ -212,8 +206,6 @@ void CdConfigImp::loadSettings(){
   KConfig &config = *KGlobal::config();
   config.setGroup("cdconfig");
   autoRip = config.readBoolEntry("autoRip", false);
-  databaseServer = config.readEntry("databaseServer", "freedb.freedb.org");
-  databasePort = config.readNumEntry("databasePort", 8880);
   performCDDBauto = config.readBoolEntry("performCDDBauto", false);
   constantlyScan = config.readBoolEntry("constantlyScan", false); 
 }
@@ -387,7 +379,7 @@ int CdConfigImp::updateCD(struct cdrom_drive * drive){
   d->cd_title = i18n("Unknown Album");
   d->cd_artist = i18n("Unknown Artist");
   d->titles.clear();
-  QValueList<int> qvl;
+  KCDDB::TrackOffsetList qvl;
 
   for (int i = 0; i < d->tracks; i++)
     {
@@ -402,26 +394,31 @@ int CdConfigImp::updateCD(struct cdrom_drive * drive){
 
   if (performCDDBauto || overrideCddb)
   {
-    d->cddb = new CDDB;
     KApplication::setOverrideCursor(Qt::waitCursor);
-    d->cddb->set_server(databaseServer.latin1(), databasePort);
 
-    if (d->cddb->queryCD(qvl))
+    KCDDB::Client c;
+
+    KCDDB::CDDB::Result result = c.lookup(qvl);
+
+    if (result == KCDDB::CDDB::Success)
     {
       d->based_on_cddb = true;
-      d->cd_title = d->cddb->title();
-      d->cd_artist = d->cddb->artist();
-      for (int i = 0; i < d->tracks; i++)
+      KCDDB::CDInfo info = c.lookupResponse().first();
+
+      d->cd_title = info.title;
+      d->cd_artist = info.artist;
+
+      KCDDB::TrackInfoList t = info.trackInfoList;
+      for (unsigned i = 0; i < t.count(); i++)
       {
         QString n;
         n.sprintf("%02d ", i + 1);
-        d->titles.append (n + d->cddb->track(i));
+        d->titles.append (n + t[i].title);
       }
       KApplication::restoreOverrideCursor();
       return 0;
     }
     KApplication::restoreOverrideCursor();
-    delete d->cddb;
   }
 
   d->based_on_cddb = false;
@@ -513,8 +510,6 @@ CdConfigImp::pickDrive()
   void
 CdConfigImp::parseArgs(const KURL & url)
 {
-  QString old_cddb_server = d->cddbServer;
-  int old_cddb_port = d->cddbPort;
   bool old_use_cddb = d->useCDDB;
 
   d->clear();
@@ -553,28 +548,13 @@ CdConfigImp::parseArgs(const KURL & url)
     {
       d->useCDDB = (0 != value.toInt());
     }
-    else if (attribute == "cddb_server")
-    {
-      int portPos = value.find(':');
-
-      if (-1 == portPos)
-        d->cddbServer = value;
-
-      else
-      {
-        d->cddbServer = value.left(portPos);
-        d->cddbPort = value.mid(portPos + 1).toInt();
-      }
-    }
   }
 
-  /* We need to recheck the CD, if the user either enabled CDDB now, or
-     changed the server (port).  We simply reset the saved discid, which
-     forces a reread of CDDB information.  */
+  /* We need to recheck the CD, if the user either enabled CDDB now. 
+     We simply reset the saved discid, which forces a reread of CDDB
+     information.  */
 
-  if ((old_use_cddb != d->useCDDB && d->useCDDB == true)
-      || old_cddb_server != d->cddbServer
-      || old_cddb_port != d->cddbPort)
+  if (old_use_cddb != d->useCDDB && d->useCDDB == true)
     d->discid = 0;
 
   kdDebug(60002) << "CDDB: use_cddb = " << d->useCDDB << endl;
@@ -605,15 +585,6 @@ void CdConfigImp::getParameters() {
   config->setGroup("CDDB");
 
   d->useCDDB = config->readBoolEntry("enable_cddb",true);
-
-  QString cddbserver = config->readEntry("cddb_server",DEFAULT_CDDB_SERVER);
-  int portPos = cddbserver.find(':');
-  if (-1 == portPos) {
-    d->cddbServer = cddbserver;
-  } else {
-    d->cddbServer = cddbserver.left(portPos);
-    d->cddbPort = cddbserver.mid(portPos + 1).toInt();
-  }
 
   delete config;
 }
