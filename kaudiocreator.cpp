@@ -38,20 +38,20 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
 
   options = new KDialogBase(KDialogBase::IconList, i18n("Options"), 0x00000004,KDialogBase::Ok,this, "Options Dialog");
 	 
-  QVBox * frame = janusWidget->addVBoxPage(QString("CD Tracks"),i18n("CD Tracks"), SmallIcon("cdaudio_unmount", 32));
+  QVBox * frame = janusWidget->addVBoxPage(i18n("CD Tracks"),i18n("CD Tracks"), SmallIcon("cdaudio_unmount", 32));
   tracksConfig = new TracksConfigImp(frame, "TracksConfig");
   trackPage = janusWidget->pageIndex(frame);
   
-  frame = options->addVBoxPage(QString("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
+  frame = options->addVBoxPage(i18n("Cd Config"),i18n("CD Config"), SmallIcon("network", 32));
   cdConfig = new CdConfigImp(frame, "CdConfig");
 
-  frame = options->addVBoxPage(QString("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
+  frame = options->addVBoxPage(i18n("Ripper Config"),i18n("Ripper Config"), SmallIcon("shredder", 32));
   ripConfig = new RipConfigImp(frame, "RipConfig");
   
-  frame = options->addVBoxPage(QString("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
+  frame = options->addVBoxPage(i18n("Encoder Config"),i18n("Encoder Config"), SmallIcon("filter", 32));
   encoderConfig = new EncoderConfigImp(frame, "EncoderConfig");
   
-  frame = janusWidget->addVBoxPage(QString("Jobs"),i18n("Jobs"), SmallIcon("run", 32));
+  frame = janusWidget->addVBoxPage(i18n("Jobs"),i18n("Jobs"), SmallIcon("run", 32));
   queConfig = new QueConfigImp(frame, "QueConfig");
   quePage = janusWidget->pageIndex(frame);
 
