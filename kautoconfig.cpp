@@ -2,11 +2,13 @@
 #include <qobjectlist.h> 
 #include <kconfig.h>
 
+// For KAutoConfigPrivate
 #include <qptrlist.h>
 #include <qmap.h>
-#include <qdict.h> 
+#include <qasciidict.h> 
 #include <qcolor.h>
 
+// All known widgets
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qlineedit.h>
@@ -17,17 +19,24 @@
 class KAutoConfig::KAutoConfigPrivate {
 public:
   KAutoConfigPrivate() : retrieved(false), knownWidgets(5, true) { }
+  // Widgets to parse
   QPtrList<QWidget> widgets;
+  // Child widgets of widgets to ignore
   QPtrList<QWidget> ignore;
+  // Name of the group that KConfig should be set to for each widget. 
   QMap<QWidget*, QString> groups;
-  
+  // If retrieveSettings has been called. 
   bool retrieved;
-  
-  QDict<int> knownWidgets; 
+  // The QDict of knownWidgets that operations can be performed on.
+  QAsciiDict<int> knownWidgets; 
 
+  // Map class that stores the default values for int based settings
   QMap<QObject*, int> numDefault;
+  // Map class that stores the default values for bool based settings
   QMap<QObject*, bool> boolDefault;
+  // Map class that stores the default values for QString based settings
   QMap<QObject*, QString> stringDefault;
+  // Map class that stores the default values for QColor based settings
   QMap<QObject*, QColor> colorDefault;
 };
 
@@ -76,14 +85,20 @@ bool KAutoConfig::saveSettings() {
   if(!d->retrieved){
     qDebug(retrievedError);
     return false;
-  } 
+  }
+  // No point in doing a lot of work if the user can't change anything.
+  if(config->isImmutable())
+    return false;
+  
   bool changed = false;
   QPtrListIterator<QWidget> it( d->widgets );
   QWidget *widget;
   while ( (widget = it.current()) != 0 ) {
     ++it;
-    config->setGroup(d->groups[widget]);
-    changed = changed || parseWidget(widget, SAVE);
+    if(!config->groupIsImmutable(d->groups[widget])){
+      config->setGroup(d->groups[widget]);
+      changed = changed || parseWidget(widget, SAVE);
+    }
   }
   return changed;
 }
@@ -93,6 +108,12 @@ void KAutoConfig::resetSettings(){
     qDebug(retrievedError);
     return;
   }
+  // No point in doing a lot of work if we can't change anything
+  // If everything is immutable then everything should be disabled so what
+  // was read in at retrieve time should still be there
+  if(config->isImmutable())
+    return;
+  
   QPtrListIterator<QWidget> it( d->widgets );
   QWidget *widget;
   while ( (widget = it.current()) != 0 ) {
@@ -107,6 +128,8 @@ void KAutoConfig::resetSettings(){
 	if(defaultMap.find(object) == defaultMap.end()) \
           defaultMap.insert(object, ((type*)object)->typeread()); \
         ((type*)object)->typewrite(config->confread(object->name(), defaultMap[object])); \
+	if(config->entryIsImmutable( object->name())) \
+          objectCastWidget->setEnabled(false); \
       break; \
       case 10##id : \
         if(config->confread(object->name(), defaultMap[object]) != ((type*)object)->typeread()){ \
@@ -117,8 +140,7 @@ void KAutoConfig::resetSettings(){
       case 20##id : \
         ((type*)object)->typewrite(defaultMap[object]); \
       break;
-//out = QString("Group:%1, Object:%2, Name:%3, Value:%4").arg(group).arg(object->className()).arg(object->name()).arg(((type*)object)->typeread()); 
-//	  qDebug("The Value has changed of %s", out.latin1()); 
+//qDebug("The Value has changed of %s", QString("Group:%1, Object:%2, Name:%3, Value:%4").arg(group).arg(object->className()).arg(object->name()).arg(((type*)object)->typeread()).latin1()); 
 	  
 bool KAutoConfig::parseWidget(QWidget *widget, int op){
   bool changed = false;
@@ -133,8 +155,9 @@ bool KAutoConfig::parseWidget(QWidget *widget, int op){
     ++it;
     if(!object->isWidgetType())
       continue;
-    QWidget *w = (QWidget *)object;
-    if(d->ignore.containsRef(w))
+
+    QWidget *objectCastWidget = (QWidget *)object;
+    if(d->ignore.containsRef(objectCastWidget))
       continue;
 	   
     int objectType = 0;
@@ -144,7 +167,6 @@ bool KAutoConfig::parseWidget(QWidget *widget, int op){
     // If type statment for reading or writing the object
     objectType ^= op;
 
-    QString out;
     switch(objectType){
       objectReadWrite(1, d->boolDefault, QCheckBox, isChecked, setChecked, readBoolEntry );
       objectReadWrite(2, d->numDefault, QSpinBox, value, setValue, readNumEntry );
@@ -157,11 +179,12 @@ bool KAutoConfig::parseWidget(QWidget *widget, int op){
 	if(d->boolDefault.find(object) == d->boolDefault.end())
           d->boolDefault.insert(object, ((QRadioButton*)object)->isChecked());
         ((QRadioButton*)object)->setChecked(config->readBoolEntry(object->parent()->name(), d->boolDefault[object]));
+        if(config->entryIsImmutable( object->name()))
+          objectCastWidget->setEnabled(false);
       break;
       case 105: // QRadioButton write
         if(config->readNumEntry(object->name(), d->boolDefault[object]) != ((QRadioButton*)object)->isChecked() && ((QRadioButton*)object)->isChecked()){
-          out = QString("Group:%1, Object:%2, Name:%3, Value:%4").arg(group).arg(object->parent()->className()).arg(object->parent()->name()).arg(((QRadioButton*)object)->isChecked());
-	  qDebug("The Value has changed of %s", out.latin1());
+          qDebug("The Value has changed of %s", QString("Group:%1, Object:%2, Name:%3, Value:%4").arg(group).arg(object->parent()->className()).arg(object->parent()->name()).arg(((QRadioButton*)object)->isChecked()).latin1());
 	  config->writeEntry(object->parent()->name(), ((QRadioButton*)object)->isChecked());
 	  changed = true;
 	}
@@ -175,6 +198,8 @@ bool KAutoConfig::parseWidget(QWidget *widget, int op){
 	if(d->colorDefault.find(object) == d->colorDefault.end())
           d->colorDefault.insert(object, ((KColorButton*)object)->color());
         ((KColorButton*)object)->setColor(config->readBoolEntry(object->parent()->name(), &d->colorDefault[object]));
+	if(config->entryIsImmutable( object->name()))
+          objectCastWidget->setEnabled(false);
       break;
       case 106: // KColorButton write
         if(config->readColorEntry(object->name(), &d->colorDefault[object]) != ((KColorButton*)object)->color()){
@@ -186,9 +211,10 @@ bool KAutoConfig::parseWidget(QWidget *widget, int op){
         ((KColorButton*)object)->setColor(d->colorDefault[object]);
       break;
       
-      default: // Unknown
-        //qDebug("Unknown Object %s", object->className());
-	changed = changed || parseWidget(w, op);
+      default:
+        // this widget is not known as something we can store.
+	// Maybe we can store one of its children.
+	changed = changed || parseWidget(objectCastWidget, op);
 	continue;
       break;
     }

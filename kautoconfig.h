@@ -10,8 +10,8 @@ class KConfig;
 /**
  * @author Benjamin C Meyer <ben@meyerhome.net>
  * 
- * The KAutoConfig class provides a means of automaticly retrieving and
- * saving basic settings.
+ * The KAutoConfig class provides a means of automaticly retrieving,
+ * saving and reseting basic settings.
  *
  * When told to retrieve/save/reset settings KAutoConfig will traverse the
  * specified widgets performing the requested task on all known widgets that
@@ -117,6 +117,19 @@ public:
 
 private:
   KConfig *config;
+  
+  /**
+   * Recursive function that does all the grunt work.
+   * Goes through all of the children to widget and if any of them are known
+   * performs the opteration on that child otherwise calls
+   * parseWidget(child, op) with the child if it is a QWidget.  The first
+   * time this function is called op _must_ be retrieving the data or else
+   * there will be a segfault do to pointer errors.
+   * @param widget - parent of the children to look at.
+   * @param op - operation to perform on the children of widget.
+   * @return bool - returns true if values have been changed, value is only
+   * computed if op = SAVE otherwise always return false.
+   */ 
   bool parseWidget(QWidget *widget, int op );
 
   class KAutoConfigPrivate;
