@@ -623,7 +623,11 @@ void TracksImp::editPreviousTrack() {
  */
 void TracksImp::eject(){
   KProcess *proc = new KProcess();
-  *proc << "eject" << device;
+#ifdef __FreeBSD__
+  *proc << "cdcontrol" << "-f" << device << "eject";
+#else
+   *proc << "eject" << device;
+#endif
   connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
   proc->start(KProcess::NotifyOnExit,  KShellProcess::NoCommunication);
 }
