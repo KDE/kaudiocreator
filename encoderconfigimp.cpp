@@ -1,4 +1,5 @@
 #include "encoderconfigimp.h"
+
 #include <qapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
