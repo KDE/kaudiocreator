@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotifyclient.h>
 
 /**
  * Constructor, load settings.
@@ -175,8 +176,9 @@ void RipConfigImp::copyJobResult(KIO::Job *job){
     if(autoEjectAfterRip->isChecked())
       QTimer::singleShot( autoEjectDelay->value()*1000, this, SLOT(eject()));
   }
-  if(beepAfterRip->isChecked())
-    qApp->beep();
+  if(beepAfterRip->isChecked()){
+    KNotifyClient::beep();
+  }
 }
 
 /**
