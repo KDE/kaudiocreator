@@ -493,14 +493,14 @@ void CdConfigImp::attemptToListAlbum(){
 
   if (0 == drive)
   {
-    emit(newAlbum("No Artist","No Album", 0, "Other"));
+    emit(newAlbum(i18n("No Artist"),i18n("No Album"), 0, i18n("Other")));
     //error(KIO::ERR_DOES_NOT_EXIST, url.path());
     return;
   }
 
   if (0 != cdda_open(drive))
   {
-    emit(newAlbum("No Artist","No Album", 0, "Other"));
+    emit(newAlbum(i18n("No Artist"),i18n("No Album"), 0, i18n("Other")));
     //error(KIO::ERR_CANNOT_OPEN_FOR_READING, url.path());
     return;
   }
@@ -510,7 +510,7 @@ void CdConfigImp::attemptToListAlbum(){
     return;
   }
 
-  emit(newAlbum(d->cd_artist,d->cd_title, 0, "Other"));
+  emit(newAlbum(d->cd_artist,d->cd_title, 0, i18n("Other")));
   for (int i = d->tracks; i > 0; i--){
     if (d->is_audio[i-1])
     {

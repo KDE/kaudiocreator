@@ -49,11 +49,11 @@ void TracksConfigImp::editInformation(){
   dialog.artist->setText(group);
   dialog.album->setText(album);
   dialog.year->setValue(year);
-  dialog.trackLabel->setText(QString("Track %1").arg(currentItem->text(HEADER_TRACK)));
+  dialog.trackLabel->setText(i18n("Track %1").arg(currentItem->text(HEADER_TRACK)));
   dialog.title->setText(currentItem->text(HEADER_NAME));
   int totalGenres = dialog.genre->count();
   if(genre == "")
-    genre = "Other";
+    genre = i18n("Other");
   
   for(int i = 0; i < totalGenres; i++){
     if(dialog.genre->text(i) == genre){
@@ -115,7 +115,7 @@ void TracksConfigImp::startSession(){
     list += "Album";
   }
   if( list != ""){
-    int r = KMessageBox:: questionYesNo(this, i18n(QString("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list).latin1()), i18n("Album Information incomplete"));
+    int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list), i18n("Album Information incomplete"));
     if( r == KMessageBox::No )
       return;
   }
@@ -146,7 +146,7 @@ void TracksConfigImp::startSession(){
   }
 
   KMessageBox::information(this,
-  i18n(QString("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter).latin1()),
+  i18n("%1 Job(s) have been started.  You can watch their progress in the jobs section.").arg(counter),
  i18n("Jobs have started"), "Jobs have started");
 }
 

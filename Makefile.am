@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) $(LAME_INCS) $(CDPARANOIA_INCS)
+INCLUDES = $(LAME_INCS) $(CDPARANOIA_INCS) $(all_includes)
 
 bin_PROGRAMS = kaudiocreator
 
@@ -11,7 +11,7 @@ kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 METASOURCES = AUTO
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp $(kaudiocreator_SOURCES) -o $(podir)/kaudiocreator.pot
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kaudiocreator.pot
 
 AM_CPPFLAGS =  -static -Wall -DDATADIR=\"$(kde_datadir)/kaudiocreator\"
 
@@ -26,4 +26,3 @@ apps_DATA = kaudiocreator.desktop
 
 data_DATA = kaudiocreatorui.rc
 datadir = $(kde_datadir)/kaudiocreator
-

@@ -181,7 +181,7 @@ void EncoderConfigImp::removeJob(int id){
  * @param job the job to encode.
  */
 void EncoderConfigImp::encodeWav(Job *job){
-  emit(addJob(job, (QString("Encoding: %1 - %2").arg(job->group).arg(job->song))));
+  emit(addJob(job, i18n("Encoding: %1 - %2").arg(job->group).arg(job->song)));
   pendingJobs.append(job);
   tendToNewJobs();
 }
@@ -289,7 +289,7 @@ void EncoderConfigImp::jobDone(KProcess *process){
       appendToPlaylist(job);
   }
   else{
-    KMessageBox::sorry(this, i18n(QString("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString).latin1()), i18n("Encoding Failed"));
+    KMessageBox::sorry(this, i18n("The encoded file was not created.\nPlease check your encoder options.\nThe wav file has been removed.  Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
     QFile::remove(job->location);
     emit(updateProgress(job->id, -1));
   }

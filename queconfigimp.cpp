@@ -36,7 +36,7 @@ void QueConfigImp::addJob(Job*job, QString name ){
   if( job->id < 10 )
     buffer += "0";
   QueListViewItem * newItem = new QueListViewItem(todoQue, QString("%1%2").arg(buffer).arg(currentId), "0", name);
-  queLabel->setText(QString("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+  queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
 /**
@@ -122,7 +122,7 @@ void QueConfigImp::clearDoneJobs(){
   if(todoQue->childCount() == 0)
     queLabel->setText(i18n("No jobs are in the queue"));
   else
-    queLabel->setText(QString("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+    queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
 
 /**

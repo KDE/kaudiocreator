@@ -107,7 +107,7 @@ void RipConfigImp::removeJob(int id){
  * @param job the new job that we need to handle. 
  */
 void RipConfigImp::ripTrack(Job *job){
-  emit(addJob(job, (QString("Ripping: %1 - %2").arg(job->group).arg(job->song))));
+  emit(addJob(job, i18n("Ripping: %1 - %2").arg(job->group).arg(job->song)));
   pendingJobs.append(job);
   tendToNewJobs();
 }
@@ -154,7 +154,7 @@ void RipConfigImp::tendToNewJobs(){
   #else
   if(job->track < 10)
   #endif
-    wavFile = QString("audiocd:/By Track/Track 0%1.wav").arg(job->track);
+    wavFile = QString("audiocd:/By Track/Track 0%1.wav").arg(job->track); //lukas: I fear this won't work
   else
     wavFile = QString("audiocd:/By Track/Track %1.wav").arg(job->track);
   

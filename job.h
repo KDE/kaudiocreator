@@ -9,6 +9,8 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <klocale.h>
+
 /**
  * The job class is what is passed around the system.  All of the data about
  * the file beeing ripped and encoded is stored in here.
@@ -16,7 +18,7 @@
 class Job{
 
 public:
-  inline Job():id(-1),genre("Other"),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false),jobType(-1){};
+  inline Job():id(-1),genre(i18n("Other")),group(""),album(""),song(""), track(-1),year(-1),lastSongInAlbum(false),jobType(-1){};
   int id; 
   QString genre;		
   QString group;
