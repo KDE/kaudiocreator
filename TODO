@@ -16,6 +16,8 @@ Make it possible to stop and start encoding jobs:
    
 Possiblity to use "nice" when calling encode jobs.
 
+Remove the magical "Rip" list header action which (de)selects all jobs.
+
 Make it possible to queue all encoding jobs until the user wishes
 for them to being. 
 
