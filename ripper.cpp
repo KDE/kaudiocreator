@@ -161,13 +161,14 @@ void Ripper::tendToNewJobs(){
 	tmp.setAutoDelete(true);
 
 	QString wavFile;
-	QString jobDevice = job->device;
-	if(!jobDevice.isEmpty())
-		jobDevice = QString("?device=%1").arg(jobDevice);
+	QString args = job->device;
+	if(!args.isEmpty())
+		args = QString("?device=%1").arg(args);
+	args = args+"&fileNameTemplate=Track %{number}";
 	if(job->track < 10)
-		wavFile = QString("audiocd:/By Track/Track 0%1.wav%2").arg(job->track).arg(jobDevice); //lukas: I fear this won't work (Works for kde2)
+		wavFile = QString("audiocd:/Wav/Track 0%1.wav%2").arg(job->track).arg(args);
 	else
-		wavFile = QString("audiocd:/By Track/Track %1.wav%2").arg(job->track).arg(jobDevice);
+		wavFile = QString("audiocd:/Wav/Track %1.wav%2").arg(job->track).arg(args);
 
 	KURL source(wavFile);
 	KURL dest(tmp.name());
