@@ -82,7 +82,7 @@ void fileWizard::fileFormatTextChanged(const QString& text)
     string.replace(QRegExp("%year"), "2002");
     string.replace(QRegExp("%song"), "Time");
     string.replace(QRegExp("%extension"), "mp3");
-    string.replace(QRegExp("%track"), "9");
+    string.replace(QRegExp("%track"), "09");
     string.replace(QRegExp("~"), "/home/foo");
     exampleLabel->setText(i18n("Example: %1").arg(string));
 }

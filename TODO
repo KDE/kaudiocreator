@@ -9,4 +9,5 @@ Plugin system for encoders (user friendly thingys)
 If possible restart jobs that have failed.
 
 ---
-FYI: Tmp files are stored in $KDEHOME/tmp-$HOST/appname which would be bad to change globally.
+Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
+	Tmp files are stored in $KDEHOME/tmp-$HOST/appname
