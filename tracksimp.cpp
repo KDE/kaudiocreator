@@ -249,7 +249,7 @@ void TracksImp::changeDevice(const QString &file ) {
  * Helper function (toolbar button) for users.
  **/ 
 void TracksImp::performCDDB() {
-	if (hasCD()) {
+	if (!hasCD()) {
 		KMessageBox::sorry(this, i18n("Please insert a disk."),
 		       i18n("CDDB Failed"));
 		return;
