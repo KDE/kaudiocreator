@@ -1,0 +1,14 @@
+[Desktop Entry]
+Comment=Frontend for audio file creation
+BinaryPattern=kaudiocreator;
+Protocols=
+Name=KAudioCreator
+MimeType=
+DocPath=kaudiocreator/index.html
+Exec=kaudiocreator
+Icon=kaudiocreator
+TerminalOptions=
+Path=
+Type=Application
+Terminal=0
+MapNotify=true
