@@ -45,8 +45,6 @@ protected:
   virtual bool queryClose();
 
 private slots:
-  void configuretoolbars();
-  void saveToolbarConfig();
   void showSettings();
   void updateStatus();
 

@@ -26,7 +26,6 @@
 #include <kmessagebox.h>
 
 #include <kaction.h>
-#include <kedittoolbar.h>
 #include <kstatusbar.h>
 #include <knotifydialog.h>
 
@@ -108,25 +107,13 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks, SLOT(performCDDB()), actionCollection(), "cddb_now");
   connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
   
-  KStdAction::configureToolbars(this, SLOT(configuretoolbars() ), actionCollection(), "configuretoolbars");
-  
   KStdAction::configureNotifications(this, SLOT(configureNotifications()),
                                        actionCollection());
-	
-  //KStdAction::configureToolbars(guiFactory(), SLOT(configureToolbars() ), actionCollection(), "configuretoolbars");
-  
-
-  setStandardToolBarMenuEnabled(true);
-
   KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
-  KStdAction::keyBindings( guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
-  createStandardStatusBarAction();
   statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
   connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
   
-  createGUI();
-  setAutoSaveSettings();
-  //setupGUI();
+  setupGUI();
 }
 
 /**
@@ -178,27 +165,9 @@ bool KAudioCreator::queryClose() {
   return true;
 }
 
-/**
- * Allow for the toolbars to be minipulated.
- */
-void KAudioCreator::configuretoolbars(){
-  saveMainWindowSettings(KGlobal::config());
-  KEditToolbar dlg(actionCollection());
-  connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(saveToolbarConfig()));
-  dlg.exec();
-}
-
-/**
- * Save new toolbarconfig.
- */
-void KAudioCreator::saveToolbarConfig(){
-  createGUI();
-  applyMainWindowSettings(KGlobal::config());
-}
-
 void KAudioCreator::configureNotifications() {
-	KNotifyDialog *dialog = new KNotifyDialog(this, "KNotifyDialog", false);
-	dialog->show();
+  KNotifyDialog *dialog = new KNotifyDialog(this, "KNotifyDialog", false);
+  dialog->show();
 }
 
 void KAudioCreator::encodeFile(){
