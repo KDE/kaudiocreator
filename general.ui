@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>762</width>
-            <height>295</height>
+            <width>489</width>
+            <height>343</height>
         </rect>
     </property>
     <property name="caption">
@@ -28,6 +28,17 @@
             </property>
             <property name="text">
                 <string>&amp;Automatically remove jobs when finished</string>
+            </property>
+            <property name="accel">
+                <string>Alt+A</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>kcfg_promptIfIncompleteInfo</cstring>
+            </property>
+            <property name="text">
+                <string>Prompt if information is not complete</string>
             </property>
         </widget>
         <widget class="QGroupBox">
@@ -148,7 +159,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>140</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>

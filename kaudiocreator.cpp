@@ -86,7 +86,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) : KMainWindow(p
   connect(tracks, SIGNAL(hasTracks(bool)), eject, SLOT(setEnabled(bool)));
   
   (void)new KAction(i18n("&Configure KAudioCreator..."), 0, this, SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
-  
+
   KAction *selectAll = new KAction(i18n("Select &All Tracks"), 0, tracks, SLOT(selectAllTracks()), actionCollection(), "select_all" );
   connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
   

@@ -44,6 +44,7 @@
 
 #include <qtimer.h>
 #include <qfileinfo.h>
+#include <kinputdialog.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kprocess.h>
@@ -363,7 +364,7 @@ void TracksImp::cddbCD(){
  */
 void TracksImp::cddbDone(CDDB::Result result){
   // CDDBTODO: figure out why using CDDB::Success doesn't compile?!
-  if ((result != 0 /*KCDDB::CDDB::Success*/) &&
+  if ((result != 0 /*KCDDB::CDDB::Lookup::Success*/) &&
       (result != KCDDB::CDDB::MultipleRecordFound))
   {
      KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
@@ -372,9 +373,33 @@ void TracksImp::cddbDone(CDDB::Result result){
 
   // Choose the cddb entry
   KCDDB::CDInfo info;
-  if(result != KCDDB::CDDB::MultipleRecordFound){
-    // TODO prompt user with a dialog
-    info = cddb->bestLookupResponse();
+  // TODO Why doesn't libcddb not return MultipleRecordFound?
+  //if(result == KCDDB::CDDB::MultipleRecordFound){
+  if(Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1){
+    CDInfoList cddb_info = cddb->lookupResponse();
+    CDInfoList::iterator it;
+    QStringList list;
+    for ( it = cddb_info.begin(); it != cddb_info.end(); ++it ){
+      list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title).arg((*it).genre));
+    }
+  
+    bool ok; 
+    QString res = KInputDialog::getItem(
+            i18n("Select  a CDDB entry - KAudioCreator"), i18n("Select a CDDB entry:"), list, 0, false, &ok,
+            this );
+    if ( ok ) {
+      // The user selected and item and pressed OK
+      int c = 0;
+      for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+        if(*it == res)  break;
+        c++;
+      }
+      
+      info = cddb_info[c];
+    } else {
+      // user pressed Cancel
+      info = cddb->bestLookupResponse();
+    }
   }
   else{
     info = cddb->bestLookupResponse();
