@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>676</width>
-            <height>484</height>
+            <height>487</height>
         </rect>
     </property>
     <property name="caption">
@@ -132,7 +132,10 @@
                         <cstring>selectAllTracksButton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Select All Tracks</string>
+                        <string>Select &amp;All Tracks</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
