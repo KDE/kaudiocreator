@@ -230,6 +230,7 @@ CdConfigImp::CdConfigImp( QWidget* parent, const char* name):CdConfig(parent,nam
     timer->start(3000, false);
     config.writeEntry("constantlyScan", constantlyScan);
   }
+  overrideCddb = false;
 }
 
 CdConfigImp::~CdConfigImp()
@@ -241,6 +242,15 @@ CdConfigImp::~CdConfigImp()
   config.writeEntry("performCDDBauto", performCDDBauto->isChecked());
   config.writeEntry("autoRip", autoRip->isChecked());
   delete d;
+}
+
+/**
+ *
+ */
+void CdConfigImp::cddbNow(){
+  overrideCddb = true;
+  timerDone();
+  overrideCddb = false;
 }
 
 /**
@@ -428,7 +438,7 @@ CdConfigImp::updateCD(struct cdrom_drive * drive)
   qvl.append(cdda_disc_firstsector(drive));
   qvl.append(my_last_sector(drive));
 
-  if (performCDDBauto->isChecked())
+  if (performCDDBauto->isChecked() || overrideCddb)
   {
     d->cddb = new CDDB;
     KApplication::setOverrideCursor(Qt::waitCursor);

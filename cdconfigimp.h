@@ -32,11 +32,13 @@ public:
 
 public slots:
   void timerDone();
+  void cddbNow();
 
 private slots:
   void attemptToListAlbum();
 
 private:
+  bool overrideCddb;
   QTimer *timer;
 
   protected:
