@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>fileWizard</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>582</width>
-            <height>244</height>
+            <height>456</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -99,7 +99,7 @@
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
-                        <cstring>playlistFormat</cstring>
+                        <cstring>fileFormat</cstring>
                     </property>
                     <property name="text">
                         <string>~/%{extension}/%{artist}/%{album}/%{artist} - %{album}.m3u</string>
@@ -349,7 +349,7 @@
         <slot>genrePressed()</slot>
     </connection>
     <connection>
-        <sender>playlistFormat</sender>
+        <sender>fileFormat</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>fileWizard</receiver>
         <slot>fileFormatTextChanged(const QString&amp;)</slot>
@@ -374,7 +374,7 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>playlistFormat</tabstop>
+    <tabstop>fileFormat</tabstop>
     <tabstop>albumButton</tabstop>
     <tabstop>artistButton</tabstop>
     <tabstop>commentButton</tabstop>
@@ -394,15 +394,15 @@
 </includes>
 <slots>
     <slot access="private">homePressed()</slot>
+    <slot>extensionPressed()</slot>
+    <slot access="private">trackTitlePressed()</slot>
+    <slot>trackArtistPressed()</slot>
+    <slot access="private">trackNumberPressed()</slot>
+    <slot>trackCommentPressed()</slot>
+    <slot access="private">yearPressed()</slot>
+    <slot>genrePressed()</slot>
     <slot>albumPressed()</slot>
     <slot>artistPressed()</slot>
-    <slot>extensionPressed()</slot>
-    <slot>genrePressed()</slot>
-    <slot access="private">trackNumberPressed()</slot>
-    <slot access="private">trackTitlePressed()</slot>
-    <slot access="private">yearPressed()</slot>
-    <slot>trackCommentPressed()</slot>
-    <slot>trackArtistPressed()</slot>
     <slot>commentPressed()</slot>
     <slot>fileFormatTextChanged( const QString &amp; text )</slot>
 </slots>

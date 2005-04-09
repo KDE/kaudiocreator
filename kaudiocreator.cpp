@@ -75,8 +75,6 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 		  SLOT(updateProgress(int,int)));
 	connect(encoder, SIGNAL(addJob(Job*, const QString &)), jobQue,
 		  SLOT(addJob(Job*, const QString &)));
-	connect(encoder, SIGNAL(jobIsDone(Job*,const QString &)), jobQue,
-		  SLOT(appendToPlaylist(Job*, const QString &)));
 
 	connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
 	connect(ripper, SIGNAL(eject(const QString &)), tracks,
@@ -249,16 +247,12 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
 	KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
 	if (libkcddb && libkcddb->isValid())
 	{
-		KCModuleInfo info(libkcddb->desktopEntryPath());
-		if (info.service()->isValid())
+		cddb = KCModuleLoader::loadModule("libkcddb");
+		if (cddb)
 		{
-			cddb = KCModuleLoader::loadModule(info);
-			if (cddb)
-			{
-				cddb->load();
-				addPage(cddb, i18n("CDDB"), "cdaudio_mount", i18n("CDDB Configuration"), false);
-	connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
-			}
+			cddb->load();
+			addPage(cddb, i18n("CDDB"), "cdaudio_mount", i18n("CDDB Configuration"), false);
+			connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
 		}
 	}
 	RipConfig *rip = new RipConfig(0, "Ripper");

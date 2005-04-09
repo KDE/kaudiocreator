@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>445</width>
-            <height>486</height>
+            <width>434</width>
+            <height>349</height>
         </rect>
     </property>
     <property name="caption">
@@ -284,7 +284,7 @@
     <include location="local" impldecl="in implementation">encoderconfig.ui.h</include>
 </includes>
 <slots>
-    <slot access="">encoderWizard()</slot>
+    <slot>encoderWizard()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

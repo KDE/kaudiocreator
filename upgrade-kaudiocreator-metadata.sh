@@ -10,19 +10,6 @@ while read; do
     VALUE="${REPLY#*=}"
 
      case "$GROUP/$KEY" in
-	encoderconfig/playlistFileFormat)
-      VALUE=`echo $VALUE | sed -e s/%album/%{albumtitle}/g`;
-      VALUE=`echo $VALUE | sed -e s/%artist/%{albumartist}/g`;
-      VALUE=`echo $VALUE | sed -e s/%song/%{title}/g`;
-      VALUE=`echo $VALUE | sed -e s/%track/%{number}/g`;
-      VALUE=`echo $VALUE | sed -e s/%genre/%{genre}/g`;
-      VALUE=`echo $VALUE | sed -e s/%extension/%{extension}/g`;
-      VALUE=`echo $VALUE | sed -e s/%year/%{year}/g`;
-	    echo "[encoderconfig]";
-	    echo "playlistFileFormat=$VALUE"
-	    echo "# DELETE [encoderconfig]playlistFileFormat"
-			;;
-     
 	encoderconfig/fileFormat)
       VALUE=`echo $VALUE | sed -e s/%album/%{albumtitle}/g`;
       VALUE=`echo $VALUE | sed -e s/%artist/%{albumartist}/g`;

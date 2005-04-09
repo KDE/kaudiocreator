@@ -34,57 +34,57 @@
 
 void fileWizard::homePressed()
 {
-	playlistFormat->insert("~");
+	fileFormat->insert("~");
 }
 
 void fileWizard::extensionPressed()
 {
-	playlistFormat->insert("%{extension}");
+	fileFormat->insert("%{extension}");
 }
 
 void fileWizard::trackTitlePressed()
 {
-	playlistFormat->insert("%{title}");
+	fileFormat->insert("%{title}");
 }
 
 void fileWizard::trackArtistPressed()
 {
-	playlistFormat->insert("%{artist}");
+	fileFormat->insert("%{artist}");
 }
 
 void fileWizard::trackNumberPressed()
 {
-	playlistFormat->insert("%{number}");
+	fileFormat->insert("%{number}");
 }
 
 void fileWizard::trackCommentPressed()
 {
-	playlistFormat->insert("%{comment}");
+	fileFormat->insert("%{comment}");
 }
 
 void fileWizard::yearPressed()
 {
-	playlistFormat->insert("%{year}");
+	fileFormat->insert("%{year}");
 }
 
 void fileWizard::genrePressed()
 {
-	playlistFormat->insert("%{genre}");
+	fileFormat->insert("%{genre}");
 }
 
 void fileWizard::albumPressed()
 {
-	playlistFormat->insert("%{albumtitle}");
+	fileFormat->insert("%{albumtitle}");
 }
 
 void fileWizard::artistPressed()
 {
-	playlistFormat->insert("%{albumartist}");
+	fileFormat->insert("%{albumartist}");
 }
 
 void fileWizard::commentPressed()
 {
-	playlistFormat->insert("%{albumcomment}");
+	fileFormat->insert("%{albumcomment}");
 }
 
 void fileWizard::fileFormatTextChanged(const QString& text)
