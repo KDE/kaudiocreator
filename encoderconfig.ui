@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>EncoderConfig</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>407</width>
+            <width>445</width>
             <height>486</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>EncoderConfig</string>
     </property>
     <grid>
         <property name="name">
@@ -138,84 +141,6 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>kcfg_createPlayList</cstring>
-            </property>
-            <property name="text">
-                <string>Create an album &amp;playlist file</string>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="8" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>GroupBox2</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="title">
-                <string>Playlist Options</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>Layout2</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>TextLabel4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Location:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>kcfg_playlistFileFormat</cstring>
-                            </property>
-                            <property name="text">
-                                <string>~/%extension/%artist/%album/%artist - %album.m3u</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>playlistWizardButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Wizard</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>kcfg_useRelativePath</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Use relative path</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>layout2</cstring>
@@ -236,7 +161,7 @@
                     <property name="name">
                         <cstring>currentEncoderName</cstring>
                     </property>
-                   <property name="sizePolicy">
+                    <property name="sizePolicy">
                         <sizepolicy>
                             <hsizetype>7</hsizetype>
                             <vsizetype>5</vsizetype>
@@ -340,24 +265,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>kcfg_createPlayList</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>GroupBox2</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>playlistWizardButton</sender>
-        <signal>clicked()</signal>
-        <receiver>EncoderConfig</receiver>
-        <slot>playlistWizard()</slot>
-    </connection>
-    <connection>
-        <sender>encoderWizardButton</sender>
-        <signal>clicked()</signal>
-        <receiver>EncoderConfig</receiver>
-        <slot>encoderWizard()</slot>
-    </connection>
-    <connection>
         <sender>kcfg_currentEncoder</sender>
         <signal>highlighted(const QString&amp;)</signal>
         <receiver>currentEncoderName</receiver>
@@ -372,17 +279,12 @@
     <tabstop>kcfg_fileFormat</tabstop>
     <tabstop>encoderWizardButton</tabstop>
     <tabstop>kcfg_numberOfCpus</tabstop>
-    <tabstop>kcfg_createPlayList</tabstop>
-    <tabstop>kcfg_playlistFileFormat</tabstop>
-    <tabstop>playlistWizardButton</tabstop>
-    <tabstop>kcfg_useRelativePath</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">encoderconfig.ui.h</include>
 </includes>
 <slots>
-    <slot>playlistWizard()</slot>
-    <slot>encoderWizard()</slot>
+    <slot access="">encoderWizard()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

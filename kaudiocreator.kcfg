@@ -67,18 +67,6 @@
       <label>Location pattern for encoded files</label>
       <default>~/%{extension}/%{albumartist}/%{albumtitle}/%{artist} - %{title}.%{extension}</default>
     </entry>
-    <entry name="createPlayList" type="Bool">
-      <label>Create an album playlist file</label>
-      <default>false</default>
-    </entry>
-    <entry name="playlistFileFormat" type="String">
-      <label>Location pattern for playlist files</label>
-      <default>~/%{extension}/%{albumartist}/%{albumtitle}/%{albumartist} - %{albumtitle}.m3u</default>
-    </entry>
-    <entry name="useRelativePath" type="Bool" key="useRelativePath">
-      <label>Use relative path for playlists</label>
-      <default>false</default>
-    </entry>
     <entry name="NiceLevel" type="Int">
       <label>Encoder priority</label>
       <default>0</default>

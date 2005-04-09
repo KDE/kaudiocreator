@@ -266,49 +266,6 @@ int JobQueImp::numberOfJobsNotFinished(){
 }
 
 /**
- * Append the job to the playlist as specified in the options.
- * @param job too append to the playlist.
- * @param encoder extension
- */
-void JobQueImp::appendToPlaylist(Job* job, const QString &extension){
-	if(!Prefs::createPlayList() || !job)
-		return;
-	QString desiredFile = Prefs::playlistFileFormat();
-	QMap <QString,QString> map;
-	map.insert("extension", extension);
-	job->replaceSpecialChars(desiredFile, false, map);
-
-	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
-	// If the user wants anything regexp replaced do it now...
-	desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
-
-	int lastSlash = desiredFile.findRev('/',-1);
-	if( lastSlash == -1 || !(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash)))){
-		KMessageBox::sorry(0, i18n("The desired playlist file could not be created.\nPlease check the set path.\n"), i18n("Playlist Creation Failed"));
-		return;
-	}
-
-	QFile f(desiredFile);
-	if ( !f.open(IO_WriteOnly|IO_Append) ){
-		KMessageBox::sorry(0, i18n("The desired playlist file could not be opened for writing to.\nPlease check the file path option."), i18n("Playlist Addition Failed"));
-		return;
-	}
-
-	QTextStream t( &f ); // use a text stream
-
-	if(Prefs::useRelativePath()){
-		QFileInfo audioFile(job->newLocation);
-		KURL d(desiredFile);
-		QString relative = KURL::relativePath(d.directory(), audioFile.filePath());
-		t << relative << endl;
-	}
-	else
-		t << job->newLocation << endl;
-
-	f.close();
-}
-
-/**
  * The repaint function overloaded so that we can have a built in progressbar.
  */
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,

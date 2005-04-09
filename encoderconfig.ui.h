@@ -11,19 +11,6 @@
 #include <qlineedit.h>
 
 /**
- * Load up the wizard with the playlist string.  Save it if OK is hit.
- */
-void EncoderConfig::playlistWizard(){
-  fileWizard wizard(this, "Playlist File FormatWizard", true);
-  wizard.playlistFormat->setText(kcfg_playlistFileFormat->text());
-  // Show dialog and save results if ok is pressed.
-  bool okClicked = wizard.exec();
-  if(okClicked){
-    kcfg_playlistFileFormat->setText(wizard.playlistFormat->text());
-  }
-}
-
-/**
  * Load up the wizard with the encoder playlist string.  Save it if OK is hit.
  */
 void EncoderConfig::encoderWizard(){
