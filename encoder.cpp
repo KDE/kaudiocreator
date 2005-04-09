@@ -233,11 +233,12 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 		kdDebug(60002) << buffer << endl;
 	
 	// Make sure we have a job to send an update too.
-	Job *job = jobs[(KShellProcess*)process];
-	if ( !job ) {
+	if(jobs.find((KShellProcess*)process) == jobs.end()){
 		kdDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
 		return;
 	}
+	
+	Job *job = jobs[(KShellProcess*)process];
 
 	// Keep the output in the event it fails.
 	job->output += QString(buffer).mid(0,length); 

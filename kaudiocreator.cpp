@@ -247,7 +247,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
 	KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
 	if (libkcddb && libkcddb->isValid())
 	{
-		cddb = KCModuleLoader::loadModule("libkcddb");
+		cddb = KCModuleLoader::loadModule(QString("libkcddb"), KCModuleLoader::Inline);
 		if (cddb)
 		{
 			cddb->load();

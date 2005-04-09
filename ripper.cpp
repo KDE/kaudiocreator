@@ -26,6 +26,7 @@
 #include <ktempfile.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
+#include <kio/scheduler.h>
 
 /**
  * Constructor, load settings.
@@ -177,10 +178,11 @@ void Ripper::tendToNewJobs(){
 	KURL source(wavFile);
 	KURL dest(tmp.name());
 
-	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, FALSE, TRUE, FALSE, FALSE);
+	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, false, true, false, false);
+	jobs.insert(copyJob, job);
 	connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
 	connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
-	jobs.insert(copyJob, job);
+	
 	emit jobsChanged();
 }
 
@@ -194,10 +196,10 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 		return;
 	KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
 	KNotifyClient::event("track ripped");
-	
-	Job *newJob = jobs[copyjob];
-	if(!newJob)
+
+	if(jobs.find(copyjob) == jobs.end())
 		return;
+	Job *newJob = jobs[copyjob];
 	jobs.remove(copyjob);
 
 	if(Prefs::beepAfterRip())

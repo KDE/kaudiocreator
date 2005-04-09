@@ -152,11 +152,11 @@ void TracksImp::lookupDevice() {
 
 	if (WM_CDS_NO_DISC(status)) {
 		kdDebug(60002) << "No disc" << endl;
-		emit(hasCD(false));
 		cddbInfo.clear();
 		trackStartFrames.clear();
 		cddbInfo.title = i18n("No disk");
 		newAlbum();
+		emit(hasCD(false));
 		return;
 	}
 
@@ -192,7 +192,7 @@ void TracksImp::lookupDevice() {
 		cddbInfo.title = i18n("Unknown Album");
 	}
 
-    // If it's a sampler, we'll do artist/title.
+	// If it's a sampler, we'll do artist/title.
 	bool isSampler = (cddbInfo.title.compare("Various") == 0);
 	KCDDB::TrackInfo track;
 	for (unsigned i = 1; i <= numberOfTracks; i++) {
@@ -397,6 +397,7 @@ void TracksImp::ripWholeAlbum() {
 void TracksImp::startSession() {
 	startSession(-1);
 }
+
 void TracksImp::startSession( int encoder ) {
 	if( trackListing->childCount() == 0 ) {
 		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
@@ -578,7 +579,7 @@ void TracksImp::ejectDevice(const QString &deviceToEject) {
 #ifdef __FreeBSD__
 	*proc << "cdcontrol" << "-f" << deviceToEject << "eject";
 #else
-	 *proc << "eject" << deviceToEject;
+	*proc << "eject" << deviceToEject;
 #endif
 	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
 	proc->start(KProcess::NotifyOnExit, KShellProcess::NoCommunication);
@@ -589,6 +590,10 @@ void TracksImp::ejectDevice(const QString &deviceToEject) {
  * @param proc pointer to the process that ended.
  */ 
 void TracksImp::ejectDone(KProcess *proc) {
+	// This shouldn't happen and something real bad has happened.
+	if(!proc)
+		return;
+
 	int returnValue = proc->exitStatus();
 	if( returnValue == 127 ) {
 		KMessageBox:: sorry(this, i18n("\"eject\" command not installed."),
