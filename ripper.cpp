@@ -162,6 +162,8 @@ void Ripper::tendToNewJobs(){
 	QString defaultTempDir;
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
+	// For cases like "/tmp" where there is a missing /
+	defaultTempDir = KURL(defaultTempDir).path(1);
 	KTempFile tmp( defaultTempDir, ".wav" );
 	tmp.setAutoDelete(true);
 
