@@ -169,7 +169,7 @@ void TracksImp::lookupDevice() {
 		return;
 	}
 
-	QString currentDistID = QString::number(cddb_discid(), 16);
+	QString currentDistID = QString::number(cddb_discid(), 16).rightJustify(8, '0');
 	if (currentDistID == cddbInfo.id) {
 		return;
 	}
