@@ -270,6 +270,12 @@
         <receiver>currentEncoderName</receiver>
         <slot>setText(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>encoderWizardButton</sender>
+        <signal>clicked()</signal>
+        <receiver>EncoderConfig</receiver>
+        <slot>encoderWizard()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>kcfg_currentEncoder</tabstop>
