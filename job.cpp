@@ -18,6 +18,7 @@
 
 #include "job.h"
 #include <kmacroexpander.h>
+#include <qregexp.h>
 
 /**
  * A helper function to replace %X with the stuff in the album.
@@ -41,5 +42,17 @@ QString Job::replaceSpecialChars(const QString &string, bool quote, QMap<QString
       return (KMacroExpander::expandMacrosShellQuote(string, map));
   else
       return (KMacroExpander::expandMacros(string, map));
+}
+
+void Job::fix(const QString &in, const QString &out){
+	track_title.replace( QRegExp(in), out );
+	track_artist.replace( QRegExp(in), out );
+	track_comment.replace( QRegExp(in), out );
+	// year
+	// track
+	genre.replace( QRegExp(in), out );
+	album.replace( QRegExp(in), out );
+	comment.replace( QRegExp(in), out );
+	group.replace( QRegExp(in), out );
 }
 
