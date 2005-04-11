@@ -1,3 +1,5 @@
+Change regexp infro to say that it is modifing the track names, not filename.
+
 Add option to disable message box
 
 Rip & Encode one track at a time."?
