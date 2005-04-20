@@ -26,6 +26,7 @@
 #include <ktempfile.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
+#include <kstandarddirs.h>
 #include <kio/scheduler.h>
 
 /**
@@ -162,6 +163,8 @@ void Ripper::tendToNewJobs(){
 	QString defaultTempDir;
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
+	else
+		defaultTempDir = locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KURL(defaultTempDir).path(1);
 	KTempFile tmp( defaultTempDir, ".wav" );
