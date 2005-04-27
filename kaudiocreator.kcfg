@@ -65,7 +65,7 @@
     </entry>
     <entry name="fileFormat" type="String">
       <label>Location pattern for encoded files</label>
-      <default>~/%{extension}/%{albumartist}/%{albumtitle}/%{artist} - %{title}.%{extension}</default>
+      <default>~/%{extension}/%{albumartist}/%{albumtitle}/%{artist} - %{number} - %{title}.%{extension}</default>
     </entry>
     <entry name="createPlayList" type="Bool">
       <label>Create an album playlist file</label>
