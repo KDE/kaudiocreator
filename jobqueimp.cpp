@@ -276,7 +276,7 @@ void JobQueImp::appendToPlaylist(Job* job, const QString &extension){
 	QString desiredFile = Prefs::playlistFileFormat();
 	QMap <QString,QString> map;
 	map.insert("extension", extension);
-	job->replaceSpecialChars(desiredFile, false, map);
+	desiredFile = job->replaceSpecialChars(desiredFile, false, map);
 
 	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
 	// If the user wants anything regexp replaced do it now...
