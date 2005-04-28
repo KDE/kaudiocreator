@@ -34,6 +34,7 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <kstandarddirs.h>
+#include <knotifyclient.h>
 #include <qdir.h>
 
 #define HEADER_JOB 0
@@ -102,6 +103,7 @@ void JobQueImp::addJob(Job*job, const QString &name ){
  * @param progress the new progress of the job.
  */
 void JobQueImp::updateProgress(int id, int progress){
+	int currentJobCount = numberOfJobsNotFinished();
 	QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
 	QString buffer = getStringFromNumber(id);
 	buffer += QString("%1").arg(id);
@@ -140,6 +142,8 @@ void JobQueImp::updateProgress(int id, int progress){
 		}
 		currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
 	}
+	if(currentJobCount > 0 && numberOfJobsNotFinished() == 0) 
+		KNotifyClient::event("no jobs left");
 }
 
 /**

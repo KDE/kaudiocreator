@@ -8,6 +8,10 @@ Comment[sv]=Kaudiocreator
 Comment[tg]=KОфарандаи Садо
 Comment[xx]=xxKAudioCreatorxx
 
+[no jobs left]
+Name=All jobs finshed
+Comment=All of the jobs in the que have been finished.
+
 [track ripped]
 Name=Track Ripped
 Name[bg]=Запис на пътечка
