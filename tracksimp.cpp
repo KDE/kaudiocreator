@@ -77,6 +77,8 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	QTimer *timer = new QTimer( this );
 	connect( timer, SIGNAL(timeout()), this, SLOT(timerDone()) );
 	timer->start( 1500, false ); // 1.5 seconds forever timer
+
+	wm_cd_init(WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
 }
 
 /**
@@ -96,6 +98,8 @@ TracksImp::~TracksImp() {
 
 	Prefs::setDevice(list);
 	Prefs::writeConfig();
+
+	wm_cd_destroy();
 }
 
 /**
@@ -136,9 +140,7 @@ bool TracksImp::hasCD(){
  * this routine.
  */
 void TracksImp::timerDone() {
-	wm_cd_init(WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
 	lookupDevice();
-	wm_cd_destroy();
 }
 
 void TracksImp::lookupDevice() {
@@ -239,6 +241,9 @@ void TracksImp::changeDevice(const QString &file ) {
 	}
 
 	device = file;
+
+	wm_cd_destroy();
+	wm_cd_init(WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
 
 	KApplication::setOverrideCursor(Qt::waitCursor);
 	timerDone();
