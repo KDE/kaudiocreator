@@ -11,9 +11,11 @@ Comment[xx]=xxKAudioCreatorxx
 [no jobs left]
 Name=All jobs finshed
 Name[bg]=Всички задачи завършиха
+Name[da]=Alle job færdige
 Name[sv]=Alla jobb är klara
 Comment=All of the jobs in the queue have been finished.
 Comment[bg]=Всички задачи в опашката завършиха
+Comment[da]=Alle jobbene i køen er færdige.
 Comment[sv]=Alla jobb i kön är klara.
 
 [track ripped]
