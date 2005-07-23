@@ -293,7 +293,7 @@ void Encoder::jobDone(KProcess *process ) {
 
 		// fyi segfaults return 136
 		if ( process->exitStatus() != 0 ) {
-			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes )
+			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),i18n("Show Output"),i18n("Skip Output")) == KMessageBox::Yes )
 			{
 				showDebugBox = true;
 			}
@@ -308,7 +308,7 @@ void Encoder::jobDone(KProcess *process ) {
 	}
 	else
 	{
-		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed")) == KMessageBox::Yes )
+		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),i18n("Show Output"),i18n("Skip Output")) == KMessageBox::Yes )
 		{
 			showDebugBox = true;
 		}

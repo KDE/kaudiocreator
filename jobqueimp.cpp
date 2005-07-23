@@ -158,7 +158,7 @@ bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
 	if(!item)
 		return false;
 
-	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStdGuiItem::yes(), KStdGuiItem::no())
+	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStdGuiItem::del(), i18n("Keep"))
 		  == KMessageBox::No ))
 		return false;
 
@@ -213,7 +213,7 @@ void JobQueImp::removeAllJobs(){
 		item = (QueListViewItem*)item->nextSibling();
 	}
 	if(!finished){
-		if(KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished all of the jobs. Remove them anyway?"), i18n("Unfinished Job in Queue"), KStdGuiItem::yes(), KStdGuiItem::no())
+		if(KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished all of the jobs. Remove them anyway?"), i18n("Unfinished Job in Queue"), KStdGuiItem::del(), i18n("Keep"))
 			== KMessageBox::No )
 		return;
 	}
