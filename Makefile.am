@@ -32,6 +32,9 @@ kde_kcfg_DATA = kaudiocreator.kcfg kaudiocreator_encoders.kcfg
 appdata_DATA = kaudiocreatorui.rc eventsrc
 appdatadir = $(kde_datadir)/kaudiocreator
 
+servicedata_DATA = audiocd_extract.desktop
+servicedatadir = $(kde_datadir)/konqueror/servicemenus
+
 updatedir = $(kde_datadir)/kconf_update
 update_DATA = kaudiocreator-meta.upd kaudiocreator-libkcddb.upd
 update_SCRIPTS = upgrade-kaudiocreator-metadata.sh

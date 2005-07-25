@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <knotifydialog.h>
+#include <kcombobox.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
@@ -142,6 +143,11 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	hasCD(tracks->hasCD());
 	
 	setupGUI();
+}
+
+void KAudioCreator::setDevice( const QString &device )
+{
+	tracks->deviceCombo->setCurrentText( device );
 }
 
 void KAudioCreator::slotRipSelection(int selection){

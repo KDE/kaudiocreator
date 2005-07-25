@@ -31,6 +31,7 @@
 #include <kurl.h>
 #include <qregexp.h>
 #include <kinputdialog.h>
+#include <dcopref.h>
 
 #define HEADER_RIP 0
 #define HEADER_TRACK 1
@@ -124,7 +125,7 @@ void TracksImp::loadSettings() {
 	// Set list, get top one
 	deviceCombo->clear();
 	deviceCombo->insertStringList(list);
-	device = deviceCombo->currentText();
+	changeDevice( deviceCombo->currentText() );
 }
 
 /**
@@ -228,18 +229,37 @@ void TracksImp::lookupDevice() {
  * @param file - the new text to check.
  */
 void TracksImp::changeDevice(const QString &file ) {
-	if( file == device ) {
+	
+	QString newDevice = file;
+
+	KURL url( newDevice );
+	if( url.isValid() ) {
+		QString name = url.fileName();
+		
+		DCOPRef mediamanager( "kded", "mediamanager" );
+		DCOPReply reply = mediamanager.call("properties(QString)", name);
+
+		if (!reply.isValid()) {
+			kdError() << "Invalid reply from mediamanager" << endl;
+			return;
+		} else {
+			QStringList properties = reply;
+			newDevice = properties[5];
+		}
+	}
+	
+	if( newDevice == device ) {
 		//qDebug("Device names match, returning");
 		return;
 	}
 
-	QFileInfo fileInfo(file);
+	QFileInfo fileInfo(newDevice);
 	if( !fileInfo.exists() || fileInfo.isDir()) {
 		//qDebug("Device file !exist or isDir or !file");
 		return;
 	}
 
-	device = file;
+	device = newDevice;
 
 	KApplication::setOverrideCursor(Qt::waitCursor);
 	timerDone();

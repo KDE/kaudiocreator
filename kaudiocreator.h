@@ -41,6 +41,7 @@ signals:
 
 public:
   KAudioCreator( QWidget* parent = 0, const char* name = 0);
+  void setDevice( const QString &device );
 
 protected:
   virtual bool queryClose();

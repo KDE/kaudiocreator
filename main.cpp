@@ -24,6 +24,12 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 
+static const KCmdLineOptions options[] = {
+  {"+[device]",I18N_NOOP( "CD device, can be a path or a media:/ URL" ),0},
+  KCmdLineLastOption
+};
+
+
 int main(int argc, char *argv[]){
   KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.12",
     I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2004, Benjamin Meyer",
@@ -32,9 +38,14 @@ int main(int argc, char *argv[]){
 
   // command line
   KCmdLineArgs::init(argc, argv, &aboutData);
+  KCmdLineArgs::addCmdLineOptions( options );
   KApplication a(argc, argv);
   KAudioCreator *app = new KAudioCreator(0, "MainWindow");
   a.setMainWidget(app);
+
+  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+  if ( args->count()>0 ) app->setDevice( args->arg( 0 ) );
+
   app->show();
   return a.exec();
 }
