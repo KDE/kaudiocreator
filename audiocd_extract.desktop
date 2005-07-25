@@ -1,0 +1,9 @@
+[Desktop Entry]
+ServiceTypes=media/audiocd
+Actions=Extract;
+X-KDE-Priority=TopLevel
+
+[Desktop Action Extract]
+Name=Extract and encode audio tracks
+Exec=kaudiocreator %u
+Icon=kaudiocreator
