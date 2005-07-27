@@ -21,6 +21,7 @@
 #include "job.h"
 #include "libkcddb/cdinfodialogbase.h"
 #include "prefs.h"
+#include "kcompactdisc.h"
 #include <qlabel.h>
 #include <qlistview.h>
 #include <klistview.h>
@@ -40,8 +41,6 @@
 #define HEADER_TRACK_ARTIST 4
 #define HEADER_TRACK_COMMENT 5
 
-#include "kaudiocreator_workman.h"
-
 #include <kconfig.h>
 #include <kapplication.h>
 
@@ -58,8 +57,11 @@
  */
 TracksImp::TracksImp( QWidget* parent, const char* name) :
 	Tracks(parent,name),
- 	lastDeviceStatus(WM_CDM_UNKNOWN),
 	cddbInfo() {
+	cd = new KCompactDisc;
+
+	connect(cd,SIGNAL(discChanged(unsigned)),this,SLOT(newDisc(unsigned)));
+
 	connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*)));
 	connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
 	connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
@@ -72,13 +74,8 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	cddb->setBlockingMode(false);
 	connect(cddb, SIGNAL(finished(CDDB::Result)),
 	                  this, SLOT(lookupCDDBDone(CDDB::Result)));
-
 	trackListing->setSorting(-1, false);
 	loadSettings();
-	QTimer *timer = new QTimer( this );
-	connect( timer, SIGNAL(timeout()), this, SLOT(timerDone()) );
-	timer->start( 1500, false ); // 1.5 seconds forever timer
-	wm_cd_init(WM_CDIN, (char *)qstrdup(QFile::encodeName(device)), NULL, NULL, NULL);
 }
 
 /**
@@ -98,8 +95,6 @@ TracksImp::~TracksImp() {
 
 	Prefs::setDevice(list);
 	Prefs::writeConfig();
-
-	wm_cd_destroy();
 }
 
 /**
@@ -125,117 +120,71 @@ void TracksImp::loadSettings() {
 	// Set list, get top one
 	deviceCombo->clear();
 	deviceCombo->insertStringList(list);
-	changeDevice( deviceCombo->currentText() );
+
+	changeDevice(deviceCombo->currentText());
+}
+
+void TracksImp::newDisc(unsigned discId)
+{
+	if (discId == KCompactDisc::missingDisc)
+	{
+		kdDebug() << "newDisc - No disc" << endl;
+		cddbInfo.clear();
+		cddbInfo.title = i18n("No disk");
+		newAlbum();
+		emit(hasCD(false));
+
+		return;
+	}
+
+	kdDebug() << "newDisc - " << discId << endl;
+	emit(hasCD(true));
+
+	cddbInfo.clear();
+
+	cddbInfo.id = discId;
+	cddbInfo.length = cd->discLength();
+
+	cddbInfo.artist = cd->discArtist();
+	cddbInfo.title = cd->discTitle();
+
+	// If it's a sampler, we'll do artist/title.
+	bool isSampler = (cddbInfo.title.compare("Various") == 0);
+	KCDDB::TrackInfo track;
+	for (unsigned i = 1; i <= cd->tracks(); i++) {
+		if (isSampler)
+			track.title = cd->trackArtist(i) + " / " + cd->trackTitle(i);
+		else
+			track.title = cd->trackTitle(i);
+		cddbInfo.trackInfoList.append(track);
+	}
+
+	newAlbum();
+
+	if (Prefs::performCDDBauto())
+		lookupCDDB();
 }
 
 /**
  * @return if there is a cd inserted or not.
  */
 bool TracksImp::hasCD(){
-	return (cddbInfo.id != 0);
+	return cd->discId() != KCompactDisc::missingDisc;
 }
 
 /**
- * Check for changes in the cd. All access to the physical CD is contained in
- * this routine.
- */
-void TracksImp::timerDone() {
-	lookupDevice();
-}
-
-void TracksImp::lookupDevice() {
-	int status = wm_cd_status();
-
-	// If nothing changed, do nothing.
-	if (status == lastDeviceStatus)
-		return;
-	kdDebug(60002) << "Drive return status: " << status << endl;
-	lastDeviceStatus = status;
-
-	if (WM_CDS_NO_DISC(status)) {
-		kdDebug(60002) << "No disc" << endl;
-		cddbInfo.clear();
-		trackStartFrames.clear();
-		cddbInfo.title = i18n("No disk");
-		newAlbum();
-		emit(hasCD(false));
-		return;
-	}
-
-	if( status < 0) {
-		QString errstring =
-							 i18n("CDROM read or access error (or no audio disk in drive).\n"\
-										"Please make sure you have access permissions to:\n%1")
-							 .arg(device);
-		KMessageBox::error(this, errstring, i18n("Error"));
-		return;
-	}
-
-	QString currentDistID = QString::number(cddb_discid(), 16).rightJustify(8, '0');
-	if (currentDistID == cddbInfo.id) {
-		return;
-	}
-	kdDebug(60002) << "New disk. Disk id: " << currentDistID << endl;
-	emit(hasCD(true));
-
-	// Initialise the album from the CD.
-	cddbInfo.clear();
-	trackStartFrames.clear();
-	cddbInfo.id = currentDistID;
-	unsigned numberOfTracks = wm_cd_getcountoftracks();
-	cddbInfo.length = cd->trk[numberOfTracks].start - cd->trk[0].start;
-	struct cdtext_info *info = wm_cd_get_cdtext();
-	if (info && info->valid) {
-		cddbInfo.artist = reinterpret_cast<char*>(info->blocks[0]->name[0]);
-		cddbInfo.title = reinterpret_cast<char*>(info->blocks[0]->performer[0]);
-	}
-	else {
-		cddbInfo.artist = i18n("Unknown Artist");
-		cddbInfo.title = i18n("Unknown Album");
-	}
-
-	// If it's a sampler, we'll do artist/title.
-	bool isSampler = (cddbInfo.title.compare("Various") == 0);
-	KCDDB::TrackInfo track;
-	for (unsigned i = 1; i <= numberOfTracks; i++) {
-		if (info && info->valid) {
-			if (isSampler) {
-				track.title = reinterpret_cast<char*>(info->blocks[0]->performer[i]);
-				track.title.append(" / ");
-				track.title.append(reinterpret_cast<char*>(info->blocks[0]->name[i]));
-			} else {
-				track.title = reinterpret_cast<char*>(info->blocks[0]->name[i]);
-			}
-		}
-		else {
-			track.title = QString::null;
-		}
-		// FIXME: KDE4
-		// track.length = cd->trk[i - 1].length;
-		trackStartFrames.append(cd->trk[i - 1].start);
-		cddbInfo.trackInfoList.append(track);
-	}
-	trackStartFrames.append((cd->trk[0]).start);
-	trackStartFrames.append((cd->trk[numberOfTracks]).start );
-
-	newAlbum();
-	if (Prefs::performCDDBauto())
-		lookupCDDB();
-}
-
-/**
- * The device text has changed. If valid different file from device
- * then call timerDone() to re-initialize the cd library and check its status.
+ * The device text has changed.
  * @param file - the new text to check.
  */
 void TracksImp::changeDevice(const QString &file ) {
-	
 	QString newDevice = file;
 
 	KURL url( newDevice );
-	if( url.isValid() ) {
+	if( url.isValid() && url.protocol() == "media" ) {
 		QString name = url.fileName();
 		
+		// FIXME Does the media lookup here instead of in KCompactDisc::setDevice,
+		//       so we can check if the device exist before we open it
 		DCOPRef mediamanager( "kded", "mediamanager" );
 		DCOPReply reply = mediamanager.call("properties(QString)", name);
 
@@ -244,11 +193,13 @@ void TracksImp::changeDevice(const QString &file ) {
 			return;
 		} else {
 			QStringList properties = reply;
+			if (properties.count() < 6)
+			    return;
 			newDevice = properties[5];
 		}
 	}
 	
-	if( newDevice == device ) {
+	if( newDevice == cd->device() ) {
 		//qDebug("Device names match, returning");
 		return;
 	}
@@ -259,11 +210,14 @@ void TracksImp::changeDevice(const QString &file ) {
 		return;
 	}
 
-	device = newDevice;
-
-	KApplication::setOverrideCursor(Qt::waitCursor);
-	timerDone();
-	KApplication::restoreOverrideCursor();
+	if (!cd->setDevice(newDevice, 50, false))
+	{
+		QString errstring =
+		  i18n("CDROM read or access error (or no audio disk in drive).\n"\
+		    "Please make sure you have access permissions to:\n%1")
+		    .arg(file);
+		KMessageBox::error(this, errstring, i18n("Error"));
+	}
 }
 
 /**
@@ -281,12 +235,10 @@ void TracksImp::performCDDB() {
 
 /**
  * See if we can't get the cddb value for this cd.
- * wm_cd_init must be called before this.
- * @return true if successful.
  */ 
 void TracksImp::lookupCDDB() {
 	cddb->config().reparse();
-	cddb->lookup(trackStartFrames);
+	cddb->lookup(cd->discSignature());
 }
 
 /**
@@ -372,7 +324,10 @@ void TracksImp::editInformation( ) {
 	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Editor" ),
 										   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true );
 	CDInfoDialogBase *base = new CDInfoDialogBase(dialog, "Album info editor dialog");
-	base->setInfo(cddbInfo, trackStartFrames);
+	// Workaround the fact that CDInfoDialogBase doesn't take
+	// a const TrackOffsetList
+	QValueList<unsigned> discSig = cd->discSignature();
+	base->setInfo(cddbInfo, discSig);
 	dialog->setMainWidget(base);
 
 	// Show dialog->and save results.
@@ -385,12 +340,10 @@ void TracksImp::editInformation( ) {
 	delete dialog;
 }
 
-QString TracksImp::framesTime(unsigned frames)
+QString TracksImp::formatTime(unsigned ms)
 {
 	QTime time;
-	double ms;
 
-	ms = frames * 1000 / 75.0;
 	time = time.addMSecs((int)ms);
 
     // Use ".zzz" for milliseconds...
@@ -448,7 +401,7 @@ void TracksImp::startSession( int encoder ) {
 		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
 			Job *newJob = new Job();
 			newJob->encoder = encoder;
-			newJob->device = device;
+			newJob->device = cd->device();
 			newJob->album = cddbInfo.title;
 			newJob->genre = cddbInfo.genre;
 			if( newJob->genre.isEmpty())
@@ -548,7 +501,7 @@ void TracksImp::newAlbum() {
 		}
 
 		// There is a new track for this title.  Add it to the list of tracks.
-		QString trackLength = framesTime(trackStartFrames[i + ((i + 1 < t.count()) ? 1 : 2)] - trackStartFrames[i]);
+		QString trackLength = formatTime(cd->trackLength(i+1));
 		QListViewItem * newItem = new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
 	}
 
@@ -580,7 +533,7 @@ void TracksImp::keyPressEvent(QKeyEvent *event) {
  * Eject the current cd device
  */
 void TracksImp::eject() {
-	ejectDevice(device);
+	ejectDevice(cd->device());
 }
 
 /**
@@ -588,45 +541,9 @@ void TracksImp::eject() {
  * @param deviceToEject the device to eject.
  */
 void TracksImp::ejectDevice(const QString &deviceToEject) {
-	/*
-	// not sure if this will fly...
-	// And either way the rest has to be here
-	if( deviceToEject == device ) {
-		wm_cd_eject();
-		return;
-	}
-	 */
-	KProcess *proc = new KProcess();
-#ifdef __FreeBSD__
-	*proc << "cdcontrol" << "-f" << deviceToEject << "eject";
-#else
-	*proc << "eject" << deviceToEject;
-#endif
-	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(ejectDone(KProcess *)));
-	proc->start(KProcess::NotifyOnExit, KShellProcess::NoCommunication);
-}
+	changeDevice(deviceToEject);
 	
-/**
- * When it is done ejecting, report any errors.
- * @param proc pointer to the process that ended.
- */ 
-void TracksImp::ejectDone(KProcess *proc) {
-	// This shouldn't happen and something real bad has happened.
-	if(!proc)
-		return;
-
-	int returnValue = proc->exitStatus();
-	if( returnValue == 127 ) {
-		KMessageBox:: sorry(this, i18n("\"eject\" command not installed."),
-		  i18n("Cannot Eject"));
-		return;
-	}
-	if( returnValue != 0 ) {
-		kdDebug(60002) << "Eject failed and returned: " << returnValue << endl;
-		KMessageBox:: sorry(this, i18n("\"eject\" command failed."), i18n("Cannot Eject"));
-		return;
-	}
-	delete proc;
+	cd->eject();
 }
 
 #include "tracksimp.moc"

@@ -1,5 +1,5 @@
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/libkcddb \
-		   -I$(top_builddir)/libkcddb $(all_includes)
+		   -I$(top_builddir)/libkcddb -I$(top_srcdir)/kscd $(all_includes)
 
 bin_PROGRAMS = kaudiocreator
 
@@ -20,7 +20,7 @@ messages: rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/kaudiocreator.pot
 
 kaudiocreator_LDADD = $(LIB_KIO) $(top_builddir)/libkcddb/libkcddb.la \
-	$(top_builddir)/kscd/libwm/libworkman.la
+	$(top_builddir)/kscd/libkcompactdisc.la
 
 KDE_ICON = AUTO
 
