@@ -91,7 +91,6 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks,
 		  SLOT(eject()),actionCollection(), "eject" );
-	connect(tracks, SIGNAL(hasTracks(bool)), eject, SLOT(setEnabled(bool)));
 
 	(void)new KAction(i18n("&Configure KAudioCreator..."), 0, this,
 		  SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );

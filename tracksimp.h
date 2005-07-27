@@ -30,6 +30,7 @@
 using namespace KCDDB;
 class Job;
 class KProcess;
+class KCompactDisc;
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
@@ -63,11 +64,11 @@ public slots:
 	void deselectAllTracks();
 
 private slots:
-	void ejectDone(KProcess *proc);
+	void newDisc(unsigned discId);
+ 
 	void selectTrack(QListViewItem *);
 	void keyPressEvent(QKeyEvent *event);
  
-	void timerDone();
 	void changeDevice(const QString &file);
 	void lookupCDDBDone(CDDB::Result result);
 
@@ -76,21 +77,14 @@ private:
 	void lookupCDDB();
 	void newAlbum();
 	void ripWholeAlbum();
-	QString framesTime(unsigned frames);
+	QString formatTime(unsigned ms);
 
 	KCDDB::Client* cddb;
-	int lastDeviceStatus;
+
+	KCompactDisc* cd;
 
 	// Current album
 	KCDDB::CDInfo cddbInfo;
-	KCDDB::TrackOffsetList trackStartFrames;
-	// CDDB data, which we keep loaded so it doesn't
-	// get lost when saving new cddb-information
-	int revision;
-	QString category;
-
-	// Settings
-	QString device;
 };
 
 #endif // TRACKSIMP_H
