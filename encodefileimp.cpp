@@ -32,6 +32,8 @@ EncodeFileImp::EncodeFileImp(QWidget* parent,
   genre->insertStringList(m_genres.i18nList());
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
+
+  connect(encodeButton,SIGNAL(clicked()),this,SLOT(encode()));
 }
 
 /**
@@ -53,6 +55,9 @@ void EncodeFileImp::encode(){
   newJob->track = track->value();
 
   newJob->track_title = track_title->text();
+  if ((track_artist->text()).isEmpty())
+     newJob->track_artist = artist->text();
+  else
   newJob->track_artist = track_artist->text();
   newJob->track_comment = track_comment->text();
 
