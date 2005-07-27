@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>EncodeFile</class>
 <widget class="KDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>339</width>
-            <height>435</height>
+            <height>452</height>
         </rect>
     </property>
     <property name="caption">
@@ -292,7 +292,7 @@
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pushButton6</cstring>
+                        <cstring>encodeButton</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Encode File</string>
@@ -300,7 +300,7 @@
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pushButton5</cstring>
+                        <cstring>closeButton</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Close</string>
@@ -310,9 +310,11 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
-        <sender>pushButton5</sender>
+        <sender>closeButton</sender>
         <signal>clicked()</signal>
         <receiver>EncodeFile</receiver>
         <slot>accept()</slot>
@@ -329,11 +331,12 @@
     <tabstop>year</tabstop>
     <tabstop>genre</tabstop>
     <tabstop>comment</tabstop>
-    <tabstop>pushButton6</tabstop>
-    <tabstop>pushButton5</tabstop>
+    <tabstop>encodeButton</tabstop>
+    <tabstop>closeButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kdialog.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
