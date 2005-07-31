@@ -5,7 +5,5 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
-Name[et]=Ekstrakti ja kodeeri audiorajad
-Name[fr]=Extrait et encore des pistes audio
 Exec=kaudiocreator %u
 Icon=kaudiocreator
