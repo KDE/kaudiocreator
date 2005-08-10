@@ -14,15 +14,11 @@ Name[bg]=Всички задачи завършиха
 Name[da]=Alle job færdige
 Name[et]=Kõik tööd lõpetatud
 Name[fr]=Toutes les tâches sont terminées
+Name[it]=Tutti i lavori sono terminati
 Name[sv]=Alla jobb är klara
 Name[tr]=Tüm işler tamamlandı
+Name[zh_CN]=全部任务都已完成
 Comment=All of the jobs in the queue have been finished
-Comment[bg]=Всички задачи в опашката завършиха
-Comment[da]=Alle jobbene i køen er færdige.
-Comment[et]=Kõik järjekorras olnud tööd on lõpetatud.
-Comment[fr]=Toutes les tâches dans la file d'attente sont terminées.
-Comment[sv]=Alla jobb i kön är klara.
-Comment[tr]=Listedeki tüm işler tamamlandı.
 
 [track ripped]
 Name=Track Ripped

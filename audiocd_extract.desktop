@@ -5,6 +5,8 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
+Name[bg]=Извличане и кодиране на аудио диск
 Name[et]=Ekstrakti ja kodeeri audiorajad
+Name[zh_CN]=提取并编码音轨
 Exec=kaudiocreator %u
 Icon=kaudiocreator
