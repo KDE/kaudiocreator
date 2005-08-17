@@ -128,7 +128,7 @@ void TracksImp::newDisc(unsigned discId)
 {
 	if (discId == KCompactDisc::missingDisc)
 	{
-		kdDebug() << "newDisc - No disc" << endl;
+		kdDebug(60002) << "newDisc - No disc" << endl;
 		cddbInfo.clear();
 		cddbInfo.title = i18n("No disk");
 		newAlbum();
@@ -137,7 +137,7 @@ void TracksImp::newDisc(unsigned discId)
 		return;
 	}
 
-	kdDebug() << "newDisc - " << discId << endl;
+	kdDebug(60002) << "newDisc - " << discId << endl;
 	emit(hasCD(true));
 
 	cddbInfo.clear();
