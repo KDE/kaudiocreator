@@ -2,6 +2,9 @@
 ServiceTypes=media/audiocd
 Actions=Extract;
 X-KDE-Priority=TopLevel
+Encoding=UTF-8
+Name=KAudioCreator-Extract
+Type=ServiceType
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
