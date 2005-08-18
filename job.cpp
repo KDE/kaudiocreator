@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2003 Waldo Bastian <bastian@kde.org>
+ *  Copyright (C) 2003-2005 Benjamin C. Meyer <ben at meyerhome dot net>
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public

@@ -1,6 +1,6 @@
 /**
- * This file is part of the KAudioCreator package
  * Copyright (C) 2003 Waldo Bastian <bastian@kde.org>
+ * Copyright (C) 2003-2005 Benjamin C. Meyer <ben at meyerhome dot net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as 
@@ -24,4 +24,5 @@ extern "C" {
   #include "../kscd/libwm/include/workman.h"
 }
 
-#endif
+#endif // KAUDIOCREATOR_WORKMAN_H
+

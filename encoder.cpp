@@ -1,6 +1,5 @@
 /**
- * This file is part of the KAudioCreator package
- * Copyright (C) 2003 Benjamin C Meyer (ben+kaudiocreator at meyerhome dot net)
+ * Copyright (C) 2003-2005 Benjamin C Meyer (ben at meyerhome dot net)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
