@@ -35,6 +35,8 @@ public:
 
 	void replaceSpecialChars(QString &string, bool quote, QMap<QString,QString> map);
 
+	void fix( const QString &in, const QString &out );
+	
 	// The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
 	QString device;
 	int id; 

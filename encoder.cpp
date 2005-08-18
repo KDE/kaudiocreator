@@ -162,12 +162,13 @@ void Encoder::tendToNewJobs() {
 	{
 		QMap <QString,QString> map;
 		map.insert("extension", prefs->extension());
-		job->replaceSpecialChars(desiredFile, false, map);
+		Job jobx = *job;
+		jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
+		jobx.fix("/", "%2f");
+		// If the user wants anything regexp replaced do it now...
+		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
+		desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
 	}
-	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
-
-	// If the user wants anything regexp replaced do it now...
-	desiredFile.replace( QRegExp(Prefs::replaceInput()), Prefs::replaceOutput() );
 
 	while ( QFile::exists( desiredFile ) ) {
 		bool ok;
@@ -200,7 +201,7 @@ void Encoder::tendToNewJobs() {
 		map.insert("extension", prefs->extension());
 		map.insert("f", job->location);
 		map.insert("o", desiredFile);
-		job->replaceSpecialChars(command, true, map);
+		command = job->replaceSpecialChars(command, true, map);
 	}
 
 	updateProgress(job->id, 1);
