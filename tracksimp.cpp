@@ -258,6 +258,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	// TODO Why doesn't libcddb not return MultipleRecordFound?
 	//if( result == KCDDB::CDDB::MultipleRecordFound ) {
 	if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
+		QString searchedCDId = cddbInfo.id;
 		CDInfoList cddb_info = cddb->lookupResponse();
 		CDInfoList::iterator it;
 		QStringList list;
@@ -293,6 +294,11 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 			return;
 			// user pressed Cancel
 		}
+	// Check that the CD we looked up is the one now loaded.
+	// The user might have ejected the CD while we were in the
+	// KInputDialog event loop, and replaced it with another one.
+		if ( searchedCDId != cddbInfo.id )
+			return;
 	}
 
 	// Some sanity provisions to ensure that the number of records matches what
