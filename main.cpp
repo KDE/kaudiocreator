@@ -1,6 +1,6 @@
 /**
  * This file is part of the KAudioCreator package
- * Copyright (C) 2003 Benjamin C Meyer (ben+kaudiocreator at meyerhome dot net)
+ * Copyright (C) 2003-2005 Benjamin C Meyer (ben+kaudiocreator at meyerhome dot net)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ static const KCmdLineOptions options[] = {
 
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.12",
-    I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2004, Benjamin Meyer",
+  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.13",
+    I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2003-2005, Benjamin Meyer",
     0, "http://www.icefox.net/");
     aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
 
