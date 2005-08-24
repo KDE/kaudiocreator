@@ -10,7 +10,9 @@ Comment[xx]=xxKAudioCreatorxx
 
 [no jobs left]
 Name=All jobs finished
+Name[da]=Alle job færdige
 Comment=All of the jobs in the queue have been finished
+Comment[da]=Alle jobbene i køen er færdige
 Comment[ru]=Все задания очереди завершены
 Comment[zh_CN]=队列中的全部任务都已完成
 
