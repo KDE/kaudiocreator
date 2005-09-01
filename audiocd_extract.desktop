@@ -12,6 +12,7 @@ Name[et]=Ekstrakti ja kodeeri audiorajad
 Name[ru]=Извлечь и закодировать дорожки
 Name[sr]=Издваја и кодира аудио стазе
 Name[sr@Latn]=Издваја и кодира аудио стазе
+Name[xx]=xxExtract and Encode Audio Tracksxx
 Name[zh_CN]=提取并编码音轨
 Exec=kaudiocreator %u
 Icon=kaudiocreator

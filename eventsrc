@@ -14,6 +14,7 @@ Name[cs]=Všechny úkoly dokončeny
 Name[da]=Alle job færdige
 Name[sr]=Сви послови завршени
 Name[sr@Latn]=Сви послови завршени
+Name[xx]=xxAll jobs finishedxx
 Name[zh_CN]=全部任务都已完成
 Comment=All of the jobs in the queue have been finished
 Comment[cs]=Všechny úkoly ve frontě byly dokončeny
@@ -21,6 +22,7 @@ Comment[da]=Alle jobbene i køen er færdige
 Comment[ru]=Все задания очереди завершены
 Comment[sr]=Сви послови из редоследа су завршени
 Comment[sr@Latn]=Сви послови из редоследа су завршени
+Comment[xx]=xxAll of the jobs in the queue have been finishedxx
 Comment[zh_CN]=队列中的全部任务都已完成
 
 [track ripped]
