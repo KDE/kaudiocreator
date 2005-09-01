@@ -19,7 +19,7 @@
 
 #include "kaudiocreator.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kiconloader.h>
 
 #include <kmessagebox.h>
@@ -53,7 +53,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
 	setCentralWidget(janusWidget);
 
-	QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), 
+	Q3VBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), 
 		     QString::null, SmallIcon("cdaudio_unmount", 32));
 	tracks = new TracksImp(frame, "Tracks");
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));

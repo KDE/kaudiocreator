@@ -22,20 +22,20 @@
 
 #include "jobque.h"
 #include <qstring.h>
-#include <qlistview.h>
+#include <q3listview.h>
 
 class Job;
 class QPainter;
 class QColorGroup;
-class QListView;
+class Q3ListView;
 
 /**
  * Helper class to allow for progress bars in list view items.
  */
-class QueListViewItem : public QListViewItem {
+class QueListViewItem : public Q3ListViewItem {
 
 public:
-	QueListViewItem (QListView * p = NULL, const QString a=0, const QString b=0, const QString c=0, const QString d=0, const QString e=0);
+	QueListViewItem (Q3ListView * p = NULL, const QString a=0, const QString b=0, const QString c=0, const QString d=0, const QString e=0);
 	virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
       int width,int align);
 	double percentDone;

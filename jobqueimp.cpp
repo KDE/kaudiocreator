@@ -274,7 +274,7 @@ int JobQueImp::numberOfJobsNotFinished(){
 void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 			int width,int align){
 	if(column != HEADER_PROGRESS){
-		QListViewItem::paintCell(p,cg,column,width,align);
+		Q3ListViewItem::paintCell(p,cg,column,width,align);
 		return;
 	}
 
@@ -294,15 +294,15 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	if(isSelected())
 		p->setPen(cg.highlightedText());
 	if(percentDone != -1)
-	p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum((int)percentDone) + "%");
+	p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,QString().setNum((int)percentDone) + "%");
 	else
-		p->drawText(0,0,width-1,height()-1,AlignCenter,i18n("Error"));
+		p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,i18n("Error"));
 }
 
 /**
  * Header for built in treelist item so we can have a progress bar in them.
  */
-QueListViewItem::QueListViewItem(QListView *parent, const QString id, const QString p , const QString name, const QString d, const QString e) : QListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
+QueListViewItem::QueListViewItem(Q3ListView *parent, const QString id, const QString p , const QString name, const QString d, const QString e) : Q3ListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"

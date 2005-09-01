@@ -23,7 +23,7 @@
 #include "job.h"
 #include <kio/jobclasses.h>
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class Job;
 
@@ -60,7 +60,7 @@ private:
 	// Jobs that we are currently doing.
 	QMap<KIO::Job*, Job*> jobs;
 	// Jobs that we want to do , but haven't done yet
-	QPtrList<Job> pendingJobs;
+	Q3PtrList<Job> pendingJobs;
 };
 
 #endif // RIPPER_H

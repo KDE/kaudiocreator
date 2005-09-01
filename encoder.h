@@ -22,7 +22,7 @@
 
 #include <qobject.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include "job.h"
 #include <kprocess.h>
@@ -57,8 +57,8 @@ private slots:
   void tendToNewJobs();
 
 private:
-  QPtrList<Job> pendingJobs;
-  QPtrList<KShellProcess> threads;
+  Q3PtrList<Job> pendingJobs;
+  Q3PtrList<KShellProcess> threads;
   QMap<KShellProcess*, Job*> jobs;
 
   EncoderPrefs *prefs;

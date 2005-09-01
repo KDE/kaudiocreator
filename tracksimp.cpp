@@ -22,7 +22,11 @@
 #include "prefs.h"
 #include "kcompactdisc.h"
 #include <qlabel.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <QKeyEvent>
 #include <klistview.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
@@ -61,9 +65,9 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 
 	connect(cd,SIGNAL(discChanged(unsigned)),this,SLOT(newDisc(unsigned)));
 
-	connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*)));
-	connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
-	connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
+	connect(trackListing, SIGNAL(clicked( Q3ListViewItem * )), this, SLOT(selectTrack(Q3ListViewItem*)));
+	connect(trackListing, SIGNAL(doubleClicked(Q3ListViewItem *)), this, SLOT(editInformation()));
+	connect(trackListing, SIGNAL(returnPressed(Q3ListViewItem *)), this, SLOT(editInformation()));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 	
@@ -331,7 +335,7 @@ void TracksImp::editInformation( ) {
 	CDInfoDialogBase *base = new CDInfoDialogBase(dialog, "Album info editor dialog");
 	// Workaround the fact that CDInfoDialogBase doesn't take
 	// a const TrackOffsetList
-	QValueList<unsigned> discSig = cd->discSignature();
+	Q3ValueList<unsigned> discSig = cd->discSignature();
 	base->setInfo(cddbInfo, discSig);
 	dialog->setMainWidget(base);
 
@@ -399,7 +403,7 @@ void TracksImp::startSession( int encoder ) {
 		if( r == KMessageBox::No )
 			return;
 	}
-	QListViewItem * currentItem = trackListing->firstChild();
+	Q3ListViewItem * currentItem = trackListing->firstChild();
 	Job *lastJob = NULL;
 	int counter = 0;
 	while( currentItem != NULL ) {
@@ -444,7 +448,7 @@ void TracksImp::startSession( int encoder ) {
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksImp::selectTrack(QListViewItem *currentItem ) {
+void TracksImp::selectTrack(Q3ListViewItem *currentItem ) {
 	if(!currentItem)
 		return;
 	if( currentItem->pixmap(HEADER_RIP) != NULL ) {
@@ -459,7 +463,7 @@ void TracksImp::selectTrack(QListViewItem *currentItem ) {
  * Turn on all of the tracks.
  */
 void TracksImp::selectAllTracks() {
-	QListViewItem *currentItem = trackListing->firstChild();
+	Q3ListViewItem *currentItem = trackListing->firstChild();
 	while( currentItem != NULL ) {
 		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
 		currentItem = currentItem->nextSibling();
@@ -470,7 +474,7 @@ void TracksImp::selectAllTracks() {
  * Turn off all of the tracks.
  */
 void TracksImp::deselectAllTracks() {
-	QListViewItem *currentItem = trackListing->firstChild();
+	Q3ListViewItem *currentItem = trackListing->firstChild();
 	QPixmap empty;
 	while( currentItem != NULL ) {
 		currentItem->setPixmap(HEADER_RIP, empty);
@@ -507,7 +511,7 @@ void TracksImp::newAlbum() {
 
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		QListViewItem * newItem = new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
+		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
 	}
 
 	if (t.count())

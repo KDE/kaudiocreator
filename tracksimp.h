@@ -25,6 +25,8 @@
 
 // CDDB support via libkcddb
 #include <libkcddb/client.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 using namespace KCDDB;
 class Job;
@@ -65,7 +67,7 @@ public slots:
 private slots:
 	void newDisc(unsigned discId);
  
-	void selectTrack(QListViewItem *);
+	void selectTrack(Q3ListViewItem *);
 	void keyPressEvent(QKeyEvent *event);
  
 	void changeDevice(const QString &file);

@@ -23,7 +23,7 @@
 #include "encoderconfig.h"
 #include "encoder_prefs.h"
 #include <qmap.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 /**
  * Class mainly build to manage encoder list.

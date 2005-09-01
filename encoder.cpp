@@ -30,7 +30,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <knotifyclient.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <kinputdialog.h>
 
 /**

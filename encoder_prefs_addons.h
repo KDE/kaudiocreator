@@ -5,4 +5,4 @@ public:
   static void deletePrefs(const QString &groupName);
 
 private:
-  static QDict<EncoderPrefs> *m_prefs;
+  static Q3Dict<EncoderPrefs> *m_prefs;

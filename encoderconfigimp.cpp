@@ -36,7 +36,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-  connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( QListBoxItem * )),this, SLOT(configureEncoderSlot()));
+  connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( Q3ListBoxItem * )),this, SLOT(configureEncoderSlot()));
 
   // If there are no encoders then store the three default ones.
   if( Prefs::lastKnownEncoder() == 0){
@@ -241,7 +241,7 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   if(newName == encoderName)
     return;
   
-  QListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
+  Q3ListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
   if(!item)
     return;
   kcfg_currentEncoder->changeItem(newName, kcfg_currentEncoder->index(item));
@@ -250,13 +250,13 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   encoderNames.erase(encoderName);
 }
 
-QDict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
+Q3Dict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
 
 EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
 {
   if (!m_prefs)
   {
-     m_prefs = new QDict<EncoderPrefs>();
+     m_prefs = new Q3Dict<EncoderPrefs>();
      m_prefs->setAutoDelete(true);
   }
   EncoderPrefs *encPrefs = m_prefs->find(groupName);
