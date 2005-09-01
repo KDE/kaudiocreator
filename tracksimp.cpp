@@ -18,7 +18,7 @@
  */
 #include "tracksimp.h"
 #include "job.h"
-#include "libkcddb/cdinfodialogbase.h"
+#include "libkcddb/cdinfodialog.h"
 #include "prefs.h"
 #include "kcompactdisc.h"
 #include <qlabel.h>
@@ -133,7 +133,7 @@ void TracksImp::newDisc(unsigned discId)
 	{
 		kdDebug(60002) << "newDisc - No disc" << endl;
 		cddbInfo.clear();
-		cddbInfo.title = i18n("No disk");
+		cddbInfo.set("title", i18n("No disk"));
 		newAlbum();
 		emit(hasCD(false));
 
@@ -145,20 +145,20 @@ void TracksImp::newDisc(unsigned discId)
 
 	cddbInfo.clear();
 
-	cddbInfo.id = discId;
-	cddbInfo.length = cd->discLength();
+	cddbInfo.set("discid", discId);
+	cddbInfo.set("length", cd->discLength());
 
-	cddbInfo.artist = cd->discArtist();
-	cddbInfo.title = cd->discTitle();
+	cddbInfo.set("artist", cd->discArtist());
+	cddbInfo.set("title", cd->discTitle());
 
 	// If it's a sampler, we'll do artist/title.
-	bool isSampler = (cddbInfo.title.compare("Various") == 0);
+	bool isSampler = (cddbInfo.get("title").toString().compare("Various") == 0);
 	KCDDB::TrackInfo track;
 	for (unsigned i = 1; i <= cd->tracks(); i++) {
 		if (isSampler)
-			track.title = cd->trackArtist(i) + " / " + cd->trackTitle(i);
+			track.set("title", cd->trackArtist(i) + " / " + cd->trackTitle(i));
 		else
-			track.title = cd->trackTitle(i);
+			track.set("title", cd->trackTitle(i));
 		cddbInfo.trackInfoList.append(track);
 	}
 
@@ -262,7 +262,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	// TODO Why doesn't libcddb not return MultipleRecordFound?
 	//if( result == KCDDB::CDDB::MultipleRecordFound ) {
 	if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
-		QString searchedCDId = cddbInfo.id;
+		QString searchedCDId = cddbInfo.get("discid").toString();
 		CDInfoList cddb_info = cddb->lookupResponse();
 		CDInfoList::iterator it;
 		QStringList list;
@@ -270,8 +270,8 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 		uint maxrev = 0;
 		uint c = 0;
 		for ( it = cddb_info.begin(); it != cddb_info.end(); ++it  ) {
-			list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title)
-			  .arg((*it).genre));
+			list.append( QString("%1, %2, %3").arg((*it).get("artist").toString()).arg((*it).get("title").toString())
+			  .arg((*it).get("genre").toString()));
 			KCDDB::CDInfo cinfo = *it;
 			if ( ( *it ).revision >= maxrev ) {
 				maxrev = info.revision;
@@ -301,7 +301,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	// Check that the CD we looked up is the one now loaded.
 	// The user might have ejected the CD while we were in the
 	// KInputDialog event loop, and replaced it with another one.
-		if ( searchedCDId != cddbInfo.id )
+		if ( searchedCDId != cddbInfo.get("discid").toString() )
 			return;
 	}
 
@@ -332,10 +332,10 @@ void TracksImp::editInformation( ) {
 	// Create dialog.
 	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Editor" ),
 										   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true );
-	CDInfoDialogBase *base = new CDInfoDialogBase(dialog, "Album info editor dialog");
-	// Workaround the fact that CDInfoDialogBase doesn't take
+	CDInfoDialog *base = new CDInfoDialog(dialog);
+	// Workaround the fact that CDInfoDialog doesn't take
 	// a const TrackOffsetList
-	Q3ValueList<unsigned> discSig = cd->discSignature();
+	QList<unsigned> discSig = cd->discSignature();
 	base->setInfo(cddbInfo, discSig);
 	dialog->setMainWidget(base);
 
@@ -389,13 +389,13 @@ void TracksImp::startSession( int encoder ) {
 	}
 
 	QStringList list;
-	if( cddbInfo.genre == "Unknown" )
+	if( cddbInfo.get("genre").toString() == "Unknown" )
 		list += "Genre";
-	if( cddbInfo.year == 0 )
+	if( cddbInfo.get("year").toInt() == 0 )
 		list += "Year";
-	if( cddbInfo.artist == "Unknown Artist")
+	if( cddbInfo.get("artist").toString() == "Unknown Artist")
 		list += "Artist";
-	if( cddbInfo.title == "Unknown Album")
+	if( cddbInfo.get("title").toString() == "Unknown Album")
 		list += "Album";
 	
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
@@ -411,13 +411,13 @@ void TracksImp::startSession( int encoder ) {
 			Job *newJob = new Job();
 			newJob->encoder = encoder;
 			newJob->device = cd->device();
-			newJob->album = cddbInfo.title;
-			newJob->genre = cddbInfo.genre;
+			newJob->album = cddbInfo.get("title").toString();
+			newJob->genre = cddbInfo.get("genre").toString();
 			if( newJob->genre.isEmpty())
 				newJob->genre = "Pop";
-			newJob->group = cddbInfo.artist;
-			newJob->comment = cddbInfo.extd;
-			newJob->year = cddbInfo.year;
+			newJob->group = cddbInfo.get("artist").toString();
+			newJob->comment = cddbInfo.get("extd").toString();
+			newJob->year = cddbInfo.get("year").toInt();
 			newJob->track = currentItem->text(HEADER_TRACK).toInt();
 			
 			newJob->track_title = currentItem->text(HEADER_TRACK_NAME);
@@ -486,7 +486,7 @@ void TracksImp::deselectAllTracks() {
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum() {
-	albumName->setText(QString("%1 - %2").arg(cddbInfo.artist).arg(cddbInfo.title));
+	albumName->setText(QString("%1 - %2").arg(cddbInfo.get("artist").toString()).arg(cddbInfo.get("title").toString()));
 	trackListing->clear();
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
@@ -499,19 +499,19 @@ void TracksImp::newAlbum() {
 		QString title;
 		
 		// Support for multiple artists stripping.
-		int delimiter = t[i].title.find(" / ");
+		int delimiter = t[i].get("title").toString().find(" / ");
 		if (delimiter != -1) {
-			trackArtist = t[i].title.left(delimiter);
-			title = t[i].title.mid(delimiter + 3);
+			trackArtist = t[i].get("title").toString().left(delimiter);
+			title = t[i].get("title").toString().mid(delimiter + 3);
 		}
 		else {
-			trackArtist = cddbInfo.artist;
-			title = t[i].title;
+			trackArtist = cddbInfo.get("artist").toString();
+			title = t[i].get("title").toString();
 		}
 
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
+		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].get("extt").toString());
 	}
 
 	if (t.count())
