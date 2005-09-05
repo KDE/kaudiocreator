@@ -16,6 +16,7 @@ Name[da]=Alle job færdige
 Name[pa]=ਸਭ ਕੰਮ ਖਤਮ
 Name[sr]=Сви послови завршени
 Name[sr@Latn]=Сви послови завршени
+Name[sv]=Alla jobb är klara
 Name[xx]=xxAll jobs finishedxx
 Name[zh_CN]=全部任务都已完成
 Comment=All of the jobs in the queue have been finished
@@ -25,6 +26,7 @@ Comment[pa]=ਕਤਾਰ ਵਿੱਚ ਸਭ ਕੰਮਾਂ ਨੂੰ ਖਤਮ
 Comment[ru]=Все задания очереди завершены
 Comment[sr]=Сви послови из редоследа су завршени
 Comment[sr@Latn]=Сви послови из редоследа су завршени
+Comment[sv]=Alla jobb i kön är klara
 Comment[xx]=xxAll of the jobs in the queue have been finishedxx
 Comment[zh_CN]=队列中的全部任务都已完成
 
