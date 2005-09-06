@@ -24,7 +24,7 @@
  * A helper function to replace %X with the stuff in the album.
  * if quote is true then put "" around the %X
  */
-void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _map){
+QString Job::replaceSpecialChars(const QString &str, bool quote, QMap<QString, QString> _map){
   QMap<QString,QString> map = _map;
   
   map.insert("title", track_title);
@@ -38,10 +38,10 @@ void Job::replaceSpecialChars(QString &str, bool quote, QMap<QString, QString> _
   map.insert("albumcomment", comment);
   map.insert("albumartist", group);
   
-	if (quote)
-      str = KMacroExpander::expandMacrosShellQuote(str, map);
+  if (quote)
+      return KMacroExpander::expandMacrosShellQuote(str, map);
   else
-      str = KMacroExpander::expandMacros(str, map);
+      return KMacroExpander::expandMacros(str, map);
 }
 
 void Job::fix(const QString &in, const QString &out){
