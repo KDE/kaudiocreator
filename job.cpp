@@ -28,21 +28,21 @@
 QString Job::replaceSpecialChars(const QString &string, bool quote, QMap<QString, QString> _map){
 	QMap<QString,QString> map = _map;
   
-  map.insert("title", track_title);
-  map.insert("artist", track_artist);
-  map.insert("number", QString().sprintf("%02d", track));
-  map.insert("comment", track_comment);
-  map.insert("year", QString::number(year));
+	map.insert("title", track_title);
+	map.insert("artist", track_artist);
+	map.insert("number", QString().sprintf("%02d", track));
+	map.insert("comment", track_comment);
+	map.insert("year", QString::number(year));
 	map.insert("genre", genre);
 	
-  map.insert("albumtitle", album);
-  map.insert("albumcomment", comment);
-  map.insert("albumartist", group);
+	map.insert("albumtitle", album);
+	map.insert("albumcomment", comment);
+	map.insert("albumartist", group);
   
 	if (quote)
-      return (KMacroExpander::expandMacrosShellQuote(string, map));
-  else
-      return (KMacroExpander::expandMacros(string, map));
+		return (KMacroExpander::expandMacrosShellQuote(string, map));
+	else
+		return (KMacroExpander::expandMacros(string, map));
 }
 
 void Job::fix(const QString &in, const QString &out){

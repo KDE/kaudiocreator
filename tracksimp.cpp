@@ -183,7 +183,7 @@ void TracksImp::changeDevice(const QString &file ) {
 	QString newDevice = file;
 
 	KURL url( newDevice );
-	if( url.isValid() && url.protocol() == "media" ) {
+	if( url.isValid() && url.protocol() == QLatin1String("media") ) {
 		QString name = url.fileName();
 		
 		// FIXME Does the media lookup here instead of in KCompactDisc::setDevice,
@@ -198,7 +198,7 @@ void TracksImp::changeDevice(const QString &file ) {
 			QStringList properties = reply;
 			if (properties.count() < 6)
 			    return;
-			newDevice = properties[5];
+			newDevice = properties.at(5);
 		}
 	}
 	
@@ -389,13 +389,13 @@ void TracksImp::startSession( int encoder ) {
 	}
 
 	QStringList list;
-	if( cddbInfo.get("genre").toString() == "Unknown" )
+	if( cddbInfo.get("genre").toString() == QLatin1String("Unknown") )
 		list += "Genre";
 	if( cddbInfo.get("year").toInt() == 0 )
 		list += "Year";
-	if( cddbInfo.get("artist").toString() == "Unknown Artist")
+	if( cddbInfo.get("artist").toString() == QLatin1String("Unknown Artist"))
 		list += "Artist";
-	if( cddbInfo.get("title").toString() == "Unknown Album")
+	if( cddbInfo.get("title").toString() == QLatin1String("Unknown Album"))
 		list += "Album";
 	
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
