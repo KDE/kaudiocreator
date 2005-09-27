@@ -177,28 +177,8 @@ bool TracksImp::hasCD(){
  * @param file - the new text to check.
  */
 void TracksImp::changeDevice(const QString &file ) {
-	QString newDevice = file;
+	QString newDevice = KCompactDisc::urlToDevice(file);
 
-	KURL url( newDevice );
-	if( url.isValid() && url.protocol() == "media" ) {
-		QString name = url.fileName();
-		
-		// FIXME Does the media lookup here instead of in KCompactDisc::setDevice,
-		//       so we can check if the device exist before we open it
-		DCOPRef mediamanager( "kded", "mediamanager" );
-		DCOPReply reply = mediamanager.call("properties(QString)", name);
-
-		if (!reply.isValid()) {
-			kdError() << "Invalid reply from mediamanager" << endl;
-			return;
-		} else {
-			QStringList properties = reply;
-			if (properties.count() < 6)
-			    return;
-			newDevice = properties[5];
-		}
-	}
-	
 	if( newDevice == cd->device() ) {
 		//qDebug("Device names match, returning");
 		return;
