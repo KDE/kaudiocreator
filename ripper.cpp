@@ -183,7 +183,7 @@ void Ripper::tendToNewJobs(){
 	KURL source(wavFile);
 	KURL dest(tmp.name());
 
-	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0664, false, true, false, false);
+	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0644, false, true, false, false);
 	jobs.insert(copyJob, job);
 	connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
 	connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
