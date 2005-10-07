@@ -11,6 +11,7 @@ Comment[xx]=xxKAudioCreatorxx
 
 [no jobs left]
 Name=All jobs finished
+Name[ca]=Han acabat tots els treballs
 Name[cs]=Všechny úkoly dokončeny
 Name[da]=Alle job færdige
 Name[de]=Alle Aufgaben sind fertig.
@@ -24,6 +25,7 @@ Name[pa]=ਸਭ ਕੰਮ ਖਤਮ
 Name[pl]=Wszystkie zadania ukończone
 Name[pt]=Todos os trabalhos terminados
 Name[pt_BR]=Todos os trabalhos terminados
+Name[ru]=Все задания выполнены
 Name[sr]=Сви послови завршени
 Name[sr@Latn]=Svi poslovi završeni
 Name[sv]=Alla jobb är klara
@@ -31,6 +33,7 @@ Name[uk]=Всі задачі виконано
 Name[xx]=xxAll jobs finishedxx
 Name[zh_CN]=全部任务都已完成
 Comment=All of the jobs in the queue have been finished
+Comment[ca]=Han acabat tots els treballs de la cua
 Comment[cs]=Všechny úkoly ve frontě byly dokončeny
 Comment[da]=Alle jobbene i køen er færdige
 Comment[de]=Alle Aufgaben der Warteschlange sind fertig.

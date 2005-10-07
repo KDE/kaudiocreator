@@ -6,6 +6,7 @@ X-KDE-Priority=TopLevel
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
 Name[bg]=Извличане и кодиране на аудио диск
+Name[ca]=Extracció i codificació de pistes d'àudio
 Name[cs]=Získat a enkódovat zvukové stopy
 Name[da]=Udtræk og indkod lydspor
 Name[de]=Musikstücke auslesen und kodieren.
