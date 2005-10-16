@@ -11,6 +11,7 @@ Comment[xx]=xxKAudioCreatorxx
 
 [no jobs left]
 Name=All jobs finished
+Name[bg]=Всички задачи завършиха
 Name[ca]=Han acabat tots els treballs
 Name[cs]=Všechny úkoly dokončeny
 Name[da]=Alle job færdige
@@ -33,6 +34,7 @@ Name[uk]=Всі задачі виконано
 Name[xx]=xxAll jobs finishedxx
 Name[zh_CN]=全部任务都已完成
 Comment=All of the jobs in the queue have been finished
+Comment[bg]=Всички задачи в опашката завършиха
 Comment[ca]=Han acabat tots els treballs de la cua
 Comment[cs]=Všechny úkoly ve frontě byly dokončeny
 Comment[da]=Alle jobbene i køen er færdige
