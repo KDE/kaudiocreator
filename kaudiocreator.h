@@ -30,7 +30,7 @@ class Ripper;
 class Encoder;
 class KCModule;
 class EncoderConfigImp;
-class KPopupMenu;
+class KMenu;
 
 class KAudioCreator : public KMainWindow {
 
@@ -62,7 +62,7 @@ private:
   JobQueImp *jobQue;
   Ripper *ripper;
   Encoder *encoder;
-	KPopupMenu *ripMenu;
+	KMenu *ripMenu;
 
 };
 
