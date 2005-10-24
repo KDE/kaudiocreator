@@ -25,8 +25,8 @@
  * A helper function to replace %X with the stuff in the album.
  * if quote is true then put "" around the %X
  */
-QString Job::replaceSpecialChars(const QString &string, bool quote, QMap<QString, QString> _map){
-	QMap<QString,QString> map = _map;
+QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QString, QString> _map){
+	QHash<QString,QString> map = _map;
   
 	map.insert("title", track_title);
 	map.insert("artist", track_artist);

@@ -22,6 +22,7 @@
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
+#include <klocale.h>
 
 static const KCmdLineOptions options[] = {
   {"+[device]",I18N_NOOP( "CD device, can be a path or a media:/ URL" ),0},

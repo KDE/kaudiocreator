@@ -159,7 +159,7 @@ void Encoder::tendToNewJobs() {
 	
 	QString desiredFile = Prefs::fileFormat();
 	{
-		QMap <QString,QString> map;
+		QHash <QString,QString> map;
 		map.insert("extension", prefs->extension());
 		Job jobx = *job;
 		jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
@@ -196,7 +196,7 @@ void Encoder::tendToNewJobs() {
 	reportCount = 0;
 
 	QString command = prefs->commandLine(); {
-		QMap <QString,QString> map;
+		QHash <QString,QString> map;
 		map.insert("extension", prefs->extension());
 		map.insert("f", job->location);
 		map.insert("o", desiredFile);

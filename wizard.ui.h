@@ -101,7 +101,7 @@ void fileWizard::fileFormatTextChanged(const QString& text)
 	job.track_title = "Time";
 	job.track_artist = "John Rocker"; 
 	job.track_comment = "This Song Rocks!";
-	QMap<QString,QString> map;
+	QHash<QString,QString> map;
 	map.insert("extension", "mp3");
 	string = job.replaceSpecialChars(string, false, map);
 	exampleLabel->setText(i18n("Example: %1").arg(string));
