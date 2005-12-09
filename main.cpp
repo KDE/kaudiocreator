@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
   // command line
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
-  KApplication a(argc, argv);
+  KApplication a(true);
   KAudioCreator *app = new KAudioCreator(0, "MainWindow");
   a.setMainWidget(app);
 

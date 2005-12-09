@@ -50,7 +50,7 @@
  */
 KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	   KMainWindow(parent, name){
-	janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
+	janusWidget = new KJanusWidget(this,  KJanusWidget::Tabbed);
 	setCentralWidget(janusWidget);
 
 	KVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), 
