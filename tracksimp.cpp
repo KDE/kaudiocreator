@@ -243,24 +243,15 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 		CDInfoList cddb_info = cddb->lookupResponse();
 		CDInfoList::iterator it;
 		QStringList list;
-		uint defaultChoice = 0;
-		uint maxrev = 0;
-		uint c = 0;
 		for ( it = cddb_info.begin(); it != cddb_info.end(); ++it  ) {
 			list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title)
 			  .arg((*it).genre));
-			KCDDB::CDInfo cinfo = *it;
-			if ( ( *it ).revision >= maxrev ) {
-				maxrev = info.revision;
-				defaultChoice = c;
-			}
-			c++;
 		}
 
 		bool ok(false); 
 		QString res = KInputDialog::getItem(
 						i18n("Select CDDB entry"),
-						i18n("Select a CDDB entry:"), list, defaultChoice, false, &ok,
+						i18n("Select a CDDB entry:"), list, 0, false, &ok,
 						this );
 		if ( ok ) {
 			// The user selected and item and pressed OK
@@ -470,14 +461,27 @@ void TracksImp::newAlbum() {
 	emit(hasTracks(false));
 
 	KCDDB::TrackInfoList t = cddbInfo.trackInfoList;
+
+	bool isSampler = true;
+	for (unsigned i = 0; i < t.count(); i++)
+	{
+	    if (t[i].title.find(" / ") == -1)
+	    {
+		isSampler = false;
+		break;
+	    }
+	}
+
 	for (unsigned i = 0; i < t.count(); i++)
 	{
 		QString trackArtist;
 		QString title;
-		
-		// Support for multiple artists stripping.
-		int delimiter = t[i].title.find(" / ");
-		if (delimiter != -1) {
+
+		if (isSampler)
+		{
+			// Support for multiple artists stripping.
+			int delimiter = t[i].title.find(" / ");
+			Q_ASSERT(delimiter != -1);
 			trackArtist = t[i].title.left(delimiter);
 			title = t[i].title.mid(delimiter + 3);
 		}
