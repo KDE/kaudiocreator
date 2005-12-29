@@ -315,7 +315,7 @@ void TracksImp::editInformation( ) {
 	if( okClicked ) {
 		cddbInfo = base->info();
 		newAlbum();
-		KCDDB::Cache::store(cddbInfo);
+		cddb->store(cddbInfo);
 	}
 	delete dialog;
 }
