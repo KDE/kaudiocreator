@@ -133,7 +133,7 @@ void TracksImp::newDisc(unsigned discId)
 	{
 		kdDebug(60002) << "newDisc - No disc" << endl;
 		cddbInfo.clear();
-		cddbInfo.set("title", i18n("No disk"));
+		cddbInfo.set(Title, i18n("No disk"));
 		newAlbum();
 		emit(hasCD(false));
 
@@ -146,20 +146,18 @@ void TracksImp::newDisc(unsigned discId)
 	cddbInfo.clear();
 
 	cddbInfo.set("discid", discId);
-	cddbInfo.set("length", cd->discLength());
+	cddbInfo.set(Length, cd->discLength());
 
-	cddbInfo.set("artist", cd->discArtist());
-	cddbInfo.set("title", cd->discTitle());
+	cddbInfo.set(Artist, cd->discArtist());
+	cddbInfo.set(Title, cd->discTitle());
 
 	// If it's a sampler, we'll do artist/title.
-	bool isSampler = (cddbInfo.get("title").toString().compare("Various") == 0);
-	KCDDB::TrackInfo track;
+	bool isSampler = (cddbInfo.get(Title).toString().compare("Various") == 0);
 	for (unsigned i = 1; i <= cd->tracks(); i++) {
+		TrackInfo& track(cddbInfo.track(i-1));
 		if (isSampler)
-			track.set("title", cd->trackArtist(i) + " / " + cd->trackTitle(i));
-		else
-			track.set("title", cd->trackTitle(i));
-		cddbInfo.trackInfoList.append(track);
+			track.set(Artist, cd->trackArtist(i));
+		track.set(Title, cd->trackTitle(i));
 	}
 
 	newAlbum();
@@ -238,7 +236,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	}
 
 	// Choose the cddb entry
-	KCDDB::CDInfo info = cddb->bestLookupResponse();
+	KCDDB::CDInfo info = cddb->lookupResponse().first();
 	// TODO Why doesn't libcddb not return MultipleRecordFound?
 	//if( result == KCDDB::CDDB::MultipleRecordFound ) {
 	if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
@@ -247,8 +245,8 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 		CDInfoList::iterator it;
 		QStringList list;
 		for ( it = cddb_info.begin(); it != cddb_info.end(); ++it  ) {
-			list.append( QString("%1, %2, %3").arg((*it).get("artist").toString()).arg((*it).get("title").toString())
-			  .arg((*it).get("genre").toString()));
+			list.append( QString("%1, %2, %3").arg((*it).get(Artist).toString()).arg((*it).get(Title).toString())
+			  .arg((*it).get(Genre).toString()));
 		}
 
 		bool ok(false); 
@@ -276,16 +274,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 			return;
 	}
 
-	// Some sanity provisions to ensure that the number of records matches what
-	// the CD actually contains.
-	while (info.trackInfoList.count() < cddbInfo.trackInfoList.count())
-	{
-		info.trackInfoList.append(KCDDB::TrackInfo());
-	}
-	while (info.trackInfoList.count() > cddbInfo.trackInfoList.count())
-	{
-		info.trackInfoList.pop_back();
-	}
+	Q_ASSERT(info.numberOfTracks() == cddbInfo.numberOfTracks());
 	cddbInfo = info;
 	newAlbum();
 
@@ -326,7 +315,7 @@ QString TracksImp::formatTime(unsigned ms)
 
 	time = time.addMSecs((int)ms);
 
-    // Use ".zzz" for milliseconds...
+	// Use ".zzz" for milliseconds...
 	QString temp2;
 	if (time.hour() > 0)
 		temp2 = time.toString("hh:mm:ss");
@@ -360,13 +349,13 @@ void TracksImp::startSession( int encoder ) {
 	}
 
 	QStringList list;
-	if( cddbInfo.get("genre").toString() == QLatin1String("Unknown") )
+	if( cddbInfo.get(Genre).toString() == QLatin1String("Unknown") )
 		list += "Genre";
-	if( cddbInfo.get("year").toInt() == 0 )
+	if( cddbInfo.get(Year).toInt() == 0 )
 		list += "Year";
-	if( cddbInfo.get("artist").toString() == QLatin1String("Unknown Artist"))
+	if( cddbInfo.get(Artist).toString() == QLatin1String("Unknown Artist"))
 		list += "Artist";
-	if( cddbInfo.get("title").toString() == QLatin1String("Unknown Album"))
+	if( cddbInfo.get(Title).toString() == QLatin1String("Unknown Album"))
 		list += "Album";
 	
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
@@ -382,13 +371,13 @@ void TracksImp::startSession( int encoder ) {
 			Job *newJob = new Job();
 			newJob->encoder = encoder;
 			newJob->device = cd->device();
-			newJob->album = cddbInfo.get("title").toString();
-			newJob->genre = cddbInfo.get("genre").toString();
+			newJob->album = cddbInfo.get(Title).toString();
+			newJob->genre = cddbInfo.get(Genre).toString();
 			if( newJob->genre.isEmpty())
 				newJob->genre = "Pop";
-			newJob->group = cddbInfo.get("artist").toString();
-			newJob->comment = cddbInfo.get("extd").toString();
-			newJob->year = cddbInfo.get("year").toInt();
+			newJob->group = cddbInfo.get(Artist).toString();
+			newJob->comment = cddbInfo.get(Comment).toString();
+			newJob->year = cddbInfo.get(Year).toInt();
 			newJob->track = currentItem->text(HEADER_TRACK).toInt();
 			
 			newJob->track_title = currentItem->text(HEADER_TRACK_NAME);
@@ -457,47 +446,47 @@ void TracksImp::deselectAllTracks() {
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum() {
-	albumName->setText(QString("%1 - %2").arg(cddbInfo.get("artist").toString()).arg(cddbInfo.get("title").toString()));
+	albumName->setText(QString("%1 - %2").arg(cddbInfo.get(Artist).toString()).arg(cddbInfo.get(Title).toString()));
 	trackListing->clear();
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
 	emit(hasTracks(false));
 
-	KCDDB::TrackInfoList t = cddbInfo.trackInfoList;
- 
 	bool isSampler = true;
-	for (unsigned i = 0; i < t.count(); i++)
+	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
 	{
-	    if (t[i].get("title").toString().find(" / ") == -1)
-	    {
-		isSampler = false;
-		break;
-	    }
+		if (cddbInfo.track(i).get(Title).toString().find(" / ") == -1)
+		{
+			isSampler = false;
+			break;
+		}
 	}
  
-	for (unsigned i = 0; i < t.count(); i++)
+	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
 	{
 		QString trackArtist;
 		QString title;
 		
+		TrackInfo ti = cddbInfo.track(i);
+		
 		if (isSampler) {
 			// Support for multiple artists stripping.
-			int delimiter = t[i].get("title").toString().find(" / ");
+			int delimiter = ti.get(Title).toString().find(" / ");
 			Q_ASSERT(delimiter != -1);
-			trackArtist = t[i].get("title").toString().left(delimiter);
-			title = t[i].get("title").toString().mid(delimiter + 3);
+			trackArtist = ti.get(Title).toString().left(delimiter);
+			title = ti.get(Title).toString().mid(delimiter + 3);
 		}
 		else {
-			trackArtist = cddbInfo.get("artist").toString();
-			title = t[i].get("title").toString();
+			trackArtist = cddbInfo.get(Artist).toString();
+			title = ti.get(Title).toString();
 		}
 
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].get("extt").toString());
+		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, ti.get(Comment).toString());
 	}
 
-	if (t.count())
+	if (cddbInfo.numberOfTracks())
 	{
 		// Set the current selected track to the first one.
 		trackListing->setCurrentItem(trackListing->firstChild());
