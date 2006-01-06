@@ -25,7 +25,6 @@
 #include <q3listview.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
 #include <QKeyEvent>
 #include <klistview.h>
 #include <qpushbutton.h>
