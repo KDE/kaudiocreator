@@ -144,7 +144,7 @@ void TracksImp::newDisc(unsigned discId)
 
 	cddbInfo.clear();
 
-	cddbInfo.set("discid", discId);
+	cddbInfo.set("discid", QString::number(discId,16).rightJustify(8,'0'));
 	cddbInfo.set(Length, cd->discLength());
 
 	cddbInfo.set(Artist, cd->discArtist());
