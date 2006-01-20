@@ -33,5 +33,6 @@ Name[sr@Latn]=Izdvaja i kodira audio staze
 Name[sv]=Hämta och koda ljudspår
 Name[uk]=Витягає і кодує звукові доріжки
 Name[zh_CN]=提取并编码音轨
+Name[zh_HK]=擷取並將音軌編碼
 Exec=kaudiocreator %u
 Icon=kaudiocreator

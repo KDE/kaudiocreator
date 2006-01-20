@@ -38,6 +38,7 @@ Name[sr@Latn]=Svi poslovi završeni
 Name[sv]=Alla jobb är klara
 Name[uk]=Всі задачі виконано
 Name[zh_CN]=全部任务都已完成
+Name[zh_HK]=工作全部完成
 Comment=All of the jobs in the queue have been finished
 Comment[bg]=Всички задачи в опашката завършиха
 Comment[ca]=Han acabat tots els treballs de la cua
@@ -67,6 +68,7 @@ Comment[sr@Latn]=Svi poslovi iz redosleda su završeni
 Comment[sv]=Alla jobb i kön är klara
 Comment[uk]=Закінчено всі задачі в черзі
 Comment[zh_CN]=队列中的全部任务都已完成
+Comment[zh_HK]=佇列中所有工作已完成
 
 [track ripped]
 Name=Track Ripped
@@ -107,6 +109,7 @@ Name[tg]=Шиор Канда шудааст
 Name[tr]=Parça Dönüştürüldü
 Name[uk]=Витягнута доріжка
 Name[zh_CN]=音轨已抓取
+Name[zh_HK]=已擷取的音軌
 Comment=Track finished ripping
 Comment[bg]=Завършване на запис на пътечка
 Comment[bn]=ট্র্যাক রিপ করা শেষ
@@ -145,6 +148,7 @@ Comment[ta]=தடம் பிரித்தலை முடித்தது
 Comment[tr]=Parçanın dönüştürülmesi tamamlandı
 Comment[uk]=Витягування доріжки закінчено
 Comment[zh_CN]=音轨抓取完成
+Comment[zh_HK]=已完成擷取的音軌
 
 [cd ripped]
 Name=CD Ripped
@@ -188,6 +192,7 @@ Name[tr]=CD Dönüştürüldü
 Name[uk]=Витягнутий музичний КД
 Name[uz]=Компакт-диск риппер
 Name[zh_CN]=CD 已抓取
+Name[zh_HK]=已擷取的 CD
 Comment=CD finished ripping
 Comment[bg]=Завършване на запис на аудио диск
 Comment[bn]=সিডি রিপ করা শেষ
@@ -227,6 +232,7 @@ Comment[ta]=CD பிரித்தல் முடிந்தது
 Comment[tr]=CD'nin dönüştürülmesi tamamlandı
 Comment[uk]=Видирання КД завершено
 Comment[zh_CN]=CD 抓取完成
+Comment[zh_HK]=已完成擷取的 CD
 
 [track encoded]
 Name=Track Encoded
@@ -270,6 +276,7 @@ Name[tg]=Шиор Рамзӣ кунонида шудааст
 Name[tr]=Parça Dönüştürücü
 Name[uk]=Закодована доріжка
 Name[zh_CN]=音轨已编码
+Name[zh_HK]=已編碼的音軌
 Comment=Track finished encoding
 Comment[bg]=Завършване на кодиране на пътечка
 Comment[bn]=ট্র্যাক এনকোডিং করা শেষ
@@ -309,6 +316,7 @@ Comment[ta]=தடம் மறையாக்கத்தை முடித்
 Comment[tr]=Parça kodlama bitirildi
 Comment[uk]=Кодування доріжки закінчене
 Comment[zh_CN]=音轨编码完成
+Comment[zh_HK]=已完成編碼的音軌
 
 [cd encoded]
 Name=CD Encoded
@@ -352,6 +360,7 @@ Name[tg]=Диски Фишурда Рамзӣ кунонида шудааст
 Name[tr]=CD Dönüştürücü
 Name[uk]=Закодовано КД
 Name[zh_CN]=CD 已编码
+Name[zh_HK]=已編碼的 CD
 Comment=CD finished encoding
 Comment[bg]=Завършване на кодиране на аудио диск
 Comment[bn]=সিডি এনকোডিং করা শেষ
@@ -391,5 +400,6 @@ Comment[ta]=CD மறையாக்கத்தை முடித்தது.
 Comment[tr]=CD çözümleyici sonlandırıldı
 Comment[uk]=Кодування КД закінчено
 Comment[zh_CN]=CD 编码完成
+Comment[zh_HK]=已完成編碼的 CD
 default_presentation=17
 default_sound=KDE_ClockChime.wav
