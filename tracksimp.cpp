@@ -451,38 +451,14 @@ void TracksImp::newAlbum() {
 	deselectAllTracksButton->setEnabled(false);
 	emit(hasTracks(false));
 
-	bool isSampler = true;
 	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
 	{
-		if (cddbInfo.track(i).get(Title).toString().find(" / ") == -1)
-		{
-			isSampler = false;
-			break;
-		}
-	}
- 
-	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
-	{
-		QString trackArtist;
-		QString title;
-		
 		TrackInfo ti = cddbInfo.track(i);
-		
-		if (isSampler) {
-			// Support for multiple artists stripping.
-			int delimiter = ti.get(Title).toString().find(" / ");
-			Q_ASSERT(delimiter != -1);
-			trackArtist = ti.get(Title).toString().left(delimiter);
-			title = ti.get(Title).toString().mid(delimiter + 3);
-		}
-		else {
-			trackArtist = cddbInfo.get(Artist).toString();
-			title = ti.get(Title).toString();
-		}
-
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, ti.get(Comment).toString());
+		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing,
+			trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength,
+			ti.get(Title).toString(), ti.get(Artist).toString(), ti.get(Comment).toString());
 	}
 
 	if (cddbInfo.numberOfTracks())
