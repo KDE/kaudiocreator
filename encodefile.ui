@@ -38,7 +38,7 @@
                         <cstring>file</cstring>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>file</cstring>
                     </property>
