@@ -230,11 +230,11 @@ void Encoder::tendToNewJobs() {
  */
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length ) {
 	if ( Prefs::fullDecoderDebug() && buffer)
-		kdDebug(60002) << buffer << endl;
+		kDebug(60002) << buffer << endl;
 	
 	// Make sure we have a job to send an update too.
 	if(jobs.find((KShellProcess*)process) == jobs.end()){
-		kdDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
+		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
 		return;
 	}
 	
@@ -246,7 +246,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	// Make sure the output string has a % symble in it.
 	QString output = QString(buffer).mid(0,length);
 	if ( output.find('%') == -1 && reportCount < 5 ) {
-		kdDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
+		kDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
 		reportCount++;
 		return;
 	}
@@ -262,7 +262,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	// If it was just some random output that couldn't be converted then don't report the error.
 	else
 		if ( conversionSuccessfull )
-			kdWarning("Percent done:\"%d\" is not >= 0 && < 100.", percent);
+			kWarning("Percent done:\"%d\" is not >= 0 && < 100.", percent);
 }
 
 /**
