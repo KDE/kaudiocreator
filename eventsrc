@@ -6,30 +6,39 @@ Comment[x-test]=xxKAudioCreatorxx
 [no jobs left]
 Name=All jobs finshed
 Comment=All of the jobs in the queue have been finished
+Comment[fr]=Toutes les tâches dans la file d'attente sont terminées
 Comment[x-test]=xxAll of the jobs in the queue have been finishedxx
 
 [track ripped]
 Name=Track Ripped
+Name[fr]=Piste extraite
 Name[x-test]=xxTrack Rippedxx
 Comment=Track finished ripping
+Comment[fr]=Extraction de la piste terminée
 Comment[x-test]=xxTrack finished rippingxx
 
 [cd ripped]
 Name=CD Ripped
+Name[fr]=CD extrait
 Name[x-test]=xxCD Rippedxx
 Comment=CD finished ripping
+Comment[fr]=extraction du CD terminée
 Comment[x-test]=xxCD finished rippingxx
 
 [track encoded]
 Name=Track Encoded
+Name[fr]=Piste encodée
 Name[x-test]=xxTrack Encodedxx
 Comment=Track finished encoding
+Comment[fr]=Encodage de la piste terminé
 Comment[x-test]=xxTrack finished encodingxx
 
 [cd encoded]
 Name=CD Encoded
+Name[fr]=CD encodé
 Name[x-test]=xxCD Encodedxx
 Comment=CD finished encoding
+Comment[fr]=Encodage du CD terminé
 Comment[x-test]=xxCD finished encodingxx
 default_presentation=17
 default_sound=KDE_ClockChime.wav
