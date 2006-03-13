@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QKeyEvent>
-#include <klistview.h>
+#include <k3listview.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <kiconloader.h>
