@@ -20,7 +20,7 @@ set(kaudiocreator_SRCS
 
 kde4_automoc(${kaudiocreator_SRCS})
 
-kde4_add_ui_files(kaudiocreator_SRCS 
+kde4_add_ui3_files(kaudiocreator_SRCS 
    encoderedit.ui 
    jobque.ui 
    tracks.ui 
