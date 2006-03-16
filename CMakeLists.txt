@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/libkcddb ${CMAKE_SOURCE_DIR}/kscd ${KDE
 
 ########### next target ###############
 
-set(kaudiocreator_SRCS 
+set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} 
    main.cpp 
    kaudiocreator.cpp 
    encoder.cpp 
@@ -37,7 +37,7 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator  ${QT_AND_KDECORE_LIBS} kutils kio kcddb kcompactdisc )
+target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb )
 
 install_targets(/bin kaudiocreator )
 
