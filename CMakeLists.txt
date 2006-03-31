@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/libkcddb ${CMAKE_SOURCE_DIR}/kscd ${KDE
 
 ########### next target ###############
 
-set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} 
+set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} ${libworkman_SRCS} 
    main.cpp 
    kaudiocreator.cpp 
    encoder.cpp 
