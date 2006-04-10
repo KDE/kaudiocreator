@@ -93,7 +93,7 @@ void JobQueImp::addJob(Job*job, const QString &name ){
 	job->id = ++currentId;
 	QueListViewItem *currentItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
 	currentItem->setPixmap(ICON_LOC, SmallIcon("player_pause", currentItem->height()-2));
-	queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+	queLabel->setText(i18n("Number of jobs in the queue: %1", todoQue->childCount()));
 }
 
 /**
@@ -157,7 +157,7 @@ bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
 	if(!item)
 		return false;
 
-	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?").arg(item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStdGuiItem::del(), i18n("Keep"))
+	if(item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?", item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStdGuiItem::del(), i18n("Keep"))
 		  == KMessageBox::No ))
 		return false;
 
@@ -179,7 +179,7 @@ bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
 		currentId = 0;
 	}
 	else
-		queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+		queLabel->setText(i18n("Number of jobs in the queue: %1", todoQue->childCount()));
 	return true;
 }
 
@@ -247,7 +247,7 @@ void JobQueImp::clearDoneJobs(){
 		currentId = 0;
 	}
 	else
-		queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
+		queLabel->setText(i18n("Number of jobs in the queue: %1", todoQue->childCount()));
 }
 
 /**

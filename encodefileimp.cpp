@@ -66,7 +66,7 @@ void EncodeFileImp::encode(){
   int counter(1);
   KMessageBox::information(this,
   i18n("%1 Job(s) have been started.  You can watch their progress in the " \
-	  "jobs section.").arg(counter),
+	  "jobs section.", counter),
  i18n("Jobs have started"), i18n("Jobs have started"));
 }
 

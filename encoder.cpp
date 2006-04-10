@@ -128,7 +128,7 @@ void Encoder::removeJob(int id ) {
  * @param job the job to encode.
  */
 void Encoder::encodeWav(Job *job ) {
-	emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(prefs->extension()).arg(job->track_artist).arg(job->track_title)));
+	emit(addJob(job, i18n("Encoding (%1): %2 - %3", prefs->extension(), job->track_artist, job->track_title)));
 	pendingJobs.append(job);
 	tendToNewJobs();
 }
@@ -282,7 +282,7 @@ void Encoder::jobDone(KProcess *process ) {
 
 	bool showDebugBox = false;
 	if ( process->exitStatus() == 127 ) {
-		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
+		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
 		QFile::remove(job->location);
 		emit(updateProgress(job->id, -1));
 	}

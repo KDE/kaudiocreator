@@ -183,11 +183,11 @@ void KAudioCreator::updateStatus() {
 	int pendingEncodingJobs = encoder->pendingJobCount();
 
 	if ( activeRippingJobs ) {
-		rippingStatus = i18n("Ripping (%1 active, %2 queued)").arg( activeRippingJobs ).arg( pendingRippingJobs );
+		rippingStatus = i18n("Ripping (%1 active, %2 queued)", activeRippingJobs, pendingRippingJobs );
 		status = rippingStatus;
 	}
 	if ( activeEncodingJobs ) {
-		encodingStatus = i18n("Encoding (%1 active, %2 queued)").arg( activeEncodingJobs ).arg( pendingEncodingJobs );
+		encodingStatus = i18n("Encoding (%1 active, %2 queued)", activeEncodingJobs, pendingEncodingJobs );
 
 		if ( activeRippingJobs ) {
 			status.append(" : ");

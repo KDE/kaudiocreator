@@ -104,6 +104,6 @@ void fileWizard::fileFormatTextChanged(const QString& text)
 	QHash<QString,QString> map;
 	map.insert("extension", "mp3");
 	string = job.replaceSpecialChars(string, false, map);
-	exampleLabel->setText(i18n("Example: %1").arg(string));
+	exampleLabel->setText(i18n("Example: %1", string));
 }
 

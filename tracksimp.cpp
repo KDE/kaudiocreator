@@ -194,8 +194,8 @@ void TracksImp::changeDevice(const QString &file ) {
 	{
 		QString errstring =
 		  i18n("CDROM read or access error (or no audio disk in drive).\n"\
-		    "Please make sure you have access permissions to:\n%1")
-		    .arg(file);
+		    "Please make sure you have access permissions to:\n%1",
+		     file);
 		KMessageBox::error(this, errstring, i18n("Error"));
 	}
 }
@@ -358,7 +358,7 @@ void TracksImp::startSession( int encoder ) {
 		list += "Album";
 	
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
-		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"),i18n("Rip"),KStdGuiItem::cancel());
+		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?", list.join(", ")), i18n("Album Information Incomplete"),i18n("Rip"),KStdGuiItem::cancel());
 		if( r == KMessageBox::No )
 			return;
 	}
@@ -399,7 +399,7 @@ void TracksImp::startSession( int encoder ) {
 
 	KMessageBox::information(this,
 	i18n("%1 Job(s) have been started.  You can watch their progress in the "\
-	   "jobs section.").arg(counter),
+	   "jobs section.", counter),
 	i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
