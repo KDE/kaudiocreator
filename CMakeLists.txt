@@ -3,7 +3,7 @@ project(kaudiocreator)
 
 add_subdirectory( icons ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/libkcddb ${CMAKE_SOURCE_DIR}/kscd ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libkcddb ${CMAKE_BINARY_DIR}/libkcddb ${CMAKE_SOURCE_DIR}/kscd ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
