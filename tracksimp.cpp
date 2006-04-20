@@ -123,7 +123,7 @@ void TracksImp::newDisc(unsigned discId)
 	{
 		kdDebug() << "newDisc - No disc" << endl;
 		cddbInfo.clear();
-		cddbInfo.title = i18n("No disk");
+		cddbInfo.title = i18n("No disc");
 		newAlbum();
 		emit(hasCD(false));
 
@@ -464,7 +464,11 @@ void TracksImp::deselectAllTracks()
  */
 void TracksImp::newAlbum()
 {
-	albumName->setText(QString("%1 - %2").arg(cddbInfo.artist).arg(cddbInfo.title));
+    QString albumText = cddbInfo.title;
+    if( !cddbInfo.artist.isEmpty() )
+        albumText = cddbInfo.artist + i18n( " - " ) + albumText;
+    
+	albumName->setText( albumText );
 	trackListing->clear();
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
