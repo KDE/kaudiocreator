@@ -46,6 +46,7 @@
 
 #include <qtimer.h>
 #include <qfileinfo.h>
+#include <qptrlist.h>
 #include <kinputdialog.h>
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -345,15 +346,19 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession() {
-	startSession(-1);
-}
-
-void TracksImp::startSession( int encoder ) {
-	if( trackListing->childCount() == 0 ) {
-		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
-		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
-		return;
+void TracksImp::startSession( int encoder ) 
+{
+    QPtrList<QListViewItem> selected = selectedTracks();
+    
+	if( selected.isEmpty() )
+    {
+		int i = KMessageBox::questionYesNo( this, i18n("No tracks have been selected.  Would you like to rip the entire CD?"),
+                                            i18n("No Tracks Selected"), i18n("Rip CD"), KStdGuiItem::cancel() );
+		if( i == KMessageBox::No )
+            return;
+        
+        selectAllTracks();
+        selected = selectedTracks();
 	}
 
 	QStringList list;
@@ -366,49 +371,45 @@ void TracksImp::startSession( int encoder ) {
 	if( cddbInfo.title == "Unknown Album")
 		list += "Album";
 	
-	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
-		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"),i18n("Rip"),KStdGuiItem::cancel());
-		if( r == KMessageBox::No )
+	if( Prefs::promptIfIncompleteInfo() && list.count() > 0 )
+    {
+		int r = KMessageBox::questionYesNo( this, 
+                 i18n( "Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"), i18n("Rip"), KStdGuiItem::cancel() );
+		
+        if( r == KMessageBox::No )
 			return;
 	}
-	QListViewItem * currentItem = trackListing->firstChild();
-	Job *lastJob = NULL;
-	int counter = 0;
-	while( currentItem != NULL ) {
-		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
-			Job *newJob = new Job();
-			newJob->encoder = encoder;
-			newJob->device = cd->device();
-			newJob->album = cddbInfo.title;
-			newJob->genre = cddbInfo.genre;
-			if( newJob->genre.isEmpty())
-				newJob->genre = "Pop";
-			newJob->group = cddbInfo.artist;
-			newJob->comment = cddbInfo.extd;
-			newJob->year = cddbInfo.year;
-			newJob->track = currentItem->text(HEADER_TRACK).toInt();
-			
-			newJob->track_title = currentItem->text(HEADER_TRACK_NAME);
-			newJob->track_artist = currentItem->text(HEADER_TRACK_ARTIST);
-			newJob->track_comment = currentItem->text(HEADER_TRACK_COMMENT);
-			lastJob = newJob;
-			emit( ripTrack(newJob) ); 
-			counter++;
-		}
-		currentItem = currentItem->nextSibling();
+    
+    Job *lastJob = 0;
+	QListViewItem *item = selected.first();
+    
+	for( ; item ; item = selected.next() ) 
+    {
+        Job *newJob = new Job();
+        newJob->encoder = encoder;
+        newJob->device  = cd->device();
+        newJob->album   = cddbInfo.title;
+        newJob->genre   = cddbInfo.genre;
+        if( newJob->genre.isEmpty() )
+            newJob->genre = "Pop";
+        
+        newJob->group   = cddbInfo.artist;
+        newJob->comment = cddbInfo.extd;
+        newJob->year    = cddbInfo.year;
+        newJob->track   = item->text( HEADER_TRACK ).toInt();
+        
+        newJob->track_title   = item->text( HEADER_TRACK_NAME );
+        newJob->track_artist  = item->text( HEADER_TRACK_ARTIST );
+        newJob->track_comment = item->text( HEADER_TRACK_COMMENT );
+        lastJob = newJob;
+        emit( ripTrack(newJob) ); 
 	}
 	if( lastJob)
 		lastJob->lastSongInAlbum = true;
 
-	if( counter == 0 ) {
-		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
-		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
-		return;
-	}
-
 	KMessageBox::information(this,
-	i18n("%1 Job(s) have been started.  You can watch their progress in the "\
-	   "jobs section.").arg(counter),
+	i18n("%1 Job(s) have been started.  You can watch their progress in the "
+	     "jobs section.").arg( selected.count() ),
 	i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
@@ -427,13 +428,29 @@ void TracksImp::selectTrack(QListViewItem *currentItem ) {
 		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
 }
 
+QPtrList<QListViewItem> TracksImp::selectedTracks()
+{
+    QPtrList<QListViewItem> selected;
+    QListViewItem *currentItem = trackListing->firstChild();
+    
+    while( currentItem )
+    {
+        if( currentItem->pixmap(HEADER_RIP) != NULL ) 
+            selected.append( currentItem );
+        currentItem = currentItem->nextSibling();
+    }
+    return selected;
+}
+
 /**
  * Turn on all of the tracks.
  */
-void TracksImp::selectAllTracks() {
+void TracksImp::selectAllTracks()
+{
 	QListViewItem *currentItem = trackListing->firstChild();
-	while( currentItem != NULL ) {
-		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
+	while( currentItem )
+    {
+		currentItem->setPixmap( HEADER_RIP, SmallIcon("check", currentItem->height()-2) );
 		currentItem = currentItem->nextSibling();
 	}
 }
@@ -492,7 +509,7 @@ void TracksImp::newAlbum() {
 
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		QListViewItem * newItem = new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
+		/*QListViewItem * newItem = */new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
 	}
 
 	if (t.count())

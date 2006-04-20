@@ -50,74 +50,67 @@
  * Constructor. Connect all of the object and the job control.
  */
 KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
-	   KMainWindow(parent, name){
+	   KMainWindow(parent, name)
+{
 	janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
 	setCentralWidget(janusWidget);
 
-	QVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), 
-		     QString::null, SmallIcon("cdaudio_unmount", 32));
+	QVBox *frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), QString::null, SmallIcon("cdaudio_unmount", 32));
 	tracks = new TracksImp(frame, "Tracks");
-	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
-	ripper = new Ripper(frame, "Rip");
-	encoder = new Encoder(frame, "Encoder");
+    
+	
+	ripper  = new Ripper ( frame, "Rip" );
+	encoder = new Encoder( frame, "Encoder" );
 
-	frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null,
-		     SmallIcon("run", 32));
-	jobQue = new JobQueImp(frame, "Que");
-
-	connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
-	connect(ripper, SIGNAL(updateProgress(int, int)), jobQue,
-		  SLOT(updateProgress(int,int)));
-	connect(ripper, SIGNAL(addJob(Job*, const QString &)), jobQue,
-		  SLOT(addJob(Job*, const QString &)));
-
-	connect(jobQue, SIGNAL(removeJob(int)), encoder, SLOT(removeJob(int)));
-	connect(encoder, SIGNAL(updateProgress(int, int)), jobQue,
-		  SLOT(updateProgress(int,int)));
-	connect(encoder, SIGNAL(addJob(Job*, const QString &)), jobQue,
-		  SLOT(addJob(Job*, const QString &)));
-
-	connect(tracks, SIGNAL(ripTrack(Job *)), ripper, SLOT(ripTrack(Job *)));
-	connect(ripper, SIGNAL(eject(const QString &)), tracks,
-	  SLOT(ejectDevice(const QString &)));
-
-	connect(ripper, SIGNAL(encodeWav(Job *)), encoder, SLOT(encodeWav(Job *)));
-
-	connect( ripper, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
-	connect( encoder, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
-	connect( jobQue, SIGNAL( removeJob( int ) ), this, SLOT( updateStatus() ) );
+	frame = janusWidget->addVBoxPage( i18n("&Jobs"), QString::null, SmallIcon( "run", 32 ) );
+	jobQue = new JobQueImp( frame, "Que" );
 
 	resize(500, 440);
 
-	KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks,
-		  SLOT(eject()),actionCollection(), "eject" );
+	/*KAction *eject = */new KAction( i18n("&Eject CD"), 0, tracks,
+		                          SLOT( eject() ), actionCollection(), "eject" );
 
-	(void)new KAction(i18n("&Configure KAudioCreator..."), 0, this,
-		  SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
+	(void)new KAction( i18n("&Configure KAudioCreator..."), 0, this,
+		               SLOT( showSettings() ), actionCollection(), "configure_kaudiocreator" );
 
-	KAction *selectAll = new KAction(i18n("Select &All Tracks"), 0, tracks,
-		  SLOT(selectAllTracks()), actionCollection(), "select_all" );
-	connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
+	KAction *selectAll   = new KAction( i18n( "Select &All Tracks"), 0, tracks,
+		                                SLOT( selectAllTracks()   ), actionCollection(), "select_all" ) ;
+	KAction *deselectAll = new KAction( i18n( "Deselect &All Tracks"), 0, tracks,
+		                                SLOT( deselectAllTracks() ), actionCollection(), "deselect_all" );
+	
 
-	KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), 0, tracks,
-		  SLOT(deselectAllTracks()), actionCollection(), "deselect_all" );
-	connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
-
-	KActionMenu *actActionMenu = new
-		KActionMenu( i18n("Rip &Selection"), "rip", actionCollection(),
-					 	"rip" );
+	KActionMenu *actActionMenu = new KActionMenu( i18n("Rip &Selection"), "rip", actionCollection(), "rip" );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
-	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
+	connect( actActionMenu, SIGNAL( activated() ), tracks, SLOT( startSession() ) );
 
 	ripMenu = actActionMenu->popupMenu();
-	connect(ripMenu, SIGNAL(activated(int)),this,SLOT(slotRipSelection(int)));
-	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(getRipMenu()));
+	connect( ripMenu, SIGNAL( activated(int) ), this, SLOT( slotRipSelection(int)) );
+	connect( ripMenu, SIGNAL( aboutToShow() ),  this, SLOT( getRipMenu()) );
 
-	KAction *rip = new KAction(i18n("Rip &Selection"), 0, tracks,
-		  SLOT(startSession()), actionCollection(), "rip_selected" );
+	KAction *rip = new KAction( i18n( "Rip &Selection" ), 0, tracks,
+	                            SLOT( startSession() ), actionCollection(), "rip_selected" );
 	
-	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
-	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
+    connect( jobQue, SIGNAL( removeJob(int) ), this,    SLOT( updateStatus() ) );
+    connect( jobQue, SIGNAL( removeJob(int) ), ripper,  SLOT( removeJob(int) ) );
+    connect( jobQue, SIGNAL( removeJob(int) ), encoder, SLOT( removeJob(int)) );
+    
+    connect( ripper, SIGNAL( updateProgress(int, int) )     , jobQue,  SLOT( updateProgress(int,int) ) );
+    connect( ripper, SIGNAL( addJob(Job*, const QString &) ), jobQue,  SLOT( addJob(Job*, const QString &)) );
+    connect( ripper, SIGNAL( eject(const QString &) )       , tracks,  SLOT( ejectDevice(const QString &)) );
+    connect( ripper, SIGNAL( encodeWav(Job *) )             , encoder, SLOT( encodeWav(Job *)) );
+    connect( ripper, SIGNAL( jobsChanged() )                , this,    SLOT( updateStatus() ) );   
+
+    
+    connect( encoder, SIGNAL( updateProgress(int, int) )   , jobQue,  SLOT( updateProgress(int,int)) );
+    connect( encoder, SIGNAL( addJob(Job*, const QString&)), jobQue,  SLOT( addJob(Job*, const QString &)) );
+    connect( encoder, SIGNAL( jobsChanged() )              , this,    SLOT( updateStatus() ) );
+    
+    connect( tracks, SIGNAL( hasCD(bool) )    , this,          SLOT( hasCD(bool) ) );
+    connect( tracks, SIGNAL( ripTrack(Job *) ), ripper,        SLOT( ripTrack(Job *)) );   
+	connect( tracks, SIGNAL( hasTracks(bool) ), rip,           SLOT( setEnabled(bool)) );
+	connect( tracks, SIGNAL( hasTracks(bool) ), actActionMenu, SLOT( setEnabled(bool)) );
+    connect( tracks, SIGNAL( hasTracks(bool) ), deselectAll,   SLOT( setEnabled(bool)) );
+    connect( tracks, SIGNAL( hasTracks(bool) ), selectAll,     SLOT( setEnabled(bool)) );   
 
 	(void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue,
 		  SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );

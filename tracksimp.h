@@ -54,8 +54,7 @@ public slots:
 	void loadSettings();
 
 	// Toolbar Buttons
-	void startSession();
-	void startSession( int encoder );
+	void startSession( int encoder = -1 );
 	void editInformation();
 	void performCDDB();
 	void ejectDevice(const QString &deviceToEject);
@@ -77,6 +76,8 @@ private:
 	void lookupCDDB();
 	void newAlbum();
 	void ripWholeAlbum();
+    QPtrList<QListViewItem> selectedTracks();   
+    
 	QString formatTime(unsigned ms);
 
 	KCDDB::Client* cddb;
