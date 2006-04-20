@@ -81,6 +81,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	KActionMenu *actActionMenu = new KActionMenu( i18n("Rip &Selection"), "rip", actionCollection(), "rip" );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
+    actActionMenu->setEnabled( false );   
 	connect( actActionMenu, SIGNAL( activated() ), tracks, SLOT( startSession() ) );
 
 	ripMenu = actActionMenu->popupMenu();
@@ -118,6 +119,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KAction *edit = new KAction(i18n("&Edit Album..."), 0, tracks,
 		  SLOT(editInformation()), actionCollection(), "edit_cd");
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
+    edit->setEnabled( false );   
 
 	(void)new KAction(i18n("Encode &File..."), 0, this,
 		  SLOT(encodeFile()), actionCollection(), "encode_file");
@@ -125,6 +127,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks,
 		  SLOT(performCDDB()), actionCollection(), "cddb_now");
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
+    cddb->setEnabled( false );   
 
 	KStdAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());

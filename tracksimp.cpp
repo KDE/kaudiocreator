@@ -289,7 +289,9 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
-void TracksImp::editInformation( ) {
+void TracksImp::editInformation( )
+{
+    if( !hasCD() ) return;
 	// Create dialog.
 	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Editor" ),
 										   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true );
