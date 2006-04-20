@@ -17,41 +17,34 @@
  * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include "tracksimp.h"
-#include "job.h"
-#include "libkcddb/cdinfodialogbase.h"
-#include "prefs.h"
-#include "kcompactdisc.h"
-#include <qlabel.h>
-#include <qlistview.h>
-#include <klistview.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kurl.h>
-#include <qregexp.h>
-#include <kinputdialog.h>
+
+
 #include <dcopref.h>
+#include <fixx11h.h>
 
-#define HEADER_RIP 0
-#define HEADER_TRACK 1
-#define HEADER_LENGTH 2
-#define HEADER_TRACK_NAME 3
-#define HEADER_TRACK_ARTIST 4
-#define HEADER_TRACK_COMMENT 5
-
-#include <kconfig.h>
 #include <kapplication.h>
-
-#include <qtimer.h>
-#include <qfileinfo.h>
-#include <qptrlist.h>
-#include <kinputdialog.h>
+#include <kconfig.h>
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <kinputdialog.h>
+#include <klistview.h>
 #include <kprocess.h>
-#include <fixx11h.h>
+#include <kmessagebox.h>
+#include <kurl.h>
+
+#include <qfileinfo.h>
+#include <qlabel.h>
+#include <qptrlist.h>
+#include <qpushbutton.h>
+#include <qregexp.h>
+#include <qspinbox.h>
+#include <qtimer.h>
+
+#include "job.h"
+#include "kcompactdisc.h"
+#include "libkcddb/cdinfodialogbase.h"
+#include "prefs.h"
+#include "tracksimp.h"
 
 /**
  * Constructor, connect up slots and signals.
@@ -73,8 +66,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
-	connect(cddb, SIGNAL(finished(CDDB::Result)),
-	                  this, SLOT(lookupCDDBDone(CDDB::Result)));
+	connect(cddb, SIGNAL(finished(CDDB::Result)), this, SLOT(lookupCDDBDone(CDDB::Result)));
 	trackListing->setSorting(-1, false);
 	loadSettings();
 }
@@ -348,7 +340,7 @@ void TracksImp::ripWholeAlbum() {
  */
 void TracksImp::startSession( int encoder ) 
 {
-    QPtrList<QListViewItem> selected = selectedTracks();
+    QPtrList<TracksItem> selected = selectedTracks();
     
 	if( selected.isEmpty() )
     {
@@ -381,7 +373,7 @@ void TracksImp::startSession( int encoder )
 	}
     
     Job *lastJob = 0;
-	QListViewItem *item = selected.first();
+	TracksItem *item = selected.first();
     
 	for( ; item ; item = selected.next() ) 
     {
@@ -396,11 +388,11 @@ void TracksImp::startSession( int encoder )
         newJob->group   = cddbInfo.artist;
         newJob->comment = cddbInfo.extd;
         newJob->year    = cddbInfo.year;
-        newJob->track   = item->text( HEADER_TRACK ).toInt();
+        newJob->track   = item->track();
         
-        newJob->track_title   = item->text( HEADER_TRACK_NAME );
-        newJob->track_artist  = item->text( HEADER_TRACK_ARTIST );
-        newJob->track_comment = item->text( HEADER_TRACK_COMMENT );
+        newJob->track_title   = item->title();
+        newJob->track_artist  = item->artist();
+        newJob->track_comment = item->comment();
         lastJob = newJob;
         emit( ripTrack(newJob) ); 
 	}
@@ -417,27 +409,26 @@ void TracksImp::startSession( int encoder )
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksImp::selectTrack(QListViewItem *currentItem ) {
-	if(!currentItem)
-		return;
-	if( currentItem->pixmap(HEADER_RIP) != NULL ) {
-		QPixmap empty;
-		currentItem->setPixmap(HEADER_RIP, empty);
-	}
-	else
-		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
+void TracksImp::selectTrack( QListViewItem *item )
+{
+    if( !item )
+        return;
+        
+#define item static_cast<TracksItem*>(item)
+    item->setChecked( !item->checked() );
+#undef item
 }
 
-QPtrList<QListViewItem> TracksImp::selectedTracks()
+QPtrList<TracksItem> TracksImp::selectedTracks()
 {
-    QPtrList<QListViewItem> selected;
-    QListViewItem *currentItem = trackListing->firstChild();
+    QPtrList<TracksItem> selected;
+    TracksItem *item = static_cast<TracksItem*>(trackListing->firstChild());
     
-    while( currentItem )
+    while( item )
     {
-        if( currentItem->pixmap(HEADER_RIP) != NULL ) 
-            selected.append( currentItem );
-        currentItem = currentItem->nextSibling();
+        if( item->checked() ) 
+            selected.append( item );
+        item = static_cast<TracksItem*>(item->nextSibling());
     }
     return selected;
 }
@@ -447,58 +438,62 @@ QPtrList<QListViewItem> TracksImp::selectedTracks()
  */
 void TracksImp::selectAllTracks()
 {
-	QListViewItem *currentItem = trackListing->firstChild();
+	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
 	while( currentItem )
     {
-		currentItem->setPixmap( HEADER_RIP, SmallIcon("check", currentItem->height()-2) );
-		currentItem = currentItem->nextSibling();
+		currentItem->setChecked( true );
+		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
 	}
 }
 
 /**
  * Turn off all of the tracks.
  */
-void TracksImp::deselectAllTracks() {
-	QListViewItem *currentItem = trackListing->firstChild();
-	QPixmap empty;
-	while( currentItem != NULL ) {
-		currentItem->setPixmap(HEADER_RIP, empty);
-		currentItem = currentItem->nextSibling();
+void TracksImp::deselectAllTracks()
+{
+	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
+	while( currentItem )
+    {
+		currentItem->setChecked( false );
+		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
 	}
 }
 
 /**
  * Set the current stats for the new album being displayed.
  */
-void TracksImp::newAlbum() {
+void TracksImp::newAlbum()
+{
 	albumName->setText(QString("%1 - %2").arg(cddbInfo.artist).arg(cddbInfo.title));
 	trackListing->clear();
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
-	emit(hasTracks(false));
+	
+    emit( hasTracks(false) );
 
 	KCDDB::TrackInfoList t = cddbInfo.trackInfoList;
 
 	bool isSampler = true;
-	for (unsigned i = 0; i < t.count(); i++)
+	for( unsigned i = 0; i < t.count(); i++ )
 	{
 	    if (t[i].title.find(" / ") == -1)
 	    {
-		isSampler = false;
-		break;
+            isSampler = false;
+            break;
 	    }
 	}
 
-	for (unsigned i = 0; i < t.count(); i++)
+    TracksItem *last = 0;
+	for( unsigned i = 0; i < t.count(); i++ )
 	{
 		QString trackArtist;
 		QString title;
 
-		if (isSampler)
+		if( isSampler )
 		{
 			// Support for multiple artists stripping.
 			int delimiter = t[i].title.find(" / ");
-			Q_ASSERT(delimiter != -1);
+			Q_ASSERT( delimiter != -1 );
 			trackArtist = t[i].title.left(delimiter);
 			title = t[i].title.mid(delimiter + 3);
 		}
@@ -509,10 +504,10 @@ void TracksImp::newAlbum() {
 
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		/*QListViewItem * newItem = */new QListViewItem(trackListing, trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength, title, trackArtist, t[i].extt);
+        last = new TracksItem( trackListing, last, title, trackArtist, i+1, trackLength, t[i].extt );
 	}
 
-	if (t.count())
+	if( t.count() )
 	{
 		// Set the current selected track to the first one.
 		trackListing->setCurrentItem(trackListing->firstChild());
@@ -527,10 +522,17 @@ void TracksImp::newAlbum() {
  * If the user presses the F2 key, trigger renaming of the title.
  * @param event the QKeyEvent passed to this event handler.
  */
-void TracksImp::keyPressEvent(QKeyEvent *event) {
-	if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
-		event->accept();
-		trackListing->selectedItem()->startRename(HEADER_TRACK_NAME);
+void TracksImp::keyPressEvent(QKeyEvent *event)
+{
+    QListViewItem *item = trackListing->selectedItem();
+    if( !item ) return;
+    
+	if( event->key() == Qt::Key_F2 ) 
+    {
+        item->setRenameEnabled( HEADER_TRACK_NAME, true );
+		item->startRename( HEADER_TRACK_NAME );
+        static_cast<TracksItem*>(item)->setTitle( item->text( HEADER_TRACK_NAME ) );
+        event->accept();      
 	}
 	else
 		Tracks::keyPressEvent(event);

@@ -22,15 +22,63 @@
 #define TRACKSIMP_H
 
 #include "tracks.h"
+#include <kiconloader.h>
+#include <klistview.h>
 #include <klocale.h>
 
 // CDDB support via libkcddb
 #include <libkcddb/client.h>
 
+#define HEADER_RIP 0
+#define HEADER_TRACK 1
+#define HEADER_LENGTH 2
+#define HEADER_TRACK_NAME 3
+#define HEADER_TRACK_ARTIST 4
+#define HEADER_TRACK_COMMENT 5
+
 using namespace KCDDB;
 class Job;
 class KProcess;
 class KCompactDisc;
+
+class TracksItem : public KListViewItem
+{
+public:
+    TracksItem( KListView *parent, KListViewItem *after, QString t, QString a, int tr, QString l, QString c )
+        : KListViewItem( parent, after, QString::null/*rip*/, QString::number(tr), l, t )
+    {
+        m_title = t;
+        m_artist = a;
+        m_length = l;
+        m_track = tr;
+        m_comment = c;
+        m_checked = false;
+    }
+
+    QString title()     const { return m_title; }
+    QString artist()    const { return m_artist; }
+    int     track()     const { return m_track; }
+    QString length()    const { return m_length; }
+    bool    checked()   const { return m_checked; }
+    QString comment()   const { return m_comment; }
+    #include <kdebug.h>
+    void    setTitle( const QString &t )  { m_title = t; kdDebug() << "title: " << m_title << endl; }
+    void    setChecked( const bool &b )   { 
+        m_checked = b;
+        b ? setPixmap( HEADER_RIP, SmallIcon( "apply", height()-2 ) ) :
+            setPixmap( HEADER_RIP, 0 );
+    }
+
+private:
+    QString m_title;
+    QString m_artist;
+    int     m_track;
+    QString m_length;
+    QString m_comment;
+    bool    m_checked; // marked for ripping
+};
+
+
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
@@ -63,26 +111,23 @@ public slots:
 	void deselectAllTracks();
 
 private slots:
-	void newDisc(unsigned discId);
- 
-	void selectTrack(QListViewItem *);
+    void changeDevice(const QString &file);
 	void keyPressEvent(QKeyEvent *event);
- 
-	void changeDevice(const QString &file);
 	void lookupCDDBDone(CDDB::Result result);
+    void newDisc(unsigned discId);   
+    void selectTrack(QListViewItem *);   
 
 private:
 	void lookupDevice();
 	void lookupCDDB();
 	void newAlbum();
 	void ripWholeAlbum();
-    QPtrList<QListViewItem> selectedTracks();   
+    QPtrList<TracksItem> selectedTracks();   
     
 	QString formatTime(unsigned ms);
 
-	KCDDB::Client* cddb;
-
-	KCompactDisc* cd;
+	KCDDB::Client *cddb;
+	KCompactDisc  *cd;
 
 	// Current album
 	KCDDB::CDInfo cddbInfo;
