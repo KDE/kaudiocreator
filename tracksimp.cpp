@@ -402,7 +402,8 @@ void TracksImp::startSession( int encoder )
         newJob->year    = cddbInfo.year;
         newJob->track   = item->track();
         
-        newJob->track_title   = item->title();
+//         newJob->track_title   = item->title();
+        newJob->track_title   = item->text( HEADER_TRACK_NAME );
         newJob->track_artist  = item->artist();
         newJob->track_comment = item->comment();
         lastJob = newJob;
@@ -547,7 +548,6 @@ void TracksImp::keyPressEvent(QKeyEvent *event)
     {
         item->setRenameEnabled( HEADER_TRACK_NAME, true );
         item->startRename( HEADER_TRACK_NAME );
-        static_cast<TracksItem*>(item)->setTitle( item->text( HEADER_TRACK_NAME ) );
         event->accept();      
     }
     else
