@@ -16,8 +16,6 @@ kaudiocreator_LDFLAGS = $(all_libraries) $(KDE_RPATH) -lkutils
 
 METASOURCES = AUTO
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kaudiocreator.pot
 
 kaudiocreator_LDADD = $(LIB_KIO) $(top_builddir)/libkcddb/libkcddb.la \
 	$(top_builddir)/kscd/libkcompactdisc.la
