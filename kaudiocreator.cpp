@@ -53,16 +53,19 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	janusWidget = new KJanusWidget(this,  KJanusWidget::Tabbed);
 	setCentralWidget(janusWidget);
 
-	KVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), 
+	KVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),
 		     QString::null, SmallIcon("cdaudio_unmount", 32));
 	tracks = new TracksImp(frame, "Tracks");
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
-	ripper = new Ripper(frame, "Rip");
-	encoder = new Encoder(frame, "Encoder");
+	ripper = new Ripper( frame );
+        ripper->setObjectName( "Rip" );
+	encoder = new Encoder(frame );
+        encoder->setObjectName("Encoder");
 
 	frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null,
 		     SmallIcon("run", 32));
-	jobQue = new JobQueImp(frame, "Que");
+	jobQue = new JobQueImp(frame);
+        jobQue->setObjectName("Que");
 
 	connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
 	connect(ripper, SIGNAL(updateProgress(int, int)), jobQue,
@@ -114,7 +117,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	KAction *rip = new KAction(i18n("Rip &Selection"), 0, tracks,
 		  SLOT(startSession()), actionCollection(), "rip_selected" );
-	
+
 	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
 	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
 
@@ -135,11 +138,11 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KStdAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());
 	KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
-	
+
 	// Init statusbar
 	statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
 	hasCD(tracks->hasCD());
-	
+
 	setupGUI();
 }
 

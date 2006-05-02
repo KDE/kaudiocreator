@@ -141,7 +141,7 @@ void JobQueImp::updateProgress(int id, int progress){
 		}
 		currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
 	}
-	if(currentJobCount > 0 && numberOfJobsNotFinished() == 0) 
+	if(currentJobCount > 0 && numberOfJobsNotFinished() == 0)
 		KNotifyClient::event("no jobs left");
 }
 
@@ -281,18 +281,18 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	p->setPen(cg.base());
 	p->drawRect(0,0,width,height());
 	if(isSelected())
-		p->fillRect(1,1,width-2,height()-2,cg.highlight());
+            p->fillRect(1,1,width-2,height()-2,cg.color( QPalette::Highlight));
 	else
-		p->fillRect(1,1,width-2,height()-2,cg.base());
+            p->fillRect(1,1,width-2,height()-2,cg.color( QPalette::Base));
 
 	int percent = (int)(((double)(width-2)) * (percentDone/100));
 
-	p->fillRect(1,1,percent,height()-2,cg.mid());
+	p->fillRect(1,1,percent,height()-2,cg.color( QPalette::Mid ));
 
 	// show the text
 	p->setPen(cg.text());
 	if(isSelected())
-		p->setPen(cg.highlightedText());
+            p->setPen(cg.color( QPalette::HighlightedText));
 	if(percentDone != -1)
 	p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,QString().setNum((int)percentDone) + "%");
 	else

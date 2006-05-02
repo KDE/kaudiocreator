@@ -31,7 +31,7 @@
 /**
  * Constructor, load settings.
  */
-Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
+Ripper::Ripper( QObject* parent) : QObject(parent) {
 	loadSettings();
 }
 
@@ -185,7 +185,7 @@ void Ripper::tendToNewJobs(){
 	jobs.insert(copyJob, job);
 	connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
 	connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
-	
+
 	emit jobsChanged();
 }
 

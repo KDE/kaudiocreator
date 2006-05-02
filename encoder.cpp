@@ -22,7 +22,7 @@
 #include "prefs.h"
 #include "encoder_prefs.h"
 #include "encoderoutput.h"
- 
+
 #include <qregexp.h>
 #include <qdir.h>
 #include <kstandarddirs.h>
@@ -42,7 +42,7 @@ Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),report
 
 /**
  * Load the settings for this class.
- */ 
+ */
 void Encoder::loadSettings() {
 	loadEncoder(Prefs::currentEncoder());
 	// If the cpu count change then try
@@ -56,7 +56,7 @@ void Encoder::loadEncoder( int encoder ){
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString::null);
-	}				
+	}
 }
 
 /**
@@ -78,14 +78,14 @@ Encoder::~Encoder() {
 	jobs.clear();
 }
 
-/** 
+/**
  * @return The number of active jobs
  */
 int Encoder::activeJobCount() {
 	return jobs.count();
 }
 
-/** 
+/**
  * @return The number of pending jobs
  */
 int Encoder::pendingJobCount() {
@@ -151,12 +151,12 @@ void Encoder::tendToNewJobs() {
 
 	Job *job = pendingJobs.first();
 	pendingJobs.remove(job);
-	
+
 	// if encoder is selected load it.
 	if ( job->encoder != -1 ){
 		loadEncoder(job->encoder);
 	}
-	
+
 	QString desiredFile = Prefs::fileFormat();
 	{
 		QHash <QString,QString> map;
@@ -176,14 +176,14 @@ void Encoder::tendToNewJobs() {
 			desiredFile, &ok );
 		if ( ok && !text.isEmpty() )
 		 	desiredFile = text;
-		else {	
+		else {
 			emit jobsChanged();
 			updateProgress(job->id, -1);
 			return;
 		}
 	}
-	
-	int lastSlash = desiredFile.findRev('/',-1);
+
+	int lastSlash = desiredFile.lastIndexOf('/',-1);
 	if ( lastSlash == -1 ||
 			!(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash))) ) {
 		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed"));
@@ -208,7 +208,7 @@ void Encoder::tendToNewJobs() {
 	job->errorString = command;
 	KShellProcess *proc = new KShellProcess();
 	proc->setPriority(Prefs::niceLevel());
- 
+
 	*proc << QFile::encodeName(command);
 	connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
 		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
@@ -231,27 +231,27 @@ void Encoder::tendToNewJobs() {
 void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length ) {
 	if ( Prefs::fullDecoderDebug() && buffer)
 		kDebug(60002) << buffer << endl;
-	
+
 	// Make sure we have a job to send an update too.
 	if(jobs.find((KShellProcess*)process) == jobs.end()){
 		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
 		return;
 	}
-	
+
 	Job *job = jobs[(KShellProcess*)process];
 
 	// Keep the output in the event it fails.
-	job->output += QString(buffer).mid(0,length); 
+	job->output += QString(buffer).mid(0,length);
 
 	// Make sure the output string has a % symble in it.
 	QString output = QString(buffer).mid(0,length);
-	if ( output.find('%') == -1 && reportCount < 5 ) {
+	if ( !output.contains('%') && reportCount < 5 ) {
 		kDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
 		reportCount++;
 		return;
 	}
 	//qDebug(QString("Pre cropped: %1").arg(output).latin1());
-	output = output.mid(output.find('%')-prefs->percentLength(),2);
+	output = output.mid(output.indexOf('%')-prefs->percentLength(),2);
 	//qDebug(QString("Post cropped: %1").arg(output).latin1());
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);
@@ -273,9 +273,9 @@ void Encoder::jobDone(KProcess *process ) {
 	// Normal error checking here.
 	if ( !process)
 		return;
- 
+
 	//qDebug("Process exited with status: %d", process->exitStatus());
-	
+
 	Job *job = jobs[(KShellProcess*)process];
 	threads.remove((KShellProcess*)process);
 	jobs.remove((KShellProcess*)process);
@@ -297,7 +297,7 @@ void Encoder::jobDone(KProcess *process ) {
 				showDebugBox = true;
 			}
 		}
-		else{ 
+		else{
 			//qDebug("Must be done: %d", (process->exitStatus()));
 			emit(updateProgress(job->id, 100));
 			KNotifyClient::event("track encoded");
