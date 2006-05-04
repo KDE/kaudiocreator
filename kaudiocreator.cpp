@@ -91,18 +91,18 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	resize(500, 440);
 
-	KAction *eject = new KAction(i18n("&Eject CD"), 0, tracks,
-		  SLOT(eject()),actionCollection(), "eject" );
+	KAction *eject = new KAction(i18n("&Eject CD"), actionCollection(), "eject" );
+	connect(eject, SIGNAL(triggered(bool) ), tracks, SLOT(eject()));
 
 	(void)new KAction(i18n("&Configure KAudioCreator..."), 0, this,
 		  SLOT(showSettings()), actionCollection(), "configure_kaudiocreator" );
 
-	KAction *selectAll = new KAction(i18n("Select &All Tracks"), 0, tracks,
-		  SLOT(selectAllTracks()), actionCollection(), "select_all" );
+	KAction *selectAll = new KAction(i18n("Select &All Tracks"), actionCollection(), "select_all" );
+	connect(selectAll, SIGNAL(triggered(bool) ), tracks, SLOT(selectAllTracks()));
 	connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
 
-	KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), 0, tracks,
-		  SLOT(deselectAllTracks()), actionCollection(), "deselect_all" );
+	KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), actionCollection(), "deselect_all" );
+	connect(deselectAll, SIGNAL(triggered(bool) ), tracks, SLOT(deselectAllTracks()));
 	connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
 
 	KActionMenu *actActionMenu = new
@@ -115,8 +115,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(ripMenu, SIGNAL(activated(int)),this,SLOT(slotRipSelection(int)));
 	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(getRipMenu()));
 
-	KAction *rip = new KAction(i18n("Rip &Selection"), 0, tracks,
-		  SLOT(startSession()), actionCollection(), "rip_selected" );
+	KAction *rip = new KAction(i18n("Rip &Selection"), actionCollection(), "rip_selected" );
+	connect(rip, SIGNAL(triggered(bool) ), tracks, SLOT(startSession()));
 
 	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
 	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
@@ -124,15 +124,15 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	(void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue,
 		  SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
 
-	KAction *edit = new KAction(i18n("&Edit Album..."), 0, tracks,
-		  SLOT(editInformation()), actionCollection(), "edit_cd");
+	KAction *edit = new KAction(i18n("&Edit Album..."), actionCollection(), "edit_cd");
+	connect(edit, SIGNAL(triggered(bool) ), tracks, SLOT(editInformation()));
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
 
 	(void)new KAction(i18n("Encode &File..."), 0, this,
 		  SLOT(encodeFile()), actionCollection(), "encode_file");
 
-	KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks,
-		  SLOT(performCDDB()), actionCollection(), "cddb_now");
+	KAction *cddb = new KAction(i18n("&CDDB Lookup"), actionCollection(), "cddb_now");
+	connect(cddb, SIGNAL(triggered(bool) ), tracks, SLOT(performCDDB()));
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
 
 	KStdAction::configureNotifications(this, SLOT(configureNotifications()),
