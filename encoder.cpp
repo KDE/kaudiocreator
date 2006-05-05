@@ -166,7 +166,7 @@ void Encoder::tendToNewJobs() {
 		jobx.fix("/", "%2f");
 		// If the user wants anything regexp replaced do it now...
 		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
-		desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+		desiredFile.replace( QRegExp("~"), QDir::homePath() );
 	}
 
 	while ( QFile::exists( desiredFile ) ) {
