@@ -44,7 +44,8 @@
 #include "general.h"
 #include <kcmoduleloader.h>
 #include <kurlrequester.h>
-
+#include <kstdaction.h>
+#include <kactionmenu.h>
 /**
  * Constructor. Connect all of the object and the job control.
  */
