@@ -21,7 +21,7 @@
 #define JOBQUEIMP_H
 
 #include "jobque.h"
-#include <qstring.h>
+#include <QString>
 #include <q3listview.h>
 
 class Job;

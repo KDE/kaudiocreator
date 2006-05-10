@@ -20,10 +20,10 @@
 #include "encodefileimp.h"
 #include "job.h"
 
-#include <qspinbox.h>
-#include <qlineedit.h>
+#include <QSpinBox>
+#include <QLineEdit>
 #include <kurlrequester.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <kmessagebox.h>
 
 EncodeFileImp::EncodeFileImp(QWidget* parent,

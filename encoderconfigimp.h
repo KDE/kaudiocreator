@@ -22,7 +22,7 @@
 
 #include "encoderconfig.h"
 #include "encoder_prefs.h"
-#include <qmap.h>
+#include <QMap>
 #include <q3dict.h>
 
 /**

@@ -23,8 +23,8 @@
 #include "encoder_prefs.h"
 #include "encoderoutput.h"
 
-#include <qregexp.h>
-#include <qdir.h>
+#include <QRegExp>
+#include <QDir>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kurl.h>

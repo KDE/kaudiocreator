@@ -19,7 +19,7 @@
 
 #include "job.h"
 #include <kmacroexpander.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 /**
  * A helper function to replace %X with the stuff in the album.

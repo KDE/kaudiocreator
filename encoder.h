@@ -20,10 +20,10 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-#include <qobject.h>
+#include <QObject>
 
 #include <q3ptrlist.h>
-#include <qmap.h>
+#include <QMap>
 #include "job.h"
 #include <kprocess.h>
 

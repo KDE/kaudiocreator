@@ -21,8 +21,8 @@
 #include "encoderedit.h"
 #include "prefs.h"
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QLineEdit>
 #include <kconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>

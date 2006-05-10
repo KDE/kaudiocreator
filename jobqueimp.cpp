@@ -20,8 +20,8 @@
 #include "jobqueimp.h"
 #include "job.h"
 #include "prefs.h"
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QLabel>
 #include <qpainter.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -29,12 +29,12 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <qfileinfo.h>
 #include <kstandarddirs.h>
 #include <knotifyclient.h>
-#include <qdir.h>
+#include <QDir>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1

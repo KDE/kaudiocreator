@@ -20,8 +20,8 @@
 #include "ripper.h"
 #include "prefs.h"
 
-#include <qfile.h>
-#include <qtimer.h>
+#include <QFile>
+#include <QTimer>
 #include <ktempfile.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>

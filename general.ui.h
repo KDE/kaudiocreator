@@ -7,9 +7,9 @@
 ** place of a destructor.
 *****************************************************************************/
 
-#include <qregexp.h>
-#include <qlineedit.h>
-#include <qlabel.h>
+#include <QRegExp>
+#include <QLineEdit>
+#include <QLabel>
 
 void General::updateExample()
 {

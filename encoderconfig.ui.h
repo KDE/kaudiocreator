@@ -8,7 +8,7 @@
 *****************************************************************************/
 
 #include "wizard.h"
-#include <qlineedit.h>
+#include <QLineEdit>
 
 /**
  * Load up the wizard with the encoder fileFormat string.  Save it if OK is hit.

@@ -25,9 +25,9 @@
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qmap.h>
+#include <QString>
+#include <QRegExp>
+#include <QMap>
 #include <klocale.h>
 #include "job.h"
 

@@ -22,7 +22,7 @@
 
 #include "job.h"
 #include <kio/jobclasses.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrlist.h>
 
 class Job;

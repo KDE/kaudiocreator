@@ -21,18 +21,18 @@
 #include "libkcddb/cdinfodialog.h"
 #include "prefs.h"
 #include "kcompactdisc.h"
-#include <qlabel.h>
+#include <QLabel>
 #include <q3listview.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QKeyEvent>
 #include <k3listview.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
+#include <QPushButton>
+#include <QSpinBox>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <kinputdialog.h>
 #include <dcopref.h>
 
@@ -46,7 +46,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-#include <qtimer.h>
+#include <QTimer>
 #include <qfileinfo.h>
 #include <kinputdialog.h>
 #include <kcombobox.h>
