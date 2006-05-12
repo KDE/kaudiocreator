@@ -50,8 +50,8 @@ public slots:
 	void removeJob( int id );
 
 private slots:
-	void copyJobResult( KIO::Job *job );
-	void updateProgress( KIO::Job *job, unsigned long percent );
+	void copyJobResult( KJob *job );
+	void updateProgress( KJob *job, unsigned long percent );
 	void tendToNewJobs();
 	void ejectNow();
 

@@ -57,8 +57,8 @@ Ripper::~Ripper(){
 		}
 		if(ioJob){
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (ioJob);
-			disconnect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
-			disconnect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
+			disconnect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
+			disconnect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
 			QString fileDestination = (copyJob->destURL()).path();
 			copyJob->kill();
 			QFile file( fileDestination );
@@ -183,8 +183,8 @@ void Ripper::tendToNewJobs(){
 
 	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0644, false, true, false, false);
 	jobs.insert(copyJob, job);
-	connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
-	connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
+	connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
+	connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
 
 	emit jobsChanged();
 }
@@ -194,16 +194,16 @@ void Ripper::tendToNewJobs(){
  * information dialog.
  * @param copyjob the IO job to copy from
  */
-void Ripper::copyJobResult(KIO::Job *copyjob){
+void Ripper::copyJobResult(KJob *copyjob){
 	if(!copyjob)
 		return;
 	KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
 	KNotifyClient::event("track ripped");
 
-	if(jobs.find(copyjob) == jobs.end())
+	if(jobs.find(static_cast<KIO::Job*>(copyjob)) == jobs.end())
 		return;
-	Job *newJob = jobs[copyjob];
-	jobs.remove(copyjob);
+	Job *newJob = jobs[static_cast<KIO::Job*>(copyjob)];
+	jobs.remove(static_cast<KIO::Job*>(copyjob));
 
 	if(Prefs::beepAfterRip())
 		KNotifyClient::beep();
@@ -249,9 +249,9 @@ void Ripper::ejectNow(){
  * @param job the current ioslave job in progress
  * @param percent the current percent that the ioslave has done.
  */
-void Ripper::updateProgress( KIO::Job *job, unsigned long percent){
+void Ripper::updateProgress( KJob *job, unsigned long percent){
 	if(job){
-		Job *ripJob = (jobs[job]);
+		Job *ripJob = (jobs[static_cast<KIO::Job*>(job)]);
 		if(ripJob)
 			emit updateProgress(ripJob->id, percent);
 	}
