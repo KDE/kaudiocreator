@@ -1,4 +1,3 @@
-kde4_header()
 project(kaudiocreator)
 
 add_subdirectory( icons ) 
@@ -54,7 +53,6 @@ install_files( ${KCONF_UPDATE_INSTALL_DIR} FILES upgrade-kaudiocreator-metadata.
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
 
 
 
