@@ -235,9 +235,9 @@ void KAudioCreator::showSettings(){
 		return;
 
 	SettingsDialog *dialog = new SettingsDialog(this, "settings", Prefs::self());
-	connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
-	connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
-	connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), ripper, SLOT(loadSettings()));
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), encoder, SLOT(loadSettings()));
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), tracks, SLOT(loadSettings()));
 	connect(dialog->encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
 	dialog->show();
 }

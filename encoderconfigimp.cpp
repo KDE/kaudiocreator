@@ -137,7 +137,7 @@ void EncoderConfigImp::addEncoderSlot(){
                                             KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
-  connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadEncoderList()));
+  connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(loadEncoderList()));
   dialog->show();
 }
 
@@ -198,8 +198,8 @@ void EncoderConfigImp::configureEncoderSlot() {
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
-  connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
-  connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
+  connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SIGNAL(encoderUpdated()));
+  connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
   dialog->show();
 }
 
@@ -222,7 +222,7 @@ void EncoderConfigImp::updateEncoder(QObject * obj){
  * Update Map
  * If current encoder update also.
  */ 
-void EncoderConfigImp::updateEncoder(const char *dialogName){
+void EncoderConfigImp::updateEncoder(const QString &dialogName){
   QString groupName = dialogName;
   QString encoderName;
   bool found = false;
