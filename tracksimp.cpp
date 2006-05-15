@@ -48,7 +48,6 @@
 
 #include <QTimer>
 #include <qfileinfo.h>
-#include <kinputdialog.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kprocess.h>
