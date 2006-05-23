@@ -42,9 +42,6 @@
                     <property name="name">
                         <cstring>file</cstring>
                     </property>
-                    <property name="showLocalProtocol">
-                        <bool>true</bool>
-                    </property>
                 </widget>
             </hbox>
         </widget>
