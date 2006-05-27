@@ -219,9 +219,10 @@ void Ripper::copyJobResult(KJob *copyjob){
 		file.remove();
 		emit updateProgress(newJob->id, -1);
 		delete newJob;
+		newJob = 0;
 	}
 
-	if(newJob->lastSongInAlbum){
+	if(newJob && newJob->lastSongInAlbum){
 		if(Prefs::autoEjectAfterRip()){
 			// Don't eject device if a pending job has that device
 			Job *job = pendingJobs.first();
