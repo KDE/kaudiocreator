@@ -53,11 +53,10 @@ Ripper::~Ripper(){
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		 KIO::Job* ioJob = it.key();
 		Job *job = it.data();
-		if(job){
-			delete job;
-		}
+		delete job;
+	
 		if(ioJob){
-			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (ioJob);
+			KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (ioJob);
 			disconnect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
 			disconnect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
 			QString fileDestination = (copyJob->destURL()).path();
