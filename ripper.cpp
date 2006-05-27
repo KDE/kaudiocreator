@@ -197,7 +197,7 @@ void Ripper::tendToNewJobs(){
 void Ripper::copyJobResult(KJob *copyjob){
 	if(!copyjob)
 		return;
-	KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (copyjob);
+	KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (copyjob);
 	KNotifyClient::event("track ripped");
 
 	if(jobs.find(static_cast<KIO::Job*>(copyjob)) == jobs.end())
