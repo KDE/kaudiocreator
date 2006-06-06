@@ -34,7 +34,6 @@
 #include <kurl.h>
 #include <QRegExp>
 #include <kinputdialog.h>
-#include <dcopref.h>
 
 #define HEADER_RIP 0
 #define HEADER_TRACK 1
