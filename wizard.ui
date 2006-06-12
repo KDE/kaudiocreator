@@ -52,8 +52,11 @@
                 <enum>RichText</enum>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignTop|AlignLeft</set>
-            </property>
+                <set>AlignTop|AlignLeft</set>
+	    </property>
+	    <property name="wordWrap">
+		    <bool>true</bool>
+	    </property>
         </widget>
         <spacer>
             <property name="name">
