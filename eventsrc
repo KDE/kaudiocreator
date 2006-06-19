@@ -47,6 +47,7 @@ Name[sv]=Alla jobb är klara
 Name[uk]=Всі задачі виконано
 Name[zh_CN]=全部任务都已完成
 Name[zh_HK]=工作全部完成
+Name[zh_TW]=所有工作均已完成
 Comment=All of the jobs in the queue have been finished
 Comment[bg]=Всички задачи в опашката завършиха
 Comment[br]=Echu eo pep dlead el lost
@@ -85,6 +86,7 @@ Comment[sv]=Alla jobb i kön är klara
 Comment[uk]=Закінчено всі задачі в черзі
 Comment[zh_CN]=队列中的全部任务都已完成
 Comment[zh_HK]=佇列中所有工作已完成
+Comment[zh_TW]=所有佇列中的工作都已完成
 
 [track ripped]
 Name=Track Ripped
@@ -129,6 +131,7 @@ Name[tr]=Parça Dönüştürüldü
 Name[uk]=Витягнута доріжка
 Name[zh_CN]=音轨已抓取
 Name[zh_HK]=已擷取的音軌
+Name[zh_TW]=音軌已切割
 Comment=Track finished ripping
 Comment[bg]=Завършване на запис на пътечка
 Comment[bn]=ট্র্যাক রিপ করা শেষ
@@ -170,6 +173,7 @@ Comment[tr]=Parçanın dönüştürülmesi tamamlandı
 Comment[uk]=Витягування доріжки закінчено
 Comment[zh_CN]=音轨抓取完成
 Comment[zh_HK]=已完成擷取的音軌
+Comment[zh_TW]=音軌已完成切割
 
 [cd ripped]
 Name=CD Ripped
@@ -216,6 +220,7 @@ Name[uk]=Витягнутий музичний КД
 Name[uz]=Компакт-диск риппер
 Name[zh_CN]=CD 已抓取
 Name[zh_HK]=已擷取的 CD
+Name[zh_TW]=光碟已切割
 Comment=CD finished ripping
 Comment[bg]=Завършване на запис на аудио диск
 Comment[bn]=সিডি রিপ করা শেষ
@@ -258,6 +263,7 @@ Comment[tr]=CD'nin dönüştürülmesi tamamlandı
 Comment[uk]=Видирання КД завершено
 Comment[zh_CN]=CD 抓取完成
 Comment[zh_HK]=已完成擷取的 CD
+Comment[zh_TW]=光碟已完成切割
 
 [track encoded]
 Name=Track Encoded
@@ -303,6 +309,7 @@ Name[tr]=Parça Dönüştürücü
 Name[uk]=Закодована доріжка
 Name[zh_CN]=音轨已编码
 Name[zh_HK]=已編碼的音軌
+Name[zh_TW]=音軌已編碼
 Comment=Track finished encoding
 Comment[bg]=Завършване на кодиране на пътечка
 Comment[bn]=ট্র্যাক এনকোডিং করা শেষ
@@ -344,6 +351,7 @@ Comment[tr]=Parça kodlama bitirildi
 Comment[uk]=Кодування доріжки закінчене
 Comment[zh_CN]=音轨编码完成
 Comment[zh_HK]=已完成編碼的音軌
+Comment[zh_TW]=音軌已完成編碼
 
 [cd encoded]
 Name=CD Encoded
@@ -389,6 +397,7 @@ Name[tr]=CD Dönüştürücü
 Name[uk]=Закодовано КД
 Name[zh_CN]=CD 已编码
 Name[zh_HK]=已編碼的 CD
+Name[zh_TW]=光碟已編碼
 Comment=CD finished encoding
 Comment[bg]=Завършване на кодиране на аудио диск
 Comment[bn]=সিডি এনকোডিং করা শেষ
@@ -430,5 +439,6 @@ Comment[tr]=CD çözümleyici sonlandırıldı
 Comment[uk]=Кодування КД закінчено
 Comment[zh_CN]=CD 编码完成
 Comment[zh_HK]=已完成編碼的 CD
+Comment[zh_TW]=光碟已完成編碼
 default_presentation=17
 default_sound=KDE_ClockChime.wav
