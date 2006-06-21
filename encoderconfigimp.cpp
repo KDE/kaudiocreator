@@ -116,7 +116,7 @@ void EncoderConfigImp::loadEncoderList(){
 /**
  * Find empty group
  * bring up dialog for that group.
- */ 
+ */
 void EncoderConfigImp::addEncoderSlot(){
   bool foundEmptyGroup = false;
   uint number = 0;
@@ -128,13 +128,13 @@ void EncoderConfigImp::addEncoderSlot(){
     else
       number++;
   }
- 
+
   if(KConfigDialog::showDialog(groupName.latin1()))
     return;
-    
+
   KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName), 
-                                            KDialogBase::Swallow,
-                                            KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
+                                            KPageDialog::Plain,
+                                            KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(loadEncoderList()));
@@ -193,8 +193,8 @@ void EncoderConfigImp::configureEncoderSlot() {
     return;
 
   KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName),
-                                            KDialogBase::Swallow,
-                                            KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
+                                            KPageDialog::Plain,
+                                            KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));

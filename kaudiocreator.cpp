@@ -51,22 +51,29 @@
  */
 KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	   KMainWindow(parent, name){
-	janusWidget = new KJanusWidget(this,  KJanusWidget::Tabbed);
-	setCentralWidget(janusWidget);
+	pageWidget = new KPageWidget(this);
+	pageWidget->setFaceType(KPageView::Tabbed);
+	setCentralWidget(pageWidget);
 
-	KVBox * frame = janusWidget->addVBoxPage(i18n("&CD Tracks"),
-		     QString::null, SmallIcon("cdaudio_unmount", 32));
-	tracks = new TracksImp(frame, "Tracks");
+	tracks = new TracksImp(0, "Tracks");
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
-	ripper = new Ripper( frame );
+
+	KPageWidgetItem* pageWidgetItem = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
+	pageWidgetItem->setIcon(SmallIcon("cdaudio_unmount", 32));
+	pageWidget->addPage(pageWidgetItem);
+
+	ripper = new Ripper(this);
         ripper->setObjectName( "Rip" );
-	encoder = new Encoder(frame );
+
+	encoder = new Encoder(this);
         encoder->setObjectName("Encoder");
 
-	frame = janusWidget->addVBoxPage(i18n("&Jobs"), QString::null,
-		     SmallIcon("run", 32));
-	jobQue = new JobQueImp(frame);
+	jobQue = new JobQueImp(0);
         jobQue->setObjectName("Que");
+
+	pageWidgetItem = new KPageWidgetItem(jobQue, i18n("&Jobs"));
+	pageWidgetItem->setIcon(SmallIcon("run", 32));
+	pageWidget->addPage(pageWidgetItem);
 
 	connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
 	connect(ripper, SIGNAL(updateProgress(int, int)), jobQue,

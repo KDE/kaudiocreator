@@ -23,7 +23,7 @@
 #include <kmainwindow.h>
 #include <kconfigdialog.h>
 
-class KJanusWidget;
+class KPageWidget;
 class TracksImp;
 class JobQueImp;
 class Ripper;
@@ -55,9 +55,9 @@ private slots:
 
 	void slotRipSelection(int);
 	void getRipMenu();
-	
+
 private:
-  KJanusWidget *janusWidget;
+  KPageWidget *pageWidget;
   TracksImp *tracks;
   JobQueImp *jobQue;
   Ripper *ripper;

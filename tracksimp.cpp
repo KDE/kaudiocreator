@@ -287,8 +287,13 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
  */
 void TracksImp::editInformation( ) {
 	// Create dialog.
-	KDialogBase *dialog = new KDialogBase( this, "name", false, i18n( "CD Editor" ),
-										   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true );
+	KDialog *dialog = new KDialog( this );
+	dialog->setModal(false);
+	dialog->setCaption(i18n( "CD Editor" ));
+	dialog->setButtons(KDialog::Ok|KDialog::Cancel);
+	dialog->setDefaultButton(KDialog::Ok);
+	dialog->enableButtonSeparator(true);
+
 	CDInfoDialog *base = new CDInfoDialog(dialog);
 	// Workaround the fact that CDInfoDialog doesn't take
 	// a const TrackOffsetList

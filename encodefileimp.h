@@ -21,15 +21,16 @@
 #define ENCODEFILEIMP_H
 
 #include "libkcddb/genres.h"
-#include "encodefile.h"
+#include "ui_encodefile.h"
 #include "qmap.h"
+#include <kpagedialog.h>
 
 class Job;
 
 /**
  * This class lets the user encode a file.
  */
-class EncodeFileImp : public EncodeFile  {
+class EncodeFileImp : public KDialog, public Ui::EncodeFile  {
 
 Q_OBJECT
 

@@ -25,6 +25,9 @@ set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} ${libworkman_SRCS}
 
 kde4_automoc(${kaudiocreator_SRCS})
 
+kde4_add_ui_files( kaudiocreator_SRCS
+   encodefile.ui )
+
 kde4_add_ui3_files(kaudiocreator_SRCS 
    encoderedit.ui 
    jobque.ui 
@@ -35,8 +38,7 @@ kde4_add_ui3_files(kaudiocreator_SRCS
    cdconfig.ui 
    ripconfig.ui 
    encoderoutput.ui 
-   encoderconfig.ui 
-   encodefile.ui )
+   encoderconfig.ui )
 
 kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 

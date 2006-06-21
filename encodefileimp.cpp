@@ -27,12 +27,21 @@
 #include <kmessagebox.h>
 
 EncodeFileImp::EncodeFileImp(QWidget* parent,
-		const char* name) : EncodeFile(parent, name), m_genres(KCDDB::Genres()) {
+		const char* name) : KDialog(parent), m_genres(KCDDB::Genres()) {
+  setObjectName(name);
+
+  QWidget* w = new QWidget();
+  setupUi(w);
+  setMainWidget(w);
+  setCaption(i18n("Encode File"));
+  setButtons(User1|Close);
+  setButtonText(User1, i18n("&Encode File"));
+
   genre->insertStringList(m_genres.i18nList());
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
 
-  connect(encodeButton,SIGNAL(clicked()),this,SLOT(encode()));
+  connect(this,SIGNAL(user1Clicked()),this,SLOT(encode()));
 }
 
 /**
