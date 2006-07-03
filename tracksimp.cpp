@@ -292,7 +292,7 @@ void TracksImp::editInformation( ) {
 	dialog->setCaption(i18n( "CD Editor" ));
 	dialog->setButtons(KDialog::Ok|KDialog::Cancel);
 	dialog->setDefaultButton(KDialog::Ok);
-	dialog->enableButtonSeparator(true);
+	dialog->showButtonSeparator(true);
 
 	CDInfoDialog *base = new CDInfoDialog(dialog);
 	// Workaround the fact that CDInfoDialog doesn't take
