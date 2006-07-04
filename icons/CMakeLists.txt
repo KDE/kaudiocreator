@@ -4,7 +4,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kaudiocreator/pics FILES check.png )
+install( FILES check.png  DESTINATION  ${DATA_INSTALL_DIR}/kaudiocreator/pics )
 
 
 
