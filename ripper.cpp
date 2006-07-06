@@ -163,7 +163,7 @@ void Ripper::tendToNewJobs(){
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
 	else
-		defaultTempDir = locateLocal("tmp", "");
+		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KUrl::fromPathOrUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
 	KTempFile tmp( defaultTempDir, ".wav" );
