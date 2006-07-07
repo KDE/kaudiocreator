@@ -275,7 +275,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	cddbInfo = info;
 	newAlbum();
 
-	// See if the user wishes to automaticly rip after successfully retrieving
+	// See if the user wishes to automatically rip after successfully retrieving
 	if( Prefs::autoRip())
 		ripWholeAlbum();
 }

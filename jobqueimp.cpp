@@ -69,7 +69,7 @@ QString JobQueImp::getStringFromNumber(int number){
 			// We have to update all of the cells.
 			QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
 			while( currentItem != NULL ){
-				currentItem->setText(HEADER_JOB, "0" + currentItem->text(HEADER_JOB));
+				currentItem->setText(HEADER_JOB, '0' + currentItem->text(HEADER_JOB));
 				currentItem = (QueListViewItem*)currentItem->itemBelow();
 			}
 		}
@@ -78,7 +78,7 @@ QString JobQueImp::getStringFromNumber(int number){
 	QString buffer = "";
 	uint newLength = QString("%1").arg(highestNumber).length() - QString("%1").arg(number).length();
 	for(uint i=0; i < newLength; i++)
-		buffer += "0";
+		buffer += '0';
 	return buffer;
 }
 
@@ -151,7 +151,7 @@ void JobQueImp::updateProgress(int id, int progress){
  * @param kill kill the actual job/process. A bool here because this CAN cause
  *        a race condition when the encoder is 100%, but hasn't exited.
  * @param prompt the user if the job isn't finished
- * @return bool if remove was successfull or not.
+ * @return bool if remove was successful or not.
  */
 bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt){
 	if(!item)
@@ -294,7 +294,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	if(isSelected())
             p->setPen(cg.color( QPalette::HighlightedText));
 	if(percentDone != -1)
-	p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,QString().setNum((int)percentDone) + "%");
+	p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,QString().setNum((int)percentDone) + '%');
 	else
 		p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,i18n("Error"));
 }
