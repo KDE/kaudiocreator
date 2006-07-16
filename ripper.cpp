@@ -27,7 +27,7 @@
 #include <knotifyclient.h>
 #include <kstandarddirs.h>
 #include <kio/scheduler.h>
-
+#include <kio/jobuidelegate.h>
 /**
  * Constructor, load settings.
  */
@@ -214,7 +214,8 @@ void Ripper::copyJobResult(KJob *copyjob){
 		emit( encodeWav(newJob));
 	}
 	else{
-		copyJob->showErrorDialog(0);
+		copyJob->ui()->setWindow(0);
+		copyJob->ui()->showErrorMessage();
 		QFile file( (copyJob->destURL()).path());
 		file.remove();
 		emit updateProgress(newJob->id, -1);
