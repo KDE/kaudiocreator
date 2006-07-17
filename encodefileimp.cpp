@@ -37,7 +37,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent,
   setButtons(User1|Close);
   setButtonText(User1, i18n("&Encode File"));
 
-  genre->insertStringList(m_genres.i18nList());
+  genre->addItems(m_genres.i18nList());
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
 

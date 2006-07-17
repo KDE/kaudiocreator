@@ -119,7 +119,7 @@ void TracksImp::loadSettings() {
 
 	// Set list, get top one
 	deviceCombo->clear();
-	deviceCombo->insertStringList(list);
+	deviceCombo->addItems(list);
 
 	changeDevice(deviceCombo->currentText());
 }
