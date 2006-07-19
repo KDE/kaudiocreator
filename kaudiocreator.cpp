@@ -119,7 +119,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
 	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
 
-	ripMenu = actActionMenu->popupMenu();
+	ripMenu = actActionMenu->menu();
 	connect(ripMenu, SIGNAL(activated(int)),this,SLOT(slotRipSelection(int)));
 	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(getRipMenu()));
 
