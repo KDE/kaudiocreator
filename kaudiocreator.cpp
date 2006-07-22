@@ -112,11 +112,14 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), actionCollection(), "deselect_all" );
 	connect(deselectAll, SIGNAL(triggered(bool) ), tracks, SLOT(deselectAllTracks()));
 	connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
+	selectAll->setEnabled( false );
+	deselectAll->setEnabled( false );
 
 	KActionMenu *actActionMenu = new
 		KActionMenu( KIcon("rip"),i18n("Rip &Selection"), actionCollection(),
 					 	"rip" );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
+	actActionMenu->setEnabled( false );
 	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
 
 	ripMenu = actActionMenu->menu();
@@ -125,6 +128,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	KAction *rip = new KAction(i18n("Rip &Selection"), actionCollection(), "rip_selected" );
 	connect(rip, SIGNAL(triggered(bool) ), tracks, SLOT(startSession()));
+	rip->setEnabled( false );
 
 	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
 	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
@@ -135,6 +139,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KAction *edit = new KAction(i18n("&Edit Album..."), actionCollection(), "edit_cd");
 	connect(edit, SIGNAL(triggered(bool) ), tracks, SLOT(editInformation()));
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
+	edit->setEnabled( false );   
 
 	action = new KAction(i18n("Encode &File..."), actionCollection(), "encode_file");
 	connect(action, SIGNAL(triggered(bool) ), SLOT(encodeFile()));
@@ -142,6 +147,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	KAction *cddb = new KAction(i18n("&CDDB Lookup"), actionCollection(), "cddb_now");
 	connect(cddb, SIGNAL(triggered(bool) ), tracks, SLOT(performCDDB()));
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
+	cddb->setEnabled( false );   
 
 	KStdAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());

@@ -41,7 +41,7 @@
             <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget class="QListView" row="2" column="0">
+        <widget class="K3ListView" row="2" column="0">
             <column>
                 <property name="text">
                     <string>Rip</string>

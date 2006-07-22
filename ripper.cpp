@@ -52,11 +52,10 @@ Ripper::~Ripper(){
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		 KIO::Job* ioJob = it.key();
 		Job *job = it.data();
-		if(job){
-			delete job;
-		}
+		delete job;
+
 		if(ioJob){
-			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (ioJob);
+			KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (ioJob);
 			disconnect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
 			disconnect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
 			QString fileDestination = (copyJob->destURL()).path();
@@ -166,6 +165,7 @@ void Ripper::tendToNewJobs(){
 		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KUrl::fromPathOrUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
+	kDebug() << "defaultTempDir: " << defaultTempDir << endl;
 	KTempFile tmp( defaultTempDir, ".wav" );
 	tmp.setAutoDelete(true);
 
@@ -176,10 +176,12 @@ void Ripper::tendToNewJobs(){
 		wavFile = QString("audiocd:/Wav/Track %1.wav").arg(job->track);
 
 	KUrl source = KUrl::fromPathOrUrl(wavFile);
+	kDebug() << "source: " << source << endl;
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", "Track %{number}");
 	KUrl dest = KUrl::fromPathOrUrl(tmp.name());
+	kDebug() << "dest: " << dest << endl;
 
 	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0644, false, true, false, false);
 	jobs.insert(copyJob, job);

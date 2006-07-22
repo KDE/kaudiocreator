@@ -22,25 +22,18 @@
 #include "prefs.h"
 #include "kcompactdisc.h"
 #include <QLabel>
-#include <q3listview.h>
+#include <k3listview.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QKeyEvent>
 #include <k3listview.h>
 #include <QPushButton>
 #include <QSpinBox>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <QRegExp>
 #include <kinputdialog.h>
-
-#define HEADER_RIP 0
-#define HEADER_TRACK 1
-#define HEADER_LENGTH 2
-#define HEADER_TRACK_NAME 3
-#define HEADER_TRACK_ARTIST 4
-#define HEADER_TRACK_COMMENT 5
+#include <kprotocolinfo.h>
 
 #include <kconfig.h>
 #include <kapplication.h>
@@ -69,6 +62,9 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 	
 	connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
+	
+	selectAllTracksButton->setEnabled( false );
+	deselectAllTracksButton->setEnabled( false );
 	
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
@@ -130,9 +126,12 @@ void TracksImp::newDisc(unsigned discId)
 	{
 		kDebug(60002) << "newDisc - No disc" << endl;
 		cddbInfo.clear();
-		cddbInfo.set(Title, i18n("No disk"));
+		cddbInfo.set(Title, i18n("No disc"));
 		newAlbum();
 		emit(hasCD(false));
+
+		selectAllTracksButton->setEnabled( false );
+		deselectAllTracksButton->setEnabled( false );
 
 		return;
 	}
@@ -140,6 +139,9 @@ void TracksImp::newDisc(unsigned discId)
 	kDebug(60002) << "newDisc - " << discId << endl;
 	emit(hasCD(true));
 
+	selectAllTracksButton->setEnabled( true );
+	deselectAllTracksButton->setEnabled( true );
+ 
 	cddbInfo.clear();
 
 	cddbInfo.set("discid", QString::number(discId,16).rightJustified(8,'0'));
@@ -286,6 +288,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
  * If ok is pressed then store the information and update track name.
  */
 void TracksImp::editInformation( ) {
+	if( !hasCD() ) return;
 	// Create dialog.
 	KDialog *dialog = new KDialog( this );
 	dialog->setModal(false);
@@ -339,14 +342,24 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession() {
-	startSession(-1);
-}
-
 void TracksImp::startSession( int encoder ) {
-	if( trackListing->childCount() == 0 ) {
-		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
-		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
+	QList<TracksItem *> selected = selectedTracks();
+
+	if( selected.isEmpty() )
+	{
+		int i = KMessageBox::questionYesNo( this, i18n("No tracks have been selected.  Would you like to rip the entire CD?"),
+					                        i18n("No Tracks Selected"), i18n("Rip CD"), KStdGuiItem::cancel() );
+		if( i == KMessageBox::No )
+			return;
+
+		selectAllTracks();
+		selected = selectedTracks();
+	}
+
+	if (!KProtocolInfo::isKnownProtocol("audiocd"))
+	{
+		KMessageBox::sorry( this, i18n("Could not find audiocd:/ protocol. Please install the audiocd ioslave"),
+		                          i18n("Protocol Not Found"));
 		return;
 	}
 
@@ -359,50 +372,42 @@ void TracksImp::startSession( int encoder ) {
 		list += "Artist";
 	if( cddbInfo.get(Title).toString() == QLatin1String("Unknown Album"))
 		list += "Album";
-	
+
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
 		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?", list.join(", ")), i18n("Album Information Incomplete"),i18n("Rip"),KStdGuiItem::cancel());
 		if( r == KMessageBox::No )
 			return;
 	}
-	Q3ListViewItem * currentItem = trackListing->firstChild();
-	Job *lastJob = NULL;
-	int counter = 0;
-	while( currentItem != NULL ) {
-		if( currentItem->pixmap(HEADER_RIP) != NULL ) {
-			Job *newJob = new Job();
-			newJob->encoder = encoder;
-			newJob->device = cd->device();
-			newJob->album = cddbInfo.get(Title).toString();
-			newJob->genre = cddbInfo.get(Genre).toString();
-			if( newJob->genre.isEmpty())
-				newJob->genre = "Pop";
-			newJob->group = cddbInfo.get(Artist).toString();
-			newJob->comment = cddbInfo.get(Comment).toString();
-			newJob->year = cddbInfo.get(Year).toInt();
-			newJob->track = currentItem->text(HEADER_TRACK).toInt();
-			
-			newJob->track_title = currentItem->text(HEADER_TRACK_NAME);
-			newJob->track_artist = currentItem->text(HEADER_TRACK_ARTIST);
-			newJob->track_comment = currentItem->text(HEADER_TRACK_COMMENT);
-			lastJob = newJob;
-			emit( ripTrack(newJob) ); 
-			counter++;
-		}
-		currentItem = currentItem->nextSibling();
+	
+	Job *lastJob = 0;
+
+	foreach(TracksItem* item, selected)
+	{
+		Job *newJob = new Job();
+		newJob->encoder = encoder;
+		newJob->device = cd->device();
+		newJob->album = cddbInfo.get(Title).toString();
+		newJob->genre = cddbInfo.get(Genre).toString();
+		if( newJob->genre.isEmpty())
+			newJob->genre = "Pop";
+		newJob->group = cddbInfo.get(Artist).toString();
+		newJob->comment = cddbInfo.get(Comment).toString();
+		newJob->year = cddbInfo.get(Year).toInt();
+		newJob->track = item->track();
+
+		//newJob->track_title = item->title();
+		newJob->track_title = item->text(HEADER_TRACK_NAME);
+		newJob->track_artist = item->artist();
+		newJob->track_comment = item->comment();
+		lastJob = newJob;
+		emit( ripTrack(newJob) ); 
 	}
 	if( lastJob)
 		lastJob->lastSongInAlbum = true;
 
-	if( counter == 0 ) {
-		KMessageBox:: sorry(this, i18n("No tracks are selected to rip. Please "\
-		 "select at least 1 track before ripping."), i18n("No Tracks Selected"));
-		return;
-	}
-
 	KMessageBox::information(this,
 	i18n("%1 Job(s) have been started.  You can watch their progress in the "\
-	   "jobs section.", counter),
+	   "jobs section.", selected.count()),
 	i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
@@ -410,25 +415,38 @@ void TracksImp::startSession( int encoder ) {
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksImp::selectTrack(Q3ListViewItem *currentItem ) {
-	if(!currentItem)
+void TracksImp::selectTrack( Q3ListViewItem *item ) {
+	if( !item )
 		return;
-	if( currentItem->pixmap(HEADER_RIP) != NULL ) {
-		QPixmap empty;
-		currentItem->setPixmap(HEADER_RIP, empty);
+
+#define item static_cast<TracksItem*>(item)
+	item->setChecked( !item->checked() );
+#undef item
+}
+
+QList<TracksItem *> TracksImp::selectedTracks()
+{
+	QList<TracksItem *> selected;
+	TracksItem *item = static_cast<TracksItem*>(trackListing->firstChild());
+
+	while( item )
+	{
+		if( item->checked() )
+			selected.append( item );
+		item = static_cast<TracksItem*>(item->nextSibling());
 	}
-	else
-		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
+	return selected;
 }
 
 /**
  * Turn on all of the tracks.
  */
 void TracksImp::selectAllTracks() {
-	Q3ListViewItem *currentItem = trackListing->firstChild();
-	while( currentItem != NULL ) {
-		currentItem->setPixmap(HEADER_RIP, SmallIcon("check", currentItem->height()-2));
-		currentItem = currentItem->nextSibling();
+	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
+	while( currentItem )
+	{
+		currentItem->setChecked( true );
+		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
 	}
 }
 
@@ -436,11 +454,11 @@ void TracksImp::selectAllTracks() {
  * Turn off all of the tracks.
  */
 void TracksImp::deselectAllTracks() {
-	Q3ListViewItem *currentItem = trackListing->firstChild();
-	QPixmap empty;
-	while( currentItem != NULL ) {
-		currentItem->setPixmap(HEADER_RIP, empty);
-		currentItem = currentItem->nextSibling();
+	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
+	while( currentItem )
+	{
+		currentItem->setChecked( false );
+		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
 	}
 }
 
@@ -448,20 +466,24 @@ void TracksImp::deselectAllTracks() {
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum() {
-	albumName->setText(QString("%1 - %2").arg(cddbInfo.get(Artist).toString()).arg(cddbInfo.get(Title).toString()));
+	QString albumText = cddbInfo.get(Title).toString();
+	if( !cddbInfo.get(Artist).toString().isEmpty() )
+		albumText = cddbInfo.get(Artist).toString() + i18n( " - " ) + albumText;
+
+	albumName->setText( albumText );
 	trackListing->clear();
 	selectAllTracksButton->setEnabled(false);
 	deselectAllTracksButton->setEnabled(false);
 	emit(hasTracks(false));
 
+	TracksItem *last = 0;
 	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
 	{
 		TrackInfo ti = cddbInfo.track(i);
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		Q3ListViewItem * newItem = new Q3ListViewItem(trackListing,
-			trackListing->lastItem(), "", QString().sprintf("%02d", i + 1), trackLength,
-			ti.get(Title).toString(), ti.get(Artist).toString(), ti.get(Comment).toString());
+		last = new TracksItem(trackListing, last, ti.get(Title).toString(), ti.get(Artist).toString(),
+			i+1, trackLength, ti.get(Comment).toString());
 	}
 
 	if (cddbInfo.numberOfTracks())
@@ -480,9 +502,14 @@ void TracksImp::newAlbum() {
  * @param event the QKeyEvent passed to this event handler.
  */
 void TracksImp::keyPressEvent(QKeyEvent *event) {
-	if( trackListing->selectedItem() != NULL && event->key() == Qt::Key_F2 ) {
+	Q3ListViewItem *item = trackListing->selectedItem();
+	if( !item ) return;
+
+	if( event->key() == Qt::Key_F2 )
+	{
+		item->setRenameEnabled( HEADER_TRACK_NAME, true );
+		item->startRename( HEADER_TRACK_NAME );
 		event->accept();
-		trackListing->selectedItem()->startRename(HEADER_TRACK_NAME);
 	}
 	else
 		Tracks::keyPressEvent(event);

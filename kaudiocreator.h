@@ -36,8 +36,6 @@ class KAudioCreator : public KMainWindow {
 
 Q_OBJECT
 
-signals:
-
 public:
   KAudioCreator( QWidget* parent = 0, const char* name = 0);
   void setDevice( const QString &device );
@@ -53,16 +51,16 @@ private slots:
   void configureNotifications();
   void encodeFile();
 
-	void slotRipSelection(int);
-	void getRipMenu();
+  void slotRipSelection(int);
+  void getRipMenu();
 
 private:
   KPageWidget *pageWidget;
-  TracksImp *tracks;
-  JobQueImp *jobQue;
-  Ripper *ripper;
-  Encoder *encoder;
-	KMenu *ripMenu;
+  TracksImp   *tracks;
+  JobQueImp   *jobQue;
+  Ripper      *ripper;
+  Encoder     *encoder;
+  KMenu       *ripMenu;
 
 };
 
@@ -86,8 +84,8 @@ public:
    EncoderConfigImp *encoderConfigImp;
 
 private:
-  KCModule* cddb;
-  bool cddbChanged;
+  KCModule *cddb;
+  bool      cddbChanged;
 };
 
 #endif
