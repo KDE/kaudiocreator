@@ -67,7 +67,7 @@ public:
     void    setChecked( const bool &b )   { 
         m_checked = b;
         b ? setPixmap( HEADER_RIP, SmallIcon( "apply", height()-2 ) ) :
-            setPixmap( HEADER_RIP, 0 );
+            setPixmap( HEADER_RIP, QPixmap() );
     }
 
 private:
