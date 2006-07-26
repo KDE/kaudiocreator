@@ -59,7 +59,7 @@ install( FILES kaudiocreator-meta.upd kaudiocreator-libkcddb.upd  DESTINATION  $
 install( FILES upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
-
+kde4_install_icons( ${ICON_INSTALL_DIR}  locolor )
 
 
 
