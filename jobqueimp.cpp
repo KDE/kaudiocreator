@@ -33,7 +33,7 @@
 #include <QRegExp>
 #include <qfileinfo.h>
 #include <kstandarddirs.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 #include <QDir>
 
 #define HEADER_JOB 0
@@ -142,7 +142,7 @@ void JobQueImp::updateProgress(int id, int progress){
 		currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
 	}
 	if(currentJobCount > 0 && numberOfJobsNotFinished() == 0)
-		KNotifyClient::event("no jobs left");
+		KNotification::event("no jobs left");
 }
 
 /**

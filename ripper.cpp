@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <ktempfile.h>
 #include <kmessagebox.h>
+#include <knotification.h>
 #include <knotifyclient.h>
 #include <kstandarddirs.h>
 #include <kio/scheduler.h>
@@ -200,7 +201,7 @@ void Ripper::copyJobResult(KJob *copyjob){
 	if(!copyjob)
 		return;
 	KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (copyjob);
-	KNotifyClient::event("track ripped");
+	KNotification::event("track ripped");
 
 	if(jobs.find(static_cast<KIO::Job*>(copyjob)) == jobs.end())
 		return;
@@ -239,7 +240,7 @@ void Ripper::copyJobResult(KJob *copyjob){
 				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SLOT(ejectNow()));
 			}
 		}
-		KNotifyClient::event("cd ripped");
+		KNotification::event("cd ripped");
 	}
 	tendToNewJobs();
 }

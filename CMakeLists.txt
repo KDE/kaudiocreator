@@ -44,7 +44,7 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb )
+target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb knotifyconfig)
 
 install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 
@@ -54,7 +54,7 @@ install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 install( FILES kaudiocreator.desktop  DESTINATION  ${XDG_APPS_DIR} )
 install( FILES kaudiocreator.kcfg kaudiocreator_encoders.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES audiocd_extract.desktop  DESTINATION  ${DATA_INSTALL_DIR}/konqueror/servicemenus )
-install( FILES kaudiocreatorui.rc eventsrc  DESTINATION  ${DATA_INSTALL_DIR}/kaudiocreator )
+install( FILES kaudiocreatorui.rc kaudiocreator.notifyrc DESTINATION  ${DATA_INSTALL_DIR}/kaudiocreator )
 install( FILES kaudiocreator-meta.upd kaudiocreator-libkcddb.upd  DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
 install( FILES upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
 

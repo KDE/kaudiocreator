@@ -29,7 +29,7 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 #include <q3textedit.h>
 #include <kinputdialog.h>
 
@@ -300,9 +300,9 @@ void Encoder::jobDone(KProcess *process ) {
 		else{
 			//qDebug("Must be done: %d", (process->exitStatus()));
 			emit(updateProgress(job->id, 100));
-			KNotifyClient::event("track encoded");
+			KNotification::event("track encoded");
 			if ( job->lastSongInAlbum)
-				KNotifyClient::event("cd encoded");
+				KNotification::event("cd encoded");
 		}
 	}
 	else

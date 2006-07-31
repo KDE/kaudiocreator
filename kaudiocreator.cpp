@@ -28,7 +28,7 @@
 #include <kstatusbar.h>
 #include <knotifydialog.h>
 #include <kcombobox.h>
-
+#include <knotifyconfigwidget.h>
 #include "tracksimp.h"
 #include "jobqueimp.h"
 #include "ripper.h"
@@ -230,7 +230,7 @@ bool KAudioCreator::queryClose() {
 }
 
 void KAudioCreator::configureNotifications() {
-	KNotifyDialog *dialog = new KNotifyDialog(this, "KNotifyDialog", false);
+	KNotifyConfigWidget *dialog = new KNotifyConfigWidget(this);
 	dialog->show();
 }
 
