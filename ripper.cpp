@@ -25,7 +25,6 @@
 #include <ktempfile.h>
 #include <kmessagebox.h>
 #include <knotification.h>
-#include <knotifyclient.h>
 #include <kstandarddirs.h>
 #include <kio/scheduler.h>
 #include <kio/jobuidelegate.h>
@@ -209,7 +208,7 @@ void Ripper::copyJobResult(KJob *copyjob){
 	jobs.remove(static_cast<KIO::Job*>(copyjob));
 
 	if(Prefs::beepAfterRip())
-		KNotifyClient::beep();
+		KNotification::beep();
 
 	if ( copyJob->error() == 0 ){
 		emit updateProgress(newJob->id, 100);
