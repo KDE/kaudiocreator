@@ -231,8 +231,7 @@ bool KAudioCreator::queryClose() {
 }
 
 void KAudioCreator::configureNotifications() {
-	KNotifyConfigWidget *dialog = new KNotifyConfigWidget(this);
-	dialog->show();
+    KNotifyConfigWidget::configure(this);
 }
 
 void KAudioCreator::encodeFile(){
