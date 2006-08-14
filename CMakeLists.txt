@@ -56,7 +56,7 @@ install( FILES kaudiocreator.kcfg kaudiocreator_encoders.kcfg  DESTINATION  ${KC
 install( FILES audiocd_extract.desktop  DESTINATION  ${DATA_INSTALL_DIR}/konqueror/servicemenus )
 install( FILES kaudiocreatorui.rc kaudiocreator.notifyrc DESTINATION  ${DATA_INSTALL_DIR}/kaudiocreator )
 install( FILES kaudiocreator-meta.upd kaudiocreator-libkcddb.upd  DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
-install( FILES upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
+install( PROGRAMS upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 kde4_install_icons( ${ICON_INSTALL_DIR}  locolor )
