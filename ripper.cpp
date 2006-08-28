@@ -58,7 +58,7 @@ Ripper::~Ripper(){
 			KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (ioJob);
 			disconnect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
 			disconnect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
-			QString fileDestination = (copyJob->destURL()).path();
+			QString fileDestination = (copyJob->destUrl()).path();
 			copyJob->kill();
 			QFile file( fileDestination );
 			file.remove();
@@ -94,7 +94,7 @@ void Ripper::removeJob(int id){
 			jobs.remove(it.key());
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
 			if(copyJob){
-				QString fileDestination = (copyJob->destURL()).path();
+				QString fileDestination = (copyJob->destUrl()).path();
 				copyJob->kill();
 				// This here is such a hack, shouldn't kill() do this, or why isn't there a stop()?
 				// TODO add to copyJob a stop() function.
@@ -212,13 +212,13 @@ void Ripper::copyJobResult(KJob *copyjob){
 
 	if ( copyJob->error() == 0 ){
 		emit updateProgress(newJob->id, 100);
-		newJob->location = copyJob->destURL().path();
+		newJob->location = copyJob->destUrl().path();
 		emit( encodeWav(newJob));
 	}
 	else{
 		copyJob->ui()->setWindow(0);
 		copyJob->ui()->showErrorMessage();
-		QFile file( (copyJob->destURL()).path());
+		QFile file( (copyJob->destUrl()).path());
 		file.remove();
 		emit updateProgress(newJob->id, -1);
 		delete newJob;
