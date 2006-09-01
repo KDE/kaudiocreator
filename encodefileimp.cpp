@@ -40,6 +40,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent,
   genre->addItems(m_genres.i18nList());
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
+  file->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
   connect(this,SIGNAL(user1Clicked()),this,SLOT(encode()));
 }
@@ -51,7 +52,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent,
 void EncodeFileImp::encode(){
   Job *newJob = new Job();
 
-  newJob->location = file->url();
+  newJob->location = file->url().path();
 
   newJob->album = album->text();
   newJob->genre = m_genres.i18n2cddb(genre->currentText());
