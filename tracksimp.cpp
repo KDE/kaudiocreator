@@ -348,7 +348,7 @@ void TracksImp::startSession( int encoder ) {
 	if( selected.isEmpty() )
 	{
 		int i = KMessageBox::questionYesNo( this, i18n("No tracks have been selected.  Would you like to rip the entire CD?"),
-					                        i18n("No Tracks Selected"), i18n("Rip CD"), KStdGuiItem::cancel() );
+					                        i18n("No Tracks Selected"), KGuiItem(i18n("Rip CD")), KStdGuiItem::cancel() );
 		if( i == KMessageBox::No )
 			return;
 
@@ -374,7 +374,7 @@ void TracksImp::startSession( int encoder ) {
 		list += "Album";
 
 	if( Prefs::promptIfIncompleteInfo() && list.count()>0 ) {
-		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?", list.join(", ")), i18n("Album Information Incomplete"),i18n("Rip"),KStdGuiItem::cancel());
+		int r = KMessageBox::questionYesNo(this, i18n("Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?", list.join(", ")), i18n("Album Information Incomplete"),KGuiItem(i18n("Rip")),KStdGuiItem::cancel());
 		if( r == KMessageBox::No )
 			return;
 	}
