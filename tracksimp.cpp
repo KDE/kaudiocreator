@@ -49,8 +49,9 @@
  * Constructor, connect up slots and signals.
  */
 TracksImp::TracksImp( QWidget* parent, const char* name) :
-	Tracks(parent,name),
+	Tracks(parent),
 	cddbInfo() {
+	setObjectName(name);
 	cd = new KCompactDisc;
 
 	connect(cd,SIGNAL(discChanged(unsigned)),this,SLOT(newDisc(unsigned)));

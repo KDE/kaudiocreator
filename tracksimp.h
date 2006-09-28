@@ -20,7 +20,7 @@
 #ifndef TRACKSIMP_H
 #define TRACKSIMP_H
 
-#include "tracks.h"
+#include "ui_tracks.h"
 #include <kiconloader.h>
 #include <k3listview.h>
 #include <klocale.h>
@@ -80,6 +80,13 @@ private:
 };
 
 
+class Tracks : public QWidget, public Ui::Tracks
+{
+public:
+  Tracks( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.

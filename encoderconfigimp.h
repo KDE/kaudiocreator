@@ -25,6 +25,17 @@
 #include <QMap>
 #include <q3dict.h>
 
+#include "ui_encoderedit.h"
+
+class EncoderEdit : public QWidget, public Ui::EncoderEdit
+{
+public:
+  EncoderEdit( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
+
 /**
  * Class mainly build to manage encoder list.
  */ 

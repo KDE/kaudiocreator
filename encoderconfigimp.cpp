@@ -18,7 +18,6 @@
  */
 
 #include "encoderconfigimp.h"
-#include "encoderedit.h"
 #include "prefs.h"
 
 #include <QPushButton>
@@ -136,7 +135,7 @@ void EncoderConfigImp::addEncoderSlot(){
                                             KPageDialog::Plain,
                                             KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
+  dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(loadEncoderList()));
   dialog->show();
 }
@@ -196,7 +195,7 @@ void EncoderConfigImp::configureEncoderSlot() {
                                             KPageDialog::Plain,
                                             KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
+  dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
