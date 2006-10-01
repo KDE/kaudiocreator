@@ -22,7 +22,7 @@
 
 #include <QFile>
 #include <QTimer>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmessagebox.h>
 #include <knotification.h>
 #include <kstandarddirs.h>
@@ -166,8 +166,10 @@ void Ripper::tendToNewJobs(){
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KUrl::fromPathOrUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
 	kDebug() << "defaultTempDir: " << defaultTempDir << endl;
-	KTempFile tmp( defaultTempDir, ".wav" );
-	tmp.setAutoDelete(true);
+	KTemporaryFile tmp;
+	tmp.setPrefix(defaultTempDir);
+	tmp.setSuffix(".wav");
+	tmp.open();
 
 	QString wavFile;
 	if(job->track < 10)
@@ -180,7 +182,7 @@ void Ripper::tendToNewJobs(){
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", "Track %{number}");
-	KUrl dest = KUrl::fromPathOrUrl(tmp.name());
+	KUrl dest = KUrl::fromPathOrUrl(tmp.fileName());
 	kDebug() << "dest: " << dest << endl;
 
 	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0644, false, true, false, false);
