@@ -38,7 +38,7 @@ kde4_add_ui3_files(kaudiocreator_SRCS
    encoderoutput.ui 
    encoderconfig.ui )
 
-kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
+kde4_add_kcfg_files(kaudiocreator kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
