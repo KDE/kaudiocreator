@@ -23,7 +23,7 @@ set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} ${libworkman_SRCS}
    tracksimp.cpp 
    encodefileimp.cpp )
 
-kde4_automoc(${kaudiocreator_SRCS})
+kde4_automoc(kaudiocreator ${kaudiocreator_SRCS})
 
 kde4_add_ui_files( kaudiocreator_SRCS
    encodefile.ui tracks.ui encoderedit.ui)
