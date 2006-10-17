@@ -33,6 +33,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent,
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
 
+  connect(file,SIGNAL(textChanged(const QString &)),this,SLOT(enableEncodeButton(const QString &)));
   connect(encodeButton,SIGNAL(clicked()),this,SLOT(encode()));
 }
 
@@ -69,6 +70,10 @@ void EncodeFileImp::encode(){
   i18n("%1 Job(s) have been started.  You can watch their progress in the " \
 	  "jobs section.").arg(counter),
  i18n("Jobs have started"), i18n("Jobs have started"));
+}
+
+void EncodeFileImp::enableEncodeButton(const QString &text){
+  encodeButton->setEnabled(!text.isEmpty());
 }
 
 

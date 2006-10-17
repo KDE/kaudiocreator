@@ -294,8 +294,14 @@
                     <property name="name">
                         <cstring>encodeButton</cstring>
                     </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
                     <property name="text">
                         <string>&amp;Encode File</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+E</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -305,13 +311,14 @@
                     <property name="text">
                         <string>&amp;Close</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>closeButton</sender>

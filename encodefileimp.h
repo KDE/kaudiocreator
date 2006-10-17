@@ -44,6 +44,8 @@ public:
 protected slots:
   // Encode button
   void encode();
+  // Enable encode button when user selects a file
+  void enableEncodeButton(const QString &text);
 
 private:
   // List of genres and i18n versions
