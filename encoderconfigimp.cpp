@@ -44,21 +44,21 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     EncoderPrefs *encPrefs;
     
     encPrefs = EncoderPrefs::prefs("Encoder_0");
-    encPrefs->setEncoderName(i18n("OggEnc"));
+    encPrefs->setEncoderName(i18n("Ogg Vorbis"));
     encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
     encPrefs->setExtension("ogg");
     encPrefs->setPercentLength(4);
     encPrefs->writeConfig();
 
     encPrefs = EncoderPrefs::prefs("Encoder_1");
-    encPrefs->setEncoderName(i18n("Lame"));
+    encPrefs->setEncoderName(i18n("MP3"));
     encPrefs->setCommandLine("lame --preset standard --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
     encPrefs->setExtension("mp3");
     encPrefs->setPercentLength(2);
     encPrefs->writeConfig();
 
     encPrefs = EncoderPrefs::prefs("Encoder_2");
-    encPrefs->setEncoderName(i18n("Leave as wav File"));
+    encPrefs->setEncoderName(i18n("Wav"));
     encPrefs->setCommandLine("mv %f %o");
     encPrefs->setExtension("wav");
     encPrefs->setPercentLength(2);
