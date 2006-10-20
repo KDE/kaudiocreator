@@ -210,10 +210,10 @@
                     <property name="name">
                         <cstring>kcfg_NiceLevel</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-19</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>19</number>
                     </property>
                     <property name="lineStep">

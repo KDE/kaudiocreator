@@ -142,7 +142,7 @@
                     <property name="name">
                         <cstring>year</cstring>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>99999</number>
                     </property>
                 </widget>

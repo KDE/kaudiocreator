@@ -56,7 +56,7 @@
                     <property name="name">
                         <cstring>kcfg_maxWavFiles</cstring>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>99999</number>
                     </property>
                 </widget>
@@ -108,7 +108,7 @@
                     <property name="suffix">
                         <string> seconds</string>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>300</number>
                     </property>
                 </widget>
