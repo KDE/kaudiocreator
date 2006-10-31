@@ -28,14 +28,14 @@
 
 /**
  * Class mainly build to manage encoder list.
- */ 
+ */
 class EncoderConfigImp : public EncoderConfig {
 
 Q_OBJECT
 
 signals:
   void encoderUpdated();
-	
+
 public:
   EncoderConfigImp( QWidget* parent = 0, const char* name = 0);
 
@@ -47,7 +47,7 @@ private slots:
   void updateEncoder(QObject * obj);
   void updateEncoder(const char *dialogName);
   void loadEncoderList();
-  
+
 private:
   // Name, groupName
   QMap<QString, QString> encoderNames;

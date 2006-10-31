@@ -29,7 +29,7 @@
                 </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2</cstring>
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;File to encode:</string>
@@ -69,7 +69,7 @@
                 </widget>
                 <widget class="QLabel" row="3" column="0">
                     <property name="name">
-                        <cstring>textLabel1_3</cstring>
+                        <cstring>textLabel4</cstring>
                     </property>
                     <property name="text">
                         <string>Track:</string>
@@ -80,7 +80,7 @@
                 </widget>
                 <widget class="QLabel" row="4" column="0">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
+                        <cstring>textLabel5</cstring>
                     </property>
                     <property name="text">
                         <string>Comment:</string>
@@ -96,7 +96,7 @@
                 </widget>
                 <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>trackLabel</cstring>
+                        <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
                         <string>Title:</string>
@@ -109,7 +109,7 @@
                 </widget>
                 <widget class="QLabel" row="0" column="0" rowspan="2" colspan="1">
                     <property name="name">
-                        <cstring>textLabel3</cstring>
+                        <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
                         <string>Artist:</string>
@@ -148,7 +148,7 @@
                 </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>TextLabel5</cstring>
+                        <cstring>textLabel6</cstring>
                     </property>
                     <property name="text">
                         <string>Artist:</string>
@@ -161,7 +161,7 @@
                 </widget>
                 <widget class="QLabel" row="2" column="0">
                     <property name="name">
-                        <cstring>TextLabel6</cstring>
+                        <cstring>textLabel7</cstring>
                     </property>
                     <property name="text">
                         <string>Album:</string>
@@ -187,7 +187,7 @@
                 </widget>
                 <widget class="QLabel" row="3" column="0">
                     <property name="name">
-                        <cstring>TextLabel7</cstring>
+                        <cstring>textLabel8</cstring>
                     </property>
                     <property name="text">
                         <string>Year:</string>
@@ -200,7 +200,7 @@
                 </widget>
                 <widget class="QLabel" row="4" column="0">
                     <property name="name">
-                        <cstring>TextLabel1</cstring>
+                        <cstring>textLabel9</cstring>
                     </property>
                     <property name="text">
                         <string>Genre:</string>
@@ -218,7 +218,7 @@
                 </widget>
                 <widget class="QLabel" row="5" column="0">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>textLabel10</cstring>
                     </property>
                     <property name="text">
                         <string>Comment:</string>

@@ -62,12 +62,12 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
     connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
     connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
     connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
-    
+
     connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
-    
+
     selectAllTracksButton->setEnabled( false );
     deselectAllTracksButton->setEnabled( false );
-    
+
     cddb = new KCDDB::Client();
     cddb->setBlockingMode(false);
     connect(cddb, SIGNAL(finished(CDDB::Result)), this, SLOT(lookupCDDBDone(CDDB::Result)));
@@ -95,7 +95,7 @@ TracksImp::~TracksImp() {
 }
 
 /**
- * Load the class settings. 
+ * Load the class settings.
  */
 void TracksImp::loadSettings() {
     QStringList list;
@@ -130,7 +130,7 @@ void TracksImp::newDisc(unsigned discId)
         cddbInfo.title = i18n("No disc");
         newAlbum();
         emit(hasCD(false));
-        
+
         selectAllTracksButton->setEnabled( false );
         deselectAllTracksButton->setEnabled( false );
 
@@ -139,7 +139,7 @@ void TracksImp::newDisc(unsigned discId)
 
     kdDebug() << "newDisc - " << discId << endl;
     emit(hasCD(true));
-    
+
     selectAllTracksButton->setEnabled( true );
     deselectAllTracksButton->setEnabled( true );
 
@@ -205,7 +205,7 @@ void TracksImp::changeDevice(const QString &file ) {
 
 /**
  * Helper function (toolbar button) for users.
- **/ 
+ **/
 void TracksImp::performCDDB() {
     if (!hasCD()) {
         KMessageBox::sorry(this, i18n("Please insert a disk."),
@@ -218,7 +218,7 @@ void TracksImp::performCDDB() {
 
 /**
  * See if we can't get the cddb value for this cd.
- */ 
+ */
 void TracksImp::lookupCDDB() {
     cddb->config().reparse();
     cddb->lookup(cd->discSignature());
@@ -251,7 +251,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
               .arg((*it).genre));
         }
 
-        bool ok(false); 
+        bool ok(false);
         QString res = KInputDialog::getItem(
                         i18n("Select CDDB entry"),
                         i18n("Select a CDDB entry:"), list, 0, false, &ok,
@@ -350,17 +350,17 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession( int encoder ) 
+void TracksImp::startSession( int encoder )
 {
     QPtrList<TracksItem> selected = selectedTracks();
-    
+
     if( selected.isEmpty() )
     {
         int i = KMessageBox::questionYesNo( this, i18n("No tracks have been selected.  Would you like to rip the entire CD?"),
                                             i18n("No Tracks Selected"), i18n("Rip CD"), KStdGuiItem::cancel() );
         if( i == KMessageBox::No )
             return;
-        
+
         selectAllTracks();
         selected = selectedTracks();
     }
@@ -374,20 +374,20 @@ void TracksImp::startSession( int encoder )
         list += "Artist";
     if( cddbInfo.title == "Unknown Album")
         list += "Album";
-    
+
     if( Prefs::promptIfIncompleteInfo() && list.count() > 0 )
     {
         int r = KMessageBox::questionYesNo( this, 
                  i18n( "Part of the album is not set: %1.\n (To change album information click the \"Edit Information\" button.)\n Would you like to rip the selected tracks anyway?").arg(list.join(", ")), i18n("Album Information Incomplete"), i18n("Rip"), KStdGuiItem::cancel() );
-        
+
         if( r == KMessageBox::No )
             return;
     }
-    
+
     Job *lastJob = 0;
     TracksItem *item = selected.first();
-    
-    for( ; item ; item = selected.next() ) 
+
+    for( ; item ; item = selected.next() )
     {
         Job *newJob = new Job();
         newJob->encoder = encoder;
@@ -396,18 +396,18 @@ void TracksImp::startSession( int encoder )
         newJob->genre   = cddbInfo.genre;
         if( newJob->genre.isEmpty() )
             newJob->genre = "Pop";
-        
+
         newJob->group   = cddbInfo.artist;
         newJob->comment = cddbInfo.extd;
         newJob->year    = cddbInfo.year;
         newJob->track   = item->track();
-        
+
 //         newJob->track_title   = item->title();
         newJob->track_title   = item->text( HEADER_TRACK_NAME );
         newJob->track_artist  = item->artist();
         newJob->track_comment = item->comment();
         lastJob = newJob;
-        emit( ripTrack(newJob) ); 
+        emit( ripTrack(newJob) );
     }
     if( lastJob)
         lastJob->lastSongInAlbum = true;
@@ -426,7 +426,7 @@ void TracksImp::selectTrack( QListViewItem *item )
 {
     if( !item )
         return;
-        
+
 #define item static_cast<TracksItem*>(item)
     item->setChecked( !item->checked() );
 #undef item
@@ -436,7 +436,7 @@ QPtrList<TracksItem> TracksImp::selectedTracks()
 {
     QPtrList<TracksItem> selected;
     TracksItem *item = static_cast<TracksItem*>(trackListing->firstChild());
-    
+
     while( item )
     {
         if( item->checked() ) 
@@ -480,12 +480,12 @@ void TracksImp::newAlbum()
     QString albumText = cddbInfo.title;
     if( !cddbInfo.artist.isEmpty() )
         albumText = cddbInfo.artist + i18n( " - " ) + albumText;
-    
+
     albumName->setText( albumText );
     trackListing->clear();
     selectAllTracksButton->setEnabled(false);
     deselectAllTracksButton->setEnabled(false);
-    
+
     emit( hasTracks(false) );
 
     KCDDB::TrackInfoList t = cddbInfo.trackInfoList;
@@ -543,12 +543,12 @@ void TracksImp::keyPressEvent(QKeyEvent *event)
 {
     QListViewItem *item = trackListing->selectedItem();
     if( !item ) return;
-    
+
     if( event->key() == Qt::Key_F2 ) 
     {
         item->setRenameEnabled( HEADER_TRACK_NAME, true );
         item->startRename( HEADER_TRACK_NAME );
-        event->accept();      
+        event->accept();
     }
     else
         Tracks::keyPressEvent(event);
@@ -567,7 +567,7 @@ void TracksImp::eject() {
  */
 void TracksImp::ejectDevice(const QString &deviceToEject) {
     changeDevice(deviceToEject);
-    
+
     cd->eject();
 }
 

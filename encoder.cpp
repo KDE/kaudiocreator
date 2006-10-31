@@ -43,7 +43,7 @@ Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),report
 
 /**
  * Load the settings for this class.
- */ 
+ */
 void Encoder::loadSettings() {
 	loadEncoder(Prefs::currentEncoder());
 	// If the cpu count change then try
@@ -57,7 +57,7 @@ void Encoder::loadEncoder( int encoder ){
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString::null);
-	}				
+	}
 }
 
 /**
@@ -86,7 +86,7 @@ int Encoder::activeJobCount() {
 	return jobs.count();
 }
 
-/** 
+/**
  * @return The number of pending jobs
  */
 int Encoder::pendingJobCount() {
@@ -298,7 +298,7 @@ void Encoder::jobDone(KProcess *process ) {
 				showDebugBox = true;
 			}
 		}
-		else{ 
+		else{
 			//qDebug("Must be done: %d", (process->exitStatus()));
 			emit(updateProgress(job->id, 100));
 			KNotifyClient::event("track encoded");

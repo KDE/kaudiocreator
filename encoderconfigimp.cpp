@@ -42,7 +42,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   // If there are no encoders then store the three default ones.
   if( Prefs::lastKnownEncoder() == 0){
     EncoderPrefs *encPrefs;
-    
+
     encPrefs = EncoderPrefs::prefs("Encoder_0");
     encPrefs->setEncoderName(i18n("Ogg Vorbis"));
     encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
@@ -74,7 +74,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     Prefs::setLastKnownEncoder(3);
     Prefs::writeConfig();
   }
-  
+
   loadEncoderList();
 }
 
@@ -82,13 +82,13 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
  * Clear map
  * Clear listbox
  * Load list of encoders.
- */ 
+ */
 void EncoderConfigImp::loadEncoderList(){
   encoderNames.clear();
   kcfg_currentEncoder->clear();
-  
+
   bool foundCurrentEncoder = false;
-  
+
   int lastEncoder = 0;
   int lastKnownEncoder = Prefs::lastKnownEncoder();
   lastKnownEncoder++;
@@ -101,14 +101,14 @@ void EncoderConfigImp::loadEncoderList(){
       kcfg_currentEncoder->insertItem(encoderName);
       encoderNames.insert(encoderName, currentGroup);
       if(Prefs::currentEncoder() == i)
-	foundCurrentEncoder = true;    
+	foundCurrentEncoder = true;
     }
   }
   if(lastEncoder != Prefs::lastKnownEncoder()){
     Prefs::setLastKnownEncoder(lastEncoder);
     Prefs::writeConfig();
   }
-  
+
   // Make sure that the current encoder is valid.
   if(!foundCurrentEncoder && kcfg_currentEncoder->count() > 0)
     kcfg_currentEncoder->setCurrentItem(0);
@@ -117,7 +117,7 @@ void EncoderConfigImp::loadEncoderList(){
 /**
  * Find empty group
  * bring up dialog for that group.
- */ 
+ */
 void EncoderConfigImp::addEncoderSlot(){
   bool foundEmptyGroup = false;
   uint number = 0;
@@ -129,10 +129,10 @@ void EncoderConfigImp::addEncoderSlot(){
     else
       number++;
   }
- 
+
   if(KConfigDialog::showDialog(groupName.latin1()))
     return;
-    
+
   KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName), 
                                             KDialogBase::Swallow,
                                             KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
@@ -151,12 +151,12 @@ void EncoderConfigImp::addEncoderSlot(){
  * Then
  * The group is removed from the list
  * Deleted from the config.
- */ 
+ */
 void EncoderConfigImp::removeEncoderSlot(){
   if(!kcfg_currentEncoder->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
-  }	
+  }
   if(kcfg_currentEncoder->count() <= 1){
     KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can Not Remove"));
     return;
@@ -164,7 +164,7 @@ void EncoderConfigImp::removeEncoderSlot(){
   if(KMessageBox::warningContinueCancel(this, i18n("Delete encoder?"), i18n("Delete Encoder"),KStdGuiItem::del())
       == KMessageBox::Cancel )
     return;
-  
+
   QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
   kcfg_currentEncoder->removeItem(kcfg_currentEncoder->currentItem());
 
@@ -179,7 +179,7 @@ void EncoderConfigImp::removeEncoderSlot(){
  * Group exists
  * Then
  * Bring up dialog
- */ 
+ */
 void EncoderConfigImp::configureEncoderSlot() {
   if(!kcfg_currentEncoder->selectedItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
@@ -205,8 +205,8 @@ void EncoderConfigImp::configureEncoderSlot() {
 }
 
 /**
- * If object exists update encoder.
- */ 
+ * If object exists update encoder
+ */
 void EncoderConfigImp::updateEncoder(QObject * obj){
   if(!obj)
    return;
@@ -222,7 +222,7 @@ void EncoderConfigImp::updateEncoder(QObject * obj){
  * Update name
  * Update Map
  * If current encoder update also.
- */ 
+ */
 void EncoderConfigImp::updateEncoder(const char *dialogName){
   QString groupName = dialogName;
   QString encoderName;
@@ -241,7 +241,7 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   QString newName = EncoderPrefs::prefs(groupName)->encoderName();
   if(newName == encoderName)
     return;
-  
+
   QListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
   if(!item)
     return;
@@ -263,7 +263,7 @@ EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
   EncoderPrefs *encPrefs = m_prefs->find(groupName);
   if (encPrefs)
     return encPrefs;
-    
+
   encPrefs = new EncoderPrefs(groupName);
   encPrefs->readConfig();
   m_prefs->insert(groupName, encPrefs);

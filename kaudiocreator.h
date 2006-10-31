@@ -54,7 +54,7 @@ private slots:
 
   void slotRipSelection(int);
   void getRipMenu();
-	
+
 private:
   KJanusWidget *janusWidget;
   TracksImp    *tracks;
@@ -70,13 +70,13 @@ Q_OBJECT
 
 public:
   SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
-  
+
 protected slots:
   void updateSettings();
   void updateWidgets();
   void updateWidgetsDefault();
   void slotCddbChanged(bool);
-  
+
 protected:
   bool hasChanged();
   bool isDefault();
