@@ -30,7 +30,7 @@
 class Job{
 
 public:
-	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), encoder(-1) {};
+	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), removeTempFile(true), encoder(-1) {};
 
 	QString replaceSpecialChars(const QString &string, bool quote, QHash<QString,QString> map);
 
@@ -63,6 +63,9 @@ public:
 
 	// If this is the last track to be ripped then value is true. 
 	bool lastSongInAlbum;
+
+	// If the file should be removed on errorr or when finished ripping
+	bool removeTempFile;
 
 	// output from the processing.
 	QString output;
