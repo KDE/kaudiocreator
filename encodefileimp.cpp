@@ -62,6 +62,8 @@ void EncodeFileImp::encode(){
   newJob->track_artist = track_artist->text();
   newJob->track_comment = track_comment->text();
 
+  newJob->removeTempFile = false;
+
   emit(startJob(newJob));
 
   // Same message and *strings* from tracksimp.cpp

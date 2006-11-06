@@ -159,6 +159,7 @@ void Encoder::tendToNewJobs() {
 	}
 	
 	QString desiredFile = Prefs::fileFormat();
+	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
 	{
 		QMap <QString,QString> map;
 		map.insert("extension", prefs->extension());
@@ -167,7 +168,6 @@ void Encoder::tendToNewJobs() {
 		jobx.fix("/", "%2f");
 		// If the user wants anything regexp replaced do it now...
 		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
-		desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
 	}
 
 	while ( QFile::exists( desiredFile ) ) {
@@ -284,12 +284,10 @@ void Encoder::jobDone(KProcess *process ) {
 	bool showDebugBox = false;
 	if ( process->exitStatus() == 127 ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
-		QFile::remove(job->location);
 		emit(updateProgress(job->id, -1));
 	}
 	else if ( QFile::exists(job->newLocation) ) {
 		emit(jobIsDone(job, prefs->extension()));
-		QFile::remove(job->location);
 
 		// fyi segfaults return 136
 		if ( process->exitStatus() != 0 ) {
@@ -312,9 +310,11 @@ void Encoder::jobDone(KProcess *process ) {
 		{
 			showDebugBox = true;
 		}
-		QFile::remove( job->location );
 		emit( updateProgress( job->id, -1 ) );
 	}
+
+	if ( job->removeTempFile )
+		QFile::remove( job->location );
 
 	if( showDebugBox ){
 		EncoderOutput dlg( 0, "Encoder Output" );
