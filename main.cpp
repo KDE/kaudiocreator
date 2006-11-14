@@ -41,6 +41,10 @@ int main(int argc, char *argv[]){
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication a(true);
   KAudioCreator *app = new KAudioCreator(0, "MainWindow");
+
+  // we need some strings from libkcddb for the cddb album dialog
+  KGlobal::locale()->insertCatalogue("libkcddb");
+
   a.setMainWidget(app);
 
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
