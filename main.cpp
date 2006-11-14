@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
   KAudioCreator *app = new KAudioCreator(0, "MainWindow");
 
   // we need some strings from libkcddb for the cddb album dialog
-  KGlobal::locale()->insertCatalogue("libkcddb");
+  KGlobal::locale()->insertCatalog("libkcddb");
 
   a.setMainWidget(app);
 
