@@ -1,285 +1,251 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>AlbumEditor</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>AlbumEditor</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>AlbumEditor</class>
+  <widget class="QDialog" name="AlbumEditor" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>423</width>
+        <height>365</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>423</width>
-            <height>365</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Album Editor</string>
     </property>
-    <property name="caption">
-        <string>Album Editor</string>
+    <property name="sizeGripEnabled" >
+      <bool>true</bool>
     </property>
-    <property name="sizeGripEnabled">
-        <bool>true</bool>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox2</cstring>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>11</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="Q3GroupBox" name="groupBox2" >
+          <property name="title" >
+            <string>Current Track</string>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="title">
-                <string>Current Track</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+            <item rowspan="2" row="2" column="0" colspan="1" >
+              <widget class="QLabel" name="textLabel2" >
+                <property name="text" >
+                  <string>Comment:</string>
                 </property>
-                <widget class="QLabel" row="2" column="0" rowspan="2" colspan="1">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Comment:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="3" column="1">
-                    <property name="name">
-                        <cstring>track_comment</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>trackLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Title:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1" rowspan="2" colspan="1">
-                    <property name="name">
-                        <cstring>track_title</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Artist:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>track_artist</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Album</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
                 </property>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>artist</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>TextLabel5</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Artist:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>TextLabel6</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Album:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>album</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox" row="3" column="1">
-                    <property name="name">
-                        <cstring>year</cstring>
-                    </property>
-                    <property name="maximum">
-                        <number>99999</number>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>TextLabel7</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Year:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0">
-                    <property name="name">
-                        <cstring>TextLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Genre:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="hAlign" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="4" column="1">
-                    <property name="name">
-                        <cstring>genre</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="5" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Comment:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="5" column="1">
-                    <property name="name">
-                        <cstring>comment</cstring>
-                    </property>
-                </widget>
-            </grid>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="1" >
+              <widget class="QLineEdit" name="track_comment" />
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="trackLabel" >
+                <property name="text" >
+                  <string>Title:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="2" row="1" column="1" colspan="1" >
+              <widget class="QLineEdit" name="track_title" />
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="textLabel3" >
+                <property name="text" >
+                  <string>Artist:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QLineEdit" name="track_artist" />
+            </item>
+          </layout>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer1</cstring>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="groupBox1" >
+          <property name="title" >
+            <string>Album</string>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>100</height>
-                </size>
-            </property>
+            <item row="1" column="1" >
+              <widget class="QLineEdit" name="artist" />
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="TextLabel5" >
+                <property name="text" >
+                  <string>Artist:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="0" >
+              <widget class="QLabel" name="TextLabel6" >
+                <property name="text" >
+                  <string>Album:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="1" >
+              <widget class="QLineEdit" name="album" />
+            </item>
+            <item row="3" column="1" >
+              <widget class="QSpinBox" name="year" >
+                <property name="maximum" >
+                  <number>99999</number>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="0" >
+              <widget class="QLabel" name="TextLabel7" >
+                <property name="text" >
+                  <string>Year:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="4" column="0" >
+              <widget class="QLabel" name="TextLabel1" >
+                <property name="text" >
+                  <string>Genre:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="4" column="1" >
+              <widget class="QComboBox" name="genre" />
+            </item>
+            <item row="5" column="0" >
+              <widget class="QLabel" name="textLabel1" >
+                <property name="text" >
+                  <string>Comment:</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="5" column="1" >
+              <widget class="QLineEdit" name="comment" />
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item>
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>100</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonPrevious</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Previous Track</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonNext</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Next Track</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonOk</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>AlbumEditor</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>AlbumEditor</receiver>
-        <slot>reject()</slot>
-    </connection>
-</connections>
-<tabstops>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <widget class="QPushButton" name="buttonPrevious" >
+              <property name="text" >
+                <string>&amp;Previous Track</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonNext" >
+              <property name="text" >
+                <string>&amp;Next Track</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonOk" >
+              <property name="text" >
+                <string>&amp;OK</string>
+              </property>
+              <property name="autoDefault" >
+                <bool>true</bool>
+              </property>
+              <property name="default" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonCancel" >
+              <property name="text" >
+                <string>&amp;Cancel</string>
+              </property>
+              <property name="autoDefault" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>track_artist</tabstop>
     <tabstop>track_title</tabstop>
     <tabstop>track_comment</tabstop>
@@ -292,6 +258,19 @@
     <tabstop>buttonNext</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>buttonOk</sender>
+      <signal>clicked()</signal>
+      <receiver>AlbumEditor</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>buttonCancel</sender>
+      <signal>clicked()</signal>
+      <receiver>AlbumEditor</receiver>
+      <slot>reject()</slot>
+    </connection>
+  </connections>
+</ui>

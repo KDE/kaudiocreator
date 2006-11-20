@@ -49,7 +49,7 @@
  * @param name - widget name
  */
 JobQueImp::JobQueImp( QWidget* parent, const char* name) :
-		JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
+		JobQue(parent),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
 	connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
 	connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
 	connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));

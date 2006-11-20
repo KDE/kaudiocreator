@@ -20,7 +20,7 @@
 #ifndef JOBQUEIMP_H
 #define JOBQUEIMP_H
 
-#include "jobque.h"
+#include "ui_jobque.h"
 #include <QString>
 #include <q3listview.h>
 
@@ -42,6 +42,15 @@ public:
 	// Has the percentDone gone beyond 0
 	// Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
 	bool progressing;
+};
+
+
+class JobQue : public QWidget, public Ui::JobQue
+{
+public:
+  JobQue( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
 };
 
 

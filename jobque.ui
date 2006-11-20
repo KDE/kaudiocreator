@@ -1,132 +1,125 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>JobQue</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>JobQue</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>JobQue</class>
+  <widget class="QWidget" name="JobQue" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>629</width>
+        <height>513</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>629</width>
-            <height>513</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="QPushButton" row="2" column="2">
-            <property name="name">
-                <cstring>removeAll</cstring>
-            </property>
-            <property name="text">
-                <string>Remove All Jobs</string>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item row="2" column="2" >
+        <widget class="QPushButton" name="removeAll" >
+          <property name="text" >
+            <string>Remove All Jobs</string>
+          </property>
         </widget>
-        <widget class="QPushButton" row="2" column="3">
-            <property name="name">
-                <cstring>removeSelected</cstring>
-            </property>
-            <property name="text">
-                <string>Remove Selected Jobs</string>
-            </property>
+      </item>
+      <item row="2" column="3" >
+        <widget class="QPushButton" name="removeSelected" >
+          <property name="text" >
+            <string>Remove Selected Jobs</string>
+          </property>
         </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item row="2" column="0" >
+        <spacer name="Spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>16</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Horizontal</enum>
+          </property>
         </spacer>
-        <widget class="QListView" row="1" column="0" rowspan="1" colspan="4">
-            <column>
-                <property name="text">
-                    <string>Job</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Progress</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Description</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>todoQue</cstring>
+      </item>
+      <item rowspan="1" row="1" column="0" colspan="4" >
+        <widget class="Q3ListView" name="todoQue" >
+          <property name="selectionMode" >
+            <enum>Q3ListView::Multi</enum>
+          </property>
+          <property name="allColumnsShowFocus" >
+            <bool>true</bool>
+          </property>
+          <property name="resizeMode" >
+            <enum>Q3ListView::LastColumn</enum>
+          </property>
+          <column>
+            <property name="text" >
+              <string>Job</string>
             </property>
-            <property name="selectionMode">
-                <enum>Multi</enum>
+            <property name="clickable" >
+              <bool>true</bool>
             </property>
-            <property name="allColumnsShowFocus">
-                <bool>true</bool>
+            <property name="resizable" >
+              <bool>true</bool>
             </property>
-            <property name="resizeMode">
-                <enum>LastColumn</enum>
+          </column>
+          <column>
+            <property name="text" >
+              <string>Progress</string>
             </property>
+            <property name="clickable" >
+              <bool>true</bool>
+            </property>
+            <property name="resizable" >
+              <bool>true</bool>
+            </property>
+          </column>
+          <column>
+            <property name="text" >
+              <string>Description</string>
+            </property>
+            <property name="clickable" >
+              <bool>true</bool>
+            </property>
+            <property name="resizable" >
+              <bool>true</bool>
+            </property>
+          </column>
         </widget>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>queLabel</cstring>
-            </property>
-            <property name="text">
-                <string>No jobs are in the queue</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
+      </item>
+      <item rowspan="1" row="0" column="0" colspan="4" >
+        <widget class="QLabel" name="queLabel" >
+          <property name="text" >
+            <string>No jobs are in the queue</string>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-        <widget class="QPushButton" row="2" column="1">
-            <property name="name">
-                <cstring>removeDoneJobs</cstring>
-            </property>
-            <property name="text">
-                <string>Remove Completed Jobs</string>
-            </property>
+      </item>
+      <item row="2" column="1" >
+        <widget class="QPushButton" name="removeDoneJobs" >
+          <property name="text" >
+            <string>Remove Completed Jobs</string>
+          </property>
         </widget>
-    </grid>
-</widget>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>todoQue</tabstop>
     <tabstop>removeDoneJobs</tabstop>
     <tabstop>removeAll</tabstop>
     <tabstop>removeSelected</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>
