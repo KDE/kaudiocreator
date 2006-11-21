@@ -21,16 +21,15 @@ set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} ${libworkman_SRCS}
    jobqueimp.cpp 
    ripper.cpp 
    tracksimp.cpp 
-   encodefileimp.cpp )
+   encodefileimp.cpp general.cpp )
 
 kde4_automoc(${kaudiocreator_SRCS})
 
 kde4_add_ui_files( kaudiocreator_SRCS
-   encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui)
+   encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui)
 
 kde4_add_ui3_files(kaudiocreator_SRCS 
-   wizard.ui 
-   general.ui 
+   wizard.ui
    cdconfig.ui 
    ripconfig.ui 
    encoderoutput.ui 

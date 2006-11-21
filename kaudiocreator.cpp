@@ -259,7 +259,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
  : KConfigDialog(parent, name, config),
  cddb(0), cddbChanged(false)
 {
-	addPage(new General(0, "General"), i18n("General"), "package_settings",
+	addPage(new General(0), i18n("General"), "package_settings",
 		  i18n("General Configuration"));
 	addPage(new CdConfig(0, "CD"), i18n("CD"), "package_system",
 		  i18n("CD Configuration"));

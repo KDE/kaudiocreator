@@ -1,288 +1,254 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>General</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>General</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>General</class>
+  <widget class="QWidget" name="General" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>473</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>442</width>
-            <height>473</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>General</string>
     </property>
-    <property name="caption">
-        <string>General</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>kcfg_removeCompletedJobs</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Automatically remove jobs when finished</string>
-            </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item>
+        <widget class="QCheckBox" name="kcfg_removeCompletedJobs" >
+          <property name="text" >
+            <string>&amp;Automatically remove jobs when finished</string>
+          </property>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>kcfg_promptIfIncompleteInfo</cstring>
-            </property>
-            <property name="text">
-                <string>Prompt if information is not complete</string>
-            </property>
+      </item>
+      <item>
+        <widget class="QCheckBox" name="kcfg_promptIfIncompleteInfo" >
+          <property name="text" >
+            <string>Prompt if information is not complete</string>
+          </property>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox2</cstring>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="groupBox2" >
+          <property name="title" >
+            <string>File Regular Expression Replacement</string>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="title">
-                <string>File Regular Expression Replacement</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="textLabel2" >
+                <property name="text" >
+                  <string>Selection:</string>
                 </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Selection:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Regular expression used on all file names. For example using selection " " and replace with "_" would replace all the spaces with underlines.
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="0" column="0" colspan="3" >
+              <widget class="QLabel" name="textLabel1" >
+                <property name="text" >
+                  <string>Regular expression used on all file names. For example using selection " " and replace with "_" would replace all the spaces with underlines.
 </string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter</set>
-                    </property>
-                    <property name="wordWrap">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="5" column="0">
-                    <property name="name">
-                        <cstring>inputlabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Input:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="6" column="0">
-                    <property name="name">
-                        <cstring>outputLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Output:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>exampleLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Example</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="6" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>exampleOutput</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cool artist - example audio file.wav</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>example</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cool artist - example audio file.wav</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>kcfg_replaceInput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="2">
-                    <property name="name">
-                        <cstring>kcfg_replaceOutput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Replace with:</string>
-                    </property>
-                </widget>
-                <widget class="Line" row="3" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>line1</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>HLine</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>kcfg_seperateMultiArtist</cstring>
-            </property>
-            <property name="title">
-                <string>Automatically Separate Multi-Artist CDDB Entries</string>
-            </property>
-            <property name="checkable">
-                <bool>true</bool>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
                 </property>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>buttonGroup2</cstring>
-                    </property>
-                    <property name="title">
-                        <string>Format</string>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>kcfg_format_titleArtist</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Title - Artist</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>kcfg_format_artistTitle</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Artist - Title</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>delimiterLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Delimiter:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>genArtistLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Generic artist:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="1">
-                            <property name="name">
-                                <cstring>kcfg_delimiter</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="0" column="1">
-                            <property name="name">
-                                <cstring>kcfg_genericArtist</cstring>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </hbox>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>true</bool>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="5" column="0" >
+              <widget class="QLabel" name="inputlabel" >
+                <property name="text" >
+                  <string>Input:</string>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="6" column="0" >
+              <widget class="QLabel" name="outputLabel" >
+                <property name="text" >
+                  <string>Output:</string>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="4" column="0" colspan="2" >
+              <widget class="QLabel" name="exampleLabel" >
+                <property name="text" >
+                  <string>Example</string>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="6" column="1" colspan="2" >
+              <widget class="QLabel" name="exampleOutput" >
+                <property name="text" >
+                  <string>Cool artist - example audio file.wav</string>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="5" column="1" colspan="2" >
+              <widget class="QLineEdit" name="example" >
+                <property name="text" >
+                  <string>Cool artist - example audio file.wav</string>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="2" column="0" colspan="2" >
+              <widget class="QLineEdit" name="kcfg_replaceInput" />
+            </item>
+            <item row="2" column="2" >
+              <widget class="QLineEdit" name="kcfg_replaceOutput" />
+            </item>
+            <item row="1" column="2" >
+              <widget class="QLabel" name="textLabel3" >
+                <property name="text" >
+                  <string>Replace with:</string>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="3" column="0" colspan="3" >
+              <widget class="Line" name="line1" >
+                <property name="frameShape" >
+                  <enum>QFrame::HLine</enum>
+                </property>
+                <property name="frameShadow" >
+                  <enum>QFrame::Sunken</enum>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer1</cstring>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="kcfg_seperateMultiArtist" >
+          <property name="title" >
+            <string>Automatically Separate Multi-Artist CDDB Entries</string>
+          </property>
+          <property name="checkable" >
+            <bool>true</bool>
+          </property>
+          <property name="checked" >
+            <bool>true</bool>
+          </property>
+          <layout class="QHBoxLayout" >
+            <property name="margin" >
+              <number>0</number>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+            <item>
+              <widget class="Q3ButtonGroup" name="buttonGroup2" >
+                <property name="title" >
+                  <string>Format</string>
+                </property>
+                <layout class="QVBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="QRadioButton" name="kcfg_format_titleArtist" >
+                      <property name="text" >
+                        <string>Title - Artist</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QRadioButton" name="kcfg_format_artistTitle" >
+                      <property name="text" >
+                        <string>Artist - Title</string>
+                      </property>
+                      <property name="checked" >
+                        <bool>true</bool>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </widget>
+            </item>
+            <item>
+              <layout class="QGridLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item row="1" column="0" >
+                  <widget class="QLabel" name="delimiterLabel" >
+                    <property name="text" >
+                      <string>Delimiter:</string>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="0" column="0" >
+                  <widget class="QLabel" name="genArtistLabel" >
+                    <property name="text" >
+                      <string>Generic artist:</string>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="1" >
+                  <widget class="QLineEdit" name="kcfg_delimiter" />
+                </item>
+                <item row="0" column="1" >
+                  <widget class="QLineEdit" name="kcfg_genericArtist" />
+                </item>
+              </layout>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item>
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Vertical</enum>
+          </property>
         </spacer>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>kcfg_replaceInput</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>General</receiver>
-        <slot>updateExample()</slot>
-    </connection>
-    <connection>
-        <sender>kcfg_replaceOutput</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>General</receiver>
-        <slot>updateExample()</slot>
-    </connection>
-    <connection>
-        <sender>example</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>General</receiver>
-        <slot>updateExample()</slot>
-    </connection>
-</connections>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>kcfg_replaceInput</tabstop>
     <tabstop>kcfg_replaceOutput</tabstop>
     <tabstop>example</tabstop>
     <tabstop>kcfg_removeCompletedJobs</tabstop>
-</tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">general.ui.h</include>
-</includes>
-<slots>
-    <slot access="protected" specifier="non virtual">updateExample()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>

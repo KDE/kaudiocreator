@@ -1,3 +1,5 @@
+#include "general.h"
+// TODO replace comment below with license
 /****************************************************************************
 ** ui.h extension file, included from the uic-generated form implementation.
 **
@@ -11,9 +13,20 @@
 #include <QLineEdit>
 #include <QLabel>
 
+General::General( QWidget* parent )
+    : QWidget( parent ), Ui_General()
+{
+    setupUi( this );
+    connect(kcfg_replaceInput,SIGNAL(textChanged(const QString &)),this, SLOT(updateExample()));
+    connect(kcfg_replaceOutput, SIGNAL(textChanged(const QString&)), this,SLOT(updateExample()));
+    connect(example, SIGNAL(textChanged(const QString&)), this, SLOT(updateExample()));
+
+}
+
 void General::updateExample()
 {
   QString text = example->text();
   text.replace( QRegExp(kcfg_replaceInput->text()), kcfg_replaceOutput->text() );
   exampleOutput->setText(text);
 }
+#include "general.moc"
