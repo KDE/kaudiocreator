@@ -14,7 +14,7 @@
  * Load up the wizard with the encoder fileFormat string.  Save it if OK is hit.
  */
 void EncoderConfig::encoderWizard(){
-  fileWizard wizard(this, "Encoder File Format Wizard", true);
+  fileWizard wizard(this);
   wizard.fileFormat->setText(kcfg_fileFormat->text());
 
   // Show dialog and save results if ok is pressed.

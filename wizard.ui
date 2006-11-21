@@ -1,382 +1,266 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>fileWizard</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>fileWizard</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>fileWizard</class>
+  <widget class="QDialog" name="fileWizard" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>582</width>
+        <height>456</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>582</width>
-            <height>456</height>
-        </rect>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>1</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
+    <property name="windowTitle" >
+      <string>File Location Wizard</string>
     </property>
-    <property name="caption">
-        <string>File Location Wizard</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel8</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>When files have finished being processed, they are saved based upon the &lt;i&gt;File Location&lt;/i&gt;.  Information about the track should be used within that text.  There are eleven special words starting with a % that will be replaced with the corresponding track's information.  Each of the buttons below will insert its replacement word into the &lt;i&gt;File Location&lt;/i&gt; where the cursor is.  Use at least one replacement string to make sure that the &lt;i&gt;File Location&lt;/i&gt; is unique.</string>
-            </property>
-            <property name="textFormat">
-                <enum>RichText</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignTop|AlignLeft</set>
-	    </property>
-	    <property name="wordWrap">
-		    <bool>true</bool>
-	    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>11</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QLabel" name="TextLabel8" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>3</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>When files have finished being processed, they are saved based upon the &lt;i>File Location&lt;/i>.  Information about the track should be used within that text.  There are eleven special words starting with a % that will be replaced with the corresponding track's information.  Each of the buttons below will insert its replacement word into the &lt;i>File Location&lt;/i> where the cursor is.  Use at least one replacement string to make sure that the &lt;i>File Location&lt;/i> is unique.</string>
+          </property>
+          <property name="textFormat" >
+            <enum>Qt::RichText</enum>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignTop|Qt::AlignLeft</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>true</bool>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer6</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+      </item>
+      <item>
+        <spacer name="Spacer6" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout8</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel9</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;File location:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>playlistFormat</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>fileFormat</cstring>
-                    </property>
-                    <property name="text">
-                        <string>~/%{extension}/%{artist}/%{album}/%{artist} - %{album}.m3u</string>
-                    </property>
-                </widget>
-            </hbox>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <widget class="QLabel" name="TextLabel9" >
+              <property name="text" >
+                <string>&amp;File location:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>playlistFormat</cstring>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLineEdit" name="fileFormat" >
+              <property name="text" >
+                <string>~/%{extension}/%{artist}/%{album}/%{artist} - %{album}.m3u</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="QLabel" name="exampleLabel" >
+          <property name="text" >
+            <string>Example: ~/mp3/Staind/Lost Love/Staind - Lost Love.m3u</string>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>exampleLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Example: ~/mp3/Staind/Lost Love/Staind - Lost Love.m3u</string>
-            </property>
+      </item>
+      <item>
+        <layout class="QGridLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item row="0" column="1" >
+            <widget class="QPushButton" name="artistButton" >
+              <property name="text" >
+                <string>&amp;Artist</string>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="2" >
+            <widget class="QPushButton" name="homeDirButton" >
+              <property name="text" >
+                <string>&amp;Home Folder</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="3" >
+            <widget class="QPushButton" name="trackNumberButton" >
+              <property name="text" >
+                <string>&amp;Track Number</string>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="1" >
+            <widget class="QPushButton" name="extensionButton" >
+              <property name="text" >
+                <string>&amp;Extension</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="0" >
+            <widget class="QPushButton" name="trackTitleButton" >
+              <property name="text" >
+                <string>Track T&amp;itle</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="2" >
+            <widget class="QPushButton" name="trackCommentButton" >
+              <property name="text" >
+                <string>T&amp;rack Comment</string>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="0" >
+            <widget class="QPushButton" name="genreButton" >
+              <property name="text" >
+                <string>&amp;Genre</string>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="3" >
+            <widget class="QPushButton" name="yearButton" >
+              <property name="text" >
+                <string>&amp;Year</string>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="0" >
+            <widget class="QPushButton" name="albumButton" >
+              <property name="text" >
+                <string>Al&amp;bum</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="1" >
+            <widget class="QPushButton" name="trackArtistButton" >
+              <property name="text" >
+                <string>Trac&amp;k Artist</string>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="2" >
+            <widget class="QPushButton" name="commentButton" >
+              <property name="text" >
+                <string>Co&amp;mment</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="Line" name="Line2" >
+          <property name="frameShape" >
+            <enum>QFrame::HLine</enum>
+          </property>
+          <property name="frameShadow" >
+            <enum>QFrame::Sunken</enum>
+          </property>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout15</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>artistButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Artist</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="2">
-                    <property name="name">
-                        <cstring>homeDirButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Home Folder</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="3">
-                    <property name="name">
-                        <cstring>trackNumberButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Track Number</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="1">
-                    <property name="name">
-                        <cstring>extensionButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Extension</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>trackTitleButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Track T&amp;itle</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="2">
-                    <property name="name">
-                        <cstring>trackCommentButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>T&amp;rack Comment</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>genreButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Genre</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="3">
-                    <property name="name">
-                        <cstring>yearButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Year</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>albumButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Al&amp;bum</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>trackArtistButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Trac&amp;k Artist</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>commentButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Co&amp;mment</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="Line">
-            <property name="name">
-                <cstring>Line2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <spacer name="Horizontal Spacing2" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
                 <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonOk</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>homeDirButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>homePressed()</slot>
-    </connection>
-    <connection>
-        <sender>artistButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>artistPressed()</slot>
-    </connection>
-    <connection>
-        <sender>trackNumberButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>trackNumberPressed()</slot>
-    </connection>
-    <connection>
-        <sender>yearButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>yearPressed()</slot>
-    </connection>
-    <connection>
-        <sender>extensionButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>extensionPressed()</slot>
-    </connection>
-    <connection>
-        <sender>albumButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>albumPressed()</slot>
-    </connection>
-    <connection>
-        <sender>trackTitleButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>trackTitlePressed()</slot>
-    </connection>
-    <connection>
-        <sender>genreButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>genrePressed()</slot>
-    </connection>
-    <connection>
-        <sender>fileFormat</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>fileWizard</receiver>
-        <slot>fileFormatTextChanged(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>trackArtistButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>trackArtistPressed()</slot>
-    </connection>
-    <connection>
-        <sender>trackCommentButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>trackCommentPressed()</slot>
-    </connection>
-    <connection>
-        <sender>commentButton</sender>
-        <signal>clicked()</signal>
-        <receiver>fileWizard</receiver>
-        <slot>commentPressed()</slot>
-    </connection>
-</connections>
-<tabstops>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonOk" >
+              <property name="text" >
+                <string>&amp;OK</string>
+              </property>
+              <property name="autoDefault" >
+                <bool>true</bool>
+              </property>
+              <property name="default" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonCancel" >
+              <property name="text" >
+                <string>&amp;Cancel</string>
+              </property>
+              <property name="autoDefault" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
     <tabstop>fileFormat</tabstop>
     <tabstop>albumButton</tabstop>
     <tabstop>artistButton</tabstop>
@@ -391,23 +275,5 @@
     <tabstop>homeDirButton</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-</tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">wizard.ui.h</include>
-</includes>
-<slots>
-    <slot access="private">homePressed()</slot>
-    <slot>extensionPressed()</slot>
-    <slot access="private">trackTitlePressed()</slot>
-    <slot>trackArtistPressed()</slot>
-    <slot access="private">trackNumberPressed()</slot>
-    <slot>trackCommentPressed()</slot>
-    <slot access="private">yearPressed()</slot>
-    <slot>genrePressed()</slot>
-    <slot>albumPressed()</slot>
-    <slot>artistPressed()</slot>
-    <slot>commentPressed()</slot>
-    <slot>fileFormatTextChanged( const QString &amp; text )</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>
