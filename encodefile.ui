@@ -300,9 +300,6 @@
                     <property name="text">
                         <string>&amp;Encode File</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+E</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -310,9 +307,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Close</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>
