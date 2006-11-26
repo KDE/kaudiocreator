@@ -1,26 +1,26 @@
 project(kaudiocreator)
 
-add_subdirectory( icons ) 
+add_subdirectory( icons )
 
-include_directories( 
-		${CMAKE_SOURCE_DIR}/libkcddb 
-		${CMAKE_BINARY_DIR}/libkcddb 
-		${CMAKE_SOURCE_DIR}/kscd   
-		${CMAKE_BINARY_DIR}/kscd
+include_directories(
+		${CMAKE_SOURCE_DIR}/libkcddb
+		${CMAKE_BINARY_DIR}/libkcddb
+		${CMAKE_SOURCE_DIR}/libkcompactdisc
+		${CMAKE_BINARY_DIR}/libkcompactdisc
 		)
 
 
 ########### next target ###############
 
-set(kaudiocreator_SRCS ${libkcompactdisc_SRCS} ${libworkman_SRCS} 
-   main.cpp 
-   kaudiocreator.cpp 
-   encoder.cpp 
-   encoderconfigimp.cpp 
-   job.cpp 
-   jobqueimp.cpp 
-   ripper.cpp 
-   tracksimp.cpp 
+set(kaudiocreator_SRCS
+   main.cpp
+   kaudiocreator.cpp
+   encoder.cpp
+   encoderconfigimp.cpp
+   job.cpp
+   jobqueimp.cpp
+   ripper.cpp
+   tracksimp.cpp
    encodefileimp.cpp general.cpp wizard.cpp )
 
 kde4_automoc(${kaudiocreator_SRCS})
@@ -28,17 +28,17 @@ kde4_automoc(${kaudiocreator_SRCS})
 kde4_add_ui_files( kaudiocreator_SRCS
    encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui wizard.ui)
 
-kde4_add_ui3_files(kaudiocreator_SRCS 
-   cdconfig.ui 
-   ripconfig.ui 
-   encoderoutput.ui 
+kde4_add_ui3_files(kaudiocreator_SRCS
+   cdconfig.ui
+   ripconfig.ui
+   encoderoutput.ui
    encoderconfig.ui )
 
 kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb knotifyconfig)
+target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb kcompactdisc knotifyconfig)
 
 install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 

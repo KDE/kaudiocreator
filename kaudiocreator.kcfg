@@ -3,7 +3,6 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
 		  http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
-  <include>kaudiocreator_workman.h</include>
   <kcfgfile name="kaudiocreatorrc"/>
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
@@ -16,7 +15,7 @@
     </entry>
     <entry name="device" type="StringList">
       <label>CD device</label>
-      <default code="true">QStringList(DEFAULT_CD_DEVICE)</default>
+      <default code="true">QStringList("/dev/cdrom")</default>
     </entry>
     <entry name="promptIfIncompleteInfo" type="Bool">
       <label>Prompt if information is not complete</label>
