@@ -14,4 +14,4 @@ Icon=kaudiocreator
 Path=
 Type=Application
 Terminal=false
-Categories=Qt;KDE;AudioVideo;;
+Categories=Qt;KDE;AudioVideo;Audio;
