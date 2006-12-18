@@ -25,6 +25,7 @@
 #include <kconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <kconfig.h>
 
 /**

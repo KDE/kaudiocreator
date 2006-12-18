@@ -22,6 +22,7 @@
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 static const KCmdLineOptions options[] = {
@@ -44,8 +45,6 @@ int main(int argc, char *argv[]){
 
   // we need some strings from libkcddb for the cddb album dialog
   KGlobal::locale()->insertCatalog("libkcddb");
-
-  a.setMainWidget(app);
 
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
   if ( args->count()>0 ) app->setDevice( args->arg( 0 ) );
