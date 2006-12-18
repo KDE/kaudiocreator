@@ -45,7 +45,7 @@
 #include "general.h"
 #include <kcmoduleloader.h>
 #include <kurlrequester.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kactionmenu.h>
 /**
  * Constructor. Connect all of the object and the job control.
@@ -150,9 +150,9 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
 	cddb->setEnabled( false );   
 
-	KStdAction::configureNotifications(this, SLOT(configureNotifications()),
+	KStandardAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());
-	KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
+	KStandardAction::quit( this, SLOT(close()), actionCollection(), "quit" );
 
 	// Init statusbar
 	statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
