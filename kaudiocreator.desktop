@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Comment=Frontend for audio file creation
 Comment[af]=Voorprogram vir audio lêer skep
-Comment[ar]=واجهة لإنشاء ملفات الصوت
 Comment[bg]=Инструмент за кодиране на аудио файлове
 Comment[bn]=অডিও ফাইল তৈরি করার জন্য ফ্রন্ট-এন্ড
 Comment[bs]=Interfejs za pravljenje audio datoteka
@@ -58,7 +57,6 @@ Comment[zh_HK]=製作音訊檔案的前端
 Comment[zh_TW]=製作聲音檔案的前端
 Comment[zu]=Isiqalo sesiphelo sokuzwakalayo kwefayela lokludala
 Name=KAudioCreator
-Name[ar]=منشئ صوت كيدي
 Name[bn]=কে-অডিও-ক্রিয়েটার
 Name[cy]=KCreuwrSain
 Name[eo]=Sonorkreilo
