@@ -160,7 +160,7 @@ void EncoderConfigImp::removeEncoderSlot(){
     KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can Not Remove"));
     return;
   }
-  if(KMessageBox::warningContinueCancel(this, i18n("Delete encoder?"), i18n("Delete Encoder"),KStdGuiItem::del())
+  if(KMessageBox::warningContinueCancel(this, i18n("Delete encoder?"), i18n("Delete Encoder"),KStandardGuiItem::del())
       == KMessageBox::Cancel )
     return;
   

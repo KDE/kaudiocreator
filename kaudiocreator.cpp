@@ -224,7 +224,7 @@ void KAudioCreator::updateStatus() {
  */
 bool KAudioCreator::queryClose() {
 	if(jobQue->numberOfJobsNotFinished() > 0 &&
-		(KMessageBox::warningContinueCancel(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in Queue"),KStdGuiItem::quit())
+		(KMessageBox::warningContinueCancel(this, i18n("There are unfinished jobs in the queue. Would you like to quit anyway?"), i18n("Unfinished Jobs in Queue"),KStandardGuiItem::quit())
 			  == KMessageBox::Cancel ))
 		return false;
 	return true;
