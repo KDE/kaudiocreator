@@ -27,7 +27,6 @@
 #include <kmenu.h>
 #include <kaction.h>
 #include <kstatusbar.h>
-#include <knotifydialog.h>
 #include <kcombobox.h>
 #include <knotifyconfigwidget.h>
 #include "tracksimp.h"
