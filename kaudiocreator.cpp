@@ -46,6 +46,7 @@
 #include <kurlrequester.h>
 #include <kstandardaction.h>
 #include <kactionmenu.h>
+#include <kactioncollection.h>
 /**
  * Constructor. Connect all of the object and the job control.
  */
@@ -99,25 +100,29 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 
 	resize(500, 440);
 
-	KAction *eject = new KAction(i18n("&Eject CD"), actionCollection(), "eject" );
+	QAction *eject = actionCollection()->addAction("eject");
+	eject->setText(i18n("&Eject CD"));
 	connect(eject, SIGNAL(triggered(bool) ), tracks, SLOT(eject()));
 
-	KAction *action = new KAction(i18n("&Configure KAudioCreator..."), actionCollection(), "configure_kaudiocreator" );
+	QAction *action = actionCollection()->addAction("configure_kaudiocreator");
+        action->setText(i18n("&Configure KAudioCreator..."));
 	connect(action, SIGNAL(triggered(bool) ), SLOT(showSettings()));
 
-	KAction *selectAll = new KAction(i18n("Select &All Tracks"), actionCollection(), "select_all" );
+	QAction *selectAll = actionCollection()->addAction("select_all");
+	selectAll->setText(i18n("Select &All Tracks"));
 	connect(selectAll, SIGNAL(triggered(bool) ), tracks, SLOT(selectAllTracks()));
 	connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
 
-	KAction *deselectAll = new KAction(i18n("Deselect &All Tracks"), actionCollection(), "deselect_all" );
+	QAction *deselectAll = actionCollection()->addAction("deselect_all");
+	deselectAll->setText(i18n("Deselect &All Tracks"));
 	connect(deselectAll, SIGNAL(triggered(bool) ), tracks, SLOT(deselectAllTracks()));
 	connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
 	selectAll->setEnabled( false );
 	deselectAll->setEnabled( false );
 
-	KActionMenu *actActionMenu = new
-		KActionMenu( KIcon("rip"),i18n("Rip &Selection"), actionCollection(),
-					 	"rip" );
+	KActionMenu *actActionMenu = actionCollection()->add<KActionMenu>( "rip" );
+        actActionMenu->setIcon( KIcon("rip") );
+        actActionMenu->setText( i18n("Rip &Selection") );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
 	actActionMenu->setEnabled( false );
 	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
@@ -126,32 +131,37 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(ripMenu, SIGNAL(activated(int)),this,SLOT(slotRipSelection(int)));
 	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(getRipMenu()));
 
-	KAction *rip = new KAction(i18n("Rip &Selection"), actionCollection(), "rip_selected" );
+	QAction *rip = actionCollection()->addAction("rip_selected");
+	rip->setText(i18n("Rip &Selection"));
 	connect(rip, SIGNAL(triggered(bool) ), tracks, SLOT(startSession()));
 	rip->setEnabled( false );
 
 	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
 	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
 
-	action = new KAction(i18n("Remove &Completed Jobs"), actionCollection(), "clear_done_jobs" );
+	action = actionCollection()->addAction("clear_done_jobs");
+        action->setText(i18n("Remove &Completed Jobs"));
 	connect(action, SIGNAL(triggered(bool) ), jobQue, SLOT(clearDoneJobs()));
 
-	KAction *edit = new KAction(i18n("&Edit Album..."), actionCollection(), "edit_cd");
+	QAction *edit = actionCollection()->addAction("edit_cd");
+	edit->setText(i18n("&Edit Album..."));
 	connect(edit, SIGNAL(triggered(bool) ), tracks, SLOT(editInformation()));
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
-	edit->setEnabled( false );   
+	edit->setEnabled( false );
 
-	action = new KAction(i18n("Encode &File..."), actionCollection(), "encode_file");
+	action = actionCollection()->addAction("encode_file");
+        action->setText(i18n("Encode &File..."));
 	connect(action, SIGNAL(triggered(bool) ), SLOT(encodeFile()));
 
-	KAction *cddb = new KAction(i18n("&CDDB Lookup"), actionCollection(), "cddb_now");
+	QAction *cddb = actionCollection()->addAction("cddb_now");
+	cddb->setText(i18n("&CDDB Lookup"));
 	connect(cddb, SIGNAL(triggered(bool) ), tracks, SLOT(performCDDB()));
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
-	cddb->setEnabled( false );   
+	cddb->setEnabled( false );
 
 	KStandardAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());
-	KStandardAction::quit( this, SLOT(close()), actionCollection(), "quit" );
+	actionCollection()->addAction(KStandardAction::Quit, "quit", this, SLOT(close()));
 
 	// Init statusbar
 	statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
