@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Frontend for audio file creation
+Comment[el]=Σύστημα υποστήριξης χρήστη για δημιουργία αρχείου ήχου
 Comment[fr]=Une interface pour la création de fichiers sons
 Comment[x-test]=xxFrontend for audio file creationxx
 Name=KAudioCreator
 Name[x-test]=xxKAudioCreatorxx
 GenericName=CD Ripper
+GenericName[el]=Εξαγωγέας CD
 GenericName[fr]=Extracteur de CD audio
 GenericName[x-test]=xxCD Ripperxx
 MimeType=

@@ -9,6 +9,7 @@ Type=ServiceType
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
+Name[el]=Εξαγωγή και κωδικοποίηση Κομματιών ήχου
 Name[fr]=Extrait et encode des pistes audio
 Name[x-test]=xxExtract and Encode Audio Tracksxx
 Exec=kaudiocreator %u
