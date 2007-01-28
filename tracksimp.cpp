@@ -291,24 +291,22 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 void TracksImp::editInformation( ) {
 	if( !hasCD() ) return;
 	// Create dialog.
-	KDialog *dialog = new KDialog( this );
+	CDInfoDialog *dialog = new CDInfoDialog( this );
 	dialog->setModal(false);
 	dialog->setCaption(i18n( "CD Editor" ));
 	dialog->setButtons(KDialog::Ok|KDialog::Cancel);
 	dialog->setDefaultButton(KDialog::Ok);
 	dialog->showButtonSeparator(true);
 
-	CDInfoDialog *base = new CDInfoDialog(dialog);
 	// Workaround the fact that CDInfoDialog doesn't take
 	// a const TrackOffsetList
 	QList<unsigned> discSig = cd->discSignature();
-	base->setInfo(cddbInfo, discSig);
-	dialog->setMainWidget(base);
+	dialog->setInfo(cddbInfo, discSig);
 
 	// Show dialog->and save results.
 	bool okClicked = dialog->exec();
 	if( okClicked ) {
-		cddbInfo = base->info();
+		cddbInfo = dialog->info();
 		newAlbum();
 		cddb->store(cddbInfo);
 	}
