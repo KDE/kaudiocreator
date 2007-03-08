@@ -73,7 +73,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
         jobQue->setObjectName("Que");
 
 	pageWidgetItem = new KPageWidgetItem(jobQue, i18n("&Jobs"));
-	pageWidgetItem->setIcon(KIcon(SmallIcon("run", 32)));
+	pageWidgetItem->setIcon(KIcon(SmallIcon("system-run", 32)));
 	pageWidget->addPage(pageWidgetItem);
 
 	connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
@@ -290,7 +290,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
 	addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
 
 	encoderConfigImp = new EncoderConfigImp(0, "Encoder");
-	addPage(encoderConfigImp, i18n("Encoder"), "filter", i18n("Encoder Configuration") );
+	addPage(encoderConfigImp, i18n("Encoder"), "search-filter", i18n("Encoder Configuration") );
 }
 
 void SettingsDialog::updateSettings()

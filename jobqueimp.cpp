@@ -92,7 +92,7 @@ void JobQueImp::addJob(Job*job, const QString &name ){
 		return;
 	job->id = ++currentId;
 	QueListViewItem *currentItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
-	currentItem->setPixmap(ICON_LOC, SmallIcon("player_pause", currentItem->height()-2));
+	currentItem->setPixmap(ICON_LOC, SmallIcon("media-playback-pause", currentItem->height()-2));
 	queLabel->setText(i18n("Number of jobs in the queue: %1", todoQue->childCount()));
 }
 
@@ -131,7 +131,7 @@ void JobQueImp::updateProgress(int id, int progress){
 		currentItem->progressing = true;
 	}
 	else if(progress == -1){
-		currentItem->setPixmap(ICON_LOC, SmallIcon("button_cancel", currentItem->height()-2));
+		currentItem->setPixmap(ICON_LOC, SmallIcon("dialog-cancel", currentItem->height()-2));
 	}
 	else if(progress == 100){
 		// Remove the job if requested.
@@ -139,7 +139,7 @@ void JobQueImp::updateProgress(int id, int progress){
 			removeJob(currentItem, false);
 			return;
 		}
-		currentItem->setPixmap(ICON_LOC, SmallIcon("button_ok", currentItem->height()));
+		currentItem->setPixmap(ICON_LOC, SmallIcon("dialog-ok", currentItem->height()));
 	}
 	if(currentJobCount > 0 && numberOfJobsNotFinished() == 0)
 		KNotification::event("no jobs left");
