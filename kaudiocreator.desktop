@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Comment=Frontend for audio file creation
 Comment[af]=Voorprogram vir audio lêer skep
+Comment[bg]=Инструмент за кодиране на аудио файлове
 Comment[ca]=Interfície per la creació de fitxers àudio
 Comment[cs]=Rozhraní pro tvorbu zvukových souborů
 Comment[cy]=Blaen i greu ffeiliau sain
@@ -63,6 +64,7 @@ Name[tg]=KОфарандаи Садо
 Name[x-test]=xxKAudioCreatorxx
 Name[zh_TW]=KAudioCreator 聲音製作
 GenericName=CD Ripper
+GenericName[bg]=Кодиране на аудио дискове
 GenericName[br]=Un eztenner CD
 GenericName[ca]=Extractor de CD
 GenericName[cs]=CD ripper
