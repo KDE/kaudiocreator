@@ -38,7 +38,7 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator  ${KDE3SUPPORT} kcddb kcompactdisc knotifyconfig)
+target_link_libraries(kaudiocreator  ${KDE3SUPPORT} ${KDE4_KNOTIFYCONFIG_LIBS} kcddb kcompactdisc)
 
 install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 
