@@ -65,10 +65,10 @@ void Encoder::loadEncoder( int encoder ){
 Encoder::~Encoder() {
 	pendingJobs.clear();
 
-	QMap<KShellProcess*, Job*>::Iterator pit;
+	QMap<K3ShellProcess*, Job*>::Iterator pit;
 	for( pit = jobs.begin(); pit != jobs.end(); ++pit ) {
 		Job *job = jobs[pit.key()];
-		KShellProcess *process = pit.key();
+		K3ShellProcess *process = pit.key();
 		threads.remove(process);
 		process->kill();
 		QFile::remove(job->newLocation);
@@ -97,10 +97,10 @@ int Encoder::pendingJobCount() {
  * @param id the id number of the job to stop.
  */
 void Encoder::removeJob(int id ) {
-	QMap<KShellProcess*, Job*>::Iterator it;
+	QMap<K3ShellProcess*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ) {
 		if ( it.data()->id == id ) {
-			KShellProcess *process = it.key();
+			K3ShellProcess *process = it.key();
 			Job *job = jobs[it.key()];
 			threads.remove(process);
 			process->kill();
@@ -206,19 +206,19 @@ void Encoder::tendToNewJobs() {
 	updateProgress(job->id, 1);
 
 	job->errorString = command;
-	KShellProcess *proc = new KShellProcess();
+	K3ShellProcess *proc = new K3ShellProcess();
 	proc->setPriority(Prefs::niceLevel());
 
 	*proc << QFile::encodeName(command);
-	connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-	connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
-		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(jobDone(KProcess *)));
+	connect(proc, SIGNAL(receivedStdout(K3Process *, char *, int )),
+		    this, SLOT(receivedThreadOutput(K3Process *, char *, int )));
+	connect(proc, SIGNAL(receivedStderr(K3Process *, char *, int )),
+		    this, SLOT(receivedThreadOutput(K3Process *, char *, int )));
+	connect(proc, SIGNAL(processExited(K3Process *)), this, SLOT(jobDone(K3Process *)));
 	jobs.insert(proc, job);
 	threads.append(proc);
 
-	proc->start(KShellProcess::NotifyOnExit, KShellProcess::AllOutput);
+	proc->start(K3ShellProcess::NotifyOnExit, K3ShellProcess::AllOutput);
 	emit jobsChanged();
 }
 
@@ -228,17 +228,17 @@ void Encoder::tendToNewJobs() {
  * @param buffer the output from the process
  * @param buflen the length of the buffer.
  */
-void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length ) {
+void Encoder::receivedThreadOutput(K3Process *process, char *buffer, int length ) {
 	if ( Prefs::fullDecoderDebug() && buffer)
 		kDebug(60002) << buffer << endl;
 
 	// Make sure we have a job to send an update too.
-	if(jobs.find((KShellProcess*)process) == jobs.end()){
+	if(jobs.find((K3ShellProcess*)process) == jobs.end()){
 		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
 		return;
 	}
 
-	Job *job = jobs[(KShellProcess*)process];
+	Job *job = jobs[(K3ShellProcess*)process];
 
 	// Keep the output in the event it fails.
 	job->output += QString(buffer).mid(0,length);
@@ -269,16 +269,16 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
  * When the process is done encoding a file this function is called.
  * @param job the job that just finished.
  */
-void Encoder::jobDone(KProcess *process ) {
+void Encoder::jobDone(K3Process *process ) {
 	// Normal error checking here.
 	if ( !process)
 		return;
 
 	//qDebug("Process exited with status: %d", process->exitStatus());
 
-	Job *job = jobs[(KShellProcess*)process];
-	threads.remove((KShellProcess*)process);
-	jobs.remove((KShellProcess*)process);
+	Job *job = jobs[(K3ShellProcess*)process];
+	threads.remove((K3ShellProcess*)process);
+	jobs.remove((K3ShellProcess*)process);
 
 	bool showDebugBox = false;
 	if ( process->exitStatus() == 127 ) {

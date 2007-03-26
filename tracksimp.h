@@ -39,7 +39,7 @@
 
 using namespace KCDDB;
 class Job;
-class KProcess;
+class K3Process;
 class KCompactDisc;
 
 class TracksItem : public K3ListViewItem

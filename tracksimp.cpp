@@ -42,7 +42,7 @@
 #include <qfileinfo.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <fixx11h.h>
 
 /**

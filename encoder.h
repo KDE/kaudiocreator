@@ -25,7 +25,7 @@
 #include <q3ptrlist.h>
 #include <QMap>
 #include "job.h"
-#include <kprocess.h>
+#include <k3process.h>
 
 class EncoderPrefs;
 
@@ -52,14 +52,14 @@ public slots:
 	void loadEncoder( int encoder );
 
 private slots:
-  void receivedThreadOutput(KProcess *process, char *buffer, int buflen);
-  void jobDone(KProcess *process);
+  void receivedThreadOutput(K3Process *process, char *buffer, int buflen);
+  void jobDone(K3Process *process);
   void tendToNewJobs();
 
 private:
   Q3PtrList<Job> pendingJobs;
-  Q3PtrList<KShellProcess> threads;
-  QMap<KShellProcess*, Job*> jobs;
+  Q3PtrList<K3ShellProcess> threads;
+  QMap<K3ShellProcess*, Job*> jobs;
 
   EncoderPrefs *prefs;
   int reportCount;
