@@ -498,4 +498,4 @@ Comment[zh_CN]=CD 编码完成
 Comment[zh_HK]=已完成編碼的 CD
 Comment[zh_TW]=光碟已完成編碼
 default_presentation=17
-default_sound=KDE_ClockChime.wav
+default_sound=KDE_Beep_ClockChime.wav
