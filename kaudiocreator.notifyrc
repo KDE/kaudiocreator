@@ -41,4 +41,4 @@ Comment=CD finished encoding
 Comment[fr]=Encodage du CD terminé
 Comment[x-test]=xxCD finished encodingxx
 Action=PassivePopup|Sound
-Sound=KDE_ClockChime.wav
+Sound=KDE_Beep_ClockChime.wav
