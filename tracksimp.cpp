@@ -298,10 +298,7 @@ void TracksImp::editInformation( ) {
 	dialog->setDefaultButton(KDialog::Ok);
 	dialog->showButtonSeparator(true);
 
-	// Workaround the fact that CDInfoDialog doesn't take
-	// a const TrackOffsetList
-	QList<unsigned> discSig = cd->discSignature();
-	dialog->setInfo(cddbInfo, discSig);
+	dialog->setInfo(cddbInfo, cd->discSignature());
 
 	// Show dialog->and save results.
 	bool okClicked = dialog->exec();
