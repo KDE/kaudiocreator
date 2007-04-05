@@ -4,6 +4,7 @@ Actions=Extract;
 X-KDE-Priority=TopLevel
 Encoding=UTF-8
 Name=KAudioCreator-Extract
+Name[es]=Extractor de KAudioCreator
 Name[sv]=Kaudiocreator hämtning
 Name[x-test]=xxKAudioCreator-Extractxx
 Type=ServiceType
