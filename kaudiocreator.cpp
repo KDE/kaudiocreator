@@ -19,7 +19,6 @@
 
 #include "kaudiocreator.h"
 
-#include <q3vbox.h>
 #include <kicon.h>
 #include <kiconloader.h>
 
