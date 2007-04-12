@@ -4,10 +4,10 @@
   <Action name="rip_selected" icon="gear"/>
   <Action name="rip" icon="gear"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
-  <Action name="clear_done_jobs" icon="edittrash"/>
-  <Action name="eject" icon="player_eject"/>
+  <Action name="clear_done_jobs" icon="edit-trash"/>
+  <Action name="eject" icon="media-eject"/>
   <Action name="edit_cd" icon="edit"/>
-  <Action name="cddb_now" icon="cdaudio_mount"/>
+  <Action name="cddb_now" icon="cdaudio-mount"/>
 </ActionProperties>
 
 <MenuBar>

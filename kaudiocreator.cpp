@@ -59,7 +59,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
 
 	KPageWidgetItem* pageWidgetItem = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
-	pageWidgetItem->setIcon(KIcon(SmallIcon("cdaudio_unmount", 32)));
+	pageWidgetItem->setIcon(KIcon(SmallIcon("cdaudio-unmount", 32)));
 	pageWidget->addPage(pageWidgetItem);
 
 	ripper = new Ripper(this);
@@ -120,7 +120,6 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	deselectAll->setEnabled( false );
 
 	KActionMenu *actActionMenu = actionCollection()->add<KActionMenu>( "rip" );
-        actActionMenu->setIcon( KIcon("rip") );
         actActionMenu->setText( i18n("Rip &Selection") );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
 	actActionMenu->setEnabled( false );
