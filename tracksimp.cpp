@@ -45,6 +45,8 @@
 #include <k3process.h>
 #include <fixx11h.h>
 
+using namespace KCDDB;
+
 /**
  * Constructor, connect up slots and signals.
  */
@@ -69,8 +71,8 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
-	connect(cddb, SIGNAL(finished(CDDB::Result)),
-	                  this, SLOT(lookupCDDBDone(CDDB::Result)));
+	connect(cddb, SIGNAL(finished(KCDDB::Result)),
+	                  this, SLOT(lookupCDDBDone(KCDDB::Result)));
 	trackListing->setSorting(-1, false);
 	loadSettings();
 }
@@ -227,9 +229,9 @@ void TracksImp::lookupCDDB() {
  * continue.
  * @param result the success or failure of the cddb retrieval.
  */
-void TracksImp::lookupCDDBDone(CDDB::Result result ) {
-	if ((result != KCDDB::CDDB::Success) &&
-		(result != KCDDB::CDDB::MultipleRecordFound))
+void TracksImp::lookupCDDBDone(Result result ) {
+	if ((result != KCDDB::Success) &&
+		(result != KCDDB::MultipleRecordFound))
 	{
 		KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
 		return;
@@ -238,7 +240,7 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
 	// Choose the cddb entry
 	KCDDB::CDInfo info = cddb->lookupResponse().first();
 	// TODO Why doesn't libcddb not return MultipleRecordFound?
-	//if( result == KCDDB::CDDB::MultipleRecordFound ) {
+	//if( result == KCDDB::MultipleRecordFound ) {
 	if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
 		QString searchedCDId = cddbInfo.get("discid").toString();
 		CDInfoList cddb_info = cddb->lookupResponse();

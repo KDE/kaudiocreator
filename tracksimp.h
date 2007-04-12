@@ -37,7 +37,6 @@
 #define HEADER_TRACK_ARTIST 4
 #define HEADER_TRACK_COMMENT 5
 
-using namespace KCDDB;
 class Job;
 class K3Process;
 class KCompactDisc;
@@ -125,7 +124,7 @@ private slots:
 	void keyPressEvent(QKeyEvent *event);
 
 	void changeDevice(const QString &file);
-	void lookupCDDBDone(CDDB::Result result);
+	void lookupCDDBDone(KCDDB::Result result);
 
 private:
 	void lookupDevice();
