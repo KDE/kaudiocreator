@@ -50,7 +50,8 @@
  * Constructor. Connect all of the object and the job control.
  */
 KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
-	   KMainWindow(parent, name){
+	   KXmlGuiWindow(parent){
+	setObjectName(name);
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);

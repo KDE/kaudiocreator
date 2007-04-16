@@ -20,7 +20,7 @@
 #ifndef KAUDIOCREATOR_H
 #define KAUDIOCREATOR_H
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <kconfigdialog.h>
 
 class KPageWidget;
@@ -32,7 +32,7 @@ class KCModule;
 class EncoderConfigImp;
 class KMenu;
 
-class KAudioCreator : public KMainWindow {
+class KAudioCreator : public KXmlGuiWindow {
 
 Q_OBJECT
 
@@ -69,13 +69,13 @@ Q_OBJECT
 
 public:
   SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
-  
+
 protected slots:
   void updateSettings();
   void updateWidgets();
   void updateWidgetsDefault();
   void slotCddbChanged(bool);
-  
+
 protected:
   bool hasChanged();
   bool isDefault();
