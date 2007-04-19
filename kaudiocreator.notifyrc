@@ -4,7 +4,7 @@ Comment=KAudioCreator
 Comment[x-test]=xxKAudioCreatorxx
 
 [Event/no jobs left]
-Name=All jobs finshed
+Name=All Jobs Finished
 Comment=All of the jobs in the queue have been finished
 Comment[fr]=Toutes les tâches dans la file d'attente sont terminées
 Comment[x-test]=xxAll of the jobs in the queue have been finishedxx
