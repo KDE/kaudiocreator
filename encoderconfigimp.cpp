@@ -132,9 +132,9 @@ void EncoderConfigImp::addEncoderSlot(){
   if(KConfigDialog::showDialog(groupName.latin1()))
     return;
 
-  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName), 
-                                            KPageDialog::Plain,
-                                            KDialog::Ok | KDialog::Cancel | KDialog::Help);
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName));
+  dialog->setFaceType(KPageDialog::Plain);
+  dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(loadEncoderList()));
@@ -192,9 +192,9 @@ void EncoderConfigImp::configureEncoderSlot() {
   if(KConfigDialog::showDialog(groupName.latin1()))
     return;
 
-  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName),
-                                            KPageDialog::Plain,
-                                            KDialog::Ok | KDialog::Cancel | KDialog::Help);
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName));
+  dialog->setFaceType(KPageDialog::Plain);
+  dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
