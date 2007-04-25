@@ -7,6 +7,7 @@ Name=KAudioCreator-Extract
 Name[es]=Extractor de KAudioCreator
 Name[sv]=Kaudiocreator hämtning
 Name[x-test]=xxKAudioCreator-Extractxx
+Name[zh_TW]=KAudioCreator-展開
 Type=ServiceType
 
 [Desktop Action Extract]
