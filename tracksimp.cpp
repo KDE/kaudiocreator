@@ -56,7 +56,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	setObjectName(name);
 	cd = new KCompactDisc;
 
-	connect(cd,SIGNAL(discChanged(unsigned)),this,SLOT(newDisc(unsigned)));
+	connect(cd, SIGNAL(discChanged(unsigned)), this, SLOT(newDisc(unsigned)));
 
 	connect(trackListing, SIGNAL(clicked( Q3ListViewItem * )), this, SLOT(selectTrack(Q3ListViewItem*)));
 	connect(trackListing, SIGNAL(doubleClicked(Q3ListViewItem *)), this, SLOT(editInformation()));
@@ -182,7 +182,7 @@ bool TracksImp::hasCD(){
 void TracksImp::changeDevice(const QString &file ) {
 	QString newDevice = KCompactDisc::urlToDevice(file);
 
-	if( newDevice == cd->device() ) {
+	if( newDevice == cd->deviceUrl().url() ) {
 		//qDebug("Device names match, returning");
 		return;
 	}
@@ -383,7 +383,7 @@ void TracksImp::startSession( int encoder ) {
 	{
 		Job *newJob = new Job();
 		newJob->encoder = encoder;
-		newJob->device = cd->device();
+		newJob->device = cd->deviceUrl().url();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
@@ -517,7 +517,7 @@ void TracksImp::keyPressEvent(QKeyEvent *event) {
  * Eject the current cd device
  */
 void TracksImp::eject() {
-	ejectDevice(cd->device());
+	ejectDevice(KCompactDisc::urlToDevice(cd->deviceUrl()));
 }
 
 /**
