@@ -8,6 +8,7 @@ Comment[ne]=केडीई अडियो सर्जक
 Comment[pa]=ਕੇ-ਆਡੀਓ-ਨਿਰਮਾਤਾ
 Comment[sv]=Kaudiocreator
 Comment[tg]=KОфарандаи Садо
+Comment[tr]=Kaudiocreator
 
 [no jobs left]
 Name=All jobs finished
@@ -294,7 +295,7 @@ Comment[sr]=Гребовање CD-а је завршено
 Comment[sr@Latn]=Grebovanje CD-a je završeno
 Comment[sv]=Cd:n har lagrats klart
 Comment[ta]=CD பிரித்தல் முடிந்தது
-Comment[tr]=CD'nin dönüştürülmesi tamamlandı
+Comment[tr]=CD dönüştürme işlemi tamamlandı
 Comment[uk]=Видирання КД завершено
 Comment[zh_CN]=CD 抓取完成
 Comment[zh_HK]=已完成擷取的 CD
