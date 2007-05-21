@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox2" >
+    <widget class="QGroupBox" name="groupBox2" >
      <property name="title" >
       <string>File Regular Expression Replacement</string>
      </property>
@@ -158,7 +158,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="kcfg_seperateMultiArtist" >
+    <widget class="QGroupBox" name="kcfg_seperateMultiArtist" >
      <property name="title" >
       <string>Automatically Separate Multi-Artist CDDB Entries</string>
      </property>
@@ -285,12 +285,6 @@
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Q3ButtonGroup</class>
    <extends>Q3GroupBox</extends>
