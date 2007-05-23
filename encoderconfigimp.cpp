@@ -71,7 +71,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     encPrefs->writeConfig();
 
     Prefs::setLastKnownEncoder(3);
-    Prefs::writeConfig();
+    Prefs::self()->writeConfig();
   }
   
   loadEncoderList();
@@ -105,7 +105,7 @@ void EncoderConfigImp::loadEncoderList(){
   }
   if(lastEncoder != Prefs::lastKnownEncoder()){
     Prefs::setLastKnownEncoder(lastEncoder);
-    Prefs::writeConfig();
+    Prefs::self()->writeConfig();
   }
   
   // Make sure that the current encoder is valid.

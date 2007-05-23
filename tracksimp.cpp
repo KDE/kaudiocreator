@@ -93,7 +93,7 @@ TracksImp::~TracksImp() {
 	}
 
 	Prefs::setDevice(list);
-	Prefs::writeConfig();
+	Prefs::self()->writeConfig();
 }
 
 /**
