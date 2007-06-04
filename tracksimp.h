@@ -38,7 +38,6 @@
 #define HEADER_TRACK_COMMENT 5
 
 class Job;
-class K3Process;
 class KCompactDisc;
 
 class TracksItem : public K3ListViewItem
