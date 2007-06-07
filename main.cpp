@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
 
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
   if ( args->count()>0 ) app->setDevice( args->arg( 0 ) );
-
+  args->clear();
   app->show();
   return a.exec();
 }
