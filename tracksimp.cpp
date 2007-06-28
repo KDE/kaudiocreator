@@ -123,9 +123,9 @@ void TracksImp::loadSettings() {
 	changeDevice(deviceCombo->currentText());
 }
 
-void TracksImp::newDisc(unsigned discId)
+void TracksImp::newDisc(unsigned tracks)
 {
-	if (discId == KCompactDisc::missingDisc)
+	if (!tracks)
 	{
 		kDebug(60002) << "newDisc - No disc" << endl;
 		cddbInfo.clear();
@@ -138,7 +138,8 @@ void TracksImp::newDisc(unsigned discId)
 
 		return;
 	}
-
+	
+	unsigned discId = cd->discId();
 	kDebug(60002) << "newDisc - " << discId << endl;
 	emit(hasCD(true));
 
@@ -172,7 +173,7 @@ void TracksImp::newDisc(unsigned discId)
  * @return if there is a cd inserted or not.
  */
 bool TracksImp::hasCD(){
-	return cd->discId() != KCompactDisc::missingDisc;
+	return !cd->isNoDisc();
 }
 
 /**
