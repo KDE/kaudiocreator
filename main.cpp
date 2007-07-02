@@ -25,20 +25,18 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-static const KCmdLineOptions options[] = {
-  {"+[device]",I18N_NOOP( "CD device, can be a path or a media:/ URL" ),0},
-  KCmdLineLastOption
-};
-
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", I18N_NOOP("KAudioCreator"), "1.2",
-    I18N_NOOP("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, "(c) 2003-2005, Benjamin Meyer",
-    0, "http://www.icefox.net/");
-    aboutData.addAuthor("Benjamin Meyer", I18N_NOOP("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
+  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.2",
+    ki18n("CD ripper and audio encoder frontend"), KAboutData::License_LGPL, ki18n("(c) 2003-2005, Benjamin Meyer"),
+    KLocalizedString(), "http://www.icefox.net/");
+    aboutData.addAuthor(ki18n("Benjamin Meyer"), ki18n("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
 
   // command line
   KCmdLineArgs::init(argc, argv, &aboutData);
+
+  KCmdLineOptions options;
+  options.add("+[device]", ki18n( "CD device, can be a path or a media:/ URL" ));
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication a(true);
   KAudioCreator *app = new KAudioCreator(0, "MainWindow");
