@@ -22,7 +22,6 @@ set(kaudiocreator_SRCS
    tracksimp.cpp
    encodefileimp.cpp general.cpp wizard.cpp )
 
-kde4_automoc(${kaudiocreator_SRCS})
 
 kde4_add_ui_files( kaudiocreator_SRCS
    encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui wizard.ui)
