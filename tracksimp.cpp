@@ -182,7 +182,7 @@ bool TracksImp::hasCD(){
 void TracksImp::changeDevice(const QString &file ) {
 	QString newDevice = KCompactDisc::urlToDevice(file);
 
-	if( newDevice == cd->deviceUrl().url() ) {
+	if( newDevice == cd->deviceUrl().path() ) {
 		//qDebug("Device names match, returning");
 		return;
 	}
@@ -383,7 +383,7 @@ void TracksImp::startSession( int encoder ) {
 	{
 		Job *newJob = new Job();
 		newJob->encoder = encoder;
-		newJob->device = cd->deviceUrl().url();
+		newJob->device = cd->deviceUrl().path();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
