@@ -312,11 +312,11 @@ void TracksImp::editInformation( ) {
 	delete dialog;
 }
 
-QString TracksImp::formatTime(unsigned ms)
+QString TracksImp::formatTime(unsigned s)
 {
 	QTime time;
 
-	time = time.addMSecs((int)ms);
+	time = time.addSecs((int) s);
 
 	// Use ".zzz" for milliseconds...
 	QString temp2;

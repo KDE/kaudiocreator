@@ -131,7 +131,7 @@ private:
 	void ripWholeAlbum();
 	QList<TracksItem *> selectedTracks();
 
-	QString formatTime(unsigned ms);
+	QString formatTime(unsigned s);
 
 	KCDDB::Client* cddb;
 
