@@ -27,7 +27,6 @@
 
 // CDDB support via libkcddb
 #include <libkcddb/client.h>
-//Added by qt3to4:
 #include <QKeyEvent>
 
 #define HEADER_RIP 0

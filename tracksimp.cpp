@@ -23,7 +23,6 @@
 #include "kcompactdisc.h"
 #include <QLabel>
 #include <k3listview.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QKeyEvent>
 #include <k3listview.h>
@@ -86,7 +85,7 @@ TracksImp::~TracksImp() {
 		list.append(deviceCombo->currentText());
 	for ( int i=0; i<deviceCombo->count();i++ ) {
 		QString text = deviceCombo->text(i);
-		if( list.find(text) == list.end())
+		if( !list.contains(text))
 			list.append(text);
 		if( list.count() == 5)
 			break;
@@ -106,13 +105,13 @@ void TracksImp::loadSettings() {
 	QStringList prefsList = Prefs::device();
 	QStringList::Iterator it;
 	for ( it = prefsList.begin(); it != prefsList.end(); ++it ) {
-		if( list.find( *it ) == list.end())
+		if( !list.contains( *it ))
 			list.append(*it);
 	}
 	// Get current list, no dups
 	for ( int i=0; i<deviceCombo->count();i++ ) {
 		QString text = deviceCombo->text(i);
-		if( list.find(text) == list.end())
+		if( !list.contains(text))
 			list.append(text);
 	}
 

@@ -129,14 +129,14 @@ void EncoderConfigImp::addEncoderSlot(){
       number++;
   }
 
-  if(KConfigDialog::showDialog(groupName.latin1()))
+  if(KConfigDialog::showDialog(groupName.toLatin1()))
     return;
 
-  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName));
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.toLatin1(), EncoderPrefs::prefs(groupName));
   dialog->setFaceType(KPageDialog::Plain);
   dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
+  dialog->addPage(new EncoderEdit(0/*, groupName.toLatin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(loadEncoderList()));
   dialog->show();
 }
@@ -167,7 +167,7 @@ void EncoderConfigImp::removeEncoderSlot(){
   QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
   kcfg_currentEncoder->removeItem(kcfg_currentEncoder->currentItem());
 
-  delete KConfigDialog::exists(groupName.latin1());
+  delete KConfigDialog::exists(groupName.toLatin1());
 
   EncoderPrefs::deletePrefs(groupName);
 }
@@ -189,14 +189,14 @@ void EncoderConfigImp::configureEncoderSlot() {
   if(!config.hasGroup(groupName))
     return;
 
-  if(KConfigDialog::showDialog(groupName.latin1()))
+  if(KConfigDialog::showDialog(groupName.toLatin1()))
     return;
 
-  KConfigDialog *dialog = new KConfigDialog(this, groupName.latin1(), EncoderPrefs::prefs(groupName));
+  KConfigDialog *dialog = new KConfigDialog(this, groupName.toLatin1(), EncoderPrefs::prefs(groupName));
   dialog->setFaceType(KPageDialog::Plain);
   dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
-  dialog->addPage(new EncoderEdit(0/*, groupName.latin1()*/), i18n("Encoder Configuration"), "package_settings");
+  dialog->addPage(new EncoderEdit(0/*, groupName.toLatin1()*/), i18n("Encoder Configuration"), "package_settings");
   connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
@@ -228,7 +228,7 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName){
   bool found = false;
   QMap<QString, QString>::Iterator it;
   for ( it = encoderNames.begin(); it != encoderNames.end(); ++it ) {
-    if(it.data() == groupName){
+    if(it.value() == groupName){
       found = true;
       encoderName = it.key();
     }

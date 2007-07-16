@@ -99,7 +99,7 @@ int Encoder::pendingJobCount() {
 void Encoder::removeJob(int id ) {
 	QMap<K3ShellProcess*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ) {
-		if ( it.data()->id == id ) {
+		if ( it.value()->id == id ) {
 			K3ShellProcess *process = it.key();
 			Job *job = jobs[it.key()];
 			threads.remove(process);
@@ -158,7 +158,7 @@ void Encoder::tendToNewJobs() {
 	}
 
 	QString desiredFile = Prefs::fileFormat();
-	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+	desiredFile.replace( QRegExp("~"), QDir::homePath() );
 	{
 		QHash <QString,QString> map;
 		map.insert("extension", prefs->extension());

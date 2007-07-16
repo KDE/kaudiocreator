@@ -51,7 +51,7 @@ Ripper::~Ripper(){
 	QMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		 KIO::Job* ioJob = it.key();
-		Job *job = it.data();
+		Job *job = it.value();
 		delete job;
 
 		if(ioJob){
@@ -90,7 +90,7 @@ int Ripper::pendingJobCount() {
 void Ripper::removeJob(int id){
 	QMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
-		if(it.data()->id == id){
+		if(it.value()->id == id){
 			jobs.remove(it.key());
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
 			if(copyJob){
@@ -109,14 +109,17 @@ void Ripper::removeJob(int id){
 			break;
 		}
 	}
-	Job *job = pendingJobs.first();
-	while(job){
-		if(job->id == id)
+	Job *job = 0;
+	foreach(Job *j, pendingJobs)
+	{
+		if(j->id == id)
+		{
+			job = j;
 			break;
-		job = pendingJobs.next();
+		}
 	}
 	if(job){
-		pendingJobs.remove(job);
+		pendingJobs.removeAll(job);
 		delete job;
 	}
 	//qDebug(QString("Done removing Job:%1").arg(id).latin1());
@@ -152,10 +155,7 @@ void Ripper::tendToNewJobs(){
 		return;
 	}
 
-	Job *job = pendingJobs.first();
-	if(!job)
-		return;
-	pendingJobs.remove(job);
+	Job *job = pendingJobs.takeFirst();
 
 	QMap<QString, QString> map;
 	QString defaultTempDir;
@@ -164,7 +164,7 @@ void Ripper::tendToNewJobs(){
 	else
 		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
-	defaultTempDir = KUrl::fromPathOrUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
+	defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
 	kDebug() << "defaultTempDir: " << defaultTempDir << endl;
 	KTemporaryFile tmp;
 	tmp.setPrefix(defaultTempDir);
@@ -177,12 +177,12 @@ void Ripper::tendToNewJobs(){
 	else
 		wavFile = QString("audiocd:/Wav/Track %1.wav").arg(job->track);
 
-	KUrl source = KUrl::fromPathOrUrl(wavFile);
+	KUrl source(wavFile);
 	kDebug() << "source: " << source << endl;
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", "Track %{number}");
-	KUrl dest = KUrl::fromPathOrUrl(tmp.fileName());
+	KUrl dest(tmp.fileName());
 	kDebug() << "dest: " << dest << endl;
 
 	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, false, true, false);
@@ -230,11 +230,14 @@ void Ripper::copyJobResult(KJob *copyjob){
 	if(newJob && newJob->lastSongInAlbum){
 		if(Prefs::autoEjectAfterRip()){
 			// Don't eject device if a pending job has that device
-			Job *job = pendingJobs.first();
-			while( job ){
-				if( job->device == newJob->device )
+			Job *job = 0;
+			foreach(Job *j, pendingJobs)
+			{
+				if( j->device == newJob->device )
+				{
+					job = j;
 					break;
-				job = pendingJobs.next();
+				}
 			}
 			if( !job ){
 				deviceToEject = newJob->device;
