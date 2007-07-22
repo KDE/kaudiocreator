@@ -307,7 +307,7 @@ void TracksImp::editInformation( ) {
 	if( okClicked ) {
 		cddbInfo = dialog->info();
 		newAlbum();
-		cddb->store(cddbInfo);
+		cddb->store(cddbInfo,cd->discSignature());
 	}
 	delete dialog;
 }
