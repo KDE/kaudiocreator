@@ -43,7 +43,7 @@ install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kaudiocreator.desktop  DESTINATION  ${XDG_APPS_DIR} )
+install( FILES kaudiocreator.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 install( FILES kaudiocreator.kcfg kaudiocreator_encoders.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES audiocd_extract.desktop  DESTINATION  ${DATA_INSTALL_DIR}/konqueror/servicemenus )
 install( FILES kaudiocreatorui.rc kaudiocreator.notifyrc DESTINATION  ${DATA_INSTALL_DIR}/kaudiocreator )
