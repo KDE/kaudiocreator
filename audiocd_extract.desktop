@@ -4,6 +4,7 @@ Actions=Extract;
 X-KDE-Priority=TopLevel
 Encoding=UTF-8
 Name=KAudioCreator-Extract
+Name[bg]=KAudioCreator
 Name[es]=Extractor de KAudioCreator
 Name[pt]=KAudioCreator - Extracção
 Name[pt_BR]=KAudioCreator - Extracção
@@ -14,6 +15,7 @@ Type=ServiceType
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
+Name[bg]=Извличане и кодиране на аудио диск
 Name[ca]=Extracció i codificació de pistes d'àudio
 Name[cs]=Získat a enkódovat zvukové stopy
 Name[da]=Udtræk og indkod lydspor
