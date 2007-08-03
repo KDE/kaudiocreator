@@ -20,7 +20,7 @@
 #include "job.h"
 #include "libkcddb/cdinfodialog.h"
 #include "prefs.h"
-#include "kcompactdisc.h"
+#include "libkcompactdisc/kcompactdisc.h"
 #include <QLabel>
 #include <k3listview.h>
 #include <QPixmap>

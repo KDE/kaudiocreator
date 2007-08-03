@@ -1,11 +1,13 @@
+if (NOT APPLE)
+
 project(kaudiocreator)
 
-include_directories(
-		${CMAKE_SOURCE_DIR}/libkcddb
-		${CMAKE_BINARY_DIR}/libkcddb
-		${CMAKE_SOURCE_DIR}/libkcompactdisc
-		${CMAKE_BINARY_DIR}/libkcompactdisc
-		)
+find_package(KDE4 REQUIRED)
+include (KDE4Defaults)
+include (MacroLibrary)
+
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -51,4 +53,6 @@ install( FILES kaudiocreator-meta.upd kaudiocreator-libkcddb.upd  DESTINATION  $
 install( PROGRAMS upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )
+
+endif (NOT APPLE)
 
