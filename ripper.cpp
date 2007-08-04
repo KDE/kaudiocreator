@@ -165,7 +165,7 @@ void Ripper::tendToNewJobs(){
 		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
-	kDebug() << "defaultTempDir: " << defaultTempDir << endl;
+	kDebug() << "defaultTempDir: " << defaultTempDir;
 	KTemporaryFile tmp;
 	tmp.setPrefix(defaultTempDir);
 	tmp.setSuffix(".wav");
@@ -178,12 +178,12 @@ void Ripper::tendToNewJobs(){
 		wavFile = QString("audiocd:/Wav/Track %1.wav").arg(job->track);
 
 	KUrl source(wavFile);
-	kDebug() << "source: " << source << endl;
+	kDebug() << "source: " << source;
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", "Track %{number}");
 	KUrl dest(tmp.fileName());
-	kDebug() << "dest: " << dest << endl;
+	kDebug() << "dest: " << dest;
 
 	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, false, true, false);
 	jobs.insert(copyJob, job);

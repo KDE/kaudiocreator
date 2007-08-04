@@ -230,11 +230,11 @@ void Encoder::tendToNewJobs() {
  */
 void Encoder::receivedThreadOutput(K3Process *process, char *buffer, int length ) {
 	if ( Prefs::fullDecoderDebug() && buffer)
-		kDebug(60002) << buffer << endl;
+		kDebug(60002) << buffer;
 
 	// Make sure we have a job to send an update too.
 	if(jobs.find((K3ShellProcess*)process) == jobs.end()){
-		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__ << endl;
+		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__;
 		return;
 	}
 
@@ -246,7 +246,7 @@ void Encoder::receivedThreadOutput(K3Process *process, char *buffer, int length 
 	// Make sure the output string has a % symble in it.
 	QString output = QString(buffer).mid(0,length);
 	if ( !output.contains('%') && reportCount < 5 ) {
-		kDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
+		kDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill.";
 		reportCount++;
 		return;
 	}

@@ -126,7 +126,7 @@ void TracksImp::newDisc(unsigned tracks)
 {
 	if (!tracks)
 	{
-		kDebug(60002) << "newDisc - No disc" << endl;
+		kDebug(60002) << "newDisc - No disc";
 		cddbInfo.clear();
 		cddbInfo.set(Title, i18n("No disc"));
 		newAlbum();
@@ -139,7 +139,7 @@ void TracksImp::newDisc(unsigned tracks)
 	}
 	
 	unsigned discId = cd->discId();
-	kDebug(60002) << "newDisc - " << discId << endl;
+	kDebug(60002) << "newDisc - " << discId;
 	emit(hasCD(true));
 
 	selectAllTracksButton->setEnabled( true );

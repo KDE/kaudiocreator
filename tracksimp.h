@@ -60,7 +60,7 @@ public:
     bool    checked()   const { return m_checked; }
     QString comment()   const { return m_comment; }
     #include <kdebug.h>
-    void    setTitle( const QString &t )  { m_title = t; kDebug() << "title: " << m_title << endl; }
+    void    setTitle( const QString &t )  { m_title = t; kDebug() << "title: " << m_title; }
     void    setChecked( const bool &b )   { 
         m_checked = b;
         b ? setPixmap( HEADER_RIP, SmallIcon( "dialog-apply", height()-2 ) ) :
