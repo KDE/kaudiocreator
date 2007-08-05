@@ -1,0 +1,1083 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kaudiocreator "<application>kaudiocreator 1.12</application>">
+  <!ENTITY kappname "&kaudiocreator;"><!-- Do *not* replace kappname-->
+  <!ENTITY package "kdemultimedia"><!-- kdebase, kdeadmin, etc -->
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kaudiocreator; Handbook</title>
+
+<authorgroup>
+<author>
+<surname>alan</surname>
+<affiliation>
+<address><email>sorry@no.mail</email>no mail, sorry.</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>1999</year>
+<year>2007</year>
+<holder>alan</holder>
+</copyright>
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (YYYY-MM-DD) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>2007-01-15</date>
+<releaseinfo>1.13</releaseinfo>
+
+<abstract>
+<para>
+&kaudiocreator; is an audio &CD; ripper for &kde;.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kaudiocreator</keyword>
+<keyword>CD</keyword>
+<keyword>ripper</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>&kaudiocreator; is an audio &CD; ripper for &kde;. With it you can easily rip your audio &CD;s to mp3 or ogg files or other formats, depending on whatever encoder you have installed on your system.</para>
+
+<para>&kaudiocreator; is a frontend to cdparanoia (vor ripping the &CD; data to wav files on your hard disk) and many encoders which encode (compress) these wav files. Currently lame for mp3, oggenc for oggs and flac (lossless compression) are supported out of the box (you may still need to install these encoder packages from your distro). But you can add more encoders with the program (if you have them installed).</para>
+
+<para>In general ripping an audio &CD; is a 2 step process:
+ <itemizedlist>
+  <listitem><para>first the &CD; tracks/songs are ripped to the computer into wav files (lossless, uncompressed) and then</para></listitem>
+  <listitem><para>in a second step these wav files (usually one per song) are compressed into mp3 or ogg format or other formats like the lossless flac.</para></listitem>
+ </itemizedlist>
+</para>
+
+<para>For the 1st step, the ripping of the &CD;, &kaudiocreator; uses cdparanoia. Nearly every distro has a pre-compiled package, so install it, if you haven't done so already.</para>
+
+<para>For the 2nd step you need lame (for mp3), oggvorbis (for ogg) or other encoders to be installed. All these programs are usually provided for whatever linux distribution you may have, so it is most likely not necessary to compile anything yourself. You just might need to install any of these packages. You only have to install the encoder package you want to need. If you for instance don't need flac, there is no need to install it.</para>
+
+<para>What encoder/file format to use? The <link linkend="what_encoder">What encoder</link> chapter gives you a small introduction about encoders, audio quality and compression factors.</para>
+
+<para>One word to copy protected audio &CD;s: As already said, &kaudiocreator; uses cdparanoia to rip the audio data from the &CD;. This  program is not designed to crack any copy protection. So unless your &CD;/DVD-player firmware circumvents the protection, you will fail to rip protected audio &CD;s. In any case &kaudiocreator; itself cannot handle/work around any protection mechanism. Your bad, just don't buy copy protected audio &CD;s and the market power will dry out this idiocy!</para>
+
+<para>Hey, still reading? Even if you just punched the help menu entry after opening the program the first time, not having a clue how to proceed from this somewhat empty screen (especially when no audio &CD; is already in the drive when starting the program) and the unusual short menu?</para>
+
+<para>Don't worry, this handbook will tell you how to rip a &CD; with this program. Beside the usual explanation of the programs commands/settings, there is a special section with a <link linkend="Example">full walkthrough example</link>. At first you will learn how to set the general settings. This includes your &CD; drive (device ID) the folder for temporary files, the main destination folder, in which a subfolder named according your choice from the &CD; parametes will be created for each &CD;, the encoder to use (like lame for mp3s or oggvorbis for oggs) and among other settings whether you want to use freedb to fetch the data for your &CD; from the Internet or (paranoia, not cdparanoia :-) ) whether you want to enter all data manually.</para>
+<para>While the setup has only to be done once (you can however tweak it as often as you like until you find a suitable setup for yourself), you will then learn the daily business of ripping a &CD; to the harddrive. It is (hopefully) then when you will understand and learn to like the lean approach of the interface you may have stumbled over at first.</para>
+
+<para>Last remark, &kaudiocreator; is a very flexible program which can invoke many encoders. Therefore this handbook (currently) does not cover every possible command and setting. Use it as a starting point to explore the program yourself if you feel the need for more than what is covered here. Usually more information about the programs/encoders (app-name) which are called by &kaudiocreator; can be obtained by opening a console and typing <command>man app-name</command>, <command>app-name -help</command>, <command>app-name --help</command> or <command>app-name -h</command>.</para>
+
+<para>And now: Have fun...</para>
+</chapter>
+
+<chapter id="using-kaudiocreator">
+<title>Using &kaudiocreator;</title>
+
+<para>
+What are we talking about? Well you read this, so you have most likely started the program already. It should look somehow like this:
+</para>
+<para>
+
+<screenshot>
+<screeninfo>Here's a screenshot of &kaudiocreator;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kaudiocreatormainwindow800.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot &kaudiocreator; main window</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+<para>
+The main window after starting the program.
+</para>
+
+<sect1 id="kaudiocreator-features">
+<title>A short list of &kaudiocreator; features</title>
+
+<itemizedlist>
+    <listitem><para>can encode to many formats - depends on what programs/encoders you have installed (mp3, ogg, flac &etc;)</para></listitem>
+    <listitem><para>can fetch &CD; information from freedb via the Internet or you can work completely off line, entering everything manually</para></listitem>
+    <listitem><para>can add tags to the created files - depends on what format you encode to</para></listitem>
+    <listitem><para>set folder names and song names according free adjustable combinations of &CD; information</para></listitem>
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<para>This is just a brief list of the commands of the main window. See the <link linkend="Example">full walkthrough example</link> for more details how to use this program and screenshots with descriptions about the program configuration tabs.</para>
+
+<sect1 id="kaudiocreator-mainwindow">
+<title>The main &kaudiocreator; window</title>
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Eject CD</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the drive bay and ejects the &CD;.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>CDDB Lookup</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Starts the CDDB lookup of the cd data according your settings from the <guilabel>Lookup</guilabel> tab on the <guilabel>CDDB</guilabel> page. (Can be local or online, in the later case you have to connect to the Internet first.)</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Edit Album...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the Album Editor window.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Select All Tracks</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Selects all tracks for processing (ripping and, if set up, encoding).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Deselect All Tracks</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Deselects all tracks for processing.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Rip Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Starts the ripping and, if an encoder is selected on the <guilabel>Encoder Configuration</guilabel> tab in the settings dialog, the encoding.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guisubmenu>Rip Selection</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Opens a sub-menu with a list of the available encoders, so you can rip a selection with another encoder than the standard one. Note, that the encoder should have been configured on the <guilabel>Encoder Configuration</guilabel> tab in the settings dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Remove Completed Jobs</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove the completed jobs from the <guilabel>Jobs</guilabel> window.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Encode File...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a file browser so you can select an already ripped file to encode rather then rip and encode a complete &CD;.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits &kaudiocreator;.</action></para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Hide/Show Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles the toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Hide/Show Statusbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles the statusbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the configuration window to set shortcuts (key codes) to menu commands.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the configuration window to configure the toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Notifications...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the configuration window to configure the type of notification (like logs, beeps) for program events (like finished &CD; ripping).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &kaudiocreator;...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens &kaudiocreator; main configuration dialog with several tabs (like Encoder, for the encoder configuration). You have to go here before you will be able to succesfully use this program!</action></para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect2>
+
+</sect1>
+</chapter>
+
+<chapter id="what_encoder">
+<title>What encoder/file format to use - about audio quality, encoders and compression rates</title>
+
+<para>What encoder to use?</para>
+
+<para>If you don't want to loose any audio information you need a lossless audio format. Beside flac there are others like shorten or monkey, which may be available for your distro. The down side is that the compression rates will be low and hardly any commercial device can play these files.</para>
+
+<para>Between the audio formats which do lose information due to data compression according their psychoacustic model, mp3 and ogg are the most common. ogg may today have a slight advantage over mp3 in audio quality on lower bit rates (up to 128 kbps), but above that rate the differences become less important, as both encoders produce very good audio quality.</para>
+
+<para>In short:</para>
+
+<para>flac
+ <itemizedlist>
+  <listitem><para>+ lossless compression</para></listitem>
+  <listitem><para>+ free</para></listitem>
+  <listitem><para>+ very good audio quality (lossless)</para></listitem>
+  <listitem><para>- low compression rate (probably only around 2.x)</para></listitem>
+  <listitem><para>- hardware player support not existing (afaik)</para></listitem>
+ </itemizedlist>
+</para>
+
+<para>ogg
+ <itemizedlist>
+  <listitem><para>- loss of audio information (amount depends on final bit rate)</para></listitem>
+  <listitem><para>+ free</para></listitem>
+  <listitem><para>+ good to very good (high bit rates) audio quality</para></listitem>
+  <listitem><para>+ high compression rate (depending on resulting audio quality)</para></listitem>
+  <listitem><para>- poor hardware player support</para></listitem>
+ </itemizedlist>
+</para>
+
+<para>mp3
+ <itemizedlist>
+  <listitem><para>- loss of audio information (amount depends on final bit rate)</para></listitem>
+  <listitem><para>o 'not so' free, lame comes for free with most distros but there are license issues</para></listitem>
+  <listitem><para>+ good to very good (high bit rates) audio quality, though slightly lower at lower bit rates compared to ogg</para></listitem>
+  <listitem><para>+ high compression rate (depending on resulting audio quality)</para></listitem>
+  <listitem><para>+ good hardware player support</para></listitem>
+ </itemizedlist>
+</para>
+
+<para>As mentioned before, mp3 and ogg both are audio formats with which you will lose sound information in the end. You cannot revert back to the original once you have the mp3/ogg files. You can create wav files of these and even burn them back onto a &CD; to play them on a &CD;-Player (while DVD-players usually can play both, wav and mp3, mostly not ogg) but the wav files generated from a mp3 or ogg will not be as good as the original. In reality, depending on your HiFi system and the compression rate you chose when creating the mp3s/oggs, you might not even hear a difference. However, if you do not want to lose any sound information but still want to compress your wave files, you should take a look into flac, shorten or monkey. But these encoders will not compress much better than the factor of 2.x .</para>
+
+<para>Until you are not the absolute enthusiast you will most likely decide between ogg and mp3. Go for</para>
+
+<para>ogg - if you want to listening to the music only via your computer or a computer based music server and/or you already have one of the few ogg playing players.</para>
+
+<para>mp3 - if you want to listen to your music on other devices as well, like standard DVD players, portable players (USB stick, flash card, HD) or special car stereos. Today, early 2005, most of these devices only support the mp3 format.</para>
+
+<para>Qualitywise both audio formats should be just fine, depending the compression rate you choose. For mp3 (and most likely ogg too) a bit rate of 128 kbps results in a compression rate of 11 compared to the original wav file which is stored on the &CD;. That might be good during travel but is not sufficient for a good home HiFi stereo system. 192 kbps is a good compromise even for you HiFi system in your living room. This would give you a compression rate of 7.3 .</para>
+
+<para>Already years ago experts were not able to differentiate a 256 kbps mp3 from the &CD; original and that was in a blind test with a HiFi system which you might never be able to affort. :-) That still will reduce the storage space of the original wav by the factor of 5.5 , quite nice. On most modern systems you can as well use variable bit rate. Here the encoder varies the bit rate depending the complexity of the music according to its psychoacoustic model (wow :-) ). The lame setting '--preset extreme' generates a file with a VBR (variable bit rate in opposite to CBR, constant bit rate) of 224 to 256 kbps, depending the complexity of the music. This will compress the original by a factor up to 6.3 and will play on nearly everything currently on the market.</para>
+
+<para>Unless you have an extremly expensive equipment (we are talking of thousands of Euros or US Dollars) and an extremly well trained ear, you will most likely not hear a difference to the maximum possible CBR rate of 320 kbps, just beleave me. Even that would still result in a compression rate of 4.4 . By the way, the setting '--preset extreme' will infact use 320 kbps for complex music parts while compressing less complex music much higher to achieve the average bit rate of 224 to 256 kbps.</para>
+
+<para>A short list of audio quality parameters and resulting compression rates for lame (mp3s) (check lame --help for more):
+ <itemizedlist>
+  <listitem><para>'--preset extreme' = 224 to 256 kbps VBR, compression rate up to 6.3 . Uses up to 320 kbps for complex music parts and way less for less complex parts of the song. Good enough for high quality home HiFi systems. First choice!</para></listitem>
+  <listitem><para>'--preset extreme -b 256 = 256 kbps CBR, compression rate around 5.5 . Uses always 256 kbps for complex and not so complex music parts of the song. Some older players need CBRs. Good enough for high quality home HiFi systems.</para></listitem>
+  <listitem><para>'-h' = 128 kbps CBR joint stereo, compression rate about 11 . 128 kbps for all parts of the song. Good enough for kids music, portable players and, well, car stereos. Not good enough for better home Hifi systems, though.</para></listitem>
+ </itemizedlist>
+</para>
+
+</chapter>
+
+
+<chapter id="parameters">
+<title>&CD; info parameters</title>
+
+<para>The &CD; information you enter or the program fetches automatically from freedb via the Internet, is available as a list of parameters within the program which can be parsed to/used with &kaudiocreator; and the encorder programs in order to create folder and file names and or generate tags in the song files.</para>
+
+<para>When used with encoder programs, often you have to use a combination of program switches from the encoder program and these parameters here. The manual or help of the encoders will tell you the switches for these programs.</para>
+
+<para>E. g. to add the &CD; title to a tag when encoding mp3s with lame you have to add the -tt switch from lame followed by the title parameter from &kaudiocreator;. The result looks then like '... -tt {title} ...' .</para>
+
+<para>This is a summary of the parameters from &kaudiocreator; you can use (= button name in the wizard):</para>
+<itemizedlist>
+ <listitem><para>%{albumartist}  - album artist (Artist)</para></listitem>
+ <listitem><para>%{albumtitle}   - album title (Album)</para></listitem>
+ <listitem><para>%{artist}       - song artist (Track Artist)</para></listitem>
+ <listitem><para>%{albumcomment} - album comment (Comment)</para></listitem>
+ <listitem><para>%{comment}      - song comment (Track Comment)</para></listitem>
+ <listitem><para>%{extension}    - file extension like mp3 or ogg (Extension)</para></listitem>
+ <listitem><para>%{genre}        - music genre (Genre)</para></listitem>
+ <listitem><para>%{title}        - song title of current track (Track Title)</para></listitem>
+ <listitem><para>%{number}       - number of current track (Track Number)</para></listitem>
+ <listitem><para>%{~}            - standard linux shortcut for the users home folder (Home Folder)</para></listitem>
+</itemizedlist>
+
+</chapter>
+
+
+<chapter id="freedb">
+<title>freedb - what's that?</title>
+
+<para>
+You are not alone with your wish to listen to your music independently of your audio &CD;. People all over the world are ripping their &CD;s and converting it into a different format. Everybody makes the same experience: The most time consuming part in this process is the input of the &CD; data. So some smart people had the idea, that it would be much more efficient, if only one person would do this for every &CD; and the rest could just fetch the &CD; data and save the typing work.</para>
+
+<para>That's what freedb is, a free database where audio &CD; rippers can input/upload the infos of a &CD; so that everybody else can download this information rather than typing it into the computer each by themselfs. Note, we are only talking text here: &CD; title, artist, song names &etc;, not the audio file itself.</para>
+
+<para>So is it legal and save to use?</para>
+
+<para>Yes, it should be legal, but I am not a lawyer. However, nobody can prevent you from issuing the &CD; information which is openly available on the &CD; anyhow. And better, without the the &CD; the info is more or less pointless, so no damage can be done to the artists or the audio companies. You can obtain all the information anyhow by strolling through a &CD; shop, physically or online.</para>
+
+<para>Save to use? Well, for retrieving the &CD; information, you do not need to reveal any personal data yourself. There are freedb mirrors in many countries and you can even download the database to work off-line. (Be warned, now in early 2005 it is already a 370 MB tar.bz2 file!). You are asked to setup a mail address to fetch data, but this can be a faked one. I would actually recommend this, to ensure that your mail address is not accidentally be slipped to public and you are ending up getting lot's of spam mail. The initiator of the service claim they will not track or store your data (so why asking for it anyhow??) and then, many mirrors are in the hands of trusted institutions.</para>
+
+<para>In &kaudiocreator; you have to actively check a box to enable smtp (sending of an address) and you can specify a different (faked) address to use with freedb other than the one the system is set up with. The way the configuration is designed, it seems, that the email address is not used when retrieving data from the server. (But I am not the programmer, haven't checked the code.)</para>
+
+<para>However, to be able to give feedback the initiators of freedb ask that in case you submit data (about a new, not yet listed &CD; or a correction of an existing entry) you should do so with a valid email address. It's a great service, so respect this wish in case you want to and have something to contribute! There shouldn't be anything to worry beside the fact that your mail address might fall into the wrong hands and you receive (more) spam. (You may just not want to use your 'best' address). Please read carefully the corresponding FAQ and How-To's at freedb.org if you think you have a &CD; which data has not yet been submitted to the database.</para>
+
+<para>There are mirrors of the master database in many countries. When you set up &kaudiocreator; to use freedb, please use the mirror nearest to you. This saves bandwith on the net and balances the load between the servers.</para>
+
+<para>Visit freedb.org to get an up-to-date list of mirrors for online retrieval of &CD; information every time you rip a &CD; or to download the full database or (usually monthly created) updates of the database.</para>
+
+<para>Oh, how does it work?</para>
+
+<para>Well due to some magic a (not so) unique ID is automatically generated from the &CD; data when it is entered/present in the drive. That might be the number of tracks and their length and/or other things. See freedb.org for more information. Funny enough but unfortunately, the created ID does not seem to be unique for each &CD;. So sometimes a &CD; has to be sorted into a wrong category, out of the 11 defined by freedb, because there is already a &CD; with the same key in the database for the correct category. For backward compatibility they don't want to change the key generation. However, that should be only exceptional. :-) Check freedb.org for the categories before submitting. For instance the category rock holds pop and rap &CD;s as well, as there does not exist a category pop or rap.</para>
+
+</chapter>
+
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+&reporting.bugs;
+&updating.documentation;
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>What ripper (program) is used to extract the songs from the &CD; into wav files on my computer?</para>
+</question>
+<answer>
+<para>Well, I haven't scanned the source but rumor has it, that cdparanoia is used for that. That has always been the best choice for ripping audio &CD;s. Note, that you have to install the cdparanoia package from your distro, if it isn't already.</para>
+<para>Meanwhile cdda2wav has cought up and there might be areas, like mixed mode &CD;s, where it has surpassed cdparanoia. For simple &CD; ripping cdda2wav uses now the same library as cdparanoia. However, this info is of not much use for you as you cannot change the &CD; ripper in  &kaudiocreator;. In case you have problems ripping a &CD; and you want to try cdda2wav you have to use another program like grip, a ripper using gtk and which let's you define the ripper program you want to use.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>What encoders/file formats are supported? Can I create mp3 or ogg files?</para>
+</question>
+<answer>
+<para>You can choose the encoder and therefore the file format you want to turn the ripped wav files into. On first opening you will find pre-defined entries for lame (mp3s), oggenc (oggs) and flac (a lossless compression audio format) on the encoder setup tab. But you can add other encoders on that tab as well.</para>
+<para>Note, that you have to install the encoder package from your distro for the encoder you want to use first, before you can use the encoder. (That's required even for the pre-defined encoders!). Take a look at the <link linkend="what_encoder">What encoder</link> chapter for more information about encoders.</para>
+<para>After installation of an encoder you can get more information about its switches by typing something like <command>lame -help</command> or <command>lame --help</command> in a console (&eg; konsole). While 'lame' has to be replaced by the name of the encoder you installed.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>There isn't much working here, is it?</para>
+</question>
+<answer>
+<para>Ha, a thousand possible reasons for that. Check the &CD;/DVD drive device ID setting, access/read permission and whether you have installed cdparanoia and the audio encoder of your choise (lame for mp3s, oggenc for oggs, flac &etc;). Try invoking both programs from a command line in a terminal. That might give you a hint what's wrong.</para>
+<para>Oh, by any chance, you don't try to rip a copy protected audio &CD;, do you? Check the cover of the &CD;. This won't work! Your bad, buy unprotected audio &CD;s next time.</para>
+<para>There is a chapter with a <link linkend="Example">full walkthrough example</link>. Even if you want to use different settings it might give you a hint how to proceed.</para>
+</answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+
+<chapter id="Example">
+
+<title>Example from a first start over the basic setup to the first rip of a &CD;</title>
+
+<para>Read the complete handbook, understood everthing and somehow still unsure what to do? Well, no problem, follow this step by step example and you will get enough information to adjust just those areas which will the program make do exactly what you want.</para>
+
+<para>In this example we will start the program for the first time, set everything up and rip our first &CD;. We will use lame '--preset extreme' to create mp3s with a VBR (Variable Bit Rate) of 224 to 256 kbps in average and ID3V1 tags.</para>
+
+<para>You need to have cdparanoia and lame installed on your system. Both programs should be available as a pre-compiled package for your linux distribution. However, you might need to ask a search engine to find a suitable package of lame, as sometimes it is considered to be not totally free. In any case you might not need to compile from source which, of course, you always can.</para>
+
+<para>The structure how we organize our music on the hard disk is:
+ <itemizedlist>
+  <listitem><para>main dir name for all &CD;s : /usr/share/cd</para></listitem>
+  <listitem><para>in that for each &CD; a subdir named : cdartist - cdtitle - year</para></listitem>
+  <listitem><para>in the subdir the song names : track# - tracktitle</para></listitem>
+ </itemizedlist>
+</para>
+<para>In summary : /usr/share/cd/cdartist - cdtitle - year/track# - tracktitle</para>
+<para>Please make sure, that the folder <filename>/usr/share/cd</filename> exists and that you have write permission on it (&eg; try to copy something to it with konqueror).</para>
+
+<para>The example is divided into 2 sections:
+ <itemizedlist>
+  <listitem><para>the first covering the basic setup of &kaudiocreator;, something you might only do once and</para></listitem>
+  <listitem><para>the second describing the process of actually ripping a &CD;, which you will have to repeat for every &CD; you rip.</para></listitem>
+ </itemizedlist>
+</para>
+
+<para>Here we go...</para>
+    
+<sect1 id="Basic-Setup">
+ <title>E 1 Basic Setup</title>
+
+  <para>Here we set the encoder to use to compress the music (lame) and so the audio file format (mp3) as well as the resulting audio quality (--preset extreme => VBR 224 to 256 kbps). You define where the files will go and what structure will be used to store them. In set the program to use freedb to get the &CD; data via Internet as we are lazy.</para>
+
+  <para>While you can always change any of these settings, you will most likely don't change them every time you rip a &CD; once you found a convenient setup.</para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.1 Step 01: Setting the device ID for your &CD;/DVD drive/writer</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>On the main window:</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="kaudiocreatormainwindow800.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; main window</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>set <guilabel>Device:</guilabel> to <filename>/dev/cdrom</filename></para>
+      <para>The device ID is parsed to the ripper program so it can read the &CD; data/songs.</para>
+      <para>Often /dev/cdrom is a symlink to the actual device ID from your drive. If that does not work or you have more than one &CD;/DVD drive, you can give the exact device ID. If you can access your drive with other programs, take a look into /etc/fstab and try the device entries for &CD-ROM; and or DVD-drives listed there.</para>
+      <para>Nothing in there, no luck?</para>
+      <para>Running kernel 2.6:</para>
+      <para>If you happen to have one of the common &ATAPI; (or IDE) drives, with kernel 2.6 the device ID will range from /dev/hda to /dev/hdd. The master on channel 2 is a good starting point: that would be /dev/hdc. If your hard disks are all S-ATA, /dev/hda will probably do the trick. Native SCSI drives will start from /dev/sda unless you have S-ATA hard disks, which come first in the list, so depending on the number of disks the &CD;/DVD drive will start at /dev/sdb or /dev/sdc .</para>
+      <para>Running kernel 2.4:</para>
+      <para>&CD;/DVD drives are accessed via SCSI, so the devices start at /dev/sda .</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.2 Step 02: General Configuration Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure KAudioCreator... -> General</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="generalconfiguration.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; General Configuration Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+      The <guilabel>General Configuration</guilabel> tab. Not much to do here. You could define some additional formating though. For our example, just enter/leave everything as shown in the screenshot.
+      </para>
+    <para>Just check <guilabel>Prompt if information is not complete</guilabel>, so you will get informed when some infos for generating tags are not available.</para></listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.3 Step 03: CD Configuration Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure KAudioCreator... -> &CD;</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="cdconfiguration.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; &CD; Configuration Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>The <guilabel>&CD; Configuration</guilabel> tab. Just check both entries. We are lazy and want that the &CD; data is fetched automatically via the Internet from a freedb server.</para>
+      <para>Note, you need to be online when ripping the &CD; to be able to access the freedb server.</para>
+      <para>The second box is convenient, as if a &CD; entry is found, the &CD; will be ripped imidiately. That's low risk, because if you are later unhappy with the database entry and the resulting director/file names or tag entries, you can easily change them. The folder and file names with konqueror->rename and the id3 tags with kid3, the &kde; tagger.</para>
+      <para>Further note appart from this example: If you want to enter everything manually uncheck the boxes and freedb will not be used. You can use freedb locally in off-line mode if you download the database before. However, this will be over 370 MB so think twice if it's worth it. To use freedb in off-line mode, you need to check the boxes here, at least the first one. The mode is set on the following tab.</para></listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.4 Step 04: CDDB Configuration Lookup Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure KAudioCreator... -> CDDB -> Lookup tab</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="cddbconfigurationlookup.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; CDDB Configuration Lookup Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>CDDB, that's freedb for us. The settings used for the data lookup, for retrieving the &CD; information from the freedb server via the Internet. How does the system know what data to get? Read <link linkend="freedb">the section about freedb</link>. Just set everything as in the screenshot.</para>
+      <para>Short explanation:</para>
+      <para>Mode: We haven't downloaded the database, so we want to work remote with the Internet server only.</para>
+      <para>CDDB Server: PLEASE (yes, I am shouting!) go to freedb.org and look up a mirror near you. This way the load is balanced between the mirror servers. However, as a first try, this setting should work, but PLEASE...</para>
+      <para>Port and Transport: There are 2 combinations, which even the mirrors should understand.</para>
+      <itemizedlist>
+        <listitem><para>Port=80 and Transport=&HTTP;</para></listitem>
+        <listitem><para>Port=8880 and Transport=CDDB</para></listitem>
+      </itemizedlist>
+      <para>Both work equally regarding the server, but as many firewalls blocking Port 8880 by default, you may have better luck with Port 80, as the &HTTP; port is usually open for browsing the Internet.</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.5 Step 05: CDDB Configuration Submit Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure KAudioCreator... -> CDDB -> Submit tab</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="cddbconfigurationsubmit.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; CDDB Configuration Submit Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>In this example we don't want to submit any &CD; data to the freedb server. Uncheck the first box and that should it be.</para>
+      <para>Note beside this example: If one day you find a &CD; which is not yet known by the freedb server or you find an error in a &CD; entry, you can submit the new/updated data. Check the first box at the top of this tab and then either use your mail address known to your system which &kaudiocreator; has already detected or check the lower radio button and enter a new mail address. Please read <link linkend="freedb">the section about freedb</link> first. You are asked to provide a mail address when submitting new or updated entries to the server and you should read the information on freedb.org about revision counts when sending updated information in case you found an error.</para></listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.6 Step 06: Ripper Configuration Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure &kaudiocreator;... -> Ripper</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="ripperconfiguration.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Ripper Configuration Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Just take the settings from the screenshot. (Make sure the folder <filename>/tmp</filename> exists on your system!)</para>
+      <para><guilabel>Beep after each rip is done</guilabel> : check this to get an audible feedback from the progress.</para>
+      <para><guilabel>Number of tracks to rip at a time</guilabel> : sorry, cannot think of a reason to do more than one with one drive? Reading and encoding parallel? Just don't know, try for yourself.</para>
+      <para><guilabel>Auto-eject &CD; after last track is ripped</guilabel> : yeah well, so you know it's done. Do what you like.</para>
+      <para><guilabel>Default Temporary Directory</guilabel> : If you check this, you can/must specify the path/folder where the wav files are ripped into. This might be handy if you only have space on another drive. If not checked the files will be created in your home folder. Remember this path if you want do something with the wav files themselfs.</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.7 Step 07: Encoder Configuration Tab</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Settings -> Configure KAudioCreator... -> Encoder</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="encoderconfiguration.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Encoder Configuration Tab</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Finally the encoder configuration. We will use lame. Here we have a little bit more to do:</para>
+      <para>Click on <guilabel>Lame</guilabel></para>
+      <para>Click on the <guibutton>Configure...</guibutton> button</para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="lameconfiguration.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Lame Configuration</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Uff, enter everything as in the screenshot. The command entry is a bit long, so you may have to scroll a bit to the right.</para>
+      <para>The settings are more or less self explaining. There is a space between '--preset' and 'extreme' .</para>
+      <para>'--preset extreme' defines the audio quality of the mp3s. As mentioned before, this is a setting for very good audio quality, sufficient even for very good HiFi Stereo systems. The resulting bit rate is about 224 to 256 kbps in average. The achieved compression factor is 6.3 . A good balance between audio quality and space consumption. Storage space/memory is cheap these days, isn't it?</para>
+      <para>Note the '--id3v1-only' entry to limit the tag creation to V1/V1.1 tags. Delete it if you want id3v2 tags as well. kid3 is a very good id3 tagger for &kde; in case you want to manipulate tags later. %f and %o should be the internal variables for the input file (incl. the full path) and the output file name (incl. the full path).</para>
+      <para>Click <guibutton>OK</guibutton> to close and apply the settings.</para>
+      <para><guilabel>Encoded File Location</guilabel> - Back on the <guilabel>Encoder Configuration</guilabel> tab, we define here the destination folder including the folder name for the files from the ripped &CD;. These are variables which will be filled with the corresponding &CD; data everytime you rip a &CD;. The &CD; data can be entered manually or fetched via Internet (CDDB). As already configured in this example, we will use freedb and fetch the data automatically. Play with the Wizard, but in the end for this example the entry should be:</para>
+      <para>'/usr/share/cd/%{albumartist} - %{albumtitle} - %{year}/%{number} - %{title}.%{extension}'</para>
+      <para>Set the rest as in the screenshot. A few comments for future use outside this example:</para>
+      <para><guilabel>'Number of wav files to encode at a time</guilabel>: Why would one want to encode more than one wav file at the time, multi-processor machines? Well, these will come soon, so if you already have one when you read this, give it a try.</para>
+      <para><guilabel>Encoder Priority</guilabel>: for the fanatics, :-) , play with it, if you feel for it. Higher is faster I guess!</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>That's about it, we have just finished the basic setup of KAudioCreator. This configuration is used as the default for every &CD; rip. If you have choosen your music organization structure wise you will never have to change it again. ;-)</para>
+
+</sect1>
+
+<sect1 id="Ripping-a-CD">
+ <title>E 2 Ripping a &CD;</title>
+
+  <para>Ready to rumble! This section will describe the process of ripping a &CD; onto the harddrive. We will create mp3 files. The folder structure, the way the music is organised on the hard disk, was described and setup in the previous section. So connect to the Internet now, as we are lazy and want to fetch the &CD; data from freedb! The process described in this section has to be repeated for ever &CD; you want to rip.</para>
+  <para>As we use a &CD;, which is not already listed in freedb, the screenshots might look a bit different as the ones you will encounter for a &CD; which could successfully fetched from freedb. Therefore you will learn to enter the &CD; data manually rather than fetching it from the Internet but comments will be made to point out the differences.</para>
+  <para>Don't try too hard to look for the &CD; we use in this example. It's a 'special' handbook-writer edition. ;-) Sadly these days, you never know...</para>
+  <para>Here we go...</para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 2.1 Step 01: Ripping a CD.</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>The main window with an audio &CD; in the drive:</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="cdinserted.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; main window - cd inserted</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>If you haven't done so far, insert the &CD; into the drive which device ID you specified here on this main window.</para>
+      <para>After a short moment the tracks and their length should be listed on the window, as in the screenshot. That is, if the &CD; could be identified as an audio &CD; and read by cdparanoia.</para>
+      <para>If that's not happening, check the <link linkend="faq">Questions and Answers</link> section for help or go back to the previous section covering the basic setup.</para>
+      <para>Attention: if the &CD; could successfully fetched from freedb, all song titles will already be filled out and above the track list, the artist and album name will be shown.</para>
+      <para>In case that there are more than one entry in the database which matches the 'unique' &CD; key for your &CD;, a popup window will appear and you can select the database entry which you think fits best for your &CD;.</para>
+      <para>If you have not checked the box for automatically querying freedb (<guilabel>&CD; Configuration</guilabel> page in the settings dialog), you can trigger this manually with the first button from the button bar. If you don't have a local database but fetching from the Internet you need to be connected to the net.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 1.2 Step 02: The Album Editor - Enter the album data and the first song title</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Double click anywhere in the first, blue 'highlighted' row (track 1):</action>
+       </para>
+       <para>The Album Editor window pops up.</para>
+       <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject><imagedata fileref="startalbumeditor.png" format="PNG"/></imageobject>
+	           <textobject><phrase>Screenshot &kaudiocreator; The Album Editor</phrase></textobject>
+	       </mediaobject>
+        </screenshot>
+       </para>
+       <para>Enter the album data for your &CD; according the pattern in the next screenshot. The song title in the Track 1 row of the Current Track box, the rest of the &CD; data in the Album box.</para>
+       <para>No need to enter the artist in the Current Track box, unless of course, you have a sampler with different artists for each song.</para>
+       <para>The upper comment field can be used for individual comments for each song, where as the Album comment field can be used for comments which should be the same across all songs.</para>
+       <para>Attention: of course, when you have successfully fetched the data from freedb the Album Editor is not empty but already holds the data as shown in the following screenshot. However, it is always a good idea to open the Album Editor once to check whether you are happy not only with the artist and album name (e.g. all words start with capital letters or not...) but to check if there are any unwanted comments.</para>
+       <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject><imagedata fileref="entersong1.png" format="PNG"/></imageobject>
+	           <textobject><phrase>Screenshot &kaudiocreator; enter title for song 1 and album data</phrase></textobject>
+	       </mediaobject>
+        </screenshot>
+       </para>
+       <para>Note: In this example we are using only id3v1 tags. This limits the length of the fields to 30 characters for the artist, album and song title and only 28 characters for the comment field. If you want to create id3v2 tags, you can use unlimited field length, well, at least what &kaudiocreator; allows here. Haven't checked. You set this option on the encoder configuration tab, take a look into the Basic Setup section for this.</para>
+       <para>You can change the tag information of the created files later at any time with a tag editor. Kid3 is a good one for mp3 files with which you can create id3v2 tags, too.</para>
+       <para>Tags may not be supported by all encoder/file formats. Check the encoder help for more information about this.</para>
+       
+       <para>After clicking <guibutton>OK</guibutton> a confirmation message pops up:</para>
+       <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject><imagedata fileref="confirmartistcarryover.png" format="PNG"/></imageobject>
+	           <textobject><phrase>Screenshot &kaudiocreator; Confirm album data change carry over</phrase></textobject>
+	       </mediaobject>
+        </screenshot>
+       </para>
+       <para>We changed the general album data and so a message pops up, asking whether we want to take over this change for the other songs. Yep, we do. Will save us some work. Click Yes.</para>
+       <para>Attention: this popup window will not appear, if you for instance change the album name in the Album box. However, the change will be valid for the other songs as well.</para>
+       
+       <para>And another pop-up window:</para>
+       <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject><imagedata fileref="setalbumcategory.png" format="PNG"/></imageobject>
+	           <textobject><phrase>Screenshot &kaudiocreator; Set album category</phrase></textobject>
+	       </mediaobject>
+        </screenshot>
+       </para>
+       <para>We are asked to select a music category for the album. Don't mix this up with the genre for the id3 tags. These are the 11 categories which are defined by freedb to pre-sort the &CD; IDs. As our &CD; is not in any database (how could it the way we use the program), we have to choose one so in case we would submit the &CD; data, it would be sorted correctly into the freedb database.</para>
+       <para>Just choose one of the entries which seems to match the style of the &CD; you rip. It's not important for this example, we don't submit the &CD; data anyways. For more info go to freedb.org and read about the categories. Pop or Rap for instance are listed under Rock.</para>
+       <para>After hitting OK, you come back to the main window again. Just double click on the row of the second track.</para>
+       <para>Again the Album Editor window pops up and you can see, that the Album box is already filled out with the data we entered for the first track. So just enter the field entries in the Current Track box. The song title for sure and other information if you want.</para>
+       <para>Click into the next row on the main screen and proceed this way until you entered the track data for all tracks on the &CD;.</para>
+       <para>Attention: this popup will not show up, if you have fetched the data from freedb. It was already sorted into one of these categories in the database.</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 2.3 Step 03: Start ripping</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Hit the <guibutton>Rip Selection</guibutton> button as shown on the screenshot</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="readytorip.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Start the ripping process</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>It's the 3rd button on the toolbar. Note, that the artist and album is shown above the track list.</para>
+      <para>Further note, that there is a check sign in front of every track row. Only the tracks which are marked that way will be processed. A single click on the track row will toggle the track selection. Ensure, that all tracks are selected or use the button <guibutton>Select All Tracks</guibutton> at the bottom of the screen (not shown on screenshot) to select all tracks at once.</para>
+
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="jobshavestarted.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Message jobs have started</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Once you have started the ripping process by clicking on the <guibutton>Rip Selection</guibutton> button, this confirmation window pops up. Hit OK and then we will take a look at the jobs window to follow what's going on.</para>
+      
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+  <para>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <menuchoice>
+       <guimenuitem>E 2.4 Step 04: Following the progress on the jobs window</guimenuitem>
+      </menuchoice>
+     </term>
+     <listitem>
+      <para>
+       <action>Hit the <guilabel>Jobs</guilabel> tab to switch to the jobs window. It's on the upper left of the screen, right under the toolbar with the buttons.</action>
+      </para>
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="jobcontrol.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Job control window</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>That's the job control window. The first track is just ripped to the hard disk. A program status is shown on the lower left screen in the status row.</para>
+      
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="encodernotfound.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Encoder not found</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Aarrrrgh! Sh*t ! Suddenly this. RTFM (read the f***ing manual)! I wrote it! Why, I am incapable! That's what you'll see, when you try to encode with/invoke an encoder which you haven't installed yet. Tracks that could not successfully encoded will get marked with a red 'x' on the job list, too.</para>
+      <para>By the way, see how I cheated? The path for the tmp file and the destination path is not what we set up here in the example. Shame over me, but you have checked that you have write access to both, the folder for the temporary files and the destination folder, haven't you? ;-)</para>
+      <para>Let's do that again...</para>
+
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="rippingandencoding.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Ripping and encoding</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Hm, now it becomes clear, why the error occured just after the rip of the first song was finished.</para>
+      <para>See that? Job one, ripping the first track, is gone (finished) but we have a new entry: Job 4 which is the encoding of track 1 to mp3. So ripping and encoding is done parallel. See the status message on the bottom of the window, it's enhanced now.</para>
+      <para>I could not find a configuration setting to suppress this behavior. The only thing that seems to be configurable is the number of parallel rips and encodings. Wow, do even more jobs parallel? I don't know, what this means on lower end machines? The AMD64 used here didn't seem to have a problem ripping and encoding a track (two different though) at once.</para>
+
+      <para>
+        <screenshot>
+	       <mediaobject>
+	           <imageobject>
+	               <imagedata fileref="rippingandencoding2.png" format="PNG"/>
+	           </imageobject>
+	           <textobject>
+	               <phrase>Screenshot &kaudiocreator; Ripping and encoding 2</phrase>
+	           </textobject>
+	       </mediaobject>
+        </screenshot>
+      </para>
+      <para>Well, the cycling goes on. Now we are ripping the last track while encoding another one and having one in the encoder queue. After the last track is encoded, a small pop up message is shown on the upper left of the window for a short time.</para>
+      <para>That's it, ready for the next &CD;. Enjoy listening to your music...</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+
+</sect1>
+
+</chapter>
+
+
+<chapter id="credits">
+
+<title>Credits and License</title>
+
+<para>
+&kaudiocreator;
+</para>
+<para>
+Program copyright 2003-2007 Benjamin Meyer <email>ben+kaudiocreator@meyerhome.net</email>
+</para>
+<para>
+Contributors:
+<itemizedlist>
+ <listitem><para>A one man show so far!<email>nope@no.mail</email></para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright 2005-2007 alan <email>sorry@no.mail</email>
+</para>
+<para>
+As a bad example: sorry no mail. I cannot maintain this handbook. It is thought as a first starter for a handbook for kaudiocreator. Whoever may think of something useful to add or change, may do so. Well, at least after contacting the author first, I assume. And if you read this, he left this section in and therefore agrees to this proposal.
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+&underGPL;        	 <!-- GPL License -->
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kaudiocreator">
+<title>How to obtain &kaudiocreator;</title>
+
+&install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>In order to successfully use &kaudiocreator;, you need &kde; 3.x. and cdparanoia. If you want to create compressed audio files like mp3s or oggs, you need the encoder of your choice.</para>
+
+<para>
+&kaudiocreator; is today maintained within the &kde; CVS as part of the kdemultimedia package. If you are familier with cvs you can do an anonymous checkout from there. However, most distros come with a pre-compiled package, especially because &kaudiocreator; is part of a main &kde; package. Install the kdemultimedia package from your distro. If you read this, you have most likely found it already...
+</para>
+
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<para>Funny, if you managed to checkout the source from the &kde; SVN you won't need this info here but...</para>
+
+&install.compile.documentation;
+
+</sect1>
+
+<sect1 id="configuration">
+<title>Configuration</title>
+
+<para>Well, this section is most likely intended for people who build from source and not the user using a pre-compiled package from a distro.</para>
+
+<para>Sorry, there is currently no help available for configuration options before compiling the source.</para>
+
+<para>If you look for help to configure the program to your needs once it is running, then the following is for you:</para>
+
+<para>Being a program that can invoke many different other programs there is a lot to configure. Best read the <link linkend="Example">full walkthrough example</link> to introduce yourself with the configuration options. It sports screenshots of the different configuration tabs and provides comments even for options not used in the example.</para>
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab 
+-->
+
