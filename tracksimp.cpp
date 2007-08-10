@@ -115,9 +115,11 @@ void TracksImp::loadSettings() {
 			list.append(text);
 	}
 
+	deviceCombo->blockSignals(true);
 	// Set list, get top one
 	deviceCombo->clear();
 	deviceCombo->addItems(list);
+	deviceCombo->blockSignals(false);
 
 	changeDevice(deviceCombo->currentText());
 }
