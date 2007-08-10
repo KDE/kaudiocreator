@@ -185,7 +185,7 @@ void Ripper::tendToNewJobs(){
 	KUrl dest(tmp.fileName());
 	kDebug() << "dest: " << dest;
 
-	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, false, true, false);
+	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, false, false, false);
 	jobs.insert(copyJob, job);
 	connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
 	connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
