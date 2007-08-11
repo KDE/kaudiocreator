@@ -91,7 +91,6 @@ void Ripper::removeJob(int id){
 	QMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		if(it.value()->id == id){
-			jobs.remove(it.key());
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
 			if(copyJob){
 				QString fileDestination = (copyJob->destUrl()).path();
@@ -106,6 +105,7 @@ void Ripper::removeJob(int id){
 					f.remove();
 				}
 			}
+			jobs.remove(it.key());
 			break;
 		}
 	}
