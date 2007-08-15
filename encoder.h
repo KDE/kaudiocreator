@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-#include <q3ptrlist.h>
 #include <QMap>
 #include "job.h"
 #include <k3process.h>
@@ -56,8 +55,8 @@ private slots:
   void tendToNewJobs();
 
 private:
-  Q3PtrList<Job> pendingJobs;
-  Q3PtrList<K3ShellProcess> threads;
+  QList<Job*> pendingJobs;
+  QList<K3ShellProcess*> threads;
   QMap<K3ShellProcess*, Job*> jobs;
 
   int reportCount;

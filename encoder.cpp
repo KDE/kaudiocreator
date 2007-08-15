@@ -66,13 +66,14 @@ EncoderPrefs* Encoder::loadEncoder( int encoder ){
  * Deconstructor, remove pending jobs, remove current jobs.
  */
 Encoder::~Encoder() {
+	qDeleteAll(pendingJobs);
 	pendingJobs.clear();
 
 	QMap<K3ShellProcess*, Job*>::Iterator pit;
 	for( pit = jobs.begin(); pit != jobs.end(); ++pit ) {
-		Job *job = jobs[pit.key()];
+		Job *job = pit.value();
 		K3ShellProcess *process = pit.key();
-		threads.remove(process);
+		threads.removeAll(process);
 		process->kill();
 		QFile::remove(job->newLocation);
 		delete job;
@@ -104,8 +105,8 @@ void Encoder::removeJob(int id ) {
 	for( it = jobs.begin(); it != jobs.end(); ++it ) {
 		if ( it.value()->id == id ) {
 			K3ShellProcess *process = it.key();
-			Job *job = jobs[it.key()];
-			threads.remove(process);
+			Job *job = it.value();
+			threads.removeAll(process);
 			process->kill();
 			jobs.remove(process);
 			delete job;
@@ -113,14 +114,17 @@ void Encoder::removeJob(int id ) {
 			break;
 		}
 	}
-	Job *job = pendingJobs.first();
-	while(job ) {
-		if ( job->id == id)
+	Job *job = 0;
+	foreach(Job* j, pendingJobs)
+	{
+		if ( j->id == id)
+		{
+			job = j;
 			break;
-		job = pendingJobs.next();
+		}
 	}
 	if ( job ) {
-		pendingJobs.remove(job);
+		pendingJobs.removeAll(job);
 		delete job;
 	}
 	tendToNewJobs();
@@ -153,8 +157,7 @@ void Encoder::tendToNewJobs() {
 		return;
 	}
 
-	Job *job = pendingJobs.first();
-	pendingJobs.remove(job);
+	Job *job = pendingJobs.takeFirst();
 
 	EncoderPrefs* prefs = loadEncoder(job->encoder);
 
@@ -278,7 +281,7 @@ void Encoder::jobDone(K3Process *process ) {
 	//qDebug("Process exited with status: %d", process->exitStatus());
 
 	Job *job = jobs[(K3ShellProcess*)process];
-	threads.remove((K3ShellProcess*)process);
+	threads.removeAll((K3ShellProcess*)process);
 	jobs.remove((K3ShellProcess*)process);
 
 	bool showDebugBox = false;

@@ -47,7 +47,9 @@ void Ripper::loadSettings(){
  * Deconstructor, remove pending jobs, remove current jobs, save settings.
  */
 Ripper::~Ripper(){
+	qDeleteAll(pendingJobs);
 	pendingJobs.clear();
+
 	QMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		 KIO::Job* ioJob = it.key();
@@ -157,7 +159,6 @@ void Ripper::tendToNewJobs(){
 
 	Job *job = pendingJobs.takeFirst();
 
-	QMap<QString, QString> map;
 	QString defaultTempDir;
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
