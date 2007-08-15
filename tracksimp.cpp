@@ -384,6 +384,9 @@ void TracksImp::startSession( int encoder )
             return;
     }
 
+    if ( encoder == -1 )
+        encoder = Prefs::currentEncoder();
+
     Job *lastJob = 0;
     TracksItem *item = selected.first();
 

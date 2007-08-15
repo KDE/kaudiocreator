@@ -51,13 +51,16 @@ void Encoder::loadSettings() {
 		tendToNewJobs();
 }
 
-void Encoder::loadEncoder( int encoder ){
+EncoderPrefs* Encoder::loadEncoder( int encoder ){
+	EncoderPrefs* prefs;
 	QString currentEncoderGroup = QString("Encoder_%1").arg(encoder);
 	prefs = EncoderPrefs::prefs(currentEncoderGroup);
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString::null);
 	}
+
+	return prefs;
 }
 
 /**
@@ -129,7 +132,8 @@ void Encoder::removeJob(int id ) {
  * @param job the job to encode.
  */
 void Encoder::encodeWav(Job *job ) {
-	emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(prefs->extension()).arg(job->track_artist).arg(job->track_title)));
+	emit(addJob(job, i18n("Encoding (%1): %2 - %3").arg(loadEncoder(job->encoder)->extension())
+		                                             .arg(job->track_artist).arg(job->track_title)));
 	pendingJobs.append(job);
 	tendToNewJobs();
 }
@@ -153,10 +157,7 @@ void Encoder::tendToNewJobs() {
 	Job *job = pendingJobs.first();
 	pendingJobs.remove(job);
 	
-	// if encoder is selected load it.
-	if ( job->encoder != -1 ){
-		loadEncoder(job->encoder);
-	}
+	EncoderPrefs* prefs = loadEncoder(job->encoder);
 	
 	QString desiredFile = Prefs::fileFormat();
 	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
@@ -252,7 +253,7 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 		return;
 	}
 	//qDebug(QString("Pre cropped: %1").arg(output).latin1());
-	output = output.mid(output.find('%')-prefs->percentLength(),2);
+	output = output.mid(output.find('%')-loadEncoder(job->encoder)->percentLength(),2);
 	//qDebug(QString("Post cropped: %1").arg(output).latin1());
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);
@@ -287,8 +288,6 @@ void Encoder::jobDone(KProcess *process ) {
 		emit(updateProgress(job->id, -1));
 	}
 	else if ( QFile::exists(job->newLocation) ) {
-		emit(jobIsDone(job, prefs->extension()));
-
 		// fyi segfaults return 136
 		if ( process->exitStatus() != 0 ) {
 			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),i18n("Show Output"),i18n("Skip Output")) == KMessageBox::Yes )
