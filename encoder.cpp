@@ -286,8 +286,6 @@ void Encoder::jobDone(K3Process *process ) {
 		emit(updateProgress(job->id, -1));
 	}
 	else if ( QFile::exists(job->newLocation) ) {
-		emit(jobIsDone(job, prefs->extension()));
-
 		// fyi segfaults return 136
 		if ( process->exitStatus() != 0 ) {
 			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
