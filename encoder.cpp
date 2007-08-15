@@ -50,13 +50,16 @@ void Encoder::loadSettings() {
 		tendToNewJobs();
 }
 
-void Encoder::loadEncoder( int encoder ){
+EncoderPrefs* Encoder::loadEncoder( int encoder ){
+	EncoderPrefs* prefs;
 	QString currentEncoderGroup = QString("Encoder_%1").arg(encoder);
 	prefs = EncoderPrefs::prefs(currentEncoderGroup);
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString::null);
 	}
+
+	return prefs;
 }
 
 /**
@@ -128,7 +131,8 @@ void Encoder::removeJob(int id ) {
  * @param job the job to encode.
  */
 void Encoder::encodeWav(Job *job ) {
-	emit(addJob(job, i18n("Encoding (%1): %2 - %3", prefs->extension(), job->track_artist, job->track_title)));
+	emit(addJob(job, i18n("Encoding (%1): %2 - %3", loadEncoder(job->encoder)->extension(),
+	                                                job->track_artist, job->track_title)));
 	pendingJobs.append(job);
 	tendToNewJobs();
 }
@@ -152,10 +156,7 @@ void Encoder::tendToNewJobs() {
 	Job *job = pendingJobs.first();
 	pendingJobs.remove(job);
 
-	// if encoder is selected load it.
-	if ( job->encoder != -1 ){
-		loadEncoder(job->encoder);
-	}
+	EncoderPrefs* prefs = loadEncoder(job->encoder);
 
 	QString desiredFile = Prefs::fileFormat();
 	desiredFile.replace( QRegExp("~"), QDir::homePath() );
@@ -251,7 +252,7 @@ void Encoder::receivedThreadOutput(K3Process *process, char *buffer, int length 
 		return;
 	}
 	//qDebug(QString("Pre cropped: %1").arg(output).latin1());
-	output = output.mid(output.indexOf('%')-prefs->percentLength(),2);
+	output = output.mid(output.indexOf('%')-loadEncoder(job->encoder)->percentLength(),2);
 	//qDebug(QString("Post cropped: %1").arg(output).latin1());
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);

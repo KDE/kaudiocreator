@@ -378,6 +378,9 @@ void TracksImp::startSession( int encoder ) {
 		if( r == KMessageBox::No )
 			return;
 	}
+
+	if (encoder == -1)
+		encoder = Prefs::currentEncoder();
 	
 	Job *lastJob = 0;
 

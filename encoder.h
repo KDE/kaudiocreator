@@ -48,7 +48,7 @@ public slots:
   void removeJob(int id);
   void encodeWav(Job *job);
   void loadSettings();
-	void loadEncoder( int encoder );
+  EncoderPrefs* loadEncoder( int encoder );
 
 private slots:
   void receivedThreadOutput(K3Process *process, char *buffer, int buflen);
@@ -60,7 +60,6 @@ private:
   Q3PtrList<K3ShellProcess> threads;
   QMap<K3ShellProcess*, Job*> jobs;
 
-  EncoderPrefs *prefs;
   int reportCount;
 };
 
