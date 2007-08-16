@@ -42,6 +42,7 @@ fileWizard::fileWizard( QWidget* parent )
     connect(trackArtistButton, SIGNAL(clicked()), this, SLOT(trackArtistPressed()));
     connect(trackCommentButton,SIGNAL(clicked()), this, SLOT(trackCommentPressed()));
     connect(commentButton, SIGNAL(clicked()), this, SLOT(commentPressed()));
+    connect(artistInitialButton, SIGNAL(clicked()), this, SLOT(artistInitialPressed()));
 
 }
 
@@ -98,6 +99,11 @@ void fileWizard::artistPressed()
 void fileWizard::commentPressed()
 {
 	fileFormat->insert("%{albumcomment}");
+}
+
+void fileWizard::artistInitialPressed()
+{
+	fileFormat->insert("%{albumartistinitial}");
 }
 
 void fileWizard::fileFormatTextChanged(const QString& text)

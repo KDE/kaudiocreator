@@ -30,23 +30,20 @@ class fileWizard : public QDialog, public Ui_fileWizard
 public:
     fileWizard( QWidget* parent = 0 );
     
-public slots:
-    virtual void extensionPressed();
-    virtual void trackArtistPressed();
-    virtual void trackCommentPressed();
-    virtual void genrePressed();
-    virtual void albumPressed();
-    virtual void artistPressed();
-    virtual void commentPressed();
-    virtual void fileFormatTextChanged( const QString & text );
-
 private slots:
-    virtual void homePressed();
-    virtual void trackTitlePressed();
-    virtual void trackNumberPressed();
-    virtual void yearPressed();
-
-
+    void homePressed();
+    void trackTitlePressed();
+    void trackNumberPressed();
+    void yearPressed();
+    void extensionPressed();
+    void trackArtistPressed();
+    void trackCommentPressed();
+    void genrePressed();
+    void albumPressed();
+    void artistPressed();
+    void commentPressed();
+    void artistInitialPressed();
+    void fileFormatTextChanged( const QString & text );
 };
 
 #endif

@@ -38,6 +38,7 @@ QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QStrin
 	map.insert("albumtitle", album);
 	map.insert("albumcomment", comment);
 	map.insert("albumartist", group);
+	map.insert("albumartistinitial", !group.isEmpty() ? group.at(0).toUpper() : QString() );
   
 	if (quote)
 		return (KMacroExpander::expandMacrosShellQuote(string, map));
