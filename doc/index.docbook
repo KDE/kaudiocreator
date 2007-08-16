@@ -296,7 +296,7 @@ The main window after starting the program.
 
 <para>What encoder to use?</para>
 
-<para>If you don't want to loose any audio information you need a lossless audio format. Beside flac there are others like shorten or monkey, which may be available for your distro. The down side is that the compression rates will be low and hardly any commercial device can play these files.</para>
+<para>If you don't want to lose any audio information you need a lossless audio format. Beside flac there are others like shorten or monkey, which may be available for your distro. The down side is that the compression rates will be low and hardly any commercial device can play these files.</para>
 
 <para>Between the audio formats which do lose information due to data compression according their psychoacustic model, mp3 and ogg are the most common. ogg may today have a slight advantage over mp3 in audio quality on lower bit rates (up to 128 kbps), but above that rate the differences become less important, as both encoders produce very good audio quality.</para>
 
