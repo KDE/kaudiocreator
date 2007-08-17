@@ -368,16 +368,18 @@ The main window after starting the program.
 
 <para>This is a summary of the parameters from &kaudiocreator; you can use (= button name in the wizard):</para>
 <itemizedlist>
- <listitem><para>%{albumartist}  - album artist (Artist)</para></listitem>
- <listitem><para>%{albumtitle}   - album title (Album)</para></listitem>
- <listitem><para>%{artist}       - song artist (Track Artist)</para></listitem>
- <listitem><para>%{albumcomment} - album comment (Comment)</para></listitem>
- <listitem><para>%{comment}      - song comment (Track Comment)</para></listitem>
- <listitem><para>%{extension}    - file extension like mp3 or ogg (Extension)</para></listitem>
- <listitem><para>%{genre}        - music genre (Genre)</para></listitem>
- <listitem><para>%{title}        - song title of current track (Track Title)</para></listitem>
- <listitem><para>%{number}       - number of current track (Track Number)</para></listitem>
- <listitem><para>%{~}            - standard linux shortcut for the users home folder (Home Folder)</para></listitem>
+ <listitem><para>%{albumartist}        - album artist (Artist)</para></listitem>
+ <listitem><para>%{albumtitle}         - album title (Album)</para></listitem>
+ <listitem><para>%{artist}             - song artist (Track Artist)</para></listitem>
+ <listitem><para>%{albumcomment}       - album comment (Comment)</para></listitem>
+ <listitem><para>%{comment}            - song comment (Track Comment)</para></listitem>
+ <listitem><para>%{extension}          - file extension like mp3 or ogg (Extension)</para></listitem>
+ <listitem><para>%{genre}              - music genre (Genre)</para></listitem>
+ <listitem><para>%{title}              - song title of current track (Track Title)</para></listitem>
+ <listitem><para>%{number}             - number of current track (Track Number)</para></listitem>
+ <listitem><para>%{year}               - release year of the album (Year)</para></listitem>
+ <listitem><para>%{albumartistinitial} - first letter of the artist's name (Artists Initial)</para></listitem>
+ <listitem><para>%{~}                  - standard linux shortcut for the users home folder (Home Folder)</para></listitem>
 </itemizedlist>
 
 </chapter>
