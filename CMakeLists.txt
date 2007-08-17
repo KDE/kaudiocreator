@@ -19,13 +19,12 @@ set(kaudiocreator_SRCS
 
 
 kde4_add_ui_files( kaudiocreator_SRCS
-   encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui wizard.ui)
+   encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui
+   wizard.ui encoderconfig.ui encoderoutput.ui )
 
 kde4_add_ui3_files(kaudiocreator_SRCS
    cdconfig.ui
-   ripconfig.ui
-   encoderoutput.ui
-   encoderconfig.ui )
+   ripconfig.ui )
 
 kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 

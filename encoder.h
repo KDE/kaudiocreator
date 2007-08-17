@@ -38,7 +38,7 @@ signals:
   void jobsChanged();
 
 public:
-  Encoder( QObject* parent = 0, const char* name = 0);
+  Encoder( QObject* parent = 0 );
   ~Encoder();
   int activeJobCount();
   int pendingJobCount();

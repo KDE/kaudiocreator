@@ -19,6 +19,7 @@
 
 #include "encoderconfigimp.h"
 #include "prefs.h"
+#include "wizard.h"
 
 #include <QPushButton>
 #include <QLineEdit>
@@ -32,11 +33,15 @@
  * Constructor.
  */
 EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
-    EncoderConfig (parent, name) {
+  QWidget(parent)
+{
+  setObjectName(name);
+  setupUi(this);
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
   connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( Q3ListBoxItem * )),this, SLOT(configureEncoderSlot()));
+  connect(encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
 
   // If there are no encoders then store the three default ones.
   if( Prefs::lastKnownEncoder() == 0){
@@ -248,6 +253,20 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName){
 
   encoderNames.insert(newName, groupName);
   encoderNames.erase(encoderName);
+}
+
+/**
+ * Load up the wizard with the encoder fileFormat string.  Save it if OK is hit.
+ */
+void EncoderConfigImp::encoderWizard(){
+  fileWizard wizard(this);
+  wizard.fileFormat->setText(kcfg_fileFormat->text());
+
+  // Show dialog and save results if ok is pressed.
+  bool okClicked = wizard.exec();
+  if(okClicked){
+    kcfg_fileFormat->setText(wizard.fileFormat->text());
+  }
 }
 
 Q3Dict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;

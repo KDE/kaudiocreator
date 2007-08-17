@@ -21,7 +21,7 @@
 
 #include "prefs.h"
 #include "encoder_prefs.h"
-#include "encoderoutput.h"
+#include "ui_encoderoutput.h"
 
 #include <QRegExp>
 #include <QDir>
@@ -33,10 +33,21 @@
 #include <q3textedit.h>
 #include <kinputdialog.h>
 
+class EncoderOutput : public QDialog, public Ui::EncoderOutput
+{
+public:
+	EncoderOutput(QWidget* parent, const char* name)
+	  : QDialog(parent)
+	{
+		setObjectName(name);
+		setupUi(this);
+	}
+} ;
+
 /**
  * Constructor, load settings.
  */
-Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),reportCount(0) {
+Encoder::Encoder( QObject* parent):QObject(parent),reportCount(0) {
 	loadSettings();
 }
 

@@ -20,7 +20,7 @@
 #ifndef ENCODERCONFIGIMP_H
 #define ENCODERCONFIGIMP_H
 
-#include "encoderconfig.h"
+#include "ui_encoderconfig.h"
 #include "encoder_prefs.h"
 #include <QMap>
 #include <q3dict.h>
@@ -39,7 +39,7 @@ public:
 /**
  * Class mainly build to manage encoder list.
  */ 
-class EncoderConfigImp : public EncoderConfig {
+class EncoderConfigImp : public QWidget, public Ui_EncoderConfig {
 
 Q_OBJECT
 
@@ -57,6 +57,8 @@ private slots:
   void updateEncoder(QObject * obj);
   void updateEncoder(const QString &);
   void loadEncoderList();
+
+  void encoderWizard();
   
 private:
   // Name, groupName
