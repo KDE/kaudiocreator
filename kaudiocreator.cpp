@@ -326,7 +326,7 @@ bool SettingsDialog::isDefault()
 void SettingsDialog::slotCddbChanged(bool changed)
 {
 	cddbChanged = changed;
-	updateButtons();
+	//updateButtons();
 }
 
 #include "kaudiocreator.moc"
