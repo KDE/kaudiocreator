@@ -11,7 +11,7 @@ Name[pt_BR]=KAudioCreator - Extracção
 Name[sv]=Kaudiocreator hämtning
 Name[x-test]=xxKAudioCreator-Extractxx
 Name[zh_TW]=KAudioCreator-展開
-Type=ServiceType
+Type=Service
 
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
