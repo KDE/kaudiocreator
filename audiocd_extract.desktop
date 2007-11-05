@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/audiocd
+ServiceTypes=KonqPopupMenu/Plugin,media/audiocd
 Actions=Extract;
 X-KDE-Priority=TopLevel
 Encoding=UTF-8
