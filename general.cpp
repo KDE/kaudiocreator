@@ -14,7 +14,7 @@
 #include <QLabel>
 
 General::General( QWidget* parent )
-    : QWidget( parent ), Ui_General()
+    : QWidget( parent )
 {
     setupUi( this );
     connect(kcfg_replaceInput,SIGNAL(textChanged(const QString &)),this, SLOT(updateExample()));

@@ -23,6 +23,9 @@
 #include <kxmlguiwindow.h>
 #include <kconfigdialog.h>
 
+#include "ui_ripconfig.h"
+#include "ui_cdconfig.h"
+
 class KPageWidget;
 class TracksImp;
 class JobQueImp;
@@ -31,6 +34,22 @@ class Encoder;
 class KCModule;
 class EncoderConfigImp;
 class KMenu;
+
+class CdCfg : public QWidget, public Ui::CdConfig
+{
+    public:
+        CdCfg(QWidget *parent = 0) : QWidget(parent) {
+            setupUi(this);
+        }
+};
+
+class RipCfg : public QWidget, public Ui::RipConfig
+{
+    public:
+        RipCfg(QWidget *parent = 0) : QWidget(parent) {
+            setupUi(this);
+        }
+};
 
 class KAudioCreator : public KXmlGuiWindow {
 
@@ -46,13 +65,13 @@ protected:
 private slots:
   void showSettings();
   void updateStatus();
-
   void hasCD(bool);
+  void showCurrentEncoder();
   void configureNotifications();
   void encodeFile();
 
-  void slotRipSelection(int);
-  void getRipMenu();
+  void slotRipSelection(QAction *);
+  void setupRipMenu();
 
 private:
   KPageWidget *pageWidget;
@@ -61,7 +80,7 @@ private:
   Ripper      *ripper;
   Encoder     *encoder;
   KMenu       *ripMenu;
-
+  QLabel *defaultEncLabel;
 };
 
 class SettingsDialog: public KConfigDialog {

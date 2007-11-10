@@ -20,12 +20,12 @@
 #ifndef ENCODERCONFIGIMP_H
 #define ENCODERCONFIGIMP_H
 
-#include "ui_encoderconfig.h"
-#include "encoder_prefs.h"
 #include <QMap>
-#include <q3dict.h>
+#include <QHash>
 
+#include "ui_encoderconfig.h"
 #include "ui_encoderedit.h"
+#include "encoder_prefs.h"
 
 class EncoderEdit : public QWidget, public Ui::EncoderEdit
 {
@@ -39,7 +39,7 @@ public:
 /**
  * Class mainly build to manage encoder list.
  */ 
-class EncoderConfigImp : public QWidget, public Ui_EncoderConfig {
+class EncoderConfigImp : public QWidget, public Ui::EncoderConfig {
 
 Q_OBJECT
 

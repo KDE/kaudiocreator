@@ -16,50 +16,51 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "tracksimp.h"
-#include "job.h"
-#include "libkcddb/cdinfodialog.h"
-#include "prefs.h"
-#include "libkcompactdisc/kcompactdisc.h"
+
 #include <QLabel>
-#include <k3listview.h>
-#include <QPixmap>
+//#include <QPixmap>
 #include <QKeyEvent>
-#include <k3listview.h>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QRegExp>
+//#include <QTimer>
+//#include <QFileInfo>
+#include <QTreeWidgetItemIterator>
+
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <QRegExp>
 #include <kinputdialog.h>
 #include <kprotocolinfo.h>
-
 #include <kconfig.h>
 #include <kapplication.h>
-
-#include <QTimer>
-#include <qfileinfo.h>
 #include <kcombobox.h>
+#include "libkcddb/cdinfodialog.h"
+#include "libkcompactdisc/kcompactdisc.h"
 #include <kdebug.h>
-#include <k3process.h>
-#include <fixx11h.h>
+
+#include "tracksimp.h"
+#include "job.h"
+#include "prefs.h"
 
 using namespace KCDDB;
 
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget* parent, const char* name) :
-	Tracks(parent),
-	cddbInfo() {
-	setObjectName(name);
+TracksImp::TracksImp( QWidget *parent) :
+	QWidget(parent), editedItem(0), cddbInfo() {
+	setupUi(this);
+	trackListing->resizeColumnToContents(HEADER_RIP);
+//	setObjectName(name);
 	cd = new KCompactDisc;
 
 	connect(cd, SIGNAL(discChanged(unsigned)), this, SLOT(newDisc(unsigned)));
 
-	connect(trackListing, SIGNAL(clicked( Q3ListViewItem * )), this, SLOT(selectTrack(Q3ListViewItem*)));
-	connect(trackListing, SIGNAL(doubleClicked(Q3ListViewItem *)), this, SLOT(editInformation()));
-	connect(trackListing, SIGNAL(returnPressed(Q3ListViewItem *)), this, SLOT(editInformation()));
+//	connect(trackListing, SIGNAL(itemClicked( QTreeWidgetItem *, int )),
+//		this, SLOT(selectTrack(QTreeWidgetItem *, int)));
+//	connect(trackListing, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editInformation()));
+	connect(trackListing, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
+	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 	
@@ -72,7 +73,7 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
 	cddb->setBlockingMode(false);
 	connect(cddb, SIGNAL(finished(KCDDB::Result)),
 	                  this, SLOT(lookupCDDBDone(KCDDB::Result)));
-	trackListing->setSorting(-1, false);
+//	trackListing->setSorting(-1, false);
 	loadSettings();
 }
 
@@ -84,7 +85,7 @@ TracksImp::~TracksImp() {
 	if( deviceCombo->count() != 0)
 		list.append(deviceCombo->currentText());
 	for ( int i=0; i<deviceCombo->count();i++ ) {
-		QString text = deviceCombo->text(i);
+		QString text = deviceCombo->itemText(i);
 		if( !list.contains(text))
 			list.append(text);
 		if( list.count() == 5)
@@ -110,7 +111,7 @@ void TracksImp::loadSettings() {
 	}
 	// Get current list, no dups
 	for ( int i=0; i<deviceCombo->count();i++ ) {
-		QString text = deviceCombo->text(i);
+		QString text = deviceCombo->itemText(i);
 		if( !list.contains(text))
 			list.append(text);
 	}
@@ -260,7 +261,7 @@ void TracksImp::lookupCDDBDone(Result result ) {
 						this );
 		if ( ok ) {
 			// The user selected and item and pressed OK
-			uint c = 0;
+			int c = 0;
 			for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
 				if( *it == res)	break;
 				c++;
@@ -292,7 +293,7 @@ void TracksImp::lookupCDDBDone(Result result ) {
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
-void TracksImp::editInformation( ) {
+void TracksImp::editInformation() {
 	if( !hasCD() ) return;
 	// Create dialog.
 	CDInfoDialog *dialog = new CDInfoDialog( this );
@@ -414,29 +415,15 @@ void TracksImp::startSession( int encoder ) {
 	i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
-/**
- * Selects and unselects the tracks.
- * @param currentItem the track to swich the selection choice.
- */
-void TracksImp::selectTrack( Q3ListViewItem *item ) {
-	if( !item )
-		return;
-
-#define item static_cast<TracksItem*>(item)
-	item->setChecked( !item->checked() );
-#undef item
-}
-
 QList<TracksItem *> TracksImp::selectedTracks()
 {
 	QList<TracksItem *> selected;
-	TracksItem *item = static_cast<TracksItem*>(trackListing->firstChild());
 
-	while( item )
-	{
-		if( item->checked() )
-			selected.append( item );
-		item = static_cast<TracksItem*>(item->nextSibling());
+	QTreeWidgetItemIterator it(trackListing, QTreeWidgetItemIterator::Checked);
+	while (*it) {
+		TracksItem *item = (TracksItem *)(*it);
+		selected.append( item );
+		++it;
 	}
 	return selected;
 }
@@ -445,11 +432,10 @@ QList<TracksItem *> TracksImp::selectedTracks()
  * Turn on all of the tracks.
  */
 void TracksImp::selectAllTracks() {
-	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
-	while( currentItem )
-	{
-		currentItem->setChecked( true );
-		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
+	QTreeWidgetItemIterator it(trackListing);
+	while (*it) {
+		(*it)->setCheckState( HEADER_RIP, Qt::Checked );
+		++it;
 	}
 }
 
@@ -457,11 +443,10 @@ void TracksImp::selectAllTracks() {
  * Turn off all of the tracks.
  */
 void TracksImp::deselectAllTracks() {
-	TracksItem *currentItem = static_cast<TracksItem*>(trackListing->firstChild());
-	while( currentItem )
-	{
-		currentItem->setChecked( false );
-		currentItem = static_cast<TracksItem*>(currentItem->nextSibling());
+	QTreeWidgetItemIterator it(trackListing);
+	while (*it) {
+		(*it)->setCheckState( HEADER_RIP, Qt::Unchecked );
+		++it;
 	}
 }
 
@@ -479,20 +464,29 @@ void TracksImp::newAlbum() {
 	deselectAllTracksButton->setEnabled(false);
 	emit(hasTracks(false));
 
-	TracksItem *last = 0;
-	for (unsigned i = 0; i < cddbInfo.numberOfTracks(); i++)
+	for (int i = 0; i < cddbInfo.numberOfTracks(); i++)
 	{
 		TrackInfo ti = cddbInfo.track(i);
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(cd->trackLength(i+1));
-		last = new TracksItem(trackListing, last, ti.get(Title).toString(), ti.get(Artist).toString(),
-			i+1, trackLength, ti.get(Comment).toString());
+		TracksItem *newItem = new TracksItem(0, ti.get(Title).toString(), ti.get(Artist).toString(),
+						      i+1, trackLength, ti.get(Comment).toString());
+		newItem->setCheckState(HEADER_RIP, Qt::Unchecked);
+		newItem->setTextAlignment(1, Qt::AlignHCenter);
+		newItem->setText(HEADER_TRACK, QString::number(i+1));
+		newItem->setTextAlignment(HEADER_LENGTH, Qt::AlignHCenter);
+		newItem->setText(HEADER_LENGTH, trackLength);
+		newItem->setText(HEADER_TRACK_NAME, ti.get(Title).toString());
+		trackListing->addTopLevelItem(newItem);
 	}
+
+	trackListing->resizeColumnToContents(HEADER_TRACK);
+	trackListing->resizeColumnToContents(HEADER_LENGTH);
 
 	if (cddbInfo.numberOfTracks())
 	{
 		// Set the current selected track to the first one.
-		trackListing->setCurrentItem(trackListing->firstChild());
+		trackListing->setCurrentItem(trackListing->topLevelItem(0));
 		selectAllTracksButton->setEnabled(true);
 		deselectAllTracksButton->setEnabled(true);
 		emit(hasTracks(true));
@@ -504,18 +498,41 @@ void TracksImp::newAlbum() {
  * If the user presses the F2 key, trigger renaming of the title.
  * @param event the QKeyEvent passed to this event handler.
  */
-void TracksImp::keyPressEvent(QKeyEvent *event) {
-	Q3ListViewItem *item = trackListing->selectedItem();
-	if( !item ) return;
+// void TracksImp::keyPressEvent(QKeyEvent *event) {
+// kDebug() << "Enter" << endl;
+// 	QTreeWidgetItem *item = trackListing->currentItem();
+// 	if( !item ) return;
+//  	if( event->key() == Qt::Key_Enter )
+//  	{
+// kDebug() << "Enter" << endl;
+//  //		emit(renameTrack(item));
+//  ///TODO		item->setRenameEnabled( HEADER_TRACK_NAME, true );
+//  ///TODO		item->startRename( HEADER_TRACK_NAME );
+//  		event->accept();
+//  	}
+//  	else
+//  		keyPressEvent(event);
+//  }
 
-	if( event->key() == Qt::Key_F2 )
-	{
-		item->setRenameEnabled( HEADER_TRACK_NAME, true );
-		item->startRename( HEADER_TRACK_NAME );
-		event->accept();
+void TracksImp::editTrackName(QTreeWidgetItem *item) {
+	if (!editedItem && item) {
+		trackListing->openPersistentEditor(item, HEADER_TRACK_NAME);
+		editedItem = item;
+	} else if (editedItem && item && (editedItem != item)) {
+		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
+		trackListing->openPersistentEditor(item, HEADER_TRACK_NAME);
+		editedItem = item;
+	} else if (editedItem && item && (editedItem == item)) {
+		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
+		editedItem = 0;
 	}
-	else
-		Tracks::keyPressEvent(event);
+}
+
+void TracksImp::closeEditor() {
+	if (editedItem) {
+		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
+		editedItem = 0;
+	}
 }
 
 /**

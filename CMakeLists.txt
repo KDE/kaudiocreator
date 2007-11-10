@@ -2,35 +2,52 @@ if (NOT APPLE)
 
 project(kaudiocreator)
 
-add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
+find_package(KDE4 REQUIRED)
+find_package(KdeMultimedia REQUIRED)
+include (KDE4Defaults)
+include (MacroLibrary)
+
+#add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+
+include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR})
 
 ########### next target ###############
 
 set(kaudiocreator_SRCS
-   main.cpp
-   kaudiocreator.cpp
-   encoder.cpp
-   encoderconfigimp.cpp
-   job.cpp
-   jobqueimp.cpp
-   ripper.cpp
-   tracksimp.cpp
-   encodefileimp.cpp general.cpp wizard.cpp )
+    main.cpp
+    kaudiocreator.cpp
+    encoder.cpp
+    encoderconfigimp.cpp
+    job.cpp
+    jobqueimp.cpp
+    ripper.cpp
+    tracksimp.cpp
+    encodefileimp.cpp
+    general.cpp
+    wizard.cpp)
 
 
-kde4_add_ui_files( kaudiocreator_SRCS
-   encodefile.ui tracks.ui encoderedit.ui jobque.ui infodialog.ui general.ui
-   wizard.ui encoderconfig.ui encoderoutput.ui )
-
-kde4_add_ui3_files(kaudiocreator_SRCS
-   cdconfig.ui
-   ripconfig.ui )
+kde4_add_ui_files(kaudiocreator_SRCS
+    encodefile.ui
+    tracks.ui
+    encoderedit.ui
+    jobque.ui
+    infodialog.ui
+    general.ui
+    wizard.ui
+    encoderconfig.ui
+    encoderoutput.ui
+    ripconfig.ui
+    cdconfig.ui)
 
 kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator  ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} kcddb kcompactdisc)
+target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES})
 
 install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
 

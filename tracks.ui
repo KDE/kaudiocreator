@@ -1,222 +1,196 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>Tracks</class>
-  <widget class="QWidget" name="Tracks" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>501</width>
-        <height>377</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Tracks</string>
-    </property>
-    <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>0</number>
-      </property>
-      <item row="1" column="0" >
-        <widget class="QLabel" name="albumName" >
-          <property name="frameShape" >
-            <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow" >
-            <enum>QFrame::Plain</enum>
-          </property>
-          <property name="text" >
-            <string>Unknown Artist - Unknown Album</string>
-          </property>
-          <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-          </property>
-          <property name="wordWrap" >
-            <bool>false</bool>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="0" >
-        <widget class="K3ListView" name="trackListing" >
-          <property name="allColumnsShowFocus" >
-            <bool>true</bool>
-          </property>
-          <property name="resizeMode" >
-            <enum>LastColumn</enum>
-          </property>
-          <column>
-            <property name="text" >
-              <string>Rip</string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Track</string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Length</string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Title</string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-        </widget>
-      </item>
-      <item row="3" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <property name="spacing" >
-            <number>6</number>
-          </property>
-          <item>
-            <spacer name="Spacer1" >
-              <property name="sizeHint" >
-                <size>
-                  <width>20</width>
-                  <height>20</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QPushButton" name="selectAllTracksButton" >
-              <property name="text" >
-                <string>Select &amp;All Tracks</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="deselectAllTracksButton" >
-              <property name="text" >
-                <string>&amp;Deselect All Tracks</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="0" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="textLabel1" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>1</hsizetype>
-                  <vsizetype>5</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="text" >
-                <string>Device:</string>
-              </property>
-              <property name="wordWrap" >
-                <bool>false</bool>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KComboBox" name="deviceCombo" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>7</hsizetype>
-                  <vsizetype>5</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="editable" >
-                <bool>true</bool>
-              </property>
-              <item>
-                <property name="text" >
-                  <string>/dev/cdrom</string>
-                </property>
-              </item>
-            </widget>
-          </item>
-          <item>
-            <spacer name="Spacer3" >
-              <property name="sizeHint" >
-                <size>
-                  <width>246</width>
-                  <height>20</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-        </layout>
-      </item>
+<ui version="4.0" >
+ <class>Tracks</class>
+ <widget class="QWidget" name="Tracks" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>506</width>
+    <height>312</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Tracks</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="textLabel1" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Device:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KComboBox" name="deviceCombo" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editable" >
+        <bool>true</bool>
+       </property>
+       <item>
+        <property name="text" >
+         <string>/dev/cdrom</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>321</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <customwidgets>
-    <customwidget>
-      <class>K3ListView</class>
-      <extends>Q3ListView</extends>
-      <header>k3listview.h</header>
-    </customwidget>
-    <customwidget>
-      <class>KComboBox</class>
-      <extends>QComboBox</extends>
-      <header>kcombobox.h</header>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>deviceCombo</tabstop>
-    <tabstop>trackListing</tabstop>
-    <tabstop>selectAllTracksButton</tabstop>
-    <tabstop>deselectAllTracksButton</tabstop>
-  </tabstops>
-  <includes>
-    <include location="local" >kcombobox.h</include>
-    <include location="local" >klineedit.h</include>
-  </includes>
+   </item>
+   <item>
+    <widget class="QLabel" name="albumName" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="text" >
+      <string>Unknown Artist - Unknown Album</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="trackListing" >
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="uniformRowHeights" >
+      <bool>true</bool>
+     </property>
+     <property name="itemsExpandable" >
+      <bool>false</bool>
+     </property>
+     <property name="allColumnsShowFocus" >
+      <bool>true</bool>
+     </property>
+     <property name="columnCount" >
+      <number>4</number>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Rip</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Track</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Length</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Title</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>151</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="selectAllTracksButton" >
+       <property name="text" >
+        <string>Select &amp;All Tracks</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deselectAllTracksButton" >
+       <property name="text" >
+        <string>&amp;Deselect All Tracks</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>deviceCombo</tabstop>
+  <tabstop>selectAllTracksButton</tabstop>
+  <tabstop>deselectAllTracksButton</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local" >kcombobox.h</include>
+  <include location="local" >klineedit.h</include>
+ </includes>
+ <resources/>
+ <connections/>
 </ui>

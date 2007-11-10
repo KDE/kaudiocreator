@@ -5,13 +5,12 @@
 #include "ui_general.h"
 
 
-class General : public QWidget, private Ui_General
+class General : public QWidget, private Ui::General
 {
     Q_OBJECT
 
 public:
     General( QWidget* parent = 0 );
-    
 
 public slots:
    void updateExample();

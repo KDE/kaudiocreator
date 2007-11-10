@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kaudiocreator.h"
-
 #include <kicon.h>
 #include <kiconloader.h>
 
@@ -28,24 +26,27 @@
 #include <kstatusbar.h>
 #include <kcombobox.h>
 #include <knotifyconfigwidget.h>
+#include <kstandarddirs.h>
+
 #include "tracksimp.h"
 #include "jobqueimp.h"
+#include "encodefileimp.h"
 #include "ripper.h"
 #include "encoder.h"
 #include "prefs.h"
-#include "encodefileimp.h"
 #include "job.h"
+#include "kaudiocreator.h"
 
 // Settings
-#include "ripconfig.h"
-#include "cdconfig.h"
-#include "encoderconfigimp.h"
-#include "general.h"
 #include <kcmoduleloader.h>
 #include <kurlrequester.h>
 #include <kstandardaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+
+#include "encoderconfigimp.h"
+#include "general.h"
+
 /**
  * Constructor. Connect all of the object and the job control.
  */
@@ -56,11 +57,11 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
 
-	tracks = new TracksImp(0, "Tracks");
+	tracks = new TracksImp();
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
 
 	KPageWidgetItem* pageWidgetItem = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
-	pageWidgetItem->setIcon(KIcon(SmallIcon("cdaudio-unmount", 32)));
+	pageWidgetItem->setIcon(KIcon(("cdaudio-unmount")));
 	pageWidget->addPage(pageWidgetItem);
 
 	ripper = new Ripper(this);
@@ -127,8 +128,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
 
 	ripMenu = actActionMenu->menu();
-	connect(ripMenu, SIGNAL(activated(int)),this,SLOT(slotRipSelection(int)));
-	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(getRipMenu()));
+	connect(ripMenu, SIGNAL(triggered(QAction *)),this,SLOT(slotRipSelection(QAction *)));
+	connect(ripMenu, SIGNAL(aboutToShow()),this,SLOT(setupRipMenu()));
 
 	QAction *rip = actionCollection()->addAction("rip_selected");
 	rip->setText(i18n("Rip &Selection"));
@@ -158,33 +159,49 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
 	cddb->setEnabled( false );
 
+// 	QAction *rename = actionCollection()->addAction("rename_track");
+// 	rename->setText(i18n("&Rename Track"));
+// 	rename->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+// 	connect(rename, SIGNAL(triggered(bool)), tracks, SLOT(editTrackName()));
+
 	KStandardAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());
 	actionCollection()->addAction(KStandardAction::Quit, "quit", this, SLOT(close()));
 
-	// Init statusbar
-	statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
-	hasCD(tracks->hasCD());
-
 	setupGUI();
+
+	// Init statusbar
+	statusBar()->showMessage(i18n("No Audio CD detected"));
+	defaultEncLabel = new QLabel();
+	statusBar()->setContentsMargins(6, 0, 6, 0);
+	statusBar()->addPermanentWidget(defaultEncLabel, 0);
+	showCurrentEncoder();
+	hasCD(tracks->hasCD());
 }
 
 void KAudioCreator::setDevice( const QString &device )
 {
-	tracks->deviceCombo->setCurrentText( device );
+	tracks->deviceCombo->setEditText( device );
 }
 
-void KAudioCreator::slotRipSelection(int selection){
-	tracks->startSession( selection );
+void KAudioCreator::slotRipSelection(QAction *selection) {
+	tracks->startSession( (selection->data()).toInt() );
 }
 
-void KAudioCreator::getRipMenu(){
+void KAudioCreator::setupRipMenu(){
 	ripMenu->clear();
 
 	int i=0;
 	QString currentGroup = QString("Encoder_%1").arg(i);
-	while(EncoderPrefs::hasPrefs(currentGroup)){
-		ripMenu->insertItem(EncoderPrefs::prefs(currentGroup)->encoderName(), i);
+	while (EncoderPrefs::hasPrefs(currentGroup)) {
+		EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
+		QString command = encPrefs->commandLine();
+		int progEnd = command.indexOf(" ");
+		QString prog = command.left(progEnd).trimmed();
+		if (KStandardDirs::findExe(prog) != QString()) {
+			QAction *encAction = ripMenu->addAction(encPrefs->encoderName());
+			encAction->setData(QVariant(i));
+		}
 		currentGroup = QString("Encoder_%1").arg(++i);
 	}
 }
@@ -194,10 +211,17 @@ void KAudioCreator::getRipMenu(){
  */
 void KAudioCreator::hasCD(bool cd){
 	if(cd)
-		statusBar()->changeItem(i18n("CD Inserted"), 0 );
+		statusBar()->showMessage(i18n("CD Inserted"));
 	else
-		statusBar()->changeItem(i18n("No Audio CD detected"), 0 );
+		statusBar()->showMessage(i18n("No Audio CD detected"));
 }
+
+void KAudioCreator::showCurrentEncoder()
+{
+	QString encName = EncoderPrefs::prefs(QString("Encoder_%1").arg(Prefs::currentEncoder()))->encoderName();
+	defaultEncLabel->setText(i18n("Default encoder: %1", encName));
+}
+
 
 void KAudioCreator::updateStatus() {
 	QString status = i18n("Idle.");
@@ -223,8 +247,7 @@ void KAudioCreator::updateStatus() {
 			status = encodingStatus;
 		}
 	}
-
-	statusBar()->changeItem( status, 0 );
+	statusBar()->showMessage(status);
 }
 
 /**
@@ -260,16 +283,18 @@ void KAudioCreator::showSettings(){
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), encoder, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), tracks, SLOT(loadSettings()));
 	connect(dialog->encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(showCurrentEncoder()));
 	dialog->show();
 }
 
-SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config)
+SettingsDialog::SettingsDialog(QWidget *parent, const char *name, KConfigSkeleton *config)
  : KConfigDialog(parent, name, config),
  cddb(0), cddbChanged(false)
 {
-	addPage(new General(0), i18n("General"), "package_settings",
+	addPage(new General, i18n("General"), "package_settings",
 		  i18n("General Configuration"));
-	addPage(new CdConfig(0, "CD"), i18n("CD"), "package_system",
+
+	addPage(new CdCfg, i18n("CD"), "package_system",
 		  i18n("CD Configuration"));
 
 	// Because WE don't segfault on our users...
@@ -284,7 +309,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
 			connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
 		}
 	}
-	RipConfig *rip = new RipConfig(0, "Ripper");
+	RipCfg *rip = new RipCfg;
 	rip->kcfg_tempDir->setMode(KFile::Directory);
 	addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
 

@@ -20,24 +20,24 @@
 #ifndef JOBQUEIMP_H
 #define JOBQUEIMP_H
 
-#include "ui_jobque.h"
 #include <QString>
-#include <q3listview.h>
+#include <QTreeWidgetItem>
+
+#include "ui_jobque.h"
 
 class Job;
 class QPainter;
 class QColorGroup;
-class Q3ListView;
+class QTreeWidget;
 
 /**
  * Helper class to allow for progress bars in list view items.
  */
-class QueListViewItem : public Q3ListViewItem {
+class QueListViewItem : public QTreeWidgetItem {
 
 public:
-	QueListViewItem (Q3ListView * p = NULL, const QString a=0, const QString b=0, const QString c=0, const QString d=0, const QString e=0);
-	virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
-      int width,int align);
+	QueListViewItem(QTreeWidget * p = 0);
+//	virtual void paintCell (QPainter *p, const QColorGroup &cg, int column, int width,int align);
 	double percentDone;
 	// Has the percentDone gone beyond 0
 	// Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
@@ -62,7 +62,7 @@ signals:
 	void removeJob( int idNumber );
 
 public:
-	JobQueImp( QWidget* parent = 0, const char* name = 0 );
+	JobQueImp( QWidget* parent = 0 );
 	int numberOfJobsNotFinished();
 
 public slots:

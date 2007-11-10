@@ -20,14 +20,16 @@
 #ifndef TRACKSIMP_H
 #define TRACKSIMP_H
 
-#include "ui_tracks.h"
-#include <kiconloader.h>
-#include <k3listview.h>
-#include <klocale.h>
 
-// CDDB support via libkcddb
-#include <libkcddb/client.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QKeyEvent>
+
+#include <klocale.h>
+#include <libkcddb/client.h>
+#include <kdebug.h>
+
+#include "ui_tracks.h"
 
 #define HEADER_RIP 0
 #define HEADER_TRACK 1
@@ -39,33 +41,25 @@
 class Job;
 class KCompactDisc;
 
-class TracksItem : public K3ListViewItem
+class TracksItem : public QTreeWidgetItem
 {
 public:
-    TracksItem( K3ListView *parent, K3ListViewItem *after, QString t, QString a, int tr, QString l, QString c )
-        : K3ListViewItem( parent, after, QString::null/*rip*/, QString::number(tr), l, t )
+    TracksItem( QTreeWidget *parent, QString t, QString a, int tr, QString l, QString c )
+        : QTreeWidgetItem( parent, QTreeWidgetItem::UserType )
     {
         m_title = t;
         m_artist = a;
         m_length = l;
         m_track = tr;
         m_comment = c;
-        m_checked = false;
     }
 
     QString title()     const { return m_title; }
     QString artist()    const { return m_artist; }
     int     track()     const { return m_track; }
     QString length()    const { return m_length; }
-    bool    checked()   const { return m_checked; }
     QString comment()   const { return m_comment; }
-    #include <kdebug.h>
     void    setTitle( const QString &t )  { m_title = t; kDebug() << "title: " << m_title; }
-    void    setChecked( const bool &b )   { 
-        m_checked = b;
-        b ? setPixmap( HEADER_RIP, SmallIcon( "dialog-apply", height()-2 ) ) :
-            setPixmap( HEADER_RIP, QPixmap() );
-    }
 
 private:
     QString m_title;
@@ -73,22 +67,14 @@ private:
     int     m_track;
     QString m_length;
     QString m_comment;
-    bool    m_checked; // marked for ripping
 };
 
-
-class Tracks : public QWidget, public Ui::Tracks
-{
-public:
-  Tracks( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
  */
-class TracksImp : public Tracks {
+class TracksImp : public QWidget, public Ui::Tracks
+{
 
 Q_OBJECT
 
@@ -96,9 +82,10 @@ signals:
 	void ripTrack(Job *job);
 	void hasCD(bool);
 	void hasTracks(bool);
+	void renameTrack(QTreeWidgetItem *);
  
 public:
-	TracksImp( QWidget* parent = 0, const char* name = 0);
+	TracksImp( QWidget* parent = 0);
 	~TracksImp();
 
 	bool hasCD();
@@ -114,12 +101,11 @@ public slots:
 	void eject();
 	void selectAllTracks();
 	void deselectAllTracks();
+	void editTrackName(QTreeWidgetItem *);
+	void closeEditor();
 
 private slots:
 	void newDisc(unsigned discId);
-
-	void selectTrack(Q3ListViewItem *);
-	void keyPressEvent(QKeyEvent *event);
 
 	void changeDevice(const QString &file);
 	void lookupCDDBDone(KCDDB::Result result);
@@ -136,6 +122,8 @@ private:
 	KCDDB::Client* cddb;
 
 	KCompactDisc* cd;
+
+	QTreeWidgetItem *editedItem;
 
 	// Current album
 	KCDDB::CDInfo cddbInfo;

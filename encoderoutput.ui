@@ -17,15 +17,9 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="Q3TextEdit" name="output" >
-     <property name="enabled" >
-      <bool>true</bool>
-     </property>
-     <property name="text" >
-      <string>The output....</string>
-     </property>
-     <property name="wordWrap" >
-      <enum>Q3TextEdit::WidgetWidth</enum>
+    <widget class="KTextEdit" name="output" >
+     <property name="acceptDrops" >
+      <bool>false</bool>
      </property>
      <property name="readOnly" >
       <bool>true</bool>
@@ -89,9 +83,9 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>Q3TextEdit</class>
-   <extends>Q3Frame</extends>
-   <header>q3textedit.h</header>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

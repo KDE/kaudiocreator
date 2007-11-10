@@ -17,12 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <kdebug.h>
+
 #include "encoderconfigimp.h"
 #include "prefs.h"
 #include "wizard.h"
 
 #include <QPushButton>
 #include <QLineEdit>
+
+#include <kstandarddirs.h>
 #include <kconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -40,13 +44,16 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
   connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-  connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( Q3ListBoxItem * )),this, SLOT(configureEncoderSlot()));
+  connect(kcfg_currentEncoder, SIGNAL(itemDoubleClicked(QListWidgetItem *)),this, SLOT(configureEncoderSlot()));
   connect(encoderWizardButton, SIGNAL(clicked()), this, SLOT(encoderWizard()));
 
+  if (KStandardDirs::findExe("nice") == QString())
+    niceLevelBox->setEnabled(false);
+
   // If there are no encoders then store the three default ones.
-  if( Prefs::lastKnownEncoder() == 0){
+  if (Prefs::lastKnownEncoder() == 0) {
     EncoderPrefs *encPrefs;
-    
+
     encPrefs = EncoderPrefs::prefs("Encoder_0");
     encPrefs->setEncoderName(i18n("Ogg Vorbis"));
     encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
@@ -78,7 +85,7 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
     Prefs::setLastKnownEncoder(3);
     Prefs::self()->writeConfig();
   }
-  
+
   loadEncoderList();
 }
 
@@ -87,52 +94,55 @@ EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
  * Clear listbox
  * Load list of encoders.
  */ 
-void EncoderConfigImp::loadEncoderList(){
-  encoderNames.clear();
-  kcfg_currentEncoder->clear();
-  
-  bool foundCurrentEncoder = false;
-  
-  int lastEncoder = 0;
-  int lastKnownEncoder = Prefs::lastKnownEncoder();
-  lastKnownEncoder++;
-  for( int i=0; i<=lastKnownEncoder; i++ ){
-    QString currentGroup = QString("Encoder_%1").arg(i);
-    if(EncoderPrefs::hasPrefs(currentGroup)){
-      lastEncoder = i;
-      EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
-      QString encoderName = encPrefs->encoderName();
-      kcfg_currentEncoder->insertItem(encoderName);
-      encoderNames.insert(encoderName, currentGroup);
-      if(Prefs::currentEncoder() == i)
-	foundCurrentEncoder = true;    
+void EncoderConfigImp::loadEncoderList() {
+    encoderNames.clear();
+    kcfg_currentEncoder->clear();
+
+    bool foundCurrentEncoder = false;
+
+    int lastEncoder = 0;
+    int lastKnownEncoder = Prefs::lastKnownEncoder();
+    ++lastKnownEncoder;
+    for (int i=0; i<=lastKnownEncoder; ++i) {
+        QString currentGroup = QString("Encoder_%1").arg(i);
+        if (EncoderPrefs::hasPrefs(currentGroup)) {
+            lastEncoder = i;
+            EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
+            QString encoderName = encPrefs->encoderName();
+            kcfg_currentEncoder->addItem(new QListWidgetItem(encoderName));
+            encoderNames.insert(encoderName, currentGroup);
+            if (Prefs::currentEncoder() == i) {
+                foundCurrentEncoder = true;
+            }
+        }
     }
-  }
-  if(lastEncoder != Prefs::lastKnownEncoder()){
-    Prefs::setLastKnownEncoder(lastEncoder);
-    Prefs::self()->writeConfig();
-  }
-  
-  // Make sure that the current encoder is valid.
-  if(!foundCurrentEncoder && kcfg_currentEncoder->count() > 0)
-    kcfg_currentEncoder->setCurrentItem(0);
+
+    if (lastEncoder != Prefs::lastKnownEncoder()) {
+        Prefs::setLastKnownEncoder(lastEncoder);
+        Prefs::self()->writeConfig();
+    }
+
+    // Make sure that the current encoder is valid.
+    if (!foundCurrentEncoder && kcfg_currentEncoder->count() > 0) {
+        kcfg_currentEncoder->setCurrentItem(0);
+     }
 }
 
 /**
  * Find empty group
  * bring up dialog for that group.
  */
-void EncoderConfigImp::addEncoderSlot(){
-  bool foundEmptyGroup = false;
-  uint number = 0;
-  QString groupName;
-  while(!foundEmptyGroup){
-    groupName = QString("Encoder_%1").arg(number);
-    if(!EncoderPrefs::hasPrefs(groupName))
-      foundEmptyGroup = true;
-    else
-      number++;
-  }
+void EncoderConfigImp::addEncoderSlot() {
+    bool foundEmptyGroup = false;
+    uint number = 0;
+    QString groupName;
+    while (!foundEmptyGroup) {
+        groupName = QString("Encoder_%1").arg(number);
+        if (!EncoderPrefs::hasPrefs(groupName))
+            foundEmptyGroup = true;
+        else
+            number++;
+    }
 
   if(KConfigDialog::showDialog(groupName.toLatin1()))
     return;
@@ -157,7 +167,7 @@ void EncoderConfigImp::addEncoderSlot(){
  * Deleted from the config.
  */ 
 void EncoderConfigImp::removeEncoderSlot(){
-  if(!kcfg_currentEncoder->selectedItem()){
+  if(!kcfg_currentEncoder->currentItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }	
@@ -168,13 +178,14 @@ void EncoderConfigImp::removeEncoderSlot(){
   if(KMessageBox::warningContinueCancel(this, i18n("Delete encoder?"), i18n("Delete Encoder"),KStandardGuiItem::del())
       == KMessageBox::Cancel )
     return;
-  
-  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
-  kcfg_currentEncoder->removeItem(kcfg_currentEncoder->currentItem());
+
+  QString groupName = encoderNames[kcfg_currentEncoder->currentItem()->text()];
+  kcfg_currentEncoder->removeItemWidget(kcfg_currentEncoder->currentItem());
 
   delete KConfigDialog::exists(groupName.toLatin1());
 
   EncoderPrefs::deletePrefs(groupName);
+  loadEncoderList();
 }
 
 /**
@@ -185,11 +196,11 @@ void EncoderConfigImp::removeEncoderSlot(){
  * Bring up dialog
  */ 
 void EncoderConfigImp::configureEncoderSlot() {
-  if(!kcfg_currentEncoder->selectedItem()){
+  if(!kcfg_currentEncoder->currentItem()){
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }
-  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
+  QString groupName = encoderNames[kcfg_currentEncoder->currentItem()->text()];
   KConfig &config = *KGlobal::config();
   if(!config.hasGroup(groupName))
     return;
@@ -214,7 +225,7 @@ void EncoderConfigImp::configureEncoderSlot() {
 void EncoderConfigImp::updateEncoder(QObject * obj){
   if(!obj)
    return;
-  updateEncoder(obj->name());
+  updateEncoder(obj->objectName());
 }
 
 /**
@@ -245,14 +256,14 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName){
   QString newName = EncoderPrefs::prefs(groupName)->encoderName();
   if(newName == encoderName)
     return;
-  
-  Q3ListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
-  if(!item)
+
+  QList<QListWidgetItem *> items = kcfg_currentEncoder->findItems(encoderName, Qt::MatchExactly);
+  if(items.isEmpty())
     return;
-  kcfg_currentEncoder->changeItem(newName, kcfg_currentEncoder->index(item));
+  items.at(0)->setText(newName);
 
   encoderNames.insert(newName, groupName);
-  encoderNames.erase(encoderName);
+  encoderNames.remove(encoderName);
 }
 
 /**
@@ -269,20 +280,20 @@ void EncoderConfigImp::encoderWizard(){
   }
 }
 
-Q3Dict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
+QHash<QString, EncoderPrefs *> *EncoderPrefs::m_prefs = 0;
 
 EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
 {
   if (!m_prefs)
   {
-     m_prefs = new Q3Dict<EncoderPrefs>();
-     m_prefs->setAutoDelete(true);
+     m_prefs = new QHash<QString, EncoderPrefs *>;
+//     m_prefs->setAutoDelete(true);
   }
-  EncoderPrefs *encPrefs = m_prefs->find(groupName);
-  if (encPrefs)
-    return encPrefs;
+   QHash<QString, EncoderPrefs *>::iterator encPrefsIt = m_prefs->find(groupName);
+  if (encPrefsIt != m_prefs->end())
+    return encPrefsIt.value();
     
-  encPrefs = new EncoderPrefs(groupName);
+  EncoderPrefs *encPrefs = new EncoderPrefs(groupName);
   encPrefs->readConfig();
   m_prefs->insert(groupName, encPrefs);
   return encPrefs;

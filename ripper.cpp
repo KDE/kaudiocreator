@@ -22,6 +22,7 @@
 
 #include <QFile>
 #include <QTimer>
+
 #include <ktemporaryfile.h>
 #include <kmessagebox.h>
 #include <knotification.h>
@@ -39,7 +40,7 @@ Ripper::Ripper( QObject* parent) : QObject(parent) {
  * Loads the settings
  */
 void Ripper::loadSettings(){
-	for(uint i=0; i<(uint)Prefs::maxWavFiles(); i++)
+	for(int i=0; i<Prefs::maxWavFiles(); i++)
 		tendToNewJobs();
 }
 
@@ -152,7 +153,7 @@ void Ripper::tendToNewJobs(){
 	}
 
 	// If we are currently ripping the max try again in a little bit.
-	if(jobs.count() >= (uint)Prefs::maxWavFiles()){
+	if(jobs.count() >= Prefs::maxWavFiles()){
 		emit jobsChanged();
 		return;
 	}
@@ -216,7 +217,7 @@ void Ripper::copyJobResult(KJob *copyjob){
 	if ( copyJob->error() == 0 ){
 		emit updateProgress(newJob->id, 100);
 		newJob->location = copyJob->destUrl().path();
-		emit( encodeWav(newJob));
+		emit(encodeWav(newJob));
 	}
 	else{
 		copyJob->ui()->setWindow(0);

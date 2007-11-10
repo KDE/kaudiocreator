@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
+    <width>460</width>
     <height>473</height>
    </rect>
   </property>
@@ -13,18 +13,6 @@
    <string>General</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
    <item>
     <widget class="QCheckBox" name="kcfg_removeCompletedJobs" >
      <property name="text" >
@@ -169,36 +157,12 @@
       <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>0</number>
-      </property>
       <item>
-       <widget class="Q3ButtonGroup" name="buttonGroup2" >
+       <widget class="KButtonGroup" name="kbuttongroup" >
         <property name="title" >
          <string>Format</string>
         </property>
         <layout class="QVBoxLayout" >
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QRadioButton" name="kcfg_format_titleArtist" >
            <property name="text" >
@@ -274,8 +238,8 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
-       <height>16</height>
+       <width>442</width>
+       <height>51</height>
       </size>
      </property>
     </spacer>
@@ -286,9 +250,9 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
+   <class>KButtonGroup</class>
+   <extends>QGroupBox</extends>
+   <header>kbuttongroup.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

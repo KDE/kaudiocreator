@@ -21,12 +21,40 @@
 #define ENCODER_H
 
 #include <QObject>
-
 #include <QMap>
+
+#include <KProcess>
+
 #include "job.h"
-#include <k3process.h>
 
 class EncoderPrefs;
+
+class EncodeProcess : public KProcess
+{
+	Q_OBJECT
+
+	public:
+		EncodeProcess(QObject *parent = 0)
+			: KProcess(parent) {
+			connect(this, SIGNAL(readyReadStandardOutput()),
+				this, SLOT(newStandardOutput()));
+			connect(this, SIGNAL(finished(int, QProcess::ExitStatus)),
+				this, SLOT(done(int, QProcess::ExitStatus)));
+		}
+
+	private slots:
+		void newStandardOutput() {
+			emit newEncodeOutput(this);
+		}
+
+		void done(int exitCode, QProcess::ExitStatus exitStatus) {
+			emit encodingFinished(this, exitCode, exitStatus);
+		}
+
+	signals:
+		void newEncodeOutput(EncodeProcess *);
+		void encodingFinished(KProcess *, int, QProcess::ExitStatus);
+};
 
 class Encoder : public QObject {
 
@@ -50,14 +78,14 @@ public slots:
   EncoderPrefs* loadEncoder( int encoder );
 
 private slots:
-  void receivedThreadOutput(K3Process *process, char *buffer, int buflen);
-  void jobDone(K3Process *process);
+  void receivedThreadOutput(EncodeProcess *process);
+  void jobDone(KProcess *process);
   void tendToNewJobs();
 
 private:
-  QList<Job*> pendingJobs;
-  QList<K3ShellProcess*> threads;
-  QMap<K3ShellProcess*, Job*> jobs;
+  QList<Job *> pendingJobs;
+  QList<KProcess *> threads;
+  QMap<KProcess *, Job *> jobs;
 
   int reportCount;
 };
