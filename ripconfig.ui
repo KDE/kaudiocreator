@@ -125,13 +125,20 @@
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QLabel" name="temporaryDirectoryLabel" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
        <property name="text" >
         <string>Temporary directory:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KUrlRequester" native="1" name="kcfg_tempDir" />
+      <widget class="KUrlRequester" native="1" name="kcfg_tempDir" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

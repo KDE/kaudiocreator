@@ -56,8 +56,8 @@ class KAudioCreator : public KXmlGuiWindow {
 Q_OBJECT
 
 public:
-  KAudioCreator( QWidget* parent = 0, const char* name = 0);
-  void setDevice( const QString &device );
+  KAudioCreator(QWidget *parent = 0);
+  void setDevice(const QString &device);
 
 protected:
   virtual bool queryClose();

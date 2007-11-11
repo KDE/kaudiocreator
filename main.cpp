@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
   options.add("+[device]", ki18n( "CD device, can be a path or a media:/ URL" ));
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication a(true);
-  KAudioCreator *app = new KAudioCreator(0, "MainWindow");
+  KAudioCreator *app = new KAudioCreator();
 
   // we need some strings from libkcddb for the cddb album dialog
   KGlobal::locale()->insertCatalog("libkcddb");

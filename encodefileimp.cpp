@@ -26,11 +26,9 @@
 #include <QComboBox>
 #include <kmessagebox.h>
 
-EncodeFileImp::EncodeFileImp(QWidget* parent,
-		const char* name) : KDialog(parent), m_genres(KCDDB::Genres()) {
-  setObjectName(name);
-
-  QWidget* w = new QWidget();
+EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB::Genres())
+{
+  QWidget *w = new QWidget();
   setupUi(w);
   setMainWidget(w);
   setCaption(i18n("Encode File"));

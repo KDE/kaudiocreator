@@ -36,10 +36,9 @@
 /**
  * Constructor.
  */
-EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
+EncoderConfigImp::EncoderConfigImp( QWidget* parent) :
   QWidget(parent)
 {
-  setObjectName(name);
   setupUi(this);
   connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
   connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));

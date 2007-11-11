@@ -36,10 +36,9 @@
 class EncoderOutput : public QDialog, public Ui::EncoderOutput
 {
 public:
-	EncoderOutput(QWidget* parent, const char* name)
+	EncoderOutput(QWidget *parent = 0)
 	  : QDialog(parent)
 	{
-		setObjectName(name);
 		setupUi(this);
 	}
 } ;
@@ -333,7 +332,7 @@ kDebug() << "jobDone" << endl;
 		QFile::remove( job->location );
 
 	if( showDebugBox ){
-		EncoderOutput dlg( 0, "Encoder Output" );
+		EncoderOutput dlg;
 		job->output = job->errorString + "\n\n\n" + job->output;
 		dlg.output->setText(job->output);
 		dlg.exec();

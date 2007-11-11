@@ -32,7 +32,7 @@
 /**
  * Constructor, load settings.
  */
-Ripper::Ripper( QObject* parent) : QObject(parent) {
+Ripper::Ripper( QObject *parent) : QObject(parent) {
 	loadSettings();
 }
 

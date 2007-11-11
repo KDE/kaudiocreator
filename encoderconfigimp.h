@@ -47,7 +47,7 @@ signals:
   void encoderUpdated();
 	
 public:
-  EncoderConfigImp( QWidget* parent = 0, const char* name = 0);
+  EncoderConfigImp( QWidget* parent = 0);
 
 private slots:
   void addEncoderSlot();

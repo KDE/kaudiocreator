@@ -50,9 +50,8 @@
 /**
  * Constructor. Connect all of the object and the job control.
  */
-KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
+KAudioCreator::KAudioCreator( QWidget *parent) :
 	   KXmlGuiWindow(parent){
-	setObjectName(name);
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
@@ -65,13 +64,8 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
 	pageWidget->addPage(pageWidgetItem);
 
 	ripper = new Ripper(this);
-        ripper->setObjectName( "Rip" );
-
 	encoder = new Encoder(this);
-        encoder->setObjectName("Encoder");
-
 	jobQue = new JobQueImp(0);
-        jobQue->setObjectName("Que");
 
 	pageWidgetItem = new KPageWidgetItem(jobQue, i18n("&Jobs"));
 	pageWidgetItem->setIcon(KIcon(SmallIcon("system-run", 32)));
@@ -266,7 +260,7 @@ void KAudioCreator::configureNotifications() {
 }
 
 void KAudioCreator::encodeFile(){
-	EncodeFileImp *file = new EncodeFileImp(this, "EncodeFile");
+	EncodeFileImp *file = new EncodeFileImp(this);
 	connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
 	file->show();
 }
@@ -313,7 +307,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name, KConfigSkeleto
 	rip->kcfg_tempDir->setMode(KFile::Directory);
 	addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
 
-	encoderConfigImp = new EncoderConfigImp(0, "Encoder");
+	encoderConfigImp = new EncoderConfigImp;
 	addPage(encoderConfigImp, i18n("Encoder"), "search-filter", i18n("Encoder Configuration") );
 }
 
