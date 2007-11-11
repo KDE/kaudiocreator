@@ -119,7 +119,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
         actActionMenu->setText( i18n("Rip &Selection") );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
 	actActionMenu->setEnabled( false );
-	connect(actActionMenu,SIGNAL(activated()),tracks,SLOT(startSession()));
+	connect(actActionMenu,SIGNAL(triggered()),tracks,SLOT(startSession()));
 
 	ripMenu = actActionMenu->menu();
 	connect(ripMenu, SIGNAL(triggered(QAction *)),this,SLOT(slotRipSelection(QAction *)));

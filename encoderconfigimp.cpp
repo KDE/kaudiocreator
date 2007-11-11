@@ -212,19 +212,9 @@ void EncoderConfigImp::configureEncoderSlot() {
   dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0/*, groupName.toLatin1()*/), i18n("Encoder Configuration"), "package_settings");
-  connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SIGNAL(encoderUpdated()));
   connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
   dialog->show();
-}
-
-/**
- * If object exists update encoder.
- */ 
-void EncoderConfigImp::updateEncoder(QObject * obj){
-  if(!obj)
-   return;
-  updateEncoder(obj->objectName());
 }
 
 /**

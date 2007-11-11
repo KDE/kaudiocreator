@@ -45,7 +45,7 @@ Q_OBJECT
 
 signals:
   void encoderUpdated();
-	
+
 public:
   EncoderConfigImp( QWidget* parent = 0);
 
@@ -54,12 +54,11 @@ private slots:
   void removeEncoderSlot();
   void configureEncoderSlot();
 
-  void updateEncoder(QObject * obj);
   void updateEncoder(const QString &);
   void loadEncoderList();
 
   void encoderWizard();
-  
+
 private:
   // Name, groupName
   QMap<QString, QString> encoderNames;

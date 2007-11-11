@@ -64,7 +64,7 @@ TracksImp::TracksImp( QWidget *parent) :
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 	
-	connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
+	connect(deviceCombo, SIGNAL(activated(const QString &)), this, SLOT(changeDevice(const QString &)));
 	
 	selectAllTracksButton->setEnabled( false );
 	deselectAllTracksButton->setEnabled( false );
