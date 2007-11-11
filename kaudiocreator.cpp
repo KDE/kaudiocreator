@@ -308,7 +308,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name, KConfigSkeleto
 	addPage(rip, i18n("Ripper"), "gear", i18n("Ripper Configuration") );
 
 	encoderConfigImp = new EncoderConfigImp;
-	addPage(encoderConfigImp, i18n("Encoder"), "search-filter", i18n("Encoder Configuration") );
+	addPage(encoderConfigImp, i18n("Encoder"), "view-filter", i18n("Encoder Configuration") );
 }
 
 void SettingsDialog::updateSettings()
