@@ -23,7 +23,6 @@
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QKeyEvent>
 
 #include <klocale.h>
 #include <libkcddb/client.h>
@@ -89,6 +88,7 @@ public:
 	~TracksImp();
 
 	bool hasCD();
+	void setDevice(const QString &);
 
 public slots:
 	void loadSettings();
@@ -107,7 +107,7 @@ public slots:
 private slots:
 	void newDisc(unsigned discId);
 
-	void changeDevice(const QString &file);
+	void changeDevice(const QString &);
 	void lookupCDDBDone(KCDDB::Result result);
 
 private:

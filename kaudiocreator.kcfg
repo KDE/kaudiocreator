@@ -4,6 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
 		  http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kaudiocreatorrc"/>
+  <include>libkcompactdisc/kcompactdisc.h</include>
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
       <label>Perform automatic CDDB lookups.</label>
@@ -13,9 +14,9 @@
       <label>Automatically rip all tracks upon a successful CDDB retrieval</label>
       <default>false</default>
     </entry>
-    <entry name="device" type="StringList">
-      <label>CD device</label>
-      <default code="true">QStringList("/dev/cdrom")</default>
+    <entry name="lastUsedDevice" type="String">
+      <label>Last used CD device</label>
+      <default code="true">KCompactDisc::defaultCdromDeviceName()</default>
     </entry>
     <entry name="promptIfIncompleteInfo" type="Bool">
       <label>Prompt if information is not complete</label>

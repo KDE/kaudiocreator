@@ -47,79 +47,60 @@ using namespace KCDDB;
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget *parent) :
-	QWidget(parent), editedItem(0), cddbInfo() {
+TracksImp::TracksImp( QWidget *parent) : QWidget(parent), editedItem(0), cddbInfo()
+{
 	setupUi(this);
 	trackListing->resizeColumnToContents(HEADER_RIP);
-//	setObjectName(name);
 	cd = new KCompactDisc;
 
 	connect(cd, SIGNAL(discChanged(unsigned)), this, SLOT(newDisc(unsigned)));
 
-//	connect(trackListing, SIGNAL(itemClicked( QTreeWidgetItem *, int )),
-//		this, SLOT(selectTrack(QTreeWidgetItem *, int)));
-//	connect(trackListing, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editInformation()));
 	connect(trackListing, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
 	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 	
-	connect(deviceCombo, SIGNAL(activated(const QString &)), this, SLOT(changeDevice(const QString &)));
+	connect(deviceCombo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
 	
 	selectAllTracksButton->setEnabled( false );
 	deselectAllTracksButton->setEnabled( false );
 	
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
-	connect(cddb, SIGNAL(finished(KCDDB::Result)),
-	                  this, SLOT(lookupCDDBDone(KCDDB::Result)));
-//	trackListing->setSorting(-1, false);
+	connect(cddb, SIGNAL(finished(KCDDB::Result)), this, SLOT(lookupCDDBDone(KCDDB::Result)));
+
 	loadSettings();
 }
 
 /**
  * store the current device from the combo.
  */
-TracksImp::~TracksImp() {
-	QStringList list;
-	if( deviceCombo->count() != 0)
-		list.append(deviceCombo->currentText());
-	for ( int i=0; i<deviceCombo->count();i++ ) {
-		QString text = deviceCombo->itemText(i);
-		if( !list.contains(text))
-			list.append(text);
-		if( list.count() == 5)
-			break;
-	}
-
-	Prefs::setDevice(list);
+TracksImp::~TracksImp()
+{
+	Prefs::setLastUsedDevice(deviceCombo->currentText());
 	Prefs::self()->writeConfig();
 }
 
 /**
  * Load the class settings. 
  */
-void TracksImp::loadSettings() {
-	QStringList list;
-
-	// Add the saved list, no dups
-	QStringList prefsList = Prefs::device();
-	QStringList::Iterator it;
-	for ( it = prefsList.begin(); it != prefsList.end(); ++it ) {
-		if( !list.contains( *it ))
-			list.append(*it);
-	}
-	// Get current list, no dups
-	for ( int i=0; i<deviceCombo->count();i++ ) {
-		QString text = deviceCombo->itemText(i);
-		if( !list.contains(text))
-			list.append(text);
-	}
-
+void TracksImp::loadSettings()
+{
 	deviceCombo->blockSignals(true);
-	// Set list, get top one
+	QStringList devices = KCompactDisc::cdromDeviceNames();
 	deviceCombo->clear();
-	deviceCombo->addItems(list);
+
+	if (devices.isEmpty()) {
+		deviceCombo->addItem(i18n("none detected"));
+	} else {
+		foreach (QString tmpDevice, devices) {
+			QString path = KCompactDisc::cdromDeviceUrl(tmpDevice).path();
+			deviceCombo->addItem(tmpDevice + " (" + path + ")");
+		}
+	}
+
+	int i = deviceCombo->findText(Prefs::lastUsedDevice());
+	if (i >= 0) deviceCombo->setCurrentIndex(i);
 	deviceCombo->blockSignals(false);
 
 	changeDevice(deviceCombo->currentText());
@@ -174,34 +155,53 @@ void TracksImp::newDisc(unsigned tracks)
 /**
  * @return if there is a cd inserted or not.
  */
-bool TracksImp::hasCD(){
+bool TracksImp::hasCD()
+{
 	return !cd->isNoDisc();
 }
 
 /**
- * The device text has changed.
- * @param file - the new text to check.
+ * If the user gave a drive on the commandline
+ * assume KCompactDisc::cdromDeviceNames() listed all valid drives
+ * and try to match one
  */
-void TracksImp::changeDevice(const QString &file ) {
-	QString newDevice = KCompactDisc::urlToDevice(file);
-
-	if( newDevice == cd->deviceUrl().path() ) {
-		//qDebug("Device names match, returning");
-		return;
+void TracksImp::setDevice(const QString &userDevice)
+{
+	KUrl url = KCompactDisc::cdromDeviceUrl(userDevice);
+	bool found = false;
+	int d = 0;
+	while (d < deviceCombo->count()) {
+		QString name = deviceCombo->itemText(d);
+		name = name.left(name.indexOf(" ("));
+		if (KCompactDisc::cdromDeviceUrl(name) == url) {
+			if (d != deviceCombo->currentIndex()) {
+				changeDevice(name);
+				deviceCombo->blockSignals(true);
+				deviceCombo->setCurrentIndex(d);
+				deviceCombo->blockSignals(false);
+			}
+			found = true;
+			break;
+		}
+		++d;
 	}
+	if (!found) kDebug() << "Selected device not found!" << endl;
+}
 
-	QFileInfo fileInfo(newDevice);
-	if( !fileInfo.exists() || fileInfo.isDir()) {
-		//qDebug("Device file !exist or isDir or !file");
-		return;
-	}
-
+/**
+ * The device text has changed.
+ * @param device - the new text to check.
+ */
+void TracksImp::changeDevice(const QString &device)
+{
+	QString newDevice = device.left(device.indexOf(" ("));
+	// assume that devices reported by KCompactDisc::cdromDeviceNames() are just there
 	if (!cd->setDevice(newDevice, 50, false))
 	{
 		QString errstring =
 		  i18n("CDROM read or access error (or no audio disk in drive).\n"\
 		    "Please make sure you have access permissions to:\n%1",
-		     file);
+		     device);
 		KMessageBox::error(this, errstring, i18n("Error"));
 	}
 }
@@ -389,7 +389,7 @@ void TracksImp::startSession( int encoder ) {
 	{
 		Job *newJob = new Job();
 		newJob->encoder = encoder;
-		newJob->device = cd->deviceUrl().path();
+		newJob->device = cd->deviceName();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
@@ -539,7 +539,7 @@ void TracksImp::closeEditor() {
  * Eject the current cd device
  */
 void TracksImp::eject() {
-	ejectDevice(KCompactDisc::urlToDevice(cd->deviceUrl()));
+	cd->eject();
 }
 
 /**

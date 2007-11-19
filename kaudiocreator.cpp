@@ -175,7 +175,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 
 void KAudioCreator::setDevice( const QString &device )
 {
-	tracks->deviceCombo->setEditText( device );
+	tracks->setDevice(device);
 }
 
 void KAudioCreator::slotRipSelection(QAction *selection) {
