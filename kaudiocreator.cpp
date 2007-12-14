@@ -165,9 +165,12 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	setupGUI();
 
 	// Init statusbar
-	statusBar()->showMessage(i18n("No Audio CD detected"));
-	defaultEncLabel = new QLabel();
+	// replace with something not hardcoded
 	statusBar()->setContentsMargins(6, 0, 6, 0);
+	statusLabel = new QLabel();
+	statusBar()->addWidget(statusLabel);
+	statusLabel->setText(i18n("No Audio CD detected"));
+	defaultEncLabel = new QLabel();
 	statusBar()->addPermanentWidget(defaultEncLabel, 0);
 	showCurrentEncoder();
 	hasCD(tracks->hasCD());
@@ -205,9 +208,9 @@ void KAudioCreator::setupRipMenu(){
  */
 void KAudioCreator::hasCD(bool cd){
 	if(cd)
-		statusBar()->showMessage(i18n("CD Inserted"));
+		statusLabel->setText(i18n("CD Inserted"));
 	else
-		statusBar()->showMessage(i18n("No Audio CD detected"));
+		statusLabel->setText(i18n("No Audio CD detected"));
 }
 
 void KAudioCreator::showCurrentEncoder()
@@ -241,7 +244,7 @@ void KAudioCreator::updateStatus() {
 			status = encodingStatus;
 		}
 	}
-	statusBar()->showMessage(status);
+	statusLabel->setText(status);
 }
 
 /**

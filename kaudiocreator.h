@@ -80,7 +80,7 @@ private:
   Ripper      *ripper;
   Encoder     *encoder;
   KMenu       *ripMenu;
-  QLabel *defaultEncLabel;
+  QLabel *statusLabel, *defaultEncLabel;
 };
 
 class SettingsDialog: public KConfigDialog {
