@@ -24,7 +24,6 @@
 #include "wizard.h"
 
 #include <QPushButton>
-#include <QLineEdit>
 
 #include <kstandarddirs.h>
 #include <kconfigdialog.h>

@@ -20,10 +20,7 @@
 #include "encodefileimp.h"
 #include "job.h"
 
-#include <QSpinBox>
-#include <QLineEdit>
 #include <kurlrequester.h>
-#include <QComboBox>
 #include <kmessagebox.h>
 
 EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB::Genres())

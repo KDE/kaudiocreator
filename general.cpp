@@ -10,8 +10,6 @@
 *****************************************************************************/
 
 #include <QRegExp>
-#include <QLineEdit>
-#include <QLabel>
 
 General::General( QWidget* parent )
     : QWidget( parent )

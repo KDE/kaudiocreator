@@ -18,12 +18,8 @@
  */
 
 #include <QPushButton>
-#include <QLabel>
 #include <QPainter>
 #include <QFile>
-#include <QRegExp>
-#include <QFileInfo>
-#include <QDir>
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 #include <QProgressBar>

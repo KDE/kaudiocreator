@@ -20,7 +20,6 @@
 #ifndef JOB_H
 #define JOB_H
 
-#include <QMap>
 #include <klocale.h>
 #include <QHash>
 /**

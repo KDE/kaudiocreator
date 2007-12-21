@@ -17,12 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QLabel>
 //#include <QPixmap>
 #include <QKeyEvent>
 #include <QPushButton>
-#include <QSpinBox>
-#include <QRegExp>
 //#include <QTimer>
 //#include <QFileInfo>
 #include <QTreeWidgetItemIterator>

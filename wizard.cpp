@@ -20,7 +20,6 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QMap>
 #include <klocale.h>
 #include "job.h"
 
