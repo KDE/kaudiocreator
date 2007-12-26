@@ -1,13 +1,13 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kaudiocreator" version="3">
 <ActionProperties>
-  <Action name="rip_selected" icon="gear"/>
-  <Action name="rip" icon="gear"/>
+  <Action name="rip_selected" icon="system-run"/>
+  <Action name="rip" icon="system-run"/>
   <Action name="configure_kaudiocreator" icon="configure"/>
   <Action name="clear_done_jobs" icon="user-trash"/>
   <Action name="eject" icon="media-eject"/>
-  <Action name="edit_cd" icon="object-edit"/>
-  <Action name="cddb_now" icon="cdaudio-mount"/>
+  <Action name="edit_cd" icon="document-properties"/>
+  <Action name="cddb_now" icon="media-optical-audio"/>
 </ActionProperties>
 
 <MenuBar>
