@@ -50,7 +50,7 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), editedItem(0), cddbInf
 	trackListing->resizeColumnToContents(HEADER_RIP);
 	cd = new KCompactDisc;
 
-	connect(cd, SIGNAL(discChanged(unsigned)), this, SLOT(newDisc(unsigned)));
+	connect(cd, SIGNAL(discChanged(unsigned int)), this, SLOT(newDisc(unsigned int)));
 
 	connect(trackListing, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
 	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
@@ -386,7 +386,7 @@ void TracksImp::startSession( int encoder ) {
 	{
 		Job *newJob = new Job();
 		newJob->encoder = encoder;
-		newJob->device = cd->deviceName();
+		newJob->device = cd->deviceUrl().path();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())

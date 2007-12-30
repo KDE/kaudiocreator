@@ -105,7 +105,7 @@ public slots:
 	void closeEditor();
 
 private slots:
-	void newDisc(unsigned discId);
+	void newDisc(unsigned int discId);
 
 	void changeDevice(const QString &);
 	void lookupCDDBDone(KCDDB::Result result);
