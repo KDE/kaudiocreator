@@ -141,7 +141,7 @@ void JobQueImp::updateProgress(int id, int progress){
 
 	// Update the icon if needed
 	if (progress > 0 && progress < 100 && !currentItem->progressing ){
-		currentItem->setIcon(ICON_LOC, KIcon("gear"));
+		currentItem->setIcon(ICON_LOC, KIcon("system-run"));
 		currentItem->progressing = true;
 	}
 	else if(progress == -1){
