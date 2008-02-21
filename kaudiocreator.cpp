@@ -51,7 +51,7 @@
  * Constructor. Connect all of the object and the job control.
  */
 KAudioCreator::KAudioCreator( QWidget *parent) :
-	   KXmlGuiWindow(parent){
+	   KXmlGuiWindow(parent), statusLabel(0){
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
@@ -207,10 +207,12 @@ void KAudioCreator::setupRipMenu(){
  * Changes the status bar to let the user no if a cd was not detected or inserted.
  */
 void KAudioCreator::hasCD(bool cd){
-	if(cd)
-		statusLabel->setText(i18n("CD Inserted"));
-	else
-		statusLabel->setText(i18n("No Audio CD detected"));
+	if (statusLabel) {
+		if(cd)
+			statusLabel->setText(i18n("CD Inserted"));
+		else
+			statusLabel->setText(i18n("No Audio CD detected"));
+	}
 }
 
 void KAudioCreator::showCurrentEncoder()
