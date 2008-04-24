@@ -2,7 +2,6 @@ if (NOT APPLE)
 
 project(kaudiocreator)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 find_package(KDE4 REQUIRED)
 find_package(KdeMultimedia REQUIRED)
