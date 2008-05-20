@@ -90,7 +90,7 @@ void TracksImp::loadSettings()
 	if (devices.isEmpty()) {
 		deviceCombo->addItem(i18n("none detected"));
 	} else {
-		foreach (QString tmpDevice, devices) {
+		foreach (const QString &tmpDevice, devices) {
 			QString path = KCompactDisc::cdromDeviceUrl(tmpDevice).path();
 			deviceCombo->addItem(tmpDevice + " (" + path + ")");
 		}
