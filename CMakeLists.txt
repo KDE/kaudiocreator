@@ -48,7 +48,7 @@ kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
 target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES})
 
-install(TARGETS kaudiocreator  DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS kaudiocreator  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
