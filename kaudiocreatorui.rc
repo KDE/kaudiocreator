@@ -11,7 +11,7 @@
 </ActionProperties>
 
 <MenuBar>
-  <Menu name="file"><Text>&amp;Program</Text>
+  <Menu name="file"><text>&amp;Program</text>
     <Action name="eject"/>
     <Action name="cddb_now"/>
     <Action name="edit_cd"/>
