@@ -314,7 +314,4 @@
    </hints>
   </connection>
  </connections>
-<includehints>
-    <includehint>klistwidget.h</includehint>
-</includehints>
 </ui>
