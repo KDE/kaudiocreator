@@ -26,6 +26,7 @@ Type=Service
 Name=Extract and Encode Audio Tracks
 Name[bg]=Извличане и кодиране на аудио записи
 Name[csb]=Zgriwô ë kòdujë sztëcczi aùdio
+Name[de]=Musikstücke auslesen und kodieren
 Name[el]=Εξαγωγή και κωδικοποίηση κομματιών ήχου
 Name[es]=Extraer y codificar pistas de audio
 Name[et]=Heliradade ekstraktimine ja kodeerimine
