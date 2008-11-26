@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Comment=Frontend for audio file creation
 Comment[bg]=Програма за създаване на аудио файлове
+Comment[cs]=Prostředí pro tvorbu audio souborů
 Comment[csb]=Programa do ùsôdzenia lopków aùdio
 Comment[de]=Oberfläche zur Erstellung von Audio-Dateien
 Comment[el]=Σύστημα υποστήριξης χρήστη για δημιουργία αρχείων ήχου
@@ -33,6 +34,7 @@ Name[sv]=Kaudiocreator
 Name[x-test]=xxKAudioCreatorxx
 GenericName=CD Ripper
 GenericName[bg]=Извличане на CD
+GenericName[cs]=CD extraktor
 GenericName[csb]=Programa zgriwającô CD
 GenericName[de]=CDs auslesen
 GenericName[el]=Εξαγωγέας CD
