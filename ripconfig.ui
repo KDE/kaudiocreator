@@ -117,7 +117,7 @@
    <item>
     <widget class="QCheckBox" name="kcfg_enableTempDir" >
      <property name="text" >
-      <string>Use default temporary directory</string>
+      <string>Use custom temporary directory</string>
      </property>
     </widget>
    </item>
