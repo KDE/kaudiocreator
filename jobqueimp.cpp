@@ -108,7 +108,8 @@ void JobQueImp::addJob(Job *job, const QString &name) {
  * @param id the id of the job to update
  * @param progress the new progress of the job.
  */
-void JobQueImp::updateProgress(int id, int progress){
+void JobQueImp::updateProgress(int id, int progress)
+{
 	int currentJobCount = numberOfJobsNotFinished();
 	QString buffer = getStringFromNumber(id);
 	buffer += QString("%1").arg(id);
@@ -125,7 +126,7 @@ void JobQueImp::updateProgress(int id, int progress){
 	}
 
 	if (!currentItem) {
-		kDebug(60002) << "JobQueImp::updateProgress An update was received about a job, "
+		kDebug() << "JobQueImp::updateProgress An update was received about a job, "
 				  "but the job couldn't be found: " << id << endl;
 		return;
 	}

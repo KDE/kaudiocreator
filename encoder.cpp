@@ -178,7 +178,6 @@ void Encoder::tendToNewJobs()
 	Job *job = pendingJobs.takeFirst();
 
 	EncoderPrefs* prefs = loadEncoder(job->encoder);
-
 	QString desiredFile = Prefs::fileFormat();
 	desiredFile.replace( QRegExp("~"), QDir::homePath() );
 	{
@@ -260,7 +259,7 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
 
 	// Make sure we have a job to send an update too.
 	if(jobs.find((KProcess *)process) == jobs.end()){
-		kDebug(60002) << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  __LINE__;
+		kDebug() << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  endl;
 		return;
 	}
 
@@ -273,7 +272,7 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
 
 	// Make sure the output string has a % symble in it.
 	if ( !output.contains('%') && reportCount < 5 ) {
-		kDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill.";
+		kDebug() << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
 		reportCount++;
 		return;
 	}

@@ -340,7 +340,12 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession( QString encoder ) {
+void TracksImp::startSession( QString encoder )
+{
+	QString currentEncoder = encoder;
+	if (currentEncoder.isEmpty())
+		currentEncoder = Prefs::defaultEncoder();
+
 	QList<TracksItem *> selected = selectedTracks();
 
 	if( selected.isEmpty() )
@@ -376,16 +381,12 @@ void TracksImp::startSession( QString encoder ) {
 		if( r == KMessageBox::No )
 			return;
 	}
-
-	if (encoder == QString())
-		encoder = Prefs::currentEncoder();
 	
 	Job *lastJob = 0;
-
 	foreach(TracksItem* item, selected)
 	{
 		Job *newJob = new Job();
-		newJob->encoder = encoder;
+		newJob->encoder = currentEncoder;
 		newJob->device = cd->deviceUrl().path();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
