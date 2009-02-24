@@ -51,9 +51,13 @@
     </entry>
   </group>
   <group name="Encoder">
-    <entry name="currentEncoder" type="Int" key="encoderChoice">
+    <entry name="currentEncoder" type="String">
       <label>Currently selected encoder</label>
       <default>0</default>
+    </entry>
+    <entry name="defaultEncoder" type="String">
+      <label>Current default encoder</label>
+      <default code="true">QString()</default>
     </entry>
     <entry name="lastKnownEncoder" type="Int">
       <label>Last encoder in the list</label>

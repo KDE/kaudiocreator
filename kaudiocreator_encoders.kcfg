@@ -18,7 +18,7 @@
     </entry>
     <entry name="extension" type="String">
       <label>File extension</label>
-      <default>wav</default>
+      <default>ext</default>
     </entry>
     <entry name="percentLength" type="Int">
       <label></label>

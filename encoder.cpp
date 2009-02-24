@@ -32,6 +32,8 @@
 #include <knotification.h>
 #include <kinputdialog.h>
 #include <kshell.h>
+#include <kdebug.h>
+
 
 class EncoderOutput : public QDialog, public Ui::EncoderOutput
 {
@@ -54,15 +56,16 @@ Encoder::Encoder( QObject* parent):QObject(parent),reportCount(0) {
  * Load the settings for this class.
  */
 void Encoder::loadSettings() {
-	loadEncoder(Prefs::currentEncoder());
+	loadEncoder(Prefs::defaultEncoder());
 	// If the cpu count change then try
 	for(uint i=0; i<(uint)Prefs::numberOfCpus(); ++i)
 		tendToNewJobs();
 }
 
-EncoderPrefs *Encoder::loadEncoder( int encoder ){
-	EncoderPrefs *prefs;
-	QString currentEncoderGroup = QString("Encoder_%1").arg(encoder);
+EncoderPrefs *Encoder::loadEncoder(QString encoder)
+{
+	EncoderPrefs *prefs = 0;
+	QString currentEncoderGroup = QString("Encoder_").append(encoder);
 	prefs = EncoderPrefs::prefs(currentEncoderGroup);
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
@@ -74,7 +77,8 @@ EncoderPrefs *Encoder::loadEncoder( int encoder ){
 /**
  * Deconstructor, remove pending jobs, remove current jobs.
  */
-Encoder::~Encoder() {
+Encoder::~Encoder()
+{
 	qDeleteAll(pendingJobs);
 	pendingJobs.clear();
 
@@ -94,14 +98,16 @@ Encoder::~Encoder() {
 /**
  * @return The number of active jobs
  */
-int Encoder::activeJobCount() {
+int Encoder::activeJobCount()
+{
 	return jobs.count();
 }
 
 /**
  * @return The number of pending jobs
  */
-int Encoder::pendingJobCount() {
+int Encoder::pendingJobCount()
+{
 	return pendingJobs.count();
 }
 
@@ -109,7 +115,8 @@ int Encoder::pendingJobCount() {
  * Stop this job with the matching id.
  * @param id the id number of the job to stop.
  */
-void Encoder::removeJob(int id ) {
+void Encoder::removeJob(int id )
+{
 	QMap<KProcess *, Job *>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ) {
 		if ( it.value()->id == id ) {
@@ -143,7 +150,8 @@ void Encoder::removeJob(int id ) {
  * Adds job to the que of jobs to encode.
  * @param job the job to encode.
  */
-void Encoder::encodeWav(Job *job ) {
+void Encoder::encodeWav(Job *job )
+{
 	emit(addJob(job, i18n("Encoding (%1): %2 - %3", loadEncoder(job->encoder)->extension(),
 	                                                job->track_artist, job->track_title)));
 	pendingJobs.append(job);
@@ -151,10 +159,11 @@ void Encoder::encodeWav(Job *job ) {
 }
 
 /**
- * See if there are new jobs to attend too.	If we are all loaded up
+ * See if there are new jobs to attend too. If we are all loaded up
  * then just loop back in a few seconds and check agian.
  */
-void Encoder::tendToNewJobs() {
+void Encoder::tendToNewJobs()
+{
 	if ( pendingJobs.count() == 0 ) {
 		emit jobsChanged();
 		return;

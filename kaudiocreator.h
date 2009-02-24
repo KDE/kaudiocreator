@@ -63,6 +63,7 @@ protected:
   virtual bool queryClose();
 
 private slots:
+	void checkSettings();
   void showSettings();
   void updateStatus();
   void hasCD(bool);

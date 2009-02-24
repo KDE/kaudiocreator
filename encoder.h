@@ -75,7 +75,7 @@ public slots:
   void removeJob(int id);
   void encodeWav(Job *job);
   void loadSettings();
-  EncoderPrefs* loadEncoder( int encoder );
+  EncoderPrefs* loadEncoder( QString encoder );
 
 private slots:
   void receivedThreadOutput(EncodeProcess *process);

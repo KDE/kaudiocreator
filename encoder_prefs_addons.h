@@ -1,6 +1,7 @@
 
 public:
   static EncoderPrefs *prefs(const QString &groupName);
+  static QStringList prefsList();
   static bool hasPrefs(const QString &groupName);
   static void deletePrefs(const QString &groupName);
 

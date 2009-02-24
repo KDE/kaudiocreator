@@ -20,7 +20,6 @@
 #ifndef ENCODERCONFIGIMP_H
 #define ENCODERCONFIGIMP_H
 
-#include <QMap>
 #include <QHash>
 
 #include "ui_encoderconfig.h"
@@ -30,8 +29,8 @@
 class EncoderEdit : public QWidget, public Ui::EncoderEdit
 {
 public:
-  EncoderEdit( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
+	EncoderEdit( QWidget *parent ) : QWidget( parent ) {
+		setupUi( this );
   }
 };
 
@@ -39,29 +38,28 @@ public:
 /**
  * Class mainly build to manage encoder list.
  */ 
-class EncoderConfigImp : public QWidget, public Ui::EncoderConfig {
+class EncoderConfigImp : public QWidget, public Ui::EncoderConfig
+{
 
 Q_OBJECT
 
-signals:
-  void encoderUpdated();
-
 public:
-  EncoderConfigImp( QWidget* parent = 0);
+	EncoderConfigImp( QWidget* parent = 0);
 
 private slots:
-  void addEncoderSlot();
-  void removeEncoderSlot();
-  void configureEncoderSlot();
+	void addEncoderSlot();
+	void saveNewEncoderSlot(const QString &);
+	void removeEncoderSlot();
+	void configureEncoderSlot();
 
-  void updateEncoder(const QString &);
-  void loadEncoderList();
+	void updateEncoder(const QString &);
+	void loadEncoderList();
+	void setDefaultEncoderSlot();
 
-  void encoderWizard();
+	void encoderWizard();
 
-private:
-  // Name, groupName
-  QMap<QString, QString> encoderNames;
+signals:
+	void encoderChanged();
 };
 
 #endif

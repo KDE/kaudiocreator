@@ -25,6 +25,16 @@
 #include "qmap.h"
 #include <kpagedialog.h>
 
+#define COLUMN_FILE 0
+#define COLUMN_TITLE 1
+#define COLUMN_ARTIST 2
+#define COLUMN_ALBUM 3
+#define COLUMN_COMMENT 4
+#define COLUMN_GENRE 5
+#define COLUMN_TRACK 6
+#define COLUMN_YEAR 7
+#define COLUMN_ENCODER 8
+
 class Job;
 
 /**
@@ -42,13 +52,18 @@ public:
   EncodeFileImp(QWidget* parent = 0);
 
 protected slots:
+  void addFiles();
+  void clearFileList();
+  void editFile(QTreeWidgetItem *, int);
+  void closeEditor();
   // Encode button
   void encode();
 
 private:
   // List of genres and i18n versions
   KCDDB::Genres m_genres;
-
+  QTreeWidgetItem *editedItem;
+  int editedColumn;
 };
 
 #endif // ENCODEFILEIMP_H

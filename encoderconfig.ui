@@ -5,13 +5,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>434</height>
+    <width>495</width>
+    <height>433</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <item rowspan="3" row="0" column="0" >
-    <widget class="KListWidget" name="kcfg_currentEncoder" />
+    <widget class="KListWidget" name="currentEncoderList" />
    </item>
    <item row="0" column="1" >
     <widget class="QPushButton" name="addEncoder" >
@@ -56,20 +56,23 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="currentEncoderName" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="KLineEdit" name="kcfg_defaultEncoder" >
+       <property name="cursor" >
+        <cursorShape>ArrowCursor</cursorShape>
        </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Sunken</enum>
+       <property name="focusPolicy" >
+        <enum>Qt::NoFocus</enum>
        </property>
-       <property name="lineWidth" >
-        <number>1</number>
+       <property name="contextMenuPolicy" >
+        <enum>Qt::NoContextMenu</enum>
        </property>
-       <property name="wordWrap" >
+       <property name="acceptDrops" >
+        <bool>false</bool>
+       </property>
+       <property name="readOnly" >
+        <bool>true</bool>
+       </property>
+       <property name="urlDropsEnabled" >
         <bool>false</bool>
        </property>
       </widget>
@@ -189,7 +192,7 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>40</width>
             <height>20</height>
@@ -228,7 +231,7 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>40</width>
             <height>20</height>
@@ -259,7 +262,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>355</width>
        <height>31</height>
@@ -267,10 +270,29 @@
      </property>
     </spacer>
    </item>
+   <item row="3" column="1" >
+    <widget class="QPushButton" name="defaultButton" >
+     <property name="text" >
+      <string>Set as default</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>klistwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>addEncoder</tabstop>
   <tabstop>removeEncoder</tabstop>
@@ -294,22 +316,6 @@
     <hint type="destinationlabel" >
      <x>249</x>
      <y>325</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>kcfg_currentEncoder</sender>
-   <signal>currentTextChanged(QString)</signal>
-   <receiver>currentEncoderName</receiver>
-   <slot>setText(QString)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>186</x>
-     <y>56</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>254</x>
-     <y>123</y>
     </hint>
    </hints>
   </connection>

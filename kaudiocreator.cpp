@@ -63,6 +63,8 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	pageWidgetItem->setIcon(KIcon(("media-optical-audio")));
 	pageWidget->addPage(pageWidgetItem);
 
+	checkSettings();
+
 	ripper = new Ripper(this);
 	encoder = new Encoder(this);
 	jobQue = new JobQueImp(0);
@@ -143,8 +145,8 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
 	edit->setEnabled( false );
 
-	action = actionCollection()->addAction("encode_file");
-        action->setText(i18n("Encode &File..."));
+	action = actionCollection()->addAction("encode_files");
+        action->setText(i18n("Encode &Files from disk"));
 	connect(action, SIGNAL(triggered(bool) ), SLOT(encodeFile()));
 
 	QAction *cddb = actionCollection()->addAction("cddb_now");
@@ -182,13 +184,62 @@ void KAudioCreator::setDevice( const QString &device )
 }
 
 void KAudioCreator::slotRipSelection(QAction *selection) {
-	tracks->startSession( (selection->data()).toInt() );
+	tracks->startSession( (selection->data().toString() ));
+}
+
+void KAudioCreator::checkSettings()
+{
+	QStringList list = EncoderPrefs::prefsList();
+	if (list.isEmpty()) {
+		EncoderPrefs *encPrefs;
+		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
+		encPrefs->setEncoderName(i18n("WAV"));
+		encPrefs->setCommandLine("mv %f %o");
+		encPrefs->setExtension("wav");
+		encPrefs->setPercentLength(2);
+		encPrefs->writeConfig();
+
+		encPrefs = EncoderPrefs::prefs("Encoder_Ogg Default");
+		encPrefs->setEncoderName(i18n("Ogg Default"));
+		encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
+		encPrefs->setExtension("ogg");
+		encPrefs->setPercentLength(4);
+		encPrefs->writeConfig();
+
+		encPrefs = EncoderPrefs::prefs("Encoder_MP3 Lame Standard");
+		encPrefs->setEncoderName(i18n("MP3 Lame Standard"));
+		encPrefs->setCommandLine("lame --preset standard --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
+		encPrefs->setExtension("mp3");
+		encPrefs->setPercentLength(2);
+		encPrefs->writeConfig();
+
+		encPrefs = EncoderPrefs::prefs("Encoder_FLAC Best");
+		encPrefs->setEncoderName(i18n("FLAC Best"));
+		encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%{artist} --tag=Album=%{albumtitle} --tag=Date=%{year} --tag=Title=%{title} --tag=Tracknumber=%{number} --tag=Genre=%{genre} %f");
+		encPrefs->setExtension("flac");
+		encPrefs->setPercentLength(2);
+		encPrefs->writeConfig();
+
+		Prefs::setDefaultEncoder("WAV");
+	}
+
 }
 
 void KAudioCreator::setupRipMenu(){
 	ripMenu->clear();
 
-	int i=0;
+	QStringList list = EncoderPrefs::prefsList();
+	foreach (QString encoder, list) {
+	EncoderPrefs *encPrefs = EncoderPrefs::prefs(encoder);
+		QString command = encPrefs->commandLine();
+		int progEnd = command.indexOf(" ");
+		QString prog = command.left(progEnd).trimmed();
+		if (KStandardDirs::findExe(prog) != QString()) {
+			QAction *encAction = ripMenu->addAction(encoder.remove("Encoder_"));
+			encAction->setData(QVariant(encoder));
+		}
+    }
+/*	int i=0;
 	QString currentGroup = QString("Encoder_%1").arg(i);
 	while (EncoderPrefs::hasPrefs(currentGroup)) {
 		EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
@@ -200,7 +251,7 @@ void KAudioCreator::setupRipMenu(){
 			encAction->setData(QVariant(i));
 		}
 		currentGroup = QString("Encoder_%1").arg(++i);
-	}
+	}*/
 }
 
 /**
@@ -217,7 +268,7 @@ void KAudioCreator::hasCD(bool cd){
 
 void KAudioCreator::showCurrentEncoder()
 {
-	QString encName = EncoderPrefs::prefs(QString("Encoder_%1").arg(Prefs::currentEncoder()))->encoderName();
+	QString encName = Prefs::defaultEncoder();
 	defaultEncLabel->setText(i18n("Default encoder: %1", encName));
 }
 
@@ -281,8 +332,13 @@ void KAudioCreator::showSettings(){
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), ripper, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), encoder, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), tracks, SLOT(loadSettings()));
-	connect(dialog->encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(showCurrentEncoder()));
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(setupRipMenu()));
+	//custom signals
+	connect(dialog->encoderConfigImp, SIGNAL(encoderChanged()), encoder, SLOT(loadSettings()));
+	connect(dialog->encoderConfigImp, SIGNAL(encoderChanged()), this, SLOT(showCurrentEncoder()));
+	connect(dialog->encoderConfigImp, SIGNAL(encoderChanged()), this, SLOT(setupRipMenu()));
+
 	dialog->show();
 }
 

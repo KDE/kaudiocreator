@@ -340,7 +340,7 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession( int encoder ) {
+void TracksImp::startSession( QString encoder ) {
 	QList<TracksItem *> selected = selectedTracks();
 
 	if( selected.isEmpty() )
@@ -377,7 +377,7 @@ void TracksImp::startSession( int encoder ) {
 			return;
 	}
 
-	if (encoder == -1)
+	if (encoder == QString())
 		encoder = Prefs::currentEncoder();
 	
 	Job *lastJob = 0;

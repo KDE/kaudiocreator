@@ -69,7 +69,7 @@ public:
 	// output from the processing.
 	QString output;
 
-	int encoder;
+	QString encoder;
 }; 
 
 #endif // JOB_H

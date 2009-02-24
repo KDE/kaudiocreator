@@ -4,4 +4,4 @@ File=kaudiocreator.kcfg
 ClassName=Prefs
 Singleton=true
 #CustomAdditions=true
-Mutators=lastUsedDevice,lastKnownEncoder
+Mutators=lastUsedDevice,defaultEncoder

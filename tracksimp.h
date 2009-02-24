@@ -94,7 +94,7 @@ public slots:
 	void loadSettings();
 
 	// Toolbar Buttons
-	void startSession( int encoder = -1 );
+	void startSession( QString encoder = QString() );
 	void editInformation();
 	void performCDDB();
 	void ejectDevice(const QString &deviceToEject);
