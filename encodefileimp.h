@@ -52,12 +52,21 @@ public:
   EncodeFileImp(QWidget* parent = 0);
 
 protected slots:
-  void addFiles();
-  void clearFileList();
-  void editFile(QTreeWidgetItem *, int);
-  void closeEditor();
-  // Encode button
-  void encode();
+	void addFiles();
+	void clearFileList();
+	void removeSelectedFiles();
+
+	void assignArtist();
+	void assignAlbum();
+	void assignComment();
+	void assignGenre();
+	void assignYear();
+	void assignEncoder();
+
+	void editFile(QTreeWidgetItem *, int);
+	void closeEditor();
+	// Encode button
+	void encode();
 
 private:
   // List of genres and i18n versions
