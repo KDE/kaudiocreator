@@ -8,6 +8,7 @@
   <Action name="eject" icon="media-eject"/>
   <Action name="edit_cd" icon="document-properties"/>
   <Action name="cddb_now" icon="media-optical-audio"/>
+  <Action name="encode_files" icon="drive-harddisk"/>
 </ActionProperties>
 
 <MenuBar>

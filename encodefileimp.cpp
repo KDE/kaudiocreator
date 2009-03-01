@@ -26,9 +26,12 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
+#include <knuminput.h>
 
 #include <QStringList>
 #include <QTreeWidget>
+#include <QDate>
+
 #include <kdebug.h>
 
 EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB::Genres()), editedItem(0), editedColumn(0)
@@ -39,16 +42,34 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 	setCaption(i18n("Encode Files"));
 	setButtons(User1|Close);
 	setButtonText(User1, i18n("&Add to queue"));
+	year->setMinimum(999);
+	year->setMaximum(QDate::currentDate().year());
+	year->setSpecialValueText(i18n("empty"));
 
-	//   genre->addItems(m_genres.i18nList());
+	genre->addItems(m_genres.i18nList());
 	//   // Specify to only accept wav files
 	//   file->setFilter("*.wav|Wav Files");
 	//   file->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
 
-	connect(fileList, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
+	QStringList encoderList = EncoderPrefs::prefsList(), encoderNamesList;
+	foreach (QString encoderName, encoderList) {
+		encoderNamesList << encoderName.remove("Encoder_");
+	}
+	encoder->addItems(encoderNamesList);
+
+	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
 	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(addFiles()));
 	connect(clearButton, SIGNAL(clicked()), this, SLOT(clearFileList()));
+	connect(removeSelectedButton, SIGNAL(clicked()), this, SLOT(removeSelectedFiles()));
+
+	connect(assignArtistButton, SIGNAL(clicked()), this, SLOT(assignArtist()));
+	connect(assignAlbumButton, SIGNAL(clicked()), this, SLOT(assignAlbum()));
+	connect(assignYearButton, SIGNAL(clicked()), this, SLOT(assignYear()));
+	connect(assignCommentButton, SIGNAL(clicked()), this, SLOT(assignComment()));
+	connect(assignGenreButton, SIGNAL(clicked()), this, SLOT(assignGenre()));
+	connect(assignEncoderButton, SIGNAL(clicked()), this, SLOT(assignEncoder()));
+
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(encode()));
 }
 
@@ -68,7 +89,20 @@ void EncodeFileImp::addFiles()
 		newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
 		newFile->setText(COLUMN_ARTIST, i18n("unknown"));
 		newFile->setText(COLUMN_ALBUM, i18n("unknown"));
+
+		KComboBox *genreBox = new KComboBox;
+		genreBox->addItems(m_genres.i18nList());
+		fileList->setItemWidget(newFile, COLUMN_GENRE, genreBox);
+
+		KIntNumInput *yearInput = new KIntNumInput;
+		yearInput->setMinimum(999);
+		yearInput->setMaximum(QDate::currentDate().year());
+		yearInput->setSpecialValueText(i18n("empty"));
+		yearInput->setSliderEnabled(true);
+		fileList->setItemWidget(newFile, COLUMN_YEAR, yearInput);
+
 		newFile->setText(COLUMN_TRACK, QString::number(fileList->topLevelItemCount()));
+
 		KComboBox *encoderBox = new KComboBox;
 		encoderBox->addItems(encoderNamesList);
 		encoderBox->setCurrentIndex(indexDefaultEncoder);
@@ -79,6 +113,58 @@ void EncodeFileImp::addFiles()
 void EncodeFileImp::clearFileList()
 {
 	fileList->clear();
+}
+
+void EncodeFileImp::removeSelectedFiles()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		fileList->takeTopLevelItem(fileList->indexOfTopLevelItem(item));
+	}
+}
+
+void EncodeFileImp::assignArtist()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		item->setText(COLUMN_ARTIST, artist->text());
+	}
+}
+
+void EncodeFileImp::assignAlbum()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		item->setText(COLUMN_ALBUM, album->text());
+	}
+}
+
+void EncodeFileImp::assignComment()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		item->setText(COLUMN_COMMENT, comment->text());
+	}
+}
+
+void EncodeFileImp::assignGenre()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_GENRE);
+		input->setCurrentIndex(genre->currentIndex());
+	}
+}
+
+void EncodeFileImp::assignYear()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		KIntNumInput *input = (KIntNumInput *)fileList->itemWidget(item, COLUMN_YEAR);
+		input->setValue(year->value());
+	}
+}
+
+void EncodeFileImp::assignEncoder()
+{
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_ENCODER);
+		input->setCurrentIndex(encoder->currentIndex());
+	}
 }
 
 /**
@@ -134,8 +220,9 @@ void EncodeFileImp::encode()
 		newJob->track_artist = (*it)->text(COLUMN_ARTIST);
 		newJob->album = (*it)->text(COLUMN_ALBUM);
 		newJob->track_comment = (*it)->text(COLUMN_COMMENT);
-		newJob->year = ((*it)->text(COLUMN_YEAR)).toInt();
-		KComboBox *box = (KComboBox*)fileList->itemWidget(*it, COLUMN_ENCODER);
+		KIntNumInput *input = (KIntNumInput *)fileList->itemWidget(*it, COLUMN_YEAR);
+		newJob->year = input->value();
+		KComboBox *box = (KComboBox *)fileList->itemWidget(*it, COLUMN_ENCODER);
 		newJob->encoder = box->currentText();
 		if(newJob->genre.isEmpty())
 		newJob->genre = "Pop";
