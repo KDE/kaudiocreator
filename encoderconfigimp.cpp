@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <krandom.h>
 
 /**
  * Constructor.
@@ -80,15 +81,16 @@ void EncoderConfigImp::setDefaultEncoderSlot()
 
 void EncoderConfigImp::addEncoderSlot()
 {
-	QString groupName("__new encoder__");
-	if(KConfigDialog::showDialog(groupName))
-		return;
+	QString groupName;
+	do {
+		groupName = QString("__new encoder__").append(KRandom::randomString(10));
+	 } while (KConfigDialog::exists(groupName));
  
 	KConfigDialog *dialog = new KConfigDialog(this, groupName, EncoderPrefs::prefs(groupName));
 	dialog->setFaceType(KPageDialog::Plain);
 	dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
 	dialog->setCaption(i18n("Configure Encoder"));
-	dialog->addPage(new EncoderEdit(0/*, groupName.toLatin1()*/), i18n("Encoder Configuration"), "package_settings");
+	dialog->addPage(new EncoderEdit(0), i18n("Encoder Configuration"), "package_settings");
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
 	dialog->show();
 }
@@ -96,17 +98,49 @@ void EncoderConfigImp::addEncoderSlot()
 
 void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 {
-	QString encoderName = (EncoderPrefs::prefs("__new encoder__"))->encoderName();
-	EncoderPrefs *encPrefs;
-	encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
-	encPrefs->setEncoderName(encoderName);
-	encPrefs->setCommandLine(EncoderPrefs::prefs("__new encoder__")->commandLine());
-	encPrefs->setExtension(EncoderPrefs::prefs("__new encoder__")->extension());
-	encPrefs->setPercentLength(EncoderPrefs::prefs("__new encoder__")->percentLength());
-	encPrefs->writeConfig();
+	QString encoderName = (EncoderPrefs::prefs(dialogName))->encoderName();
+	QString command = EncoderPrefs::prefs(dialogName)->commandLine();
+	QString extension = EncoderPrefs::prefs(dialogName)->extension();
+	int percentLength = EncoderPrefs::prefs(dialogName)->percentLength();
 	KConfigDialog::exists(dialogName)->deleteLater();
-	EncoderPrefs::deletePrefs("__new encoder__");
-	currentEncoderList->addItem(new QListWidgetItem(encoderName));
+	EncoderPrefs::deletePrefs(dialogName);
+
+	if (checkEncoderName(encoderName)) {
+		EncoderPrefs *encPrefs;
+		encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
+		encPrefs->setEncoderName(encoderName);
+		encPrefs->setCommandLine(command);
+		encPrefs->setExtension(extension);
+		encPrefs->setPercentLength(percentLength);
+		encPrefs->writeConfig();
+		currentEncoderList->addItem(new QListWidgetItem(encoderName));
+	} else {
+		KMessageBox::error(this, i18n("An encoder with that name already exists, please choose a different one."), i18n("Encoder exists already"), KMessageBox::PlainCaption);
+
+		// Would be easier but doesn't work for me?? GF
+		//KConfigDialog::showDialog(dialogName);
+
+		QString groupName;
+		do {
+			groupName = QString("__new encoder__").append(KRandom::randomString(10));
+		} while (KConfigDialog::exists(groupName));
+		EncoderPrefs *encPrefs;
+		encPrefs = EncoderPrefs::prefs(groupName);
+		encPrefs->setEncoderName(QString());
+		encPrefs->setCommandLine(command);
+		encPrefs->setExtension(extension);
+		encPrefs->setPercentLength(percentLength);
+
+		KConfigDialog *dialog = new KConfigDialog(this, groupName, EncoderPrefs::prefs(groupName));
+		dialog->setFaceType(KPageDialog::Plain);
+		dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
+		dialog->setCaption(i18n("Configure Encoder"));
+		EncoderEdit *page = new EncoderEdit(0);
+		dialog->addPage(page, i18n("Encoder Configuration"), "package_settings");
+		connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
+		dialog->show();
+		page->kcfg_encoderName->insert(encoderName);
+	}
 }
 
 /**
@@ -178,7 +212,7 @@ void EncoderConfigImp::configureEncoderSlot()
 	dialog->setFaceType(KPageDialog::Plain);
 	dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
 	dialog->setCaption(i18n("Configure Encoder"));
-	dialog->addPage(new EncoderEdit(0/*, groupName.toLatin1()*/), i18n("Encoder Configuration"), "package_settings");
+	dialog->addPage(new EncoderEdit(0), i18n("Encoder Configuration"), "package_settings");
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
 	dialog->show();
 }
@@ -222,6 +256,16 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 
 	Prefs::self()->writeConfig();
 	emit encoderChanged();
+}
+
+bool EncoderConfigImp::checkEncoderName(const QString &encoder)
+{
+	QStringList list = EncoderPrefs::prefsList();
+	if (list.contains(QString("Encoder_").append(encoder))) {
+		return false;
+	}
+
+	return true;
 }
 
 /**

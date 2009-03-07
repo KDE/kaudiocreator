@@ -51,6 +51,7 @@ private slots:
 	void saveNewEncoderSlot(const QString &);
 	void removeEncoderSlot();
 	void configureEncoderSlot();
+	bool checkEncoderName(const QString &);
 
 	void updateEncoder(const QString &);
 	void loadEncoderList();
