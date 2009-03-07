@@ -320,7 +320,7 @@ void KAudioCreator::configureNotifications() {
 void KAudioCreator::encodeFile(){
 	EncodeFileImp *file = new EncodeFileImp(this);
 	connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
-	file->show();
+	file->exec();
 }
 
 /**
@@ -341,7 +341,7 @@ void KAudioCreator::showSettings(){
 	connect(dialog->encoderConfigImp, SIGNAL(encoderChanged()), this, SLOT(showCurrentEncoder()));
 	connect(dialog->encoderConfigImp, SIGNAL(encoderChanged()), this, SLOT(setupRipMenu()));
 
-	dialog->show();
+	dialog->exec();
 }
 
 SettingsDialog::SettingsDialog(QWidget *parent, const char *name, KConfigSkeleton *config)
