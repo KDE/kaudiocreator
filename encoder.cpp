@@ -328,6 +328,7 @@ kDebug() << "jobDone" << endl;
 			{
 				showDebugBox = true;
 			}
+			emit( updateProgress( job->id, -1 ) );
 		}
 		else{
 			//qDebug("Must be done: %d", (process->exitStatus()));
