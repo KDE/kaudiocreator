@@ -25,6 +25,7 @@
 
 #include <QRegExp>
 #include <QDir>
+
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kurl.h>
@@ -32,6 +33,8 @@
 #include <knotification.h>
 #include <kinputdialog.h>
 #include <kshell.h>
+#include <kio/renamedialog.h>
+
 #include <kdebug.h>
 
 
@@ -189,17 +192,24 @@ void Encoder::tendToNewJobs()
 		// If the user wants anything regexp replaced do it now...
 		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
 	}
-	while ( QFile::exists( desiredFile ) ) {
-		bool ok;
-		QString text = KInputDialog::getText(
-			i18n("File Already Exists"), i18n("Sorry, file already exists. Please pick a new name:"),
-			desiredFile, &ok );
-		if ( ok && !text.isEmpty() )
-		 	desiredFile = text;
-		else {
-			emit jobsChanged();
-			updateProgress(job->id, -1);
-			return;
+
+	if (QFile::exists(desiredFile)) {
+		KUrl desiredFileUrl = KUrl::fromPath(desiredFile);
+		KIO::RenameDialog over(0, i18n("File Already Exists"), KUrl(), desiredFileUrl, KIO::M_OVERWRITE);
+		int result = over.exec();
+		switch (result) {
+			case KIO::R_OVERWRITE:
+				// keep the filename, overwriting existing files may need extra external encoder options, delete it here?
+				break;
+			case KIO::R_RENAME:
+				desiredFileUrl = over.newDestUrl();
+				desiredFile = desiredFileUrl.path();
+				break;
+			case KIO::R_CANCEL:
+			default:
+				emit jobsChanged();
+				updateProgress(job->id, -1);
+				return;
 		}
 	}
 
