@@ -19,6 +19,13 @@
 <address><email>sorry@no.mail</email>no mail, sorry.</address>
 </affiliation>
 </author>
+<author>
+<surname>Landert</surname>
+<firstname>René</firstname>
+<affiliation>
+<address><email>rene.landert@bluewin.ch</email>René Landert</address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
@@ -26,6 +33,10 @@
 <year>1999</year>
 <year>2007</year>
 <holder>alan</holder>
+</copyright>
+<copyright>
+<year>2009</year>
+<holder>René Landert</holder>
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
@@ -36,7 +47,7 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2007-01-15</date>
+<date>2009-03-07</date>
 <releaseinfo>1.13</releaseinfo>
 
 <abstract>
@@ -75,23 +86,20 @@ mp3, oggenc for oggs and flac (lossless compression) are supported out of the bo
 
 <para>What encoder/file format to use? The <link linkend="what_encoder">What encoder</link> chapter gives you a small introduction about encoders, audio quality and compression factors.</para>
 
-<para>One word to copy protected audio &CD;s: As already said, &kaudiocreator; uses cdparanoia to rip the audio data from the &CD;. This  program is not designed to crack any copy protection. So unless your &CD;/DVD-player firmware circumvents the protection, you will fail to rip protected audio &CD;s. In any case &kaudiocreator; itself cannot handle/work around any protection mechanism. Your bad, just don't buy copy protected audio &CD;s and the market power will dry out this idiocy!</para>
+<para>One word to copy protected audio &CD;s: As already said, &kaudiocreator; uses cdparanoia to rip the audio data from the &CD;. This  program is not designed to crack any copy protection. So unless your &CD;/DVD-player firmware circumvents the protection, you will fail to rip protected audio &CD;s. In any case &kaudiocreator; itself cannot handle or work around any protection mechanism. You better avoid buying copy protected audio &CD;s!</para>
 
-<para>Hey, still reading? Even if you just punched the help menu entry after opening the program the first time, not having a clue how to proceed from this somewhat empty screen (especially when no audio &CD; is already in the drive when starting the program) and the unusual short menu?</para>
-
-<para>Don't worry, this handbook will tell you how to rip a &CD; with this program. Beside the usual explanation of the programs commands/settings, there is a special section with a <link linkend="Example">full walkthrough example</link>. At first you will learn how to set the general settings. This includes your &CD; drive (device ID) the folder for temporary files, the main destination folder, in which a subfolder named according your choice from the &CD; parameters will be created for each &CD;, the encoder to use (like lame for mp3s or oggvorbis for oggs) and among other settings whether you want to use freedb to fetch the data for your &CD; from the Internet or (paranoia, not cdparanoia :-) ) whether you want to enter all data manually.</para>
+<para>This handbook will tell you how to rip a &CD; with this program. Beside the usual explanation of the programs commands and settings, there is a special section with a <link linkend="Example">full walkthrough example</link>. At first you will learn how to set the general settings. This includes your &CD; drive (device ID), the folder for temporary files, the main destination folder, in which a subfolder named according your choice from the &CD; parameters will be created for each &CD;, the encoder to use (like lame for mp3s or oggvorbis for oggs) and among other settings whether you want to use freedb to fetch the data for your &CD; from the Internet or whether you want to enter all data manually.</para>
 <para>While the setup has only to be done once (you can however tweak it as often as you like until you find a suitable setup for yourself), you will then learn the daily business of ripping a &CD; to the harddrive. It is (hopefully) then when you will understand and learn to like the lean approach of the interface you may have stumbled over at first.</para>
 
-<para>Last remark, &kaudiocreator; is a very flexible program which can invoke many encoders. Therefore this handbook (currently) does not cover every possible command and setting. Use it as a starting point to explore the program yourself if you feel the need for more than what is covered here. Usually more information about the programs/encoders (app-name) which are called by &kaudiocreator; can be obtained by opening a console and typing <command>man app-name</command>, <command>app-name -help</command>, <command>app-name --help</command> or <command>app-name -h</command>.</para>
+<para>Last remark, &kaudiocreator; is a very flexible program which can invoke many encoders. Therefore this handbook does not cover every possible command and setting. Use it as a starting point to explore the program yourself if you feel the need for more than what is covered here. Usually more information about the encoder programs (app-name) which are called by &kaudiocreator; can be obtained by opening a console and typing <command>man app-name</command>, <command>app-name -help</command>, <command>app-name --help</command> or <command>app-name -h</command>.</para>
 
-<para>And now: Have fun...</para>
 </chapter>
 
 <chapter id="using-kaudiocreator">
 <title>Using &kaudiocreator;</title>
 
 <para>
-What are we talking about? Well you read this, so you have most likely started the program already. It should look somehow like this:
+After the start of the program, it should look somehow like this screen:
 </para>
 <para>
 
@@ -108,14 +116,14 @@ What are we talking about? Well you read this, so you have most likely started t
 </screenshot>
 </para>
 <para>
-The main window after starting the program.
+This is the main window after starting the program.
 </para>
 
 <sect1 id="kaudiocreator-features">
 <title>A short list of &kaudiocreator; features</title>
 
 <itemizedlist>
-    <listitem><para>can encode to many formats - depends on what programs/encoders you have installed (mp3, ogg, flac &etc;)</para></listitem>
+    <listitem><para>can encode to many formats - depends on what encoder programs you have installed (mp3, ogg, flac &etc;)</para></listitem>
     <listitem><para>can fetch &CD; information from freedb via the Internet or you can work completely off line, entering everything manually</para></listitem>
     <listitem><para>can add tags to the created files - depends on what format you encode to</para></listitem>
     <listitem><para>set folder names and song names according free adjustable combinations of &CD; information</para></listitem>
@@ -290,9 +298,9 @@ The main window after starting the program.
 </chapter>
 
 <chapter id="what_encoder">
-<title>What encoder/file format to use - about audio quality, encoders and compression rates</title>
+<title>Choosing the encoder or file format</title>
 
-<para>What encoder to use?</para>
+<para>This chapter is about audio quality, encoders and compression rates and helps you to choose the right encoder</para>
 
 <para>If you don't want to lose any audio information you need a lossless audio format. Beside flac there are others like shorten or monkey, which may be available for your distro. The down side is that the compression rates will be low and hardly any commercial device can play these files.</para>
 
@@ -332,7 +340,7 @@ The main window after starting the program.
 
 <para>As mentioned before, mp3 and ogg both are audio formats with which you will lose sound information in the end. You cannot revert back to the original once you have the mp3/ogg files. You can create wav files of these and even burn them back onto a &CD; to play them on a &CD;-Player (while DVD-players usually can play both, wav and mp3, mostly not ogg) but the wav files generated from a mp3 or ogg will not be as good as the original. In reality, depending on your HiFi system and the compression rate you chose when creating the mp3s/oggs, you might not even hear a difference. However, if you do not want to lose any sound information but still want to compress your wave files, you should take a look into flac, shorten or monkey. But these encoders will not compress much better than the factor of 2.x .</para>
 
-<para>Until you are not the absolute enthusiast you will most likely decide between ogg and mp3. Go for</para>
+<para>In most cases you will decide between ogg and mp3. Go for</para>
 
 <para>ogg - if you want to listening to the music only via your computer or a computer based music server and/or you already have one of the few ogg playing players.</para>
 
@@ -340,15 +348,18 @@ The main window after starting the program.
 
 <para>Qualitywise both audio formats should be just fine, depending the compression rate you choose. For mp3 (and most likely ogg too) a bit rate of 128 kbps results in a compression rate of 11 compared to the original wav file which is stored on the &CD;. That might be good during travel but is not sufficient for a good home HiFi stereo system. 192 kbps is a good compromise even for you HiFi system in your living room. This would give you a compression rate of 7.3 .</para>
 
-<para>Already years ago experts were not able to differentiate a 256 kbps mp3 from the &CD; original and that was in a blind test with a HiFi system which you might never be able to effort. :-) That still will reduce the storage space of the original wav by the factor of 5.5 , quite nice. On most modern systems you can as well use variable bit rate. Here the encoder varies the bit rate depending the complexity of the music according to its psychoacoustic model (wow :-) ). The lame setting '--preset extreme' generates a file with a VBR (variable bit rate in opposite to CBR, constant bit rate) of 224 to 256 kbps, depending the complexity of the music. This will compress the original by a factor up to 6.3 and will play on nearly everything currently on the market.</para>
+<para>Already years ago experts were not able to differentiate a 256 kbps mp3 from the &CD; original and that was in a blind test with a HiFi system which you might never be able to effort. That still will reduce the storage space of the original wav by the factor of 5.5. On most modern systems you can as well use variable bit rate. Here the encoder varies the bit rate depending the complexity of the music according to its psychoacoustic model. The lame setting '--preset extreme' generates a file with a VBR (variable bit rate in opposite to CBR, constant bit rate) of 224 to 256 kbps, depending the complexity of the music. This will compress the original by a factor up to 6.3 and will play on nearly everything currently on the market.</para>
 
-<para>Unless you have an extremely expensive equipment (we are talking of thousands of Euros or US Dollars) and an extremely well trained ear, you will most likely not hear a difference to the maximum possible CBR rate of 320 kbps, just believe me. Even that would still result in a compression rate of 4.4 . By the way, the setting '--preset extreme' will in fact use 320 kbps for complex music parts while compressing less complex music much higher to achieve the average bit rate of 224 to 256 kbps.</para>
+<para>Unless you have an extremely expensive equipment (we are talking of thousands of Euros or US Dollars) and an extremely well trained ear, you will most likely not hear a difference to the maximum possible CBR rate of 320 kbps. Even that would still result in a compression rate of 4.4 . By the way, the setting '--preset extreme' will in fact use 320 kbps for complex music parts while compressing less complex music much higher to achieve the average bit rate of 224 to 256 kbps.</para>
 
 <para>A short list of audio quality parameters and resulting compression rates for lame (mp3s) (check lame --help for more):
  <itemizedlist>
-  <listitem><para>'--preset extreme' = 224 to 256 kbps VBR, compression rate up to 6.3 . Uses up to 320 kbps for complex music parts and way less for less complex parts of the song. Good enough for high quality home HiFi systems. First choice!</para></listitem>
-  <listitem><para>'--preset extreme -b 256 = 256 kbps CBR, compression rate around 5.5 . Uses always 256 kbps for complex and not so complex music parts of the song. Some older players need CBRs. Good enough for high quality home HiFi systems.</para></listitem>
+  <listitem><para>'--preset medium' = This preset should provide near transparency to most people on most music</para></listitem>
+  <listitem><para>'--preset standard' = This preset should generally be transparent to most people on most music and is already quite high in quality. Good enough for high quality home HiFi systems.</para></listitem>
+  <listitem><para>'--preset extreme' = 224 to 256 kbps VBR, compression rate up to 6.3 . Uses up to 320 kbps for complex music parts and way less for less complex parts of the song. Good enough for high quality home HiFi systems. This should be the preferred choice.</para></listitem>
+  <listitem><para>'--preset extreme -b 256' = 256 kbps CBR, compression rate around 5.5 . Uses always 256 kbps for complex and not so complex music parts of the song. Some older players need CBRs. Good enough for high quality home HiFi systems.</para></listitem>
   <listitem><para>'-h' = 128 kbps CBR joint stereo, compression rate about 11 . 128 kbps for all parts of the song. Good enough for kids music, portable players and, well, car stereos. Not good enough for better home Hifi systems, though.</para></listitem>
+  <listitem><para>'--preset insane' = 320kbps CBR. This preset will usually be overkill for most people and most situations, but if you must have the absolute highest quality with no regard to filesize, this is the way to go.</para></listitem>
  </itemizedlist>
 </para>
 
@@ -438,11 +449,11 @@ You are not alone with your wish to listen to your music independently of your a
 </qandaentry>
 <qandaentry>
 <question>
-<para>There isn't much working here, is it?</para>
+<para>The program ist not working, no encoded files are produced.</para>
 </question>
 <answer>
-<para>Ha, a thousand possible reasons for that. Check the &CD;/DVD drive device ID setting, access/read permission and whether you have installed cdparanoia and the audio encoder of your choice (lame for mp3s, oggenc for oggs, flac &etc;). Try invoking both programs from a command line in a terminal. That might give you a hint what's wrong.</para>
-<para>Oh, by any chance, you don't try to rip a copy protected audio &CD;, do you? Check the cover of the &CD;. This won't work! Your bad, buy unprotected audio &CD;s next time.</para>
+<para>Thereare many possible reasons for that. Check the &CD;/DVD drive device ID setting, access/read permission and whether you have installed cdparanoia and the audio encoder of your choice (lame for mp3s, oggenc for oggs, flac &etc;). Try invoking both programs from a command line in a terminal. That might give you a hint what's wrong.</para>
+<para>Check if you don't try to rip a copy protected audio &CD;. Verify it on the cover of the &CD;. This won't work!</para>
 <para>There is a chapter with a <link linkend="Example">full walkthrough example</link>. Even if you want to use different settings it might give you a hint how to proceed.</para>
 </answer>
 </qandaentry>
@@ -454,7 +465,7 @@ You are not alone with your wish to listen to your music independently of your a
 
 <title>Example from a first start over the basic setup to the first rip of a &CD;</title>
 
-<para>Read the complete handbook, understood everything and somehow still unsure what to do? Well, no problem, follow this step by step example and you will get enough information to adjust just those areas which will the program make do exactly what you want.</para>
+<para>Do you have read the complete handbook, understood everything and somehow still unsure what to do? Well, no problem, follow this step by step example and you will get enough information to adjust just those areas which will the program make do exactly what you want.</para>
 
 <para>In this example we will start the program for the first time, set everything up and rip our first &CD;. We will use lame '--preset extreme' to create mp3s with a VBR (Variable Bit Rate) of 224 to 256 kbps in average and ID3V1 tags.</para>
 
@@ -477,12 +488,10 @@ You are not alone with your wish to listen to your music independently of your a
  </itemizedlist>
 </para>
 
-<para>Here we go...</para>
-    
 <sect1 id="Basic-Setup">
  <title>E 1 Basic Setup</title>
 
-  <para>Here we set the encoder to use to compress the music (lame) and so the audio file format (mp3) as well as the resulting audio quality (--preset extreme => VBR 224 to 256 kbps). You define where the files will go and what structure will be used to store them. In set the program to use freedb to get the &CD; data via Internet as we are lazy.</para>
+  <para>Here we set the encoder to use to compress the music (lame) and so the audio file format (mp3) as well as the resulting audio quality (--preset extreme => VBR 224 to 256 kbps). You define where the files will go and what structure will be used to store them. We set the program to use freedb to get the &CD; data via Internet as we are lazy.</para>
 
   <para>While you can always change any of these settings, you will most likely don't change them every time you rip a &CD; once you found a convenient setup.</para>
 
@@ -513,8 +522,8 @@ You are not alone with your wish to listen to your music independently of your a
       <para>set <guilabel>Device:</guilabel> to <filename>/dev/cdrom</filename></para>
       <para>The device ID is parsed to the ripper program so it can read the &CD; data/songs.</para>
       <para>Often /dev/cdrom is a symlink to the actual device ID from your drive. If that does not work or you have more than one &CD;/DVD drive, you can give the exact device ID. If you can access your drive with other programs, take a look into /etc/fstab and try the device entries for &CD-ROM; and or DVD-drives listed there.</para>
-      <para>Nothing in there, no luck?</para>
-      <para>Running kernel 2.6:</para>
+      <para>If there is nothing in there, you first have to check the kernel version of your machine</para>
+      <para>Your machine is running kernel 2.6:</para>
       <para>If you happen to have one of the common &ATAPI; (or IDE) drives, with kernel 2.6 the device ID will range from /dev/hda to /dev/hdd. The master on channel 2 is a good starting point: that would be /dev/hdc. If your hard disks are all S-ATA, /dev/hda will probably do the trick. Native SCSI drives will start from /dev/sda unless you have S-ATA hard disks, which come first in the list, so depending on the number of disks the &CD;/DVD drive will start at /dev/sdb or /dev/sdc .</para>
       <para>Running kernel 2.4:</para>
       <para>&CD;/DVD drives are accessed via SCSI, so the devices start at /dev/sda .</para>
@@ -548,7 +557,7 @@ You are not alone with your wish to listen to your music independently of your a
         </screenshot>
       </para>
       <para>
-      The <guilabel>General Configuration</guilabel> tab. Not much to do here. You could define some additional formatting though. For our example, just enter/leave everything as shown in the screenshot.
+      The <guilabel>General Configuration</guilabel> tab. There is not much to do here. You could define some additional formatting though. For our example, just enter/leave everything as shown in the screenshot.
       </para>
     <para>Just check <guilabel>Prompt if information is not complete</guilabel>, so you will get informed when some infos for generating tags are not available.</para></listitem>
     </varlistentry>
@@ -581,7 +590,7 @@ You are not alone with your wish to listen to your music independently of your a
       </para>
       <para>The <guilabel>&CD; Configuration</guilabel> tab. Just check both entries. We are lazy and want that the &CD; data is fetched automatically via the Internet from a freedb server.</para>
       <para>Note, you need to be online when ripping the &CD; to be able to access the freedb server.</para>
-      <para>The second box is convenient, as if a &CD; entry is found, the &CD; will be ripped immediately. That's low risk, because if you are later unhappy with the database entry and the resulting director/file names or tag entries, you can easily change them. The folder and file names with konqueror->rename and the id3 tags with kid3, the &kde; tagger.</para>
+      <para>The second box is convenient, as if a &CD; entry is found, the &CD; will be ripped immediately. That's low risk, because if you are later unhappy with the database entry and the resulting directory/file names or tag entries, you can easily change them. The folder and file names with konqueror->rename and the id3 tags with kid3, the &kde; tagger.</para>
       <para>Further note apart from this example: If you want to enter everything manually uncheck the boxes and freedb will not be used. You can use freedb locally in off-line mode if you download the database before. However, this will be over 620 MB so think twice if it's worth it. To use freedb in off-line mode, you need to check the boxes here, at least the first one. The mode is set on the following tab.</para></listitem>
     </varlistentry>
    </variablelist>
@@ -614,13 +623,13 @@ You are not alone with your wish to listen to your music independently of your a
       <para>CDDB, that's freedb for us. The settings used for the data lookup, for retrieving the &CD; information from the freedb server via the Internet. How does the system know what data to get? Read <link linkend="freedb">the section about freedb</link>. Just set everything as in the screenshot.</para>
       <para>Short explanation:</para>
       <para>Mode: We haven't downloaded the database, so we want to work remote with the Internet server only.</para>
-      <para>CDDB Server: PLEASE (yes, I am shouting!) go to freedb.org and look up a mirror near you. This way the load is balanced between the mirror servers. However, as a first try, this setting should work, but PLEASE...</para>
+      <para>CDDB Server: Please go to freedb.org and look up a mirror near you. This way the load is balanced between the mirror servers. However, as a first try, this setting should work.</para>
       <para>Port and Transport: There are 2 combinations, which even the mirrors should understand.</para>
       <itemizedlist>
         <listitem><para>Port=80 and Transport=&HTTP;</para></listitem>
         <listitem><para>Port=8880 and Transport=CDDB</para></listitem>
       </itemizedlist>
-      <para>Both work equally regarding the server, but as many firewalls blocking Port 8880 by default, you may have better luck with Port 80, as the &HTTP; port is usually open for browsing the Internet.</para>
+      <para>Both work equally regarding the server, but as many firewalls are blocking Port 8880 by default, you may have better luck with Port 80, as the &HTTP; port is usually open for browsing the Internet.</para>
       </listitem>
     </varlistentry>
    </variablelist>
@@ -651,7 +660,7 @@ You are not alone with your wish to listen to your music independently of your a
         </screenshot>
       </para>
       <para>In this example we don't want to submit any &CD; data to the freedb server. Uncheck the first box and that should it be.</para>
-      <para>Note beside this example: If one day you find a &CD; which is not yet known by the freedb server or you find an error in a &CD; entry, you can submit the new/updated data. Check the first box at the top of this tab and then either use your mail address known to your system which &kaudiocreator; has already detected or check the lower radio button and enter a new mail address. Please read <link linkend="freedb">the section about freedb</link> first. You are asked to provide a mail address when submitting new or updated entries to the server and you should read the information on freedb.org about revision counts when sending updated information in case you found an error.</para></listitem>
+      <para>Note beside this example: If one day you find a &CD; which is not yet known by the freedb server or you find an error in a &CD; entry, you can submit the new or updated data. Check the first box at the top of this tab and then either use your mail address known to your system which &kaudiocreator; has already detected or check the lower radio button and enter a new mail address. Please read <link linkend="freedb">the section about freedb</link> first. You are asked to provide a mail address when submitting new or updated entries to the server and you should read the information on freedb.org about revision counts when sending updated information in case you found an error.</para></listitem>
     </varlistentry>
    </variablelist>
   </para>
@@ -683,7 +692,7 @@ You are not alone with your wish to listen to your music independently of your a
       <para>Just take the settings from the screenshot. (If you don't choose the standard folder <filename>/tmp</filename> make sure that the folder exists on your system!)</para>
       <para><guilabel>Beep after each rip is done</guilabel> : check this to get an audible feedback from the progress.</para>
       <para><guilabel>Number of tracks to rip at a time</guilabel> : sorry, cannot think of a reason to do more than one with one drive? Reading and encoding parallel? Just don't know, try for yourself.</para>
-      <para><guilabel>Auto-eject &CD; after last track is ripped</guilabel> : yeah well, so you know it's done. Do what you like.</para>
+      <para><guilabel>Auto-eject &CD; after last track is ripped</guilabel> : check this to eject the &CD; after the end of the process.</para>
       <para><guilabel>Use Custom temporary directory</guilabel> : If you check this, you can/must specify the path/folder where the wav files are ripped into. This might be handy if you only have space on another drive. If not checked the files will be created in your home folder. Remember this path if you want do something with the wav files themselves.</para>
       </listitem>
     </varlistentry>
@@ -729,33 +738,32 @@ You are not alone with your wish to listen to your music independently of your a
 	       </mediaobject>
         </screenshot>
       </para>
-      <para>Uff, enter everything as in the screenshot. The command entry is a bit long, so you may have to scroll a bit to the right.</para>
+      <para>Enter everything as in the screenshot. The command entry is a bit long, so you may have to scroll a bit to the right.</para>
       <para>The settings are more or less self explaining. There is a space between '--preset' and 'extreme' .</para>
-      <para>'--preset extreme' defines the audio quality of the mp3s. As mentioned before, this is a setting for very good audio quality, sufficient even for very good HiFi Stereo systems. The resulting bit rate is about 224 to 256 kbps in average. The achieved compression factor is 6.3 . A good balance between audio quality and space consumption. Storage space/memory is cheap these days, isn't it?</para>
+      <para>'--preset extreme' defines the audio quality of the mp3s. As mentioned before, this is a setting for very good audio quality, sufficient even for very good HiFi Stereo systems. The resulting bit rate is about 224 to 256 kbps in average. The achieved compression factor is 6.3 . A good balance between audio quality and space consumption.</para>
       <para>Note the '--id3v1-only' entry to limit the tag creation to V1/V1.1 tags. Delete it if you want id3v2 tags as well. kid3 is a very good id3 tagger for &kde; in case you want to manipulate tags later. %f and %o should be the internal variables for the input file (incl. the full path) and the output file name (incl. the full path).</para>
       <para>Click <guibutton>OK</guibutton> to close and apply the settings.</para>
       <para><guilabel>Encoded File Location</guilabel> - Back on the <guilabel>Encoder Configuration</guilabel> tab, we define here the destination folder including the folder name for the files from the ripped &CD;. These are variables which will be filled with the corresponding &CD; data everytime you rip a &CD;. The &CD; data can be entered manually or fetched via Internet (CDDB). As already configured in this example, we will use freedb and fetch the data automatically. Play with the Wizard, but in the end for this example the entry should be:</para>
       <para>'/usr/share/cd/%{albumartist} - %{albumtitle} - %{year}/%{number} - %{title}.%{extension}'</para>
       <para>Set the rest as in the screenshot. A few comments for future use outside this example:</para>
-      <para><guilabel>'Number of wav files to encode at a time</guilabel>: Why would one want to encode more than one wav file at the time, multi-processor machines? Well, these will come soon, so if you already have one when you read this, give it a try.</para>
-      <para><guilabel>Encoder Priority</guilabel>: for the fanatics, :-) , play with it, if you feel for it. Higher is faster I guess!</para>
+      <para><guilabel>'Number of wav files to encode at a time</guilabel>: If you have a dualcore or quadcore machine or even a multi-processor machine, you can try to encode more than one file at the same time.</para>
+      <para><guilabel>Encoder Priority</guilabel>: for the experts only, increase the priority for faster encoding.</para>
       </listitem>
     </varlistentry>
    </variablelist>
   </para>
 
-  <para>That's about it, we have just finished the basic setup of KAudioCreator. This configuration is used as the default for every &CD; rip. If you have chosen your music organization structure wise you will never have to change it again. ;-)</para>
+  <para>That's about it, we have just finished the basic setup of KAudioCreator. This configuration is used as the default for every &CD; rip. If you have chosen your music organization structure wise you will never have to change it again.</para>
 
 </sect1>
 
 <sect1 id="Ripping-a-CD">
  <title>E 2 Ripping a &CD;</title>
 
-  <para>Ready to rumble! This section will describe the process of ripping a &CD; onto the harddrive. We will create mp3 files. The folder structure, the way the music is organized on the hard disk, was described and setup in the previous section. So connect to the Internet now, as we are lazy and want to fetch the &CD; data from freedb! The process described in this section has to be repeated for ever &CD; you want to rip.</para>
+  <para>This section will describe the process of ripping a &CD; onto the harddrive. We will create mp3 files. The folder structure, the way the music is organized on the hard disk, was described and setup in the previous section. So connect to the Internet now, as we are lazy and want to fetch the &CD; data from freedb! The process described in this section has to be repeated for ever &CD; you want to rip.</para>
   <para>As we use a &CD;, which is not already listed in freedb, the screenshots might look a bit different as the ones you will encounter for a &CD; which could successfully fetched from freedb. Therefore you will learn to enter the &CD; data manually rather than fetching it from the Internet but comments will be made to point out the differences.</para>
-  <para>Don't try too hard to look for the &CD; we use in this example. It's a 'special' handbook-writer edition. ;-) Sadly these days, you never know...</para>
-  <para>Here we go...</para>
-
+  <para>Don't try too hard to look for the &CD; we use in this example. It's a 'special' handbook-writer edition.</para>
+  
   <para>
    <variablelist>
     <varlistentry>
@@ -932,8 +940,8 @@ You are not alone with your wish to listen to your music independently of your a
 	       </mediaobject>
         </screenshot>
       </para>
-      <para>Aarrrrgh! Sh*t ! Suddenly this. RTFM (read the f***ing manual)! I wrote it! Why, I am incapable! That's what you'll see, when you try to encode with/invoke an encoder which you haven't installed yet. Tracks that could not successfully encoded will get marked with a red 'x' on the job list, too.</para>
-      <para>By the way, see how I cheated? The path for the tmp file and the destination path is not what we set up here in the example. Shame over me, but you have checked that you have write access to both, the folder for the temporary files and the destination folder, haven't you? ;-)</para>
+      <para>You will see this error message when you try to encode with/invoke an encoder which you haven't installed yet. Tracks that could not successfully encoded will get marked with a red 'x' on the job list, too.</para>
+      <para>By the way, the path for the tmp file and the destination path is not what we set up here in the example. So have you checked that you have write access to both, the folder for the temporary files and the destination folder? ;-)</para>
       <para>Let's do that again...</para>
 
       <para>
@@ -948,9 +956,9 @@ You are not alone with your wish to listen to your music independently of your a
 	       </mediaobject>
         </screenshot>
       </para>
-      <para>Hm, now it becomes clear, why the error occurred just after the rip of the first song was finished.</para>
-      <para>See that? Job one, ripping the first track, is gone (finished) but we have a new entry: Job 4 which is the encoding of track 1 to mp3. So ripping and encoding is done parallel. See the status message on the bottom of the window, it's enhanced now.</para>
-      <para>I could not find a configuration setting to suppress this behavior. The only thing that seems to be configurable is the number of parallel rips and encodings. Wow, do even more jobs parallel? I don't know, what this means on lower end machines? The AMD64 used here didn't seem to have a problem ripping and encoding a track (two different though) at once.</para>
+      <para>Now it becomes clear, why the error occurred just after the rip of the first song was finished.</para>
+      <para>Job one, ripping the first track, is gone (finished) but we have a new entry: Job 4 which is the encoding of track 1 to mp3. So ripping and encoding is done parallel. See the status message on the bottom of the window, it's enhanced now.</para>
+      <para>I could not find a configuration setting to suppress this behavior. The only thing that seems to be configurable is the number of parallel rips and encodings. I don't know, what this means on lower end machines. The AMD64 used here didn't seem to have a problem ripping and encoding a track (two different though) at once.</para>
 
       <para>
         <screenshot>
@@ -964,7 +972,7 @@ You are not alone with your wish to listen to your music independently of your a
 	       </mediaobject>
         </screenshot>
       </para>
-      <para>Well, the cycling goes on. Now we are ripping the last track while encoding another one and having one in the encoder queue. After the last track is encoded, a small pop up message is shown on the upper left of the window for a short time.</para>
+      <para>Now we are ripping the last track while encoding another one and having one in the encoder queue. After the last track is encoded, a small pop up message is shown on the upper left of the window for a short time.</para>
       <para>That's it, ready for the next &CD;. Enjoy listening to your music...</para>
       </listitem>
     </varlistentry>
@@ -988,9 +996,6 @@ Program copyright 2003-2007 Benjamin Meyer <email>ben+kaudiocreator@meyerhome.ne
 </para>
 <para>
 Contributors:
-<itemizedlist>
- <listitem><para>A one man show so far!<email>nope@no.mail</email></para></listitem>
-</itemizedlist>
 </para>
 
 <para>
@@ -998,9 +1003,6 @@ Documentation copyright 2005-2007 alan <email>sorry@no.mail</email>
 </para>
 <para>
 Documentation update 2009 Rene Landert <email>rene.landert@bluewin.ch</email>
-</para>
-<para>
-As a bad example: sorry no mail. I cannot maintain this handbook. It is thought as a first starter for a handbook for &kaudiocreator;. Whoever may think of something useful to add or change, may do so. Well, at least after contacting the author first, I assume. And if you read this, he left this section in and therefore agrees to this proposal.
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -1033,8 +1035,6 @@ As a bad example: sorry no mail. I cannot maintain this handbook. It is thought 
 
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
-
-<para>Funny, if you managed to checkout the source from the &kde; SVN you won't need this info here but...</para>
 
 &install.compile.documentation;
 
