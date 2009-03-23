@@ -237,7 +237,7 @@ void Encoder::tendToNewJobs()
 		command = niceProg + " -n " + QString::number(niceLevel) + " " + command;
 
 	command = job->replaceSpecialChars(command, true, map);
-	updateProgress(job->id, 1);
+	updateProgress(job->id, 0);
 	job->errorString = command;
 
 	EncodeProcess *proc = new EncodeProcess();
@@ -314,14 +314,14 @@ kDebug() << "jobDone" << endl;
 	//qDebug("Process exited with status: %d", process->exitStatus());
 
 	Job *job = jobs[(KProcess *)process];
+	EncoderPrefs *encPrefs = loadEncoder(job->encoder);
 	threads.removeAll((KProcess *)process);
 	jobs.remove((KProcess *)process);
 	bool showDebugBox = false;
 	if ( process->exitCode() == 127 ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
 		emit(updateProgress(job->id, -1));
-	}
-	else if ( QFile::exists(job->newLocation) ) {
+	} else if (encPrefs->checkOutput() && QFile::exists(job->newLocation)) {
 		// fyi segfaults return 136
 		if ( process->exitCode() != 0 ) {
 			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
@@ -329,17 +329,19 @@ kDebug() << "jobDone" << endl;
 				showDebugBox = true;
 			}
 			emit( updateProgress( job->id, -1 ) );
-		}
-		else{
+		} else {
 			//qDebug("Must be done: %d", (process->exitStatus()));
 			emit(updateProgress(job->id, 100));
 			KNotification::event("track encoded");
 			if ( job->lastSongInAlbum)
 				KNotification::event("cd encoded");
 		}
-	}
-	else
-	{
+	} else if (!encPrefs->checkOutput()) {
+		emit(updateProgress(job->id, 100));
+		KNotification::event("track encoded");
+		if ( job->lastSongInAlbum)
+			KNotification::event("cd encoded");
+	} else {
 		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
 		{
 			showDebugBox = true;

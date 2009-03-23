@@ -27,10 +27,14 @@
 #include <kfiledialog.h>
 #include <kcombobox.h>
 #include <knuminput.h>
+#include <kmimetype.h>
 
 #include <QStringList>
 #include <QTreeWidget>
 #include <QDate>
+#include <QSet>
+#include <QDir>
+#include <QDirIterator>
 
 #include <kdebug.h>
 
@@ -40,26 +44,23 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 	setupUi(w);
 	setMainWidget(w);
 	setCaption(i18n("Encode Files"));
-	setButtons(User1|Close);
+	setButtons(User1|User2|Close);
 	setButtonText(User1, i18n("&Add to queue"));
-	year->setMinimum(999);
-	year->setMaximum(QDate::currentDate().year());
-	year->setSpecialValueText(i18n("empty"));
+	setButtonText(User2, i18n("&Add to queue and close"));
+	yearInput->setMinimum(999);
+	yearInput->setMaximum(QDate::currentDate().year());
+	yearInput->setSpecialValueText(i18n("empty"));
 
-	genre->addItems(m_genres.i18nList());
-	//   // Specify to only accept wav files
-	//   file->setFilter("*.wav|Wav Files");
-	//   file->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
+	genreBox->addItems(m_genres.i18nList());
 
-	QStringList encoderList = EncoderPrefs::prefsList(), encoderNamesList;
-	foreach (QString encoderName, encoderList) {
-		encoderNamesList << encoderName.remove("Encoder_");
-	}
-	encoder->addItems(encoderNamesList);
+	setupFilter();
+	setupEncoderMap();
 
 	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
-	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(addFiles()));
+	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(setupEncoderBox()));
+	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(openFiles()));
+	connect(addDirectoryButton, SIGNAL(clicked()), this, SLOT(openDirectory()));
 	connect(clearButton, SIGNAL(clicked()), this, SLOT(clearFileList()));
 	connect(removeSelectedButton, SIGNAL(clicked()), this, SLOT(removeSelectedFiles()));
 
@@ -71,42 +72,139 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 	connect(assignEncoderButton, SIGNAL(clicked()), this, SLOT(assignEncoder()));
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(encode()));
+	connect(this, SIGNAL(user2Clicked()), this, SLOT(encodeAndClose()));
 }
 
-void EncodeFileImp::addFiles()
+/**
+ * setup the filter for openFilesDialog
+ */
+void EncodeFileImp::setupFilter()
 {
-	QString defaultEncoder = Prefs::defaultEncoder();
-	QStringList encoderList = EncoderPrefs::prefsList(), encoderNamesList;
-	foreach (QString encoderName, encoderList) {
-		encoderNamesList << encoderName.remove("Encoder_");
+	dirFilter.clear();
+	QString filter;
+	QStringList supportedInputTypes = Prefs::inputTypesList();
+	// one for every supported filetype
+	foreach (QString type, supportedInputTypes) {
+		filter.append("*." + type + " ");
+		dirFilter << QString("*." + type);
 	}
-	int indexDefaultEncoder = encoderNamesList.indexOf(defaultEncoder);
+	filter.remove(filter.length()-1, 1);
+	filter.append("|All supported types\n");
+	// and each filetype separate
+	foreach (QString type, supportedInputTypes) {
+		filter.append("*." + type + "\n");
+	}
+	filter.remove(filter.length()-1, 1);
+	fileTypeFilter = filter;
+}
 
-	QStringList files = KFileDialog::getOpenFileNames(KUrl(), "*.wav|Wav Files", this, QString());
-	foreach (QString track, files) {
+/**
+ * setup a map for filetypes and encoders
+ */
+void EncodeFileImp::setupEncoderMap()
+{
+	encoderMap.clear();
+	foreach (QString type, Prefs::inputTypesList()) {
+		foreach (QString encoder, EncoderPrefs::prefsList()) {
+			QStringList encoderInputTypesList = (EncoderPrefs::prefs(encoder)->inputTypes()).split(",", QString::SkipEmptyParts);
+			if (encoderInputTypesList.contains(type)) {
+				if (encoderMap.contains(type)) {
+					(encoderMap[type]).append(encoder.remove("Encoder_"));
+				} else {
+					QStringList enc(encoder.remove("Encoder_"));
+					encoderMap[type] = enc;
+				}
+			}
+		}
+	}
+}
+
+/**
+ * setup/update encoderBox
+ */
+void EncodeFileImp::setupEncoderBox()
+{
+	QStringList fileTypeList, encoders;
+	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
+		QString mimeType = KMimeType::extractKnownExtension(item->text(COLUMN_FILE));
+		fileTypeList << mimeType;
+		encoders << encoderMap[mimeType];
+	}
+
+	foreach (QString enc, encoders) {
+		foreach (QString type, fileTypeList) {
+			if (!(encoderMap[type]).contains(enc))
+				encoders.removeAll(enc);
+		}
+	}
+
+	QSet<QString> encodersSet = encoders.toSet(); // remove duplicates
+	encoders = encoders.fromSet(encodersSet);
+	encoders.sort();
+	encoderBox->clear();
+	encoderBox->addItems(encoders);
+}
+
+void EncodeFileImp::openFiles()
+{
+	QStringList files = KFileDialog::getOpenFileNames(KUrl(), fileTypeFilter, this, QString());
+	addFilesToList(files);
+}
+
+void EncodeFileImp::openDirectory()
+{
+	QStringList files;
+	QString dirPath = KFileDialog::getExistingDirectory(KUrl(), this, QString());
+	QDir dir(dirPath);
+	
+	QStringList entries = dir.entryList(dirFilter, QDir::Files);
+ 	foreach (QString file, entries) {
+ 		files << dir.absoluteFilePath(file);
+ 	}
+
+	// go through the subdirectories, this is really slow for a lot of files
+	if (!(dir.entryList(QDir::AllDirs|QDir::NoDotAndDotDot)).isEmpty()) {
+		QDirIterator it(dirPath, QDir::AllDirs|QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+		while (it.hasNext()) {
+			dir = QDir(it.next());
+			entries = dir.entryList(dirFilter, QDir::Files);
+			foreach (QString file, entries) {
+				files << dir.absoluteFilePath(file);
+			}
+		}
+	}
+
+	addFilesToList(files);
+}
+
+void EncodeFileImp::addFilesToList(const QStringList &list)
+{
+	foreach (QString track, list) {
 		QTreeWidgetItem *newFile = new QTreeWidgetItem(QStringList(track));
 		fileList->addTopLevelItem(newFile);
 		newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
 		newFile->setText(COLUMN_ARTIST, i18n("unknown"));
 		newFile->setText(COLUMN_ALBUM, i18n("unknown"));
 
-		KComboBox *genreBox = new KComboBox;
-		genreBox->addItems(m_genres.i18nList());
-		fileList->setItemWidget(newFile, COLUMN_GENRE, genreBox);
+		KComboBox *itemGenreBox = new KComboBox;
+		itemGenreBox->addItems(m_genres.i18nList());
+		fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
 
-		KIntNumInput *yearInput = new KIntNumInput;
-		yearInput->setMinimum(999);
-		yearInput->setMaximum(QDate::currentDate().year());
-		yearInput->setSpecialValueText(i18n("empty"));
-		yearInput->setSliderEnabled(true);
-		fileList->setItemWidget(newFile, COLUMN_YEAR, yearInput);
+		KIntNumInput *itemYearInput = new KIntNumInput;
+		itemYearInput->setMinimum(999);
+		itemYearInput->setMaximum(QDate::currentDate().year());
+		itemYearInput->setSpecialValueText(i18n("empty"));
+		itemYearInput->setSliderEnabled(true);
+		fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
 
 		newFile->setText(COLUMN_TRACK, QString::number(fileList->topLevelItemCount()));
 
-		KComboBox *encoderBox = new KComboBox;
-		encoderBox->addItems(encoderNamesList);
-		encoderBox->setCurrentIndex(indexDefaultEncoder);
-		fileList->setItemWidget(newFile, COLUMN_ENCODER, encoderBox);
+		KComboBox *itemEncoderBox = new KComboBox;
+		QString extension = KMimeType::extractKnownExtension(track);
+		if (encoderMap.contains(extension)) {
+			itemEncoderBox->addItems(encoderMap[extension]);
+		}
+		fileList->setItemWidget(newFile, COLUMN_ENCODER, itemEncoderBox);
 	}
 }
 
@@ -125,21 +223,21 @@ void EncodeFileImp::removeSelectedFiles()
 void EncodeFileImp::assignArtist()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_ARTIST, artist->text());
+		item->setText(COLUMN_ARTIST, artistEdit->text());
 	}
 }
 
 void EncodeFileImp::assignAlbum()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_ALBUM, album->text());
+		item->setText(COLUMN_ALBUM, albumEdit->text());
 	}
 }
 
 void EncodeFileImp::assignComment()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_COMMENT, comment->text());
+		item->setText(COLUMN_COMMENT, commentEdit->text());
 	}
 }
 
@@ -147,7 +245,7 @@ void EncodeFileImp::assignGenre()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
 		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_GENRE);
-		input->setCurrentIndex(genre->currentIndex());
+		input->setCurrentIndex(genreBox->currentIndex());
 	}
 }
 
@@ -155,7 +253,7 @@ void EncodeFileImp::assignYear()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
 		KIntNumInput *input = (KIntNumInput *)fileList->itemWidget(item, COLUMN_YEAR);
-		input->setValue(year->value());
+		input->setValue(yearInput->value());
 	}
 }
 
@@ -163,7 +261,8 @@ void EncodeFileImp::assignEncoder()
 {
 	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
 		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_ENCODER);
-		input->setCurrentIndex(encoder->currentIndex());
+		int index = input->findText(encoderBox->currentText());
+		input->setCurrentIndex(index);
 	}
 }
 
@@ -241,5 +340,10 @@ void EncodeFileImp::encode()
 	i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
+void EncodeFileImp::encodeAndClose()
+{
+	encode();
+	accept();
+}
 
 #include "encodefileimp.moc"

@@ -221,6 +221,8 @@ void KAudioCreator::checkSettings()
 		encPrefs->writeConfig();
 
 		Prefs::setDefaultEncoder("WAV");
+		Prefs::setInputTypesList(QStringList("wav"));
+		Prefs::self()->writeConfig();
 	}
 
 }

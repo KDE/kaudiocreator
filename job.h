@@ -65,6 +65,7 @@ public:
 
 	// If the file should be removed on errorr or when finished ripping
 	bool removeTempFile;
+	bool checkOutput;
 
 	// output from the processing.
 	QString output;

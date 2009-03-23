@@ -5,81 +5,112 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>433</height>
+    <width>499</width>
+    <height>533</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item rowspan="3" row="0" column="0" >
-    <widget class="KListWidget" name="currentEncoderList" />
-   </item>
-   <item row="0" column="1" >
-    <widget class="QPushButton" name="addEncoder" >
-     <property name="toolTip" >
-      <string>Add a new encoder configuration.</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Add...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="removeEncoder" >
-     <property name="toolTip" >
-      <string>Remove encoder from list.</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Remove</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QPushButton" name="configureEncoder" >
-     <property name="toolTip" >
-      <string>Set encoder details.</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Configure...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <layout class="QHBoxLayout" >
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" name="verticalLayout_2" >
      <item>
-      <widget class="QLabel" name="currentEncoderText" >
-       <property name="text" >
-        <string>Current default encoder:</string>
-       </property>
-       <property name="wordWrap" >
-        <bool>false</bool>
-       </property>
-      </widget>
+      <widget class="KListWidget" name="currentEncoderList" />
      </item>
      <item>
-      <widget class="KLineEdit" name="kcfg_defaultEncoder" >
-       <property name="cursor" >
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="focusPolicy" >
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="contextMenuPolicy" >
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-       <property name="acceptDrops" >
-        <bool>false</bool>
-       </property>
-       <property name="readOnly" >
-        <bool>true</bool>
-       </property>
-       <property name="urlDropsEnabled" >
-        <bool>false</bool>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" >
+       <item>
+        <widget class="QLabel" name="currentEncoderText" >
+         <property name="text" >
+          <string>Current default encoder:</string>
+         </property>
+         <property name="wordWrap" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KLineEdit" name="kcfg_defaultEncoder" >
+         <property name="cursor" >
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="focusPolicy" >
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="contextMenuPolicy" >
+          <enum>Qt::NoContextMenu</enum>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+         <property name="urlDropsEnabled" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
-   <item row="4" column="0" colspan="2" >
+   <item row="0" column="1" >
+    <layout class="QVBoxLayout" name="verticalLayout" >
+     <item>
+      <widget class="QPushButton" name="addEncoder" >
+       <property name="toolTip" >
+        <string>Add a new encoder configuration.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Add...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeEncoder" >
+       <property name="toolTip" >
+        <string>Remove encoder from list.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Remove</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="configureEncoder" >
+       <property name="toolTip" >
+        <string>Set encoder details.</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Configure...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="defaultButton" >
+       <property name="text" >
+        <string>Set as default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer" >
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Minimum</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>20</width>
+         <height>94</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" colspan="2" >
     <widget class="Line" name="line1" >
      <property name="frameShape" >
       <enum>QFrame::HLine</enum>
@@ -89,7 +120,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2" >
+   <item row="2" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
       <string>Encoded File Location</string>
@@ -118,7 +149,7 @@
      </layout>
     </widget>
    </item>
-   <item row="6" column="0" >
+   <item row="3" column="0" >
     <widget class="QLabel" name="TextLabel1_2" >
      <property name="text" >
       <string>&amp;Number of wav files to encode at a time:</string>
@@ -131,14 +162,14 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1" >
+   <item row="3" column="1" >
     <widget class="QSpinBox" name="kcfg_numberOfCpus" >
      <property name="minimum" >
       <number>1</number>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2" >
+   <item row="4" column="0" colspan="2" >
     <widget class="QGroupBox" name="niceLevelBox" >
      <property name="enabled" >
       <bool>true</bool>
@@ -254,7 +285,7 @@
      </layout>
     </widget>
    </item>
-   <item row="8" column="0" >
+   <item row="5" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -269,13 +300,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QPushButton" name="defaultButton" >
-     <property name="text" >
-      <string>Set as default</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

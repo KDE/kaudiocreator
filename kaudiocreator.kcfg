@@ -59,9 +59,8 @@
       <label>Current default encoder</label>
       <default code="true">QString()</default>
     </entry>
-    <entry name="lastKnownEncoder" type="Int">
-      <label>Last encoder in the list</label>
-      <default>0</default>
+    <entry name="inputTypesList" type="StringList">
+      <label>List of available input types</label>
     </entry>
     <entry name="numberOfCpus" type="Int">
       <label>Number of files to encode at a time</label>

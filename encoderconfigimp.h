@@ -20,8 +20,6 @@
 #ifndef ENCODERCONFIGIMP_H
 #define ENCODERCONFIGIMP_H
 
-#include <QHash>
-
 #include "ui_encoderconfig.h"
 #include "ui_encoderedit.h"
 #include "encoder_prefs.h"
@@ -56,7 +54,7 @@ private slots:
 	void updateEncoder(const QString &);
 	void loadEncoderList();
 	void setDefaultEncoderSlot();
-
+	void createInputTypesList();
 	void encoderWizard();
 
 signals:

@@ -52,7 +52,8 @@ public:
   EncodeFileImp(QWidget* parent = 0);
 
 protected slots:
-	void addFiles();
+	void openFiles();
+	void openDirectory();
 	void clearFileList();
 	void removeSelectedFiles();
 
@@ -63,16 +64,25 @@ protected slots:
 	void assignYear();
 	void assignEncoder();
 
+	void setupEncoderBox();
 	void editFile(QTreeWidgetItem *, int);
 	void closeEditor();
 	// Encode button
 	void encode();
+	void encodeAndClose();
 
 private:
-  // List of genres and i18n versions
-  KCDDB::Genres m_genres;
-  QTreeWidgetItem *editedItem;
-  int editedColumn;
+	// List of genres and i18n versions
+	KCDDB::Genres m_genres;
+	QTreeWidgetItem *editedItem;
+	int editedColumn;
+	QString fileTypeFilter;
+	QStringList dirFilter;
+	QMap<QString, QStringList> encoderMap;
+
+	void setupFilter();
+	void setupEncoderMap();
+	void addFilesToList(const QStringList &);
 };
 
 #endif // ENCODEFILEIMP_H

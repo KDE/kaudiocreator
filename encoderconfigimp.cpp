@@ -31,6 +31,9 @@
 #include <kconfig.h>
 #include <krandom.h>
 
+#include <QSet>
+#include <QHash>
+
 /**
  * Constructor.
  */
@@ -79,6 +82,23 @@ void EncoderConfigImp::setDefaultEncoderSlot()
 		kcfg_defaultEncoder->setText((currentEncoderList->currentItem())->text());
 }
 
+void EncoderConfigImp::createInputTypesList()
+{
+	QStringList encoderInputTypesList, inputTypesList;
+	QStringList encoderList = EncoderPrefs::prefsList();
+	foreach (QString encoder, encoderList) {
+		encoderInputTypesList = (EncoderPrefs::prefs(encoder)->inputTypes()).split(",", QString::SkipEmptyParts);
+		foreach (QString inputType, encoderInputTypesList) {
+			inputTypesList << inputType.trimmed();
+		}
+	}
+
+	QSet<QString> inputTypesSet = inputTypesList.toSet(); // remove duplicates
+	inputTypesList = inputTypesList.fromSet(inputTypesSet);
+	inputTypesList.sort();
+	Prefs::setInputTypesList(inputTypesList);
+}
+
 void EncoderConfigImp::addEncoderSlot()
 {
 	QString groupName;
@@ -101,7 +121,9 @@ void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 	QString encoderName = (EncoderPrefs::prefs(dialogName))->encoderName();
 	QString command = EncoderPrefs::prefs(dialogName)->commandLine();
 	QString extension = EncoderPrefs::prefs(dialogName)->extension();
+	QString inputTypes = EncoderPrefs::prefs(dialogName)->inputTypes();
 	int percentLength = EncoderPrefs::prefs(dialogName)->percentLength();
+	bool checkOutput = EncoderPrefs::prefs(dialogName)->checkOutput();
 	KConfigDialog::exists(dialogName)->deleteLater();
 	EncoderPrefs::deletePrefs(dialogName);
 
@@ -111,9 +133,13 @@ void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 		encPrefs->setEncoderName(encoderName);
 		encPrefs->setCommandLine(command);
 		encPrefs->setExtension(extension);
+		encPrefs->setInputTypes(inputTypes);
 		encPrefs->setPercentLength(percentLength);
+		encPrefs->setCheckOutput(checkOutput);
 		encPrefs->writeConfig();
 		currentEncoderList->addItem(new QListWidgetItem(encoderName));
+		createInputTypesList();
+		Prefs::self()->writeConfig();
 	} else {
 		KMessageBox::error(this, i18n("An encoder with that name already exists, please choose a different one."), i18n("Encoder exists already"), KMessageBox::PlainCaption);
 
@@ -124,12 +150,15 @@ void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 		do {
 			groupName = QString("__new encoder__").append(KRandom::randomString(10));
 		} while (KConfigDialog::exists(groupName));
+
 		EncoderPrefs *encPrefs;
 		encPrefs = EncoderPrefs::prefs(groupName);
 		encPrefs->setEncoderName(QString());
 		encPrefs->setCommandLine(command);
 		encPrefs->setExtension(extension);
+		encPrefs->setInputTypes(inputTypes);
 		encPrefs->setPercentLength(percentLength);
+		encPrefs->setCheckOutput(checkOutput);
 
 		KConfigDialog *dialog = new KConfigDialog(this, groupName, EncoderPrefs::prefs(groupName));
 		dialog->setFaceType(KPageDialog::Plain);
@@ -180,6 +209,7 @@ void EncoderConfigImp::removeEncoderSlot()
 		Prefs::setDefaultEncoder((currentEncoderList->currentItem())->text());
 	}
 
+	createInputTypesList();
 	Prefs::self()->writeConfig();
 	kcfg_defaultEncoder->setText(Prefs::defaultEncoder());
 	emit encoderChanged();
@@ -238,6 +268,7 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 		encPrefs->setCommandLine((EncoderPrefs::prefs(groupName))->commandLine());
 		encPrefs->setExtension((EncoderPrefs::prefs(groupName))->extension());
 		encPrefs->setPercentLength((EncoderPrefs::prefs(groupName))->percentLength());
+		encPrefs->setCheckOutput((EncoderPrefs::prefs(groupName))->checkOutput());
 		encPrefs->writeConfig();
 
 		//delete old encoder
@@ -254,6 +285,7 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 		kcfg_defaultEncoder->setText(Prefs::defaultEncoder());
 	}
 
+	createInputTypesList();
 	Prefs::self()->writeConfig();
 	emit encoderChanged();
 }

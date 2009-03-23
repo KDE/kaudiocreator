@@ -132,30 +132,37 @@ void JobQueImp::updateProgress(int id, int progress)
 	}
 
 	// Only update the % if it changed.
-	if (currentItem->percentDone == progress)
+	if (progress > 0 && currentItem->percentDone == progress)
 		return;
 
 	currentItem->percentDone = progress;
 	QProgressBar *pg = (QProgressBar *)todoQue->itemWidget(currentItem, HEADER_PROGRESS);
-	pg->setValue(progress);
-///TODO?	currentItem->repaint();
 
 	// Update the icon if needed
-	if (progress > 0 && progress < 100 && !currentItem->progressing ){
-		currentItem->setIcon(ICON_LOC, KIcon("system-run"));
-		currentItem->progressing = true;
-	}
-	else if(progress == -1){
+	if (progress > 0 && progress < 100) {
+		if (pg->maximum() == 0) pg->setMaximum(100);
+		pg->setValue(progress);
+	} else if (progress == 0) {
+		if  (!currentItem->progressing) {
+			currentItem->setIcon(ICON_LOC, KIcon("system-run"));
+			currentItem->progressing = true;
+		}
+		pg->setMinimum(0);
+		pg->setMaximum(0);
+	} else if(progress == -1) {
 		currentItem->setIcon(ICON_LOC, KIcon("dialog-cancel"));
-	}
-	else if(progress == 100){
+		pg->setMaximum(100);
+		pg->setValue(0);
+	} else if (progress == 100) {
 		// Remove the job if requested.
 		if(Prefs::removeCompletedJobs()){
 			removeJob(currentItem, false);
 			return;
 		}
 		currentItem->setIcon(ICON_LOC, KIcon("dialog-ok"));
+		pg->setValue(progress);
 	}
+
 	if (currentJobCount > 0 && numberOfJobsNotFinished() == 0)
 		KNotification::event("no jobs left");
 }

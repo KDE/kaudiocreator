@@ -28,6 +28,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="toolTip" >
+      <string>An unique and descriptive name for the encoder.</string>
+     </property>
+     <property name="whatsThis" >
+      <string>An unique and descriptive name for the encoder.</string>
+     </property>
      <property name="text" >
       <string>Unknown Encoder</string>
      </property>
@@ -68,13 +74,23 @@
     </widget>
    </item>
    <item row="3" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Input types:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QLineEdit" name="kcfg_inputTypes" />
+   </item>
+   <item row="4" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Percent length</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="4" column="1" >
     <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
       <widget class="QSpinBox" name="kcfg_percentLength" />
@@ -94,7 +110,20 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="1" >
+   <item row="5" column="1" >
+    <widget class="QCheckBox" name="kcfg_checkOutput" >
+     <property name="toolTip" >
+      <string>Check if output files should be checked for existence.</string>
+     </property>
+     <property name="whatsThis" >
+      <string>Check if output files should be checked for existence, if the files are placed by the encoder itself, not kaudiocreator leave this unchecked.</string>
+     </property>
+     <property name="text" >
+      <string>Check output files</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
     <spacer name="spacer14" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>

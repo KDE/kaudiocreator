@@ -20,9 +20,17 @@
       <label>File extension</label>
       <default>ext</default>
     </entry>
+    <entry name="inputTypes" type="String">
+      <label>Input Types</label>
+      <default>ext</default>
+    </entry>
     <entry name="percentLength" type="Int">
       <label></label>
       <default>2</default>
+    </entry>
+    <entry name="checkOutput" type="Bool">
+      <label>Check output files</label>
+      <default>true</default>
     </entry>
   </group>
 </kcfg>
