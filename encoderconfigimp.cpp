@@ -42,6 +42,7 @@ EncoderConfigImp::EncoderConfigImp(QWidget* parent) :
 {
 	setupUi(this);
 	connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
+	connect(copyEncoder, SIGNAL(clicked()), this, SLOT(copyEncoderSlot()));
 	connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
 	connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
 	connect(defaultButton, SIGNAL(clicked()), this, SLOT(setDefaultEncoderSlot()));
@@ -78,6 +79,7 @@ void EncoderConfigImp::loadEncoderList()
 
 void EncoderConfigImp::setDefaultEncoderSlot()
 {
+///TODO: needs to accept wav
 	if (currentEncoderList->currentItem())
 		kcfg_defaultEncoder->setText((currentEncoderList->currentItem())->text());
 }
@@ -87,10 +89,7 @@ void EncoderConfigImp::createInputTypesList()
 	QStringList encoderInputTypesList, inputTypesList;
 	QStringList encoderList = EncoderPrefs::prefsList();
 	foreach (QString encoder, encoderList) {
-		encoderInputTypesList = (EncoderPrefs::prefs(encoder)->inputTypes()).split(",", QString::SkipEmptyParts);
-		foreach (QString inputType, encoderInputTypesList) {
-			inputTypesList << inputType.trimmed();
-		}
+		inputTypesList << EncoderPrefs::prefs(encoder)->inputTypes().split(",", QString::SkipEmptyParts);
 	}
 
 	QSet<QString> inputTypesSet = inputTypesList.toSet(); // remove duplicates
@@ -104,13 +103,9 @@ void EncoderConfigImp::addEncoderSlot()
 	QString groupName;
 	do {
 		groupName = QString("__new encoder__").append(KRandom::randomString(10));
-	 } while (KConfigDialog::exists(groupName));
+	 } while (EncoderEditDialog::exists(groupName));
  
-	KConfigDialog *dialog = new KConfigDialog(this, groupName, EncoderPrefs::prefs(groupName));
-	dialog->setFaceType(KPageDialog::Plain);
-	dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
-	dialog->setCaption(i18n("Configure Encoder"));
-	dialog->addPage(new EncoderEdit(0), i18n("Encoder Configuration"), "package_settings");
+	EncoderEditDialog *dialog = new EncoderEditDialog(this, groupName, EncoderPrefs::prefs(groupName));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
 	dialog->show();
 }
@@ -124,52 +119,65 @@ void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 	QString inputTypes = EncoderPrefs::prefs(dialogName)->inputTypes();
 	int percentLength = EncoderPrefs::prefs(dialogName)->percentLength();
 	bool checkOutput = EncoderPrefs::prefs(dialogName)->checkOutput();
-	KConfigDialog::exists(dialogName)->deleteLater();
+	EncoderEditDialog::exists(dialogName)->deleteLater();
 	EncoderPrefs::deletePrefs(dialogName);
 
-	if (checkEncoderName(encoderName)) {
-		EncoderPrefs *encPrefs;
-		encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
-		encPrefs->setEncoderName(encoderName);
-		encPrefs->setCommandLine(command);
-		encPrefs->setExtension(extension);
-		encPrefs->setInputTypes(inputTypes);
-		encPrefs->setPercentLength(percentLength);
-		encPrefs->setCheckOutput(checkOutput);
-		encPrefs->writeConfig();
-		currentEncoderList->addItem(new QListWidgetItem(encoderName));
-		createInputTypesList();
-		Prefs::self()->writeConfig();
-	} else {
-		KMessageBox::error(this, i18n("An encoder with that name already exists, please choose a different one."), i18n("Encoder exists already"), KMessageBox::PlainCaption);
+	EncoderPrefs *encPrefs;
+	encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
+	encPrefs->setEncoderName(encoderName);
+	encPrefs->setCommandLine(command);
+	encPrefs->setExtension(extension);
+	encPrefs->setInputTypes(inputTypes);
+	encPrefs->setPercentLength(percentLength);
+	encPrefs->setCheckOutput(checkOutput);
+	encPrefs->writeConfig();
+	currentEncoderList->addItem(new QListWidgetItem(encoderName));
+	createInputTypesList();
+	Prefs::self()->writeConfig();
+}
 
-		// Would be easier but doesn't work for me?? GF
-		//KConfigDialog::showDialog(dialogName);
-
-		QString groupName;
-		do {
-			groupName = QString("__new encoder__").append(KRandom::randomString(10));
-		} while (KConfigDialog::exists(groupName));
-
-		EncoderPrefs *encPrefs;
-		encPrefs = EncoderPrefs::prefs(groupName);
-		encPrefs->setEncoderName(QString());
-		encPrefs->setCommandLine(command);
-		encPrefs->setExtension(extension);
-		encPrefs->setInputTypes(inputTypes);
-		encPrefs->setPercentLength(percentLength);
-		encPrefs->setCheckOutput(checkOutput);
-
-		KConfigDialog *dialog = new KConfigDialog(this, groupName, EncoderPrefs::prefs(groupName));
-		dialog->setFaceType(KPageDialog::Plain);
-		dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
-		dialog->setCaption(i18n("Configure Encoder"));
-		EncoderEdit *page = new EncoderEdit(0);
-		dialog->addPage(page, i18n("Encoder Configuration"), "package_settings");
-		connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
-		dialog->show();
-		page->kcfg_encoderName->insert(encoderName);
+void EncoderConfigImp::copyEncoderSlot()
+{
+	if(!currentEncoderList->currentItem()) {
+		KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
+		return;
 	}
+
+	QString listText = (currentEncoderList->currentItem())->text();
+	QString groupName = QString("Encoder_").append(listText);
+	KConfig &config = *KGlobal::config();
+	if(!config.hasGroup(groupName))
+		return;
+
+	if(EncoderEditDialog::showDialog(listText))
+		return;
+
+	QString tmpEncoderName;
+	do {
+		tmpEncoderName = QString("__new encoder__").append(KRandom::randomString(10));
+	 } while (EncoderEditDialog::exists(tmpEncoderName));
+
+	EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
+	QString encoderName = origPrefs->encoderName();
+	QString command = origPrefs->commandLine();
+	QString extension = origPrefs->extension();
+	QString inputTypes = origPrefs->inputTypes();
+	int percentLength = origPrefs->percentLength();
+	bool checkOutput = origPrefs->checkOutput();
+
+	EncoderPrefs *encPrefs;
+	encPrefs = EncoderPrefs::prefs(tmpEncoderName);
+	encPrefs->setEncoderName(encoderName);
+	encPrefs->setCommandLine(command);
+	encPrefs->setExtension(extension);
+	encPrefs->setInputTypes(inputTypes);
+	encPrefs->setPercentLength(percentLength);
+	encPrefs->setCheckOutput(checkOutput);
+	
+	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs);
+	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
+	dialog->setEncoderExists(true);
+	dialog->show();
 }
 
 /**
@@ -199,7 +207,7 @@ void EncoderConfigImp::removeEncoderSlot()
 
 	QString listText = (currentEncoderList->currentItem())->text();
 	QString groupName = QString("Encoder_").append(listText);
-	KConfigDialog::exists(listText)->deleteLater ();
+	EncoderEditDialog::exists(listText)->deleteLater ();
 	EncoderPrefs::deletePrefs(groupName);
 	QListWidgetItem *removedItem = currentEncoderList->takeItem(currentEncoderList->currentRow());
 	delete removedItem;
@@ -235,14 +243,10 @@ void EncoderConfigImp::configureEncoderSlot()
 	if(!config.hasGroup(groupName))
 		return;
 
-	if(KConfigDialog::showDialog(listText))
+	if(EncoderEditDialog::showDialog(listText))
 		return;
 
-	KConfigDialog *dialog = new KConfigDialog(this, listText, EncoderPrefs::prefs(groupName));
-	dialog->setFaceType(KPageDialog::Plain);
-	dialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
-	dialog->setCaption(i18n("Configure Encoder"));
-	dialog->addPage(new EncoderEdit(0), i18n("Encoder Configuration"), "package_settings");
+	EncoderEditDialog *dialog = new EncoderEditDialog(this, listText, EncoderPrefs::prefs(groupName));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
 	dialog->show();
 }
@@ -260,6 +264,7 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 {
 	QString groupName = QString("Encoder_").append(dialogName);
 	QString encoderName = (EncoderPrefs::prefs(groupName))->encoderName();
+
 	// if the name changed copy to new name
 	if (encoderName != dialogName) {
 		EncoderPrefs *encPrefs;
@@ -267,12 +272,13 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 		encPrefs->setEncoderName(encoderName);
 		encPrefs->setCommandLine((EncoderPrefs::prefs(groupName))->commandLine());
 		encPrefs->setExtension((EncoderPrefs::prefs(groupName))->extension());
+		encPrefs->setInputTypes(EncoderPrefs::prefs(groupName)->inputTypes());
 		encPrefs->setPercentLength((EncoderPrefs::prefs(groupName))->percentLength());
 		encPrefs->setCheckOutput((EncoderPrefs::prefs(groupName))->checkOutput());
 		encPrefs->writeConfig();
 
 		//delete old encoder
-		KConfigDialog::exists(groupName)->deleteLater();
+		EncoderEditDialog::exists(groupName)->deleteLater();
 		EncoderPrefs::deletePrefs(groupName);
 		QList<QListWidgetItem *> items = currentEncoderList->findItems(dialogName, Qt::MatchExactly); //should be only one
 		QListWidgetItem *removedItem = currentEncoderList->takeItem(currentEncoderList->row(items.at(0)));
@@ -288,16 +294,6 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 	createInputTypesList();
 	Prefs::self()->writeConfig();
 	emit encoderChanged();
-}
-
-bool EncoderConfigImp::checkEncoderName(const QString &encoder)
-{
-	QStringList list = EncoderPrefs::prefsList();
-	if (list.contains(QString("Encoder_").append(encoder))) {
-		return false;
-	}
-
-	return true;
 }
 
 /**
@@ -356,6 +352,53 @@ void EncoderPrefs::deletePrefs(const QString &groupName)
 	if (!m_prefs)
 		return;
 	m_prefs->remove(groupName);
+}
+
+/**
+ * EncoderEditDialog
+ */
+EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config)
+	: KConfigDialog(parent, name, config), encoderExists(false)
+{
+	setFaceType(KPageDialog::Plain);
+	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
+	setCaption(i18n("Configure Encoder"));
+	editDialog = new EncoderEdit(0);
+	addPage(editDialog, i18n("Encoder Configuration"), "package_settings");
+}
+
+void EncoderEditDialog::updateSettings()
+{
+	// avoid double encodernames
+	QStringList list = EncoderPrefs::prefsList();
+	QString name = editDialog->kcfg_encoderName->text();
+	QString newName = name;
+	int i = 2;
+	while (list.contains(QString("Encoder_").append(newName))) {
+		newName = name + " " + QString::number(i);
+		++i;
+	}
+	editDialog->kcfg_encoderName->setText(newName);
+
+	// trim inputtypes and turn them to lower letters
+	QStringList inputTypesList;
+	foreach (QString type, editDialog->kcfg_inputTypes->text().split(",", QString::SkipEmptyParts)) {
+		inputTypesList << type.trimmed().toLower();
+	}
+	QString inputTypes = inputTypesList.join(",");
+	editDialog->kcfg_inputTypes->setText(inputTypes);
+
+	KConfigDialog::updateSettings();
+}
+
+void EncoderEditDialog::setEncoderExists(bool exists)
+{
+	encoderExists = exists;
+}
+
+bool EncoderEditDialog::hasChanged()
+{
+	return encoderExists;
 }
 
 #include "encoderconfigimp.moc"

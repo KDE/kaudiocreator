@@ -66,6 +66,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="copyEncoder" >
+       <property name="text" >
+        <string>Copy...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="removeEncoder" >
        <property name="toolTip" >
         <string>Remove encoder from list.</string>

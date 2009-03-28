@@ -24,6 +24,8 @@
 #include "ui_encoderedit.h"
 #include "encoder_prefs.h"
 
+#include <kconfigdialog.h>
+
 class EncoderEdit : public QWidget, public Ui::EncoderEdit
 {
 public:
@@ -38,7 +40,6 @@ public:
  */ 
 class EncoderConfigImp : public QWidget, public Ui::EncoderConfig
 {
-
 Q_OBJECT
 
 public:
@@ -47,9 +48,9 @@ public:
 private slots:
 	void addEncoderSlot();
 	void saveNewEncoderSlot(const QString &);
+	void copyEncoderSlot();
 	void removeEncoderSlot();
 	void configureEncoderSlot();
-	bool checkEncoderName(const QString &);
 
 	void updateEncoder(const QString &);
 	void loadEncoderList();
@@ -59,6 +60,25 @@ private slots:
 
 signals:
 	void encoderChanged();
+};
+
+class EncoderEditDialog : public KConfigDialog
+{
+Q_OBJECT
+
+public:
+	EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config);
+	void setEncoderExists(bool);
+
+protected slots:
+	void updateSettings();
+
+protected:
+	bool hasChanged();
+
+private:
+	EncoderEdit *editDialog;
+	bool encoderExists;
 };
 
 #endif
