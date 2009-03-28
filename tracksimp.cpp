@@ -17,11 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-//#include <QPixmap>
 #include <QKeyEvent>
 #include <QPushButton>
-//#include <QTimer>
-//#include <QFileInfo>
 #include <QTreeWidgetItemIterator>
 
 #include <kmessagebox.h>
@@ -99,7 +96,10 @@ void TracksImp::loadSettings()
 	int i = deviceCombo->findText(Prefs::lastUsedDevice());
 	if (i >= 0) deviceCombo->setCurrentIndex(i);
 	deviceCombo->blockSignals(false);
+}
 
+void TracksImp::initDevice()
+{
 	changeDevice(deviceCombo->currentText());
 }
 

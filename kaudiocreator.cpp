@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QTimer>
+
 #include <kicon.h>
 #include <kiconloader.h>
 
@@ -171,11 +173,12 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	statusBar()->setContentsMargins(6, 0, 6, 0);
 	statusLabel = new QLabel();
 	statusBar()->addWidget(statusLabel);
-	statusLabel->setText(i18n("No Audio CD detected"));
+	statusLabel->setText(i18n("Searching"));
 	defaultEncLabel = new QLabel();
 	statusBar()->addPermanentWidget(defaultEncLabel, 0);
 	showCurrentEncoder();
-	hasCD(tracks->hasCD());
+	// seems to need some time to settle
+	QTimer::singleShot(250, tracks, SLOT(initDevice()));
 }
 
 void KAudioCreator::setDevice( const QString &device )

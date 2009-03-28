@@ -92,6 +92,7 @@ public:
 
 public slots:
 	void loadSettings();
+	void initDevice();
 
 	// Toolbar Buttons
 	void startSession( QString encoder = QString() );
