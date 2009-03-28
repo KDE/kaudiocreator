@@ -107,6 +107,7 @@ void EncoderConfigImp::addEncoderSlot()
  
 	EncoderEditDialog *dialog = new EncoderEditDialog(this, groupName, EncoderPrefs::prefs(groupName));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
+	dialog->setCaption(i18n("Add Encoder"));
 	dialog->show();
 }
 
@@ -176,6 +177,7 @@ void EncoderConfigImp::copyEncoderSlot()
 	
 	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs);
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
+	dialog->setCaption(i18n("Copy Encoder"));
 	dialog->setEncoderExists(true);
 	dialog->show();
 }
@@ -248,6 +250,7 @@ void EncoderConfigImp::configureEncoderSlot()
 
 	EncoderEditDialog *dialog = new EncoderEditDialog(this, listText, EncoderPrefs::prefs(groupName));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(updateEncoder(const QString &)));
+	dialog->setCaption(i18n("Configure Encoder"));
 	dialog->show();
 }
 
@@ -362,7 +365,6 @@ EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConf
 {
 	setFaceType(KPageDialog::Plain);
 	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
-	setCaption(i18n("Configure Encoder"));
 	editDialog = new EncoderEdit(0);
 	addPage(editDialog, i18n("Encoder Configuration"), "package_settings");
 }
