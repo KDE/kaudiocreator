@@ -44,6 +44,10 @@ Q_OBJECT
 
 public:
 	EncoderConfigImp( QWidget* parent = 0);
+	~EncoderConfigImp();
+
+private:
+	void cloneEncoder(EncoderPrefs *, EncoderPrefs *);
 
 private slots:
 	void addEncoderSlot();

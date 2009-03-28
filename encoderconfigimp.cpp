@@ -55,6 +55,17 @@ EncoderConfigImp::EncoderConfigImp(QWidget* parent) :
 	loadEncoderList();
 }
 
+EncoderConfigImp::~EncoderConfigImp()
+{
+	// delete temporary configs, e.g. from canceled dialogs
+	KConfig &config = *KGlobal::config();
+	QStringList list = config.groupList().filter("__new encoder__");
+	foreach (QString encoder, list) {
+		config.deleteGroup(encoder);
+	}
+	Prefs::self()->writeConfig();
+}
+
 /**
  * Clear listbox
  * Load list of encoders.
@@ -111,27 +122,17 @@ void EncoderConfigImp::addEncoderSlot()
 	dialog->show();
 }
 
-
 void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 {
-	QString encoderName = (EncoderPrefs::prefs(dialogName))->encoderName();
-	QString command = EncoderPrefs::prefs(dialogName)->commandLine();
-	QString extension = EncoderPrefs::prefs(dialogName)->extension();
-	QString inputTypes = EncoderPrefs::prefs(dialogName)->inputTypes();
-	int percentLength = EncoderPrefs::prefs(dialogName)->percentLength();
-	bool checkOutput = EncoderPrefs::prefs(dialogName)->checkOutput();
+	EncoderPrefs *origPrefs = EncoderPrefs::prefs(dialogName);
+	QString encoderName = origPrefs->encoderName();
+	EncoderPrefs *encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
+	cloneEncoder(origPrefs, encPrefs);
+	encPrefs->writeConfig();
+
 	EncoderEditDialog::exists(dialogName)->deleteLater();
 	EncoderPrefs::deletePrefs(dialogName);
 
-	EncoderPrefs *encPrefs;
-	encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
-	encPrefs->setEncoderName(encoderName);
-	encPrefs->setCommandLine(command);
-	encPrefs->setExtension(extension);
-	encPrefs->setInputTypes(inputTypes);
-	encPrefs->setPercentLength(percentLength);
-	encPrefs->setCheckOutput(checkOutput);
-	encPrefs->writeConfig();
 	currentEncoderList->addItem(new QListWidgetItem(encoderName));
 	createInputTypesList();
 	Prefs::self()->writeConfig();
@@ -159,22 +160,9 @@ void EncoderConfigImp::copyEncoderSlot()
 	 } while (EncoderEditDialog::exists(tmpEncoderName));
 
 	EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
-	QString encoderName = origPrefs->encoderName();
-	QString command = origPrefs->commandLine();
-	QString extension = origPrefs->extension();
-	QString inputTypes = origPrefs->inputTypes();
-	int percentLength = origPrefs->percentLength();
-	bool checkOutput = origPrefs->checkOutput();
+	EncoderPrefs *encPrefs = EncoderPrefs::prefs(tmpEncoderName);
+	cloneEncoder(origPrefs, encPrefs);
 
-	EncoderPrefs *encPrefs;
-	encPrefs = EncoderPrefs::prefs(tmpEncoderName);
-	encPrefs->setEncoderName(encoderName);
-	encPrefs->setCommandLine(command);
-	encPrefs->setExtension(extension);
-	encPrefs->setInputTypes(inputTypes);
-	encPrefs->setPercentLength(percentLength);
-	encPrefs->setCheckOutput(checkOutput);
-	
 	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs);
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
 	dialog->setCaption(i18n("Copy Encoder"));
@@ -270,14 +258,10 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 
 	// if the name changed copy to new name
 	if (encoderName != dialogName) {
-		EncoderPrefs *encPrefs;
-		encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
+		EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
+		EncoderPrefs *encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
+		cloneEncoder(origPrefs, encPrefs);
 		encPrefs->setEncoderName(encoderName);
-		encPrefs->setCommandLine((EncoderPrefs::prefs(groupName))->commandLine());
-		encPrefs->setExtension((EncoderPrefs::prefs(groupName))->extension());
-		encPrefs->setInputTypes(EncoderPrefs::prefs(groupName)->inputTypes());
-		encPrefs->setPercentLength((EncoderPrefs::prefs(groupName))->percentLength());
-		encPrefs->setCheckOutput((EncoderPrefs::prefs(groupName))->checkOutput());
 		encPrefs->writeConfig();
 
 		//delete old encoder
@@ -312,6 +296,26 @@ void EncoderConfigImp::encoderWizard()
 	if (okClicked) {
 		kcfg_fileFormat->setText(wizard.fileFormat->text());
 	}
+}
+
+/**
+ * Helperfunction to copy one EncoderPref to another
+ */
+void EncoderConfigImp::cloneEncoder(EncoderPrefs *origPrefs, EncoderPrefs *newPrefs)
+{
+	QString encoderName = origPrefs->encoderName();
+	QString command = origPrefs->commandLine();
+	QString extension = origPrefs->extension();
+	QString inputTypes = origPrefs->inputTypes();
+	int percentLength = origPrefs->percentLength();
+	bool checkOutput = origPrefs->checkOutput();
+
+	newPrefs->setEncoderName(encoderName);
+	newPrefs->setCommandLine(command);
+	newPrefs->setExtension(extension);
+	newPrefs->setInputTypes(inputTypes);
+	newPrefs->setPercentLength(percentLength);
+	newPrefs->setCheckOutput(checkOutput);
 }
 
 /**
