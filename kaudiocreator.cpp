@@ -223,22 +223,25 @@ void KAudioCreator::checkSettings()
 		encPrefs->setPercentLength(2);
 		encPrefs->writeConfig();
 
-		Prefs::setDefaultEncoder("WAV");
 		Prefs::setInputTypesList(QStringList("wav"));
 		Prefs::self()->writeConfig();
 	} else {
-		if (list.contains(QString("Encoder_WAV")))
-			return;
-
-		EncoderPrefs *encPrefs;
-		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
-		encPrefs->setEncoderName(i18n("WAV"));
-		encPrefs->setCommandLine("mv %f %o");
-		encPrefs->setExtension("wav");
-		encPrefs->setPercentLength(2);
-		encPrefs->writeConfig();
+		if (list.contains(QString("Encoder_WAV"))) {
+			EncoderPrefs *encPrefs;
+			encPrefs = EncoderPrefs::prefs("Encoder_WAV");
+			encPrefs->setEncoderName(i18n("WAV"));
+			encPrefs->setCommandLine("mv %f %o");
+			encPrefs->setExtension("wav");
+			encPrefs->setPercentLength(2);
+			encPrefs->writeConfig();
+		}
 	}
 
+	QString groupName = QString("Encoder_").append(Prefs::defaultEncoder());
+	if (!list.contains(groupName)) {
+		Prefs::setDefaultEncoder("WAV");
+		Prefs::self()->writeConfig();
+	}
 }
 
 void KAudioCreator::setupRipMenu(){

@@ -81,10 +81,9 @@ void EncoderConfigImp::loadEncoderList()
 
 	// Make sure that the default encoder is valid.
 	QString groupName = QString("Encoder_").append(Prefs::defaultEncoder());
-	if (!list.contains(groupName) && currentEncoderList->count() > 0) {
-		QList<QListWidgetItem *> items = currentEncoderList->findItems(QString("WAV"), Qt::MatchExactly); //should be only one
-		currentEncoderList->setCurrentItem(items.at(0));
-		Prefs::setDefaultEncoder((currentEncoderList->currentItem())->text());
+	if (!list.contains(groupName)) {
+		Prefs::setDefaultEncoder("WAV");
+		Prefs::self()->writeConfig();
 	}
 	kcfg_defaultEncoder->setText(Prefs::defaultEncoder());
 }
