@@ -79,10 +79,11 @@ void EncoderConfigImp::loadEncoderList()
 		currentEncoderList->addItem(new QListWidgetItem(encoder.remove("Encoder_")));
 	}
 
-	// Make sure that the current encoder is valid.
+	// Make sure that the default encoder is valid.
 	QString groupName = QString("Encoder_").append(Prefs::defaultEncoder());
 	if (!list.contains(groupName) && currentEncoderList->count() > 0) {
-		currentEncoderList->setCurrentRow(0);
+		QList<QListWidgetItem *> items = currentEncoderList->findItems(QString("WAV"), Qt::MatchExactly); //should be only one
+		currentEncoderList->setCurrentItem(items.at(0));
 		Prefs::setDefaultEncoder((currentEncoderList->currentItem())->text());
 	}
 	kcfg_defaultEncoder->setText(Prefs::defaultEncoder());
@@ -90,9 +91,15 @@ void EncoderConfigImp::loadEncoderList()
 
 void EncoderConfigImp::setDefaultEncoderSlot()
 {
-///TODO: needs to accept wav
-	if (currentEncoderList->currentItem())
-		kcfg_defaultEncoder->setText((currentEncoderList->currentItem())->text());
+	if (currentEncoderList->currentItem()) {
+		QString listText = (currentEncoderList->currentItem())->text();
+		QString groupName = QString("Encoder_").append(listText);
+		QStringList types = EncoderPrefs::prefs(groupName)->inputTypes().split(",", QString::SkipEmptyParts);
+		if (types.contains(QString("wav")))
+			kcfg_defaultEncoder->setText((currentEncoderList->currentItem())->text());
+		else
+			KMessageBox:: sorry(this, i18n("The default encoder has to accept wav as input."), i18n("Not Allowed"));
+	}
 }
 
 void EncoderConfigImp::createInputTypesList()
@@ -126,8 +133,7 @@ void EncoderConfigImp::saveNewEncoderSlot(const QString &dialogName)
 {
 	EncoderPrefs *origPrefs = EncoderPrefs::prefs(dialogName);
 	QString encoderName = origPrefs->encoderName();
-	EncoderPrefs *encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
-	cloneEncoder(origPrefs, encPrefs);
+	EncoderPrefs *encPrefs = cloneEncoder(origPrefs, QString("Encoder_").append(encoderName));
 	encPrefs->writeConfig();
 
 	EncoderEditDialog::exists(dialogName)->deleteLater();
@@ -160,8 +166,7 @@ void EncoderConfigImp::copyEncoderSlot()
 	 } while (EncoderEditDialog::exists(tmpEncoderName));
 
 	EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
-	EncoderPrefs *encPrefs = EncoderPrefs::prefs(tmpEncoderName);
-	cloneEncoder(origPrefs, encPrefs);
+	EncoderPrefs *encPrefs = cloneEncoder(origPrefs, tmpEncoderName);
 
 	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs);
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
@@ -181,13 +186,13 @@ void EncoderConfigImp::copyEncoderSlot()
  */ 
 void EncoderConfigImp::removeEncoderSlot()
 {
-	if(!currentEncoderList->currentItem()){
+	if (!currentEncoderList->currentItem()) {
 		KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
 		return;
 	}
 
-	if(currentEncoderList->count() <= 1){
-		KMessageBox:: sorry(this, i18n("At least one encoder must exist."), i18n("Can Not Remove"));
+	if (currentEncoderList->currentItem()->text() == QString("WAV")) {
+		KMessageBox:: sorry(this, i18n("WAV is not allowed to be removed."), i18n("Not Allowed"));
 		return;
 	}
 
@@ -227,6 +232,11 @@ void EncoderConfigImp::configureEncoderSlot()
 		return;
 	}
 
+	if(currentEncoderList->currentItem()->text() == QString("WAV")) {
+		KMessageBox:: sorry(this, i18n("WAV is not allowed to be changed.\nYou can copy it to adjust it to your needs."), i18n("Not Allowed"));
+		return;
+	}
+
 	QString listText = (currentEncoderList->currentItem())->text();
 	QString groupName = QString("Encoder_").append(listText);
 	KConfig &config = *KGlobal::config();
@@ -259,8 +269,7 @@ void EncoderConfigImp::updateEncoder(const QString &dialogName)
 	// if the name changed copy to new name
 	if (encoderName != dialogName) {
 		EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
-		EncoderPrefs *encPrefs = EncoderPrefs::prefs(QString("Encoder_").append(encoderName));
-		cloneEncoder(origPrefs, encPrefs);
+		EncoderPrefs *encPrefs = cloneEncoder(origPrefs, QString("Encoder_").append(encoderName));
 		encPrefs->setEncoderName(encoderName);
 		encPrefs->writeConfig();
 
@@ -301,7 +310,7 @@ void EncoderConfigImp::encoderWizard()
 /**
  * Helperfunction to copy one EncoderPref to another
  */
-void EncoderConfigImp::cloneEncoder(EncoderPrefs *origPrefs, EncoderPrefs *newPrefs)
+EncoderPrefs *EncoderConfigImp::cloneEncoder(EncoderPrefs *origPrefs, const QString &newName)
 {
 	QString encoderName = origPrefs->encoderName();
 	QString command = origPrefs->commandLine();
@@ -310,12 +319,15 @@ void EncoderConfigImp::cloneEncoder(EncoderPrefs *origPrefs, EncoderPrefs *newPr
 	int percentLength = origPrefs->percentLength();
 	bool checkOutput = origPrefs->checkOutput();
 
+	EncoderPrefs *newPrefs = EncoderPrefs::prefs(newName);
 	newPrefs->setEncoderName(encoderName);
 	newPrefs->setCommandLine(command);
 	newPrefs->setExtension(extension);
 	newPrefs->setInputTypes(inputTypes);
 	newPrefs->setPercentLength(percentLength);
 	newPrefs->setCheckOutput(checkOutput);
+
+	return newPrefs;
 }
 
 /**

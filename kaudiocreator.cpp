@@ -226,6 +226,17 @@ void KAudioCreator::checkSettings()
 		Prefs::setDefaultEncoder("WAV");
 		Prefs::setInputTypesList(QStringList("wav"));
 		Prefs::self()->writeConfig();
+	} else {
+		if (list.contains(QString("Encoder_WAV")))
+			return;
+
+		EncoderPrefs *encPrefs;
+		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
+		encPrefs->setEncoderName(i18n("WAV"));
+		encPrefs->setCommandLine("mv %f %o");
+		encPrefs->setExtension("wav");
+		encPrefs->setPercentLength(2);
+		encPrefs->writeConfig();
 	}
 
 }

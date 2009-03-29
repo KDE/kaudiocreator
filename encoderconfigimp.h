@@ -47,7 +47,7 @@ public:
 	~EncoderConfigImp();
 
 private:
-	void cloneEncoder(EncoderPrefs *, EncoderPrefs *);
+	EncoderPrefs *cloneEncoder(EncoderPrefs *, const QString &);
 
 private slots:
 	void addEncoderSlot();
