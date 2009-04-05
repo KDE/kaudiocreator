@@ -20,7 +20,7 @@
 #ifndef ENCODEFILEIMP_H
 #define ENCODEFILEIMP_H
 
-#include "config.h"
+#include "config-kaudiocreator.h"
 
 #include "libkcddb/genres.h"
 #include "ui_encodefile.h"

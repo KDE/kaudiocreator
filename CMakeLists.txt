@@ -14,7 +14,7 @@ add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${TAGLIB_CFLAGS})
 
 include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR})
 
-CONFIGURE_FILE(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+CONFIGURE_FILE(config-kaudiocreator.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kaudiocreator.h)
 
 ########### next target ###############
 
