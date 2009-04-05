@@ -20,6 +20,8 @@
 #ifndef ENCODEFILEIMP_H
 #define ENCODEFILEIMP_H
 
+#include "config.h"
+
 #include "libkcddb/genres.h"
 #include "ui_encodefile.h"
 #include "qmap.h"
@@ -79,9 +81,11 @@ private:
 	QString fileTypeFilter;
 	QStringList dirFilter;
 	QMap<QString, QStringList> encoderMap;
+#ifdef HAVE_TAGLIB
+	QStringList taglibExtensions;
+#endif
 
-	void setupFilter();
-	void setupEncoderMap();
+	void setupGlobals();
 	void addFilesToList(const QStringList &);
 };
 

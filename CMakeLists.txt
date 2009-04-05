@@ -5,13 +5,16 @@ project(kaudiocreator)
 
 find_package(KDE4 REQUIRED)
 find_package(KdeMultimedia REQUIRED)
+find_package(Taglib)
 include (KDE4Defaults)
 include (MacroLibrary)
 
 #add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${TAGLIB_CFLAGS})
 
-include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR})
+include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR})
+
+CONFIGURE_FILE(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 ########### next target ###############
 
@@ -46,7 +49,7 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES})
+target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES} ${TAGLIB_LIBRARIES})
 
 install(TARGETS kaudiocreator  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
