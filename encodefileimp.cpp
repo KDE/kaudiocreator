@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "prefs.h"
 #include "encoder_prefs.h"
 #include "encodefileimp.h"
@@ -36,6 +38,13 @@
 #include <QDir>
 #include <QDirIterator>
 
+#ifdef HAVE_TAGLIB
+#define Qt4QStringToTString(s) TagLib::String(s.toUtf8().data(), TagLib::String::UTF8) 
+#include <tstring.h>
+#include <tag.h>
+#include <fileref.h>
+#endif
+
 #include <kdebug.h>
 
 EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB::Genres()), editedItem(0), editedColumn(0)
@@ -53,8 +62,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 
 	genreBox->addItems(m_genres.i18nList());
 
-	setupFilter();
-	setupEncoderMap();
+	setupGlobals();
 
 	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
@@ -77,8 +85,9 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 
 /**
  * setup the filter for openFilesDialog
+ * setup a map for filetypes and encoders
  */
-void EncodeFileImp::setupFilter()
+void EncodeFileImp::setupGlobals()
 {
 	dirFilter.clear();
 	QString filter;
@@ -96,13 +105,7 @@ void EncodeFileImp::setupFilter()
 	}
 	filter.remove(filter.length()-1, 1);
 	fileTypeFilter = filter;
-}
 
-/**
- * setup a map for filetypes and encoders
- */
-void EncodeFileImp::setupEncoderMap()
-{
 	encoderMap.clear();
 	foreach (QString type, Prefs::inputTypesList()) {
 		foreach (QString encoder, EncoderPrefs::prefsList()) {
@@ -117,6 +120,13 @@ void EncodeFileImp::setupEncoderMap()
 			}
 		}
 	}
+
+#ifdef HAVE_TAGLIB
+	TagLib::StringList extensions = TagLib::FileRef::defaultFileExtensions();
+	TagLib::String tagExt = extensions.toString(",");
+	QString qtExt = TStringToQString(tagExt);
+	taglibExtensions = qtExt.split(",");
+#endif
 }
 
 /**
@@ -182,9 +192,39 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 	foreach (QString track, list) {
 		QTreeWidgetItem *newFile = new QTreeWidgetItem(QStringList(track));
 		fileList->addTopLevelItem(newFile);
+
+#ifdef HAVE_TAGLIB
+		if (taglibExtensions.contains(KMimeType::extractKnownExtension(track))) {
+			TagLib::String s(Qt4QStringToTString(track));
+			TagLib::FileRef f(s.toCString());
+
+			TagLib::String tagString;
+			QString qtString;
+			tagString = f.tag()->title();
+			tagString == TagLib::String::null ? qtString = i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())) : qtString = TStringToQString(tagString);
+			newFile->setText(COLUMN_TITLE, qtString);
+
+			tagString = f.tag()->artist();
+			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
+			newFile->setText(COLUMN_ARTIST, qtString);
+
+			tagString = f.tag()->album();
+			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
+			newFile->setText(COLUMN_ALBUM, qtString);
+
+			tagString = f.tag()->comment();
+			tagString == TagLib::String::null ? qtString = QString() : qtString = TStringToQString(tagString);
+			newFile->setText(COLUMN_COMMENT, qtString);
+		} else {
+			newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
+			newFile->setText(COLUMN_ARTIST, i18n("unknown"));
+			newFile->setText(COLUMN_ALBUM, i18n("unknown"));
+		}
+#else
 		newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
 		newFile->setText(COLUMN_ARTIST, i18n("unknown"));
 		newFile->setText(COLUMN_ALBUM, i18n("unknown"));
+#endif
 
 		KComboBox *itemGenreBox = new KComboBox;
 		itemGenreBox->addItems(m_genres.i18nList());
