@@ -130,10 +130,14 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="artistEdit" />
+      <item row="0" column="1" colspan="2" >
+       <widget class="QLineEdit" name="artistEdit" >
+        <property name="toolTip" >
+         <string>Set the artist for the selected tracks.</string>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="2" >
+      <item row="0" column="3" >
        <widget class="QPushButton" name="assignArtistButton" >
         <property name="text" >
          <string>Assign</string>
@@ -150,10 +154,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="albumEdit" />
+      <item row="1" column="1" colspan="2" >
+       <widget class="QLineEdit" name="albumEdit" >
+        <property name="toolTip" >
+         <string>Set the album for the selected tracks.</string>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="2" >
+      <item row="1" column="3" >
        <widget class="QPushButton" name="assignAlbumButton" >
         <property name="text" >
          <string>Assign</string>
@@ -170,10 +178,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QLineEdit" name="commentEdit" />
+      <item row="2" column="1" colspan="2" >
+       <widget class="QLineEdit" name="commentEdit" >
+        <property name="toolTip" >
+         <string>Set the comment for the selected tracks.</string>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="2" >
+      <item row="2" column="3" >
        <widget class="QPushButton" name="assignCommentButton" >
         <property name="text" >
          <string>Assign</string>
@@ -190,30 +202,62 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="KComboBox" name="genreBox" />
+      <item row="3" column="1" colspan="2" >
+       <widget class="KComboBox" name="genreBox" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Set the genre for the selected tracks.</string>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
-      <item row="3" column="2" >
+      <item row="3" column="3" >
        <widget class="QPushButton" name="assignGenreButton" >
         <property name="text" >
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
+      <item row="4" column="0" colspan="2" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Track:</string>
+         <string>Trackcounting starts at:</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
-       <widget class="KIntNumInput" name="kintnuminput" />
-      </item>
       <item row="4" column="2" >
+       <widget class="KIntNumInput" name="trackStart" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Set the tracknumbers for the selected tracks. This is the number for the first track.</string>
+        </property>
+        <property name="value" >
+         <number>1</number>
+        </property>
+        <property name="minimum" >
+         <number>0</number>
+        </property>
+        <property name="specialValueText" >
+         <string>empty</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3" >
        <widget class="QPushButton" name="assignTrackButton" >
         <property name="text" >
          <string>Assign</string>
@@ -230,10 +274,20 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1" >
-       <widget class="KIntNumInput" name="yearInput" />
+      <item row="5" column="1" colspan="2" >
+       <widget class="KIntNumInput" name="yearInput" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Set the year for the selected tracks.</string>
+        </property>
+       </widget>
       </item>
-      <item row="5" column="2" >
+      <item row="5" column="3" >
        <widget class="QPushButton" name="assignYearButton" >
         <property name="text" >
          <string>Assign</string>
@@ -250,10 +304,20 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="1" >
-       <widget class="KComboBox" name="encoderBox" />
+      <item row="6" column="1" colspan="2" >
+       <widget class="KComboBox" name="encoderBox" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Set the encoder to use for the selected tracks.</string>
+        </property>
+       </widget>
       </item>
-      <item row="6" column="2" >
+      <item row="6" column="3" >
        <widget class="QPushButton" name="assignEncoderButton" >
         <property name="text" >
          <string>Assign</string>

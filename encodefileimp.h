@@ -63,8 +63,10 @@ protected slots:
 	void assignAlbum();
 	void assignComment();
 	void assignGenre();
+	void assignTrack();
 	void assignYear();
 	void assignEncoder();
+	void assignAll();
 
 	void setupEncoderBox();
 	void editFile(QTreeWidgetItem *, int);

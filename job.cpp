@@ -30,9 +30,9 @@ QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QStrin
   
 	map.insert("title", track_title);
 	map.insert("artist", track_artist);
-	map.insert("number", QString().sprintf("%02d", track));
+	map.insert("number", track == EMPTY_TRACK ? QString() : QString().sprintf("%02d", track));
 	map.insert("comment", track_comment);
-	map.insert("year", QString::number(year));
+	map.insert("year", year == EMPTY_YEAR ? QString() : QString::number(year));
 	map.insert("genre", genre);
 	
 	map.insert("albumtitle", album);
