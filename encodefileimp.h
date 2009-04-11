@@ -77,7 +77,7 @@ protected slots:
 
 private:
 	// List of genres and i18n versions
-	KCDDB::Genres m_genres;
+	QStringList m_genres;
 	QTreeWidgetItem *editedItem;
 	int editedColumn;
 	QString fileTypeFilter;

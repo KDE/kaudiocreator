@@ -28,6 +28,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kcombobox.h>
+#include "libkcddb/genres.h"
 #include "libkcddb/cdinfodialog.h"
 #include "libkcompactdisc/kcompactdisc.h"
 #include <kdebug.h>
@@ -47,18 +48,25 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), editedItem(0), cddbInf
 	trackListing->resizeColumnToContents(HEADER_RIP);
 	cd = new KCompactDisc;
 
+	genreBox->addItems(KCDDB::Genres().i18nList());
+
 	connect(cd, SIGNAL(discChanged(unsigned int)), this, SLOT(newDisc(unsigned int)));
 
-	connect(trackListing, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
+	connect(trackListing, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
 	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
-	
+
+	connect(artistEdit, SIGNAL(editingFinished()), this, SLOT(artistChangedByUser()));
+	connect(albumEdit, SIGNAL(editingFinished()), this, SLOT(albumChangedByUser()));
+	connect(yearInput, SIGNAL(valueChanged(int)), this, SLOT(yearChangedByUser(int)));
+	connect(genreBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(genreChangedByUser(const QString &)));
+	connect(genreBox, SIGNAL(editTextChanged(const QString &)), this, SLOT(genreChangedByUser(const QString &)));
+
 	connect(deviceCombo, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
-	
-	selectAllTracksButton->setEnabled( false );
-	deselectAllTracksButton->setEnabled( false );
-	
+
+	toggleInputs(false);
+
 	cddb = new KCDDB::Client();
 	cddb->setBlockingMode(false);
 	connect(cddb, SIGNAL(finished(KCDDB::Result)), this, SLOT(lookupCDDBDone(KCDDB::Result)));
@@ -109,12 +117,10 @@ void TracksImp::newDisc(unsigned tracks)
 	{
 		kDebug(60002) << "newDisc - No disc";
 		cddbInfo.clear();
-		cddbInfo.set(Title, i18n("No disc"));
 		newAlbum();
 		emit(hasCD(false));
 
-		selectAllTracksButton->setEnabled( false );
-		deselectAllTracksButton->setEnabled( false );
+		toggleInputs(false);
 
 		return;
 	}
@@ -123,8 +129,7 @@ void TracksImp::newDisc(unsigned tracks)
 	kDebug(60002) << "newDisc - " << discId;
 	emit(hasCD(true));
 
-	selectAllTracksButton->setEnabled( true );
-	deselectAllTracksButton->setEnabled( true );
+	toggleInputs(true);
  
 	cddbInfo.clear();
 
@@ -285,6 +290,28 @@ void TracksImp::lookupCDDBDone(Result result ) {
 		ripWholeAlbum();
 }
 
+void TracksImp::artistChangedByUser()
+{
+	cddbInfo.set(Artist, artistEdit->text());
+	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+}
+
+void TracksImp::albumChangedByUser()
+{
+	cddbInfo.set(Title, albumEdit->text());
+	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+}
+
+void TracksImp::yearChangedByUser(int newYear)
+{
+	cddbInfo.set(Year, newYear);
+}
+
+void TracksImp::genreChangedByUser(const QString &newGenre)
+{
+	cddbInfo.set(Genre, newGenre);
+}
+
 /**
  * Bring up the dialog to edit the information about this album.
  * If there is not currently selected track return.
@@ -383,8 +410,7 @@ void TracksImp::startSession( QString encoder )
 	}
 	
 	Job *lastJob = 0;
-	foreach(TracksItem* item, selected)
-	{
+	foreach (TracksItem* item, selected) {
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;
 		newJob->device = cd->deviceUrl().path();
@@ -404,7 +430,8 @@ void TracksImp::startSession( QString encoder )
 		lastJob = newJob;
 		emit( ripTrack(newJob) ); 
 	}
-	if( lastJob)
+
+	if (lastJob)
 		lastJob->lastSongInAlbum = true;
 
 	KMessageBox::information(this,
@@ -448,18 +475,31 @@ void TracksImp::deselectAllTracks() {
 	}
 }
 
+void TracksImp::toggleInputs(bool status)
+{
+	selectAllTracksButton->setEnabled(status);
+	deselectAllTracksButton->setEnabled(status);
+
+	artistEdit->setEnabled(status);
+	albumEdit->setEnabled(status);
+	yearInput->setEnabled(status);
+	genreBox->setEnabled(status);
+}
+
 /**
  * Set the current stats for the new album being displayed.
  */
 void TracksImp::newAlbum() {
-	QString albumText = cddbInfo.get(Title).toString();
-	if( !cddbInfo.get(Artist).toString().isEmpty() )
-		albumText = cddbInfo.get(Artist).toString() + i18n( " - " ) + albumText;
+	QString albumTitle = cddbInfo.get(Title).toString();
+	QString albumArtist = cddbInfo.get(Artist).toString();
 
-	albumName->setText( albumText );
+	artistEdit->setText(albumArtist);
+	albumEdit->setText(albumTitle);
+	setAlbumInfo(albumArtist, albumTitle);
+	yearInput->setValue(cddbInfo.get(Year).toInt());
+	genreBox->setEditText(cddbInfo.get(Genre).toString());
 	trackListing->clear();
-	selectAllTracksButton->setEnabled(false);
-	deselectAllTracksButton->setEnabled(false);
+	toggleInputs(false);
 	emit(hasTracks(false));
 
 	for (int i = 0; i < cddbInfo.numberOfTracks(); i++)
@@ -485,12 +525,21 @@ void TracksImp::newAlbum() {
 	{
 		// Set the current selected track to the first one.
 		trackListing->setCurrentItem(trackListing->topLevelItem(0));
-		selectAllTracksButton->setEnabled(true);
-		deselectAllTracksButton->setEnabled(true);
+		toggleInputs(true);
 		emit(hasTracks(true));
 	}
 }
 
+void TracksImp::setAlbumInfo(const QString &artist, const QString &album)
+{
+	QString albumInfo;
+	if (cddbInfo.isValid())
+		albumInfo = artist.isEmpty() ? album : artist + i18n( " - " ) + album;
+	else
+		albumInfo = i18n("No disc");
+
+	albumInfoLabel->setText(albumInfo);
+}
 
 /**
  * If the user presses the F2 key, trigger renaming of the title.

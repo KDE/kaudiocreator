@@ -107,17 +107,21 @@ public slots:
 
 private slots:
 	void newDisc(unsigned int discId);
-
 	void changeDevice(const QString &);
 	void lookupCDDBDone(KCDDB::Result result);
+	void artistChangedByUser();
+	void albumChangedByUser();
+	void yearChangedByUser(int);
+	void genreChangedByUser(const QString &);
 
 private:
 	void lookupDevice();
 	void lookupCDDB();
 	void newAlbum();
+	void setAlbumInfo(const QString &, const QString &);
 	void ripWholeAlbum();
 	QList<TracksItem *> selectedTracks();
-
+	void toggleInputs(bool);
 	QString formatTime(unsigned s);
 
 	KCDDB::Client* cddb;

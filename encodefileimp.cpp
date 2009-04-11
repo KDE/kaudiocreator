@@ -47,7 +47,7 @@
 
 #include <kdebug.h>
 
-EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB::Genres()), editedItem(0), editedColumn(0)
+EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), editedColumn(0)
 {
 	QWidget *w = new QWidget();
 	setupUi(w);
@@ -60,9 +60,9 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
 	yearInput->setMaximum(QDate::currentDate().year());
 	yearInput->setSpecialValueText(i18n("empty"));
 
-	genreBox->addItems(m_genres.i18nList());
-
 	setupGlobals();
+
+	genreBox->addItems(m_genres);
 
 	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
@@ -91,6 +91,8 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), m_genres(KCDDB:
  */
 void EncodeFileImp::setupGlobals()
 {
+	m_genres = KCDDB::Genres().i18nList();
+
 	dirFilter.clear();
 	QString filter;
 	QStringList supportedInputTypes = Prefs::inputTypesList();
@@ -219,7 +221,7 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 
 			KComboBox *itemGenreBox = new KComboBox;
 			itemGenreBox->setEditable(true);
-			itemGenreBox->addItems(m_genres.i18nList());
+			itemGenreBox->addItems(m_genres);
 			tagString = f.tag()->genre();
 			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
 			itemGenreBox->setEditText(qtString);
@@ -250,7 +252,7 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 
 			KComboBox *itemGenreBox = new KComboBox;
 			itemGenreBox->setEditable(true);
-			itemGenreBox->addItems(m_genres.i18nList());
+			itemGenreBox->addItems(m_genres);
 			fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
 
 			KIntNumInput *itemYearInput = new KIntNumInput;
@@ -274,7 +276,7 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 
 		KComboBox *itemGenreBox = new KComboBox;
 		itemGenreBox->setEditable(true);
-		itemGenreBox->addItems(m_genres.i18nList());
+		itemGenreBox->addItems(m_genres);
 		fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
 
 		KIntNumInput *itemYearInput = new KIntNumInput;
