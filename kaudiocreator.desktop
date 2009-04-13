@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Comment=Frontend for audio file creation
 Comment[bg]=Програма за създаване на аудио файлове
 Comment[cs]=Prostředí pro tvorbu audio souborů
@@ -65,10 +64,8 @@ GenericName[sv]=Cd-lagring
 GenericName[tr]=CD 
 GenericName[uk]=Видирання КД
 GenericName[x-test]=xxCD Ripperxx
-MimeType=
 Exec=kaudiocreator
 Icon=kaudiocreator
-Path=
 Type=Application
 Terminal=false
 Categories=Qt;KDE;AudioVideo;Audio;
