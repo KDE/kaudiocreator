@@ -449,10 +449,10 @@ You are not alone with your wish to listen to your music independently of your a
 </qandaentry>
 <qandaentry>
 <question>
-<para>The program ist not working, no encoded files are produced.</para>
+<para>The program is not working, no encoded files are produced.</para>
 </question>
 <answer>
-<para>Thereare many possible reasons for that. Check the &CD;/DVD drive device ID setting, access/read permission and whether you have installed cdparanoia and the audio encoder of your choice (lame for mp3s, oggenc for oggs, flac &etc;). Try invoking both programs from a command line in a terminal. That might give you a hint what's wrong.</para>
+<para>There are many possible reasons for that. Check the &CD;/DVD drive device ID setting, access/read permission and whether you have installed cdparanoia and the audio encoder of your choice (lame for mp3s, oggenc for oggs, flac &etc;). Try invoking both programs from a command line in a terminal. That might give you a hint what's wrong.</para>
 <para>Check if you don't try to rip a copy protected audio &CD;. Verify it on the cover of the &CD;. This won't work!</para>
 <para>There is a chapter with a <link linkend="Example">full walkthrough example</link>. Even if you want to use different settings it might give you a hint how to proceed.</para>
 </answer>
@@ -542,7 +542,7 @@ You are not alone with your wish to listen to your music independently of your a
      </term>
      <listitem>
       <para>
-       <action>Settings -> Configure KAudioCreator... -> General</action>
+       <action>Settings -> Configure &kaudiocreator;... -> General</action>
       </para>
       <para>
         <screenshot>
@@ -574,7 +574,7 @@ You are not alone with your wish to listen to your music independently of your a
      </term>
      <listitem>
       <para>
-       <action>Settings -> Configure KAudioCreator... -> &CD;</action>
+       <action>Settings -> Configure &kaudiocreator;... -> &CD;</action>
       </para>
       <para>
         <screenshot>
@@ -606,7 +606,7 @@ You are not alone with your wish to listen to your music independently of your a
      </term>
      <listitem>
       <para>
-       <action>Settings -> Configure KAudioCreator... -> CDDB -> Lookup tab</action>
+       <action>Settings -> Configure &kaudiocreator;... -> CDDB -> Lookup tab</action>
       </para>
       <para>
         <screenshot>
@@ -645,7 +645,7 @@ You are not alone with your wish to listen to your music independently of your a
      </term>
      <listitem>
       <para>
-       <action>Settings -> Configure KAudioCreator... -> CDDB -> Submit tab</action>
+       <action>Settings -> Configure &kaudiocreator;... -> CDDB -> Submit tab</action>
       </para>
       <para>
         <screenshot>
@@ -709,7 +709,7 @@ You are not alone with your wish to listen to your music independently of your a
      </term>
      <listitem>
       <para>
-       <action>Settings -> Configure KAudioCreator... -> Encoder</action>
+       <action>Settings -> Configure &kaudiocreator;... -> Encoder</action>
       </para>
       <para>
         <screenshot>
@@ -746,14 +746,14 @@ You are not alone with your wish to listen to your music independently of your a
       <para><guilabel>Encoded File Location</guilabel> - Back on the <guilabel>Encoder Configuration</guilabel> tab, we define here the destination folder including the folder name for the files from the ripped &CD;. These are variables which will be filled with the corresponding &CD; data everytime you rip a &CD;. The &CD; data can be entered manually or fetched via Internet (CDDB). As already configured in this example, we will use freedb and fetch the data automatically. Play with the Wizard, but in the end for this example the entry should be:</para>
       <para>'/usr/share/cd/%{albumartist} - %{albumtitle} - %{year}/%{number} - %{title}.%{extension}'</para>
       <para>Set the rest as in the screenshot. A few comments for future use outside this example:</para>
-      <para><guilabel>'Number of wav files to encode at a time</guilabel>: If you have a dualcore or quadcore machine or even a multi-processor machine, you can try to encode more than one file at the same time.</para>
+      <para><guilabel>Number of wav files to encode at a time</guilabel>: If you have a dualcore or quadcore machine or even a multi-processor machine, you can try to encode more than one file at the same time.</para>
       <para><guilabel>Encoder Priority</guilabel>: for the experts only, increase the priority for faster encoding.</para>
       </listitem>
     </varlistentry>
    </variablelist>
   </para>
 
-  <para>That's about it, we have just finished the basic setup of KAudioCreator. This configuration is used as the default for every &CD; rip. If you have chosen your music organization structure wise you will never have to change it again.</para>
+  <para>That's about it, we have just finished the basic setup of &kaudiocreator;. This configuration is used as the default for every &CD; rip. If you have chosen your music organization structure wise you will never have to change it again.</para>
 
 </sect1>
 
