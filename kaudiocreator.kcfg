@@ -37,6 +37,12 @@
     <entry name="seperateMultiArtist" type="Bool">
       <default>false</default>
     </entry>
+    <entry name="fat32compatible" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="replaceFatIncompatible" type="String">
+      <default>_</default>
+    </entry>
     <entry name="genericArtist" type="String">
       <default>Various Artists</default>
     </entry>

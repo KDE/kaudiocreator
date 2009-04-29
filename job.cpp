@@ -17,15 +17,19 @@
  *  Boston, MA 02110-1301, USA.
  **/
 
+#include "prefs.h"
 #include "job.h"
+
 #include <kmacroexpander.h>
+
 #include <QRegExp>
 
 /**
  * A helper function to replace %X with the stuff in the album.
  * if quote is true then put "" around the %X
  */
-QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QString, QString> _map){
+QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QString, QString> _map, bool createFilename)
+{
 	QHash<QString,QString> map = _map;
   
 	map.insert("title", track_title);
@@ -39,14 +43,29 @@ QString Job::replaceSpecialChars(const QString &string, bool quote, QHash<QStrin
 	map.insert("albumcomment", comment);
 	map.insert("albumartist", group);
 	map.insert("albumartistinitial", !group.isEmpty() ? group.at(0).toUpper() : QString() );
-  
+
+	if (createFilename && Prefs::fat32compatible()) {
+		map.insert("title", make_fat32_compatible(map["title"]));
+		map.insert("artist", make_fat32_compatible(map["artist"]));
+		map.insert("number", make_fat32_compatible(map["number"]));
+		map.insert("comment", make_fat32_compatible(map["comment"]));
+		map.insert("year", make_fat32_compatible(map["year"]));
+		map.insert("genre", make_fat32_compatible(map["genre"]));
+		
+		map.insert("albumtitle", make_fat32_compatible(map["albumtitle"]));
+		map.insert("albumcomment", make_fat32_compatible(map["albumcomment"]));
+		map.insert("albumartist", make_fat32_compatible(map["albumartist"]));
+		map.insert("albumartistinitial", make_fat32_compatible(map["albumartistinitial"]));
+	}
+
 	if (quote)
 		return (KMacroExpander::expandMacrosShellQuote(string, map));
 	else
 		return (KMacroExpander::expandMacros(string, map));
 }
 
-void Job::fix(const QString &in, const QString &out){
+void Job::fix(const QString &in, const QString &out)
+{
 	track_title.replace( QRegExp(in), out );
 	track_artist.replace( QRegExp(in), out );
 	track_comment.replace( QRegExp(in), out );
@@ -58,3 +77,18 @@ void Job::fix(const QString &in, const QString &out){
 	group.replace( QRegExp(in), out );
 }
 
+//remove \ / : * ? " < > |
+const QString Job::make_fat32_compatible(const QString &tag)
+{
+	QString s = tag;
+	QString rep = Prefs::replaceFatIncompatible();
+	s.replace("\\", "_");
+	s.replace("/", "_");
+	s.replace(":", "_");
+	s.replace("*", "_");
+	s.replace("?", "_");
+	s.replace("<", "_");
+	s.replace(">", "_");
+	s.replace("|", "_");
+	return s;
+}

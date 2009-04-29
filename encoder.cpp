@@ -183,15 +183,14 @@ void Encoder::tendToNewJobs()
 	EncoderPrefs* prefs = loadEncoder(job->encoder);
 	QString desiredFile = Prefs::fileFormat();
 	desiredFile.replace( QRegExp("~"), QDir::homePath() );
-	{
-		QHash <QString,QString> map;
-		map.insert("extension", prefs->extension());
-		Job jobx = *job;
-		jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
-		jobx.fix("/", "%2f");
-		// If the user wants anything regexp replaced do it now...
-		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
-	}
+
+	QHash <QString,QString> map;
+	map.insert("extension", prefs->extension());
+	Job jobx = *job;
+	jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
+	jobx.fix("/", "%2f");
+	// If the user wants anything regexp replaced do it now...
+	desiredFile = jobx.replaceSpecialChars(desiredFile, false, map, true);
 
 	if (QFile::exists(desiredFile)) {
 		KUrl desiredFileUrl = KUrl::fromPath(desiredFile);
@@ -226,7 +225,7 @@ void Encoder::tendToNewJobs()
 	reportCount = 0;
 
 	QString command = prefs->commandLine();
-	QHash <QString,QString> map;
+	map.clear();
 	map.insert("extension", prefs->extension());
 	map.insert("f", job->location);
 	map.insert("o", desiredFile);
@@ -237,6 +236,7 @@ void Encoder::tendToNewJobs()
 		command = niceProg + " -n " + QString::number(niceLevel) + " " + command;
 
 	command = job->replaceSpecialChars(command, true, map);
+
 	updateProgress(job->id, 0);
 	job->errorString = command;
 

@@ -7,13 +7,16 @@
 
 class General : public QWidget, private Ui::General
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    General( QWidget* parent = 0 );
+	General( QWidget* parent = 0 );
 
 public slots:
-   void updateExample();
+	void updateExample();
+   
+private:
+	const QString make_fat32_compatible(const QString &);
 };
 
 #endif

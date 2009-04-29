@@ -5,14 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>473</height>
+    <width>467</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>General</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
     <widget class="QCheckBox" name="kcfg_removeCompletedJobs" >
      <property name="text" >
@@ -32,30 +32,8 @@
      <property name="title" >
       <string>File Regular Expression Replacement</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>0</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="textLabel2" >
-        <property name="text" >
-         <string>Selection:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="3" >
+     <layout class="QGridLayout" name="gridLayout_3" >
+      <item row="0" column="0" colspan="2" >
        <widget class="QLabel" name="textLabel1" >
         <property name="text" >
          <string>Regular expression used on all file names. For example using selection " " and replace with "_" would replace all the spaces with underlines.
@@ -69,7 +47,76 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
+      <item row="1" column="0" colspan="2" >
+       <layout class="QGridLayout" name="gridLayout" >
+        <item row="0" column="0" >
+         <widget class="QLabel" name="textLabel2" >
+          <property name="text" >
+           <string>Selection:</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QLineEdit" name="kcfg_replaceInput" />
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="textLabel3" >
+          <property name="text" >
+           <string>Replace with:</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QLineEdit" name="kcfg_replaceOutput" />
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" colspan="2" >
+       <widget class="QCheckBox" name="kcfg_fat32compatible" >
+        <property name="toolTip" >
+         <string>Check if you want FAT32-incompatible characters to be replaced.</string>
+        </property>
+        <property name="whatsThis" >
+         <string>Check if you want FAT32-incompatible characters to be replaced. Of course this only works if the output is created by this program (%f), not the encoder itself.</string>
+        </property>
+        <property name="text" >
+         <string>Use FAT32-compatible Filenames</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Replace incompatible characters with:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLineEdit" name="kcfg_replaceFatIncompatible" >
+        <property name="toolTip" >
+         <string>Replace FAT32-incompatible characters with that text.</string>
+        </property>
+        <property name="whatsThis" >
+         <string>Replace FAT32-incompatible characters with that text.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Example</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2" >
+      <item row="0" column="0" >
        <widget class="QLabel" name="inputlabel" >
         <property name="text" >
          <string>Input:</string>
@@ -79,7 +126,14 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0" >
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="example" >
+        <property name="text" >
+         <string>Cool artist - example audio file.wav</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
        <widget class="QLabel" name="outputLabel" >
         <property name="text" >
          <string>Output:</string>
@@ -89,56 +143,13 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2" >
-       <widget class="QLabel" name="exampleLabel" >
-        <property name="text" >
-         <string>Example</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1" colspan="2" >
+      <item row="1" column="1" >
        <widget class="QLabel" name="exampleOutput" >
         <property name="text" >
          <string>Cool artist - example audio file.wav</string>
         </property>
         <property name="wordWrap" >
          <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1" colspan="2" >
-       <widget class="QLineEdit" name="example" >
-        <property name="text" >
-         <string>Cool artist - example audio file.wav</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2" >
-       <widget class="QLineEdit" name="kcfg_replaceInput" />
-      </item>
-      <item row="2" column="2" >
-       <widget class="QLineEdit" name="kcfg_replaceOutput" />
-      </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="textLabel3" >
-        <property name="text" >
-         <string>Replace with:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="3" >
-       <widget class="Line" name="line1" >
-        <property name="frameShape" >
-         <enum>QFrame::HLine</enum>
-        </property>
-        <property name="frameShadow" >
-         <enum>QFrame::Sunken</enum>
         </property>
        </widget>
       </item>
@@ -185,16 +196,7 @@
       </item>
       <item>
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item row="1" column="0" >
@@ -236,7 +238,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>442</width>
        <height>51</height>
