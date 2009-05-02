@@ -5,14 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>467</width>
-    <height>590</height>
+    <width>458</width>
+    <height>558</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>General</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout_3" >
    <item>
     <widget class="QCheckBox" name="kcfg_removeCompletedJobs" >
      <property name="text" >
@@ -32,8 +32,8 @@
      <property name="title" >
       <string>File Regular Expression Replacement</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3" >
-      <item row="0" column="0" colspan="2" >
+     <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <item>
        <widget class="QLabel" name="textLabel1" >
         <property name="text" >
          <string>Regular expression used on all file names. For example using selection " " and replace with "_" would replace all the spaces with underlines.
@@ -47,7 +47,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2" >
+      <item>
        <layout class="QGridLayout" name="gridLayout" >
         <item row="0" column="0" >
          <widget class="QLabel" name="textLabel2" >
@@ -76,36 +76,6 @@
          <widget class="QLineEdit" name="kcfg_replaceOutput" />
         </item>
        </layout>
-      </item>
-      <item row="2" column="0" colspan="2" >
-       <widget class="QCheckBox" name="kcfg_fat32compatible" >
-        <property name="toolTip" >
-         <string>Check if you want FAT32-incompatible characters to be replaced.</string>
-        </property>
-        <property name="whatsThis" >
-         <string>Check if you want FAT32-incompatible characters to be replaced. Of course this only works if the output is created by this program (%f), not the encoder itself.</string>
-        </property>
-        <property name="text" >
-         <string>Use FAT32-compatible Filenames</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Replace incompatible characters with:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" >
-       <widget class="QLineEdit" name="kcfg_replaceFatIncompatible" >
-        <property name="toolTip" >
-         <string>Replace FAT32-incompatible characters with that text.</string>
-        </property>
-        <property name="whatsThis" >
-         <string>Replace FAT32-incompatible characters with that text.</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>
@@ -152,6 +122,45 @@
          <bool>false</bool>
         </property>
        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="kcfg_fat32compatible" >
+     <property name="toolTip" >
+      <string>Check if you want FAT32-incompatible characters to be replaced.</string>
+     </property>
+     <property name="whatsThis" >
+      <string>Check if you want FAT32-incompatible characters to be replaced. Of course this only works if the output is created by this program (%f), not the encoder itself.</string>
+     </property>
+     <property name="title" >
+      <string>Use FAT32-compatible Filenames</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" >
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="text" >
+           <string>Replace incompatible characters with:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="kcfg_replaceFatIncompatible" >
+          <property name="toolTip" >
+           <string>Replace FAT32-incompatible characters with that text.</string>
+          </property>
+          <property name="whatsThis" >
+           <string>Replace FAT32-incompatible characters with that text.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

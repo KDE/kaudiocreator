@@ -82,13 +82,13 @@ const QString Job::make_fat32_compatible(const QString &tag)
 {
 	QString s = tag;
 	QString rep = Prefs::replaceFatIncompatible();
-	s.replace("\\", "_");
-	s.replace("/", "_");
-	s.replace(":", "_");
-	s.replace("*", "_");
-	s.replace("?", "_");
-	s.replace("<", "_");
-	s.replace(">", "_");
-	s.replace("|", "_");
+	s.replace("\\", rep);
+	s.replace("/", rep);
+	s.replace(":", rep);
+	s.replace("*", rep);
+	s.replace("?", rep);
+	s.replace("<", rep);
+	s.replace(">", rep);
+	s.replace("|", rep);
 	return s;
 }

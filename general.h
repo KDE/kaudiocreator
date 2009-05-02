@@ -4,7 +4,6 @@
 
 #include "ui_general.h"
 
-
 class General : public QWidget, private Ui::General
 {
 Q_OBJECT
@@ -12,11 +11,9 @@ Q_OBJECT
 public:
 	General( QWidget* parent = 0 );
 
-public slots:
+private slots:
 	void updateExample();
-   
-private:
-	const QString make_fat32_compatible(const QString &);
+	void check_fat32_compatibility(const QString &);
 };
 
 #endif
