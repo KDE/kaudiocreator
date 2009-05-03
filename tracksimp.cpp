@@ -54,6 +54,7 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), editedItem(0), cddbInf
 
 	connect(trackListing, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
 	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
+	connect(trackListing, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(syncToCddbInfo(QTreeWidgetItem *, int)));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 
@@ -561,7 +562,8 @@ void TracksImp::setAlbumInfo(const QString &artist, const QString &album)
 //  		keyPressEvent(event);
 //  }
 
-void TracksImp::editTrackName(QTreeWidgetItem *item) {
+void TracksImp::editTrackName(QTreeWidgetItem *item)
+{
 	if (!editedItem && item) {
 		trackListing->openPersistentEditor(item, HEADER_TRACK_NAME);
 		editedItem = item;
@@ -575,11 +577,18 @@ void TracksImp::editTrackName(QTreeWidgetItem *item) {
 	}
 }
 
-void TracksImp::closeEditor() {
+void TracksImp::closeEditor()
+{
 	if (editedItem) {
 		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
 		editedItem = 0;
 	}
+}
+
+void TracksImp::syncToCddbInfo(QTreeWidgetItem *item, int /*column*/)
+{
+	TrackInfo &track = cddbInfo.track((item->text(HEADER_TRACK)).toInt() - 1);
+	track.set(Title, QVariant(item->text(HEADER_TRACK_NAME)));
 }
 
 /**

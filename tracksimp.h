@@ -113,6 +113,7 @@ private slots:
 	void albumChangedByUser();
 	void yearChangedByUser(int);
 	void genreChangedByUser(const QString &);
+	void syncToCddbInfo(QTreeWidgetItem *, int);
 
 private:
 	void lookupDevice();
