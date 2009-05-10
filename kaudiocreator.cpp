@@ -97,8 +97,6 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	connect( encoder, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
 	connect( jobQue, SIGNAL( removeJob( int ) ), this, SLOT( updateStatus() ) );
 
-	resize(500, 440);
-
 	QAction *eject = actionCollection()->addAction("eject");
 	eject->setText(i18n("&Eject CD"));
 	connect(eject, SIGNAL(triggered(bool) ), tracks, SLOT(eject()));

@@ -64,6 +64,8 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), 
 
 	genreBox->addItems(m_genres);
 
+	restoreDialogSize(KConfigGroup(KGlobal::config(), "size_encodefiledialog"));
+
 	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
 	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(setupEncoderBox()));
@@ -83,6 +85,16 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), 
 
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(encode()));
 	connect(this, SIGNAL(user2Clicked()), this, SLOT(encodeAndClose()));
+
+	connect(this, SIGNAL(user2Clicked()), this, SLOT(saveSize()));
+	connect(this, SIGNAL(closeClicked()), this, SLOT(saveSize()));
+}
+
+void EncodeFileImp::saveSize()
+{
+	KConfigGroup group(KGlobal::config(), "size_encodefiledialog");
+	saveDialogSize(group);
+	group.sync();
 }
 
 /**

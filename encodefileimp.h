@@ -51,9 +51,10 @@ signals:
   void startJob(Job *newJob);
 
 public:
-  EncodeFileImp(QWidget* parent = 0);
+	EncodeFileImp(QWidget* parent = 0);
 
 protected slots:
+	void saveSize();
 	void openFiles();
 	void openDirectory();
 	void clearFileList();
