@@ -53,7 +53,9 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), 
 	setupUi(w);
 	setMainWidget(w);
 	setCaption(i18n("Encode Files"));
-	setButtons(User1|User2|Close);
+	setButtons(Default|User1|User2|Close);
+	setButtonText(Default, i18n("Fit Columns to Content"));
+	setButtonIcon(Default, KIcon("resizeimages"));
 	setButtonText(User1, i18n("&Add to queue"));
 	setButtonText(User2, i18n("&Add to queue and close"));
 	yearInput->setMinimum(EMPTY_YEAR);
@@ -83,6 +85,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), 
 	connect(assignEncoderButton, SIGNAL(clicked()), this, SLOT(assignEncoder()));
 	connect(assignAllButton, SIGNAL(clicked()), this, SLOT(assignAll()));
 
+	connect(this, SIGNAL(defaultClicked()), this, SLOT(fitToContent()));
 	connect(this, SIGNAL(user1Clicked()), this, SLOT(encode()));
 	connect(this, SIGNAL(user2Clicked()), this, SLOT(encodeAndClose()));
 
@@ -306,6 +309,13 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 			itemEncoderBox->addItems(encoderMap[extension]);
 		}
 		fileList->setItemWidget(newFile, COLUMN_ENCODER, itemEncoderBox);
+	}
+}
+
+void EncodeFileImp::fitToContent()
+{
+	for (int c = 0; c < fileList->columnCount(); ++c) {
+		fileList->resizeColumnToContents(c);
 	}
 }
 

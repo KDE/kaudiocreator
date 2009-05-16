@@ -59,6 +59,7 @@ protected slots:
 	void openDirectory();
 	void clearFileList();
 	void removeSelectedFiles();
+	void fitToContent();
 
 	void assignArtist();
 	void assignAlbum();
