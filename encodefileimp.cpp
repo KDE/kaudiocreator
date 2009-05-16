@@ -243,7 +243,6 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 			itemYearInput->setMinimum(EMPTY_YEAR);
 			itemYearInput->setMaximum(QDate::currentDate().year());
 			itemYearInput->setSpecialValueText(i18n("empty"));
-			itemYearInput->setSliderEnabled(true);
 			uint y = f.tag()->year();
 			if (y == 0) y = EMPTY_YEAR;
 			fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
@@ -252,7 +251,6 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 			KIntNumInput *trackNumberInput = new KIntNumInput;
 			uint t = f.tag()->track();
 			if (t == 0) t = fileList->topLevelItemCount();
-			trackNumberInput->setSliderEnabled(true);
 			trackNumberInput->setMinimum(EMPTY_TRACK);
 			trackNumberInput->setSpecialValueText(i18n("empty"));
 			fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
@@ -271,11 +269,9 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 			itemYearInput->setMinimum(EMPTY_YEAR);
 			itemYearInput->setMaximum(QDate::currentDate().year());
 			itemYearInput->setSpecialValueText(i18n("empty"));
-			itemYearInput->setSliderEnabled(true);
 			fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
 
 			KIntNumInput *trackNumberInput = new KIntNumInput;
-			trackNumberInput->setSliderEnabled(true);
 			trackNumberInput->setMinimum(EMPTY_TRACK);
 			trackNumberInput->setSpecialValueText(i18n("empty"));
 			fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
@@ -295,11 +291,9 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 		itemYearInput->setMinimum(EMPTY_YEAR);
 		itemYearInput->setMaximum(QDate::currentDate().year());
 		itemYearInput->setSpecialValueText(i18n("empty"));
-		itemYearInput->setSliderEnabled(true);
 		fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
 
 		KIntNumInput *trackNumberInput = new KIntNumInput;
-		trackNumberInput->setSliderEnabled(true);
 		trackNumberInput->setMinimum(EMPTY_TRACK);
 		trackNumberInput->setSpecialValueText(i18n("empty"));
 		fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
