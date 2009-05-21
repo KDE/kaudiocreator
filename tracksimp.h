@@ -103,6 +103,7 @@ public slots:
 	void eject();
 	void selectAllTracks();
 	void deselectAllTracks();
+	void editCurrentTrack();
 	void editTrackName(QTreeWidgetItem *);
 	void closeEditor();
 

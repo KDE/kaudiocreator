@@ -6,7 +6,8 @@
   <Action name="configure_kaudiocreator" icon="configure"/>
   <Action name="clear_done_jobs" icon="user-trash"/>
   <Action name="eject" icon="media-eject"/>
-  <Action name="edit_cd" icon="document-properties"/>
+  <Action name="edit_cd" icon="document-edit"/>
+  <Action name="edit_track" icon="document-properties"/>
   <Action name="cddb_now" icon="media-optical-audio"/>
   <Action name="encode_files" icon="drive-harddisk"/>
 </ActionProperties>
@@ -16,6 +17,7 @@
     <Action name="eject"/>
     <Action name="cddb_now"/>
     <Action name="edit_cd"/>
+    <Action name="edit_track"/>
     <Action name="select_all"/>
     <Action name="deselect_all"/>
     <Action name="rip_selected"/>

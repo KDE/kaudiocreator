@@ -147,6 +147,12 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
 	edit->setEnabled( false );
 
+	QAction *editTrack = actionCollection()->addAction("edit_track");
+	editTrack->setText(i18n("Edit &Track"));
+	connect(editTrack, SIGNAL(triggered(bool) ), tracks, SLOT(editCurrentTrack()));
+	connect(tracks, SIGNAL(hasCD(bool)), editTrack, SLOT(setEnabled(bool)));
+	editTrack->setEnabled( false );
+
 	action = actionCollection()->addAction("encode_files");
         action->setText(i18n("Encode &Files from disk"));
 	connect(action, SIGNAL(triggered(bool) ), SLOT(encodeFile()));
@@ -156,11 +162,6 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	connect(cddb, SIGNAL(triggered(bool) ), tracks, SLOT(performCDDB()));
 	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
 	cddb->setEnabled( false );
-
-// 	QAction *rename = actionCollection()->addAction("rename_track");
-// 	rename->setText(i18n("&Rename Track"));
-// 	rename->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
-// 	connect(rename, SIGNAL(triggered(bool)), tracks, SLOT(editTrackName()));
 
 	KStandardAction::configureNotifications(this, SLOT(configureNotifications()),
 		  actionCollection());
@@ -178,7 +179,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	statusBar()->addPermanentWidget(defaultEncLabel, 0);
 	showCurrentEncoder();
 	// seems to need some time to settle
-	QTimer::singleShot(250, tracks, SLOT(initDevice()));
+	QTimer::singleShot(500, tracks, SLOT(initDevice()));
 }
 
 void KAudioCreator::setDevice( const QString &device )

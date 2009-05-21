@@ -544,25 +544,13 @@ void TracksImp::setAlbumInfo(const QString &artist, const QString &album)
 	albumInfoLabel->setText(albumInfo);
 }
 
-/**
- * If the user presses the F2 key, trigger renaming of the title.
- * @param event the QKeyEvent passed to this event handler.
- */
-// void TracksImp::keyPressEvent(QKeyEvent *event) {
-// kDebug() << "Enter" << endl;
-// 	QTreeWidgetItem *item = trackListing->currentItem();
-// 	if( !item ) return;
-//  	if( event->key() == Qt::Key_Enter )
-//  	{
-// kDebug() << "Enter" << endl;
-//  //		emit(renameTrack(item));
-//  ///TODO		item->setRenameEnabled( HEADER_TRACK_NAME, true );
-//  ///TODO		item->startRename( HEADER_TRACK_NAME );
-//  		event->accept();
-//  	}
-//  	else
-//  		keyPressEvent(event);
-//  }
+void TracksImp::editCurrentTrack()
+{
+	QTreeWidgetItem *item = trackListing->currentItem();
+	trackListing->setFocus();
+	trackListing->setCurrentItem(item, HEADER_TRACK_NAME);
+	editTrackName(item);
+}
 
 void TracksImp::editTrackName(QTreeWidgetItem *item)
 {
