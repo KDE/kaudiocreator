@@ -42,13 +42,15 @@ class Job;
 /**
  * This class lets the user encode a file.
  */
-class EncodeFileImp : public KDialog, public Ui::EncodeFile  {
+class EncodeFileImp : public KDialog, public Ui::EncodeFile
+{
 
 Q_OBJECT
 
 signals:
   // Start encoding this wav file
-  void startJob(Job *newJob);
+	void startJob(Job *newJob);
+	void allJobsStarted();
 
 public:
 	EncodeFileImp(QWidget* parent = 0);

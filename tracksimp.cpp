@@ -439,6 +439,8 @@ void TracksImp::startSession( QString encoder )
 	i18n("%1 Job(s) have been started.  You can watch their progress in the "\
 	   "jobs section.", selected.count()),
 	i18n("Jobs have started"), i18n("Jobs have started"));
+
+	emit(sessionStarted());
 }
 
 QList<TracksItem *> TracksImp::selectedTracks()

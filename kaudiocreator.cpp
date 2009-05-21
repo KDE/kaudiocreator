@@ -52,8 +52,8 @@
 /**
  * Constructor. Connect all of the object and the job control.
  */
-KAudioCreator::KAudioCreator( QWidget *parent) :
-	   KXmlGuiWindow(parent), statusLabel(0){
+KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLabel(0)
+{
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
@@ -61,9 +61,9 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	tracks = new TracksImp();
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
 
-	KPageWidgetItem* pageWidgetItem = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
-	pageWidgetItem->setIcon(KIcon(("media-optical-audio")));
-	pageWidget->addPage(pageWidgetItem);
+	trackPage = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
+	trackPage->setIcon(KIcon(("media-optical-audio")));
+	pageWidget->addPage(trackPage);
 
 	checkSettings();
 
@@ -71,9 +71,11 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 	encoder = new Encoder(this);
 	jobQue = new JobQueImp(0);
 
-	pageWidgetItem = new KPageWidgetItem(jobQue, i18n("&Jobs"));
-	pageWidgetItem->setIcon(KIcon(SmallIcon("system-run", 32)));
-	pageWidget->addPage(pageWidgetItem);
+	jobPage = new KPageWidgetItem(jobQue, i18n("&Jobs"));
+	jobPage->setIcon(KIcon(SmallIcon("system-run", 32)));
+	pageWidget->addPage(jobPage);
+
+	connect(tracks, SIGNAL(sessionStarted()), this, SLOT(showJobPage()));
 
 	connect(jobQue, SIGNAL(removeJob(int)), ripper, SLOT(removeJob(int)));
 	connect(ripper, SIGNAL(updateProgress(int, int)), jobQue,
@@ -182,6 +184,11 @@ KAudioCreator::KAudioCreator( QWidget *parent) :
 void KAudioCreator::setDevice( const QString &device )
 {
 	tracks->setDevice(device);
+}
+
+void KAudioCreator::showJobPage()
+{
+	pageWidget->setCurrentPage(jobPage);
 }
 
 void KAudioCreator::slotRipSelection(QAction *selection) {
@@ -337,6 +344,7 @@ void KAudioCreator::configureNotifications() {
 void KAudioCreator::encodeFile(){
 	EncodeFileImp *file = new EncodeFileImp(this);
 	connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
+	connect(file, SIGNAL(allJobsStarted()), this, SLOT(showJobPage()));
 	file->exec();
 }
 

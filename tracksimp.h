@@ -82,7 +82,8 @@ signals:
 	void hasCD(bool);
 	void hasTracks(bool);
 	void renameTrack(QTreeWidgetItem *);
- 
+	void sessionStarted();
+
 public:
 	TracksImp( QWidget* parent = 0);
 	~TracksImp();

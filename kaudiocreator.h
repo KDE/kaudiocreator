@@ -27,6 +27,7 @@
 #include "ui_cdconfig.h"
 
 class KPageWidget;
+class KPageWidgetItem;
 class TracksImp;
 class JobQueImp;
 class Ripper;
@@ -58,6 +59,9 @@ Q_OBJECT
 public:
   KAudioCreator(QWidget *parent = 0);
   void setDevice(const QString &device);
+  
+public slots:
+	void showJobPage();
 
 protected:
   virtual bool queryClose();
@@ -75,7 +79,8 @@ private slots:
   void setupRipMenu();
 
 private:
-  KPageWidget *pageWidget;
+	KPageWidget *pageWidget;
+	KPageWidgetItem *trackPage, *jobPage;
   TracksImp   *tracks;
   JobQueImp   *jobQue;
   Ripper      *ripper;

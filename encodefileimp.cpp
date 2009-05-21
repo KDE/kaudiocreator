@@ -476,6 +476,8 @@ void EncodeFileImp::encode()
 	i18n("%1 Job(s) have been started.  You can watch their progress in the " \
 		"jobs section.", jobCounter),
 	i18n("Jobs have started"), i18n("Jobs have started"));
+
+	if (jobCounter > 0) emit(allJobsStarted());
 }
 
 void EncodeFileImp::encodeAndClose()
