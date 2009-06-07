@@ -1,15 +1,17 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kaudiocreator" version="3">
+<kpartgui name="kaudiocreator" version="4">
 <ActionProperties>
-  <Action name="rip_selected" icon="system-run"/>
-  <Action name="rip" icon="system-run"/>
-  <Action name="configure_kaudiocreator" icon="configure"/>
-  <Action name="clear_done_jobs" icon="user-trash"/>
-  <Action name="eject" icon="media-eject"/>
-  <Action name="edit_cd" icon="document-edit"/>
-  <Action name="edit_track" icon="document-properties"/>
-  <Action name="cddb_now" icon="media-optical-audio"/>
-  <Action name="encode_files" icon="drive-harddisk"/>
+  <Action name="rip_selected" icon="system-run" shortcut="Ctrl+S"/>
+  <Action name="rip" icon="system-run" shortcut="Ctrl+R"/>
+  <Action name="configure_kaudiocreator" icon="configure" shortcut="Ctrl+C"/>
+  <Action name="clear_done_jobs" icon="user-trash" shortcut="Ctrl+J"/>
+  <Action name="eject" icon="media-eject" shortcut="Ctrl+E"/>
+  <Action name="edit_cd" icon="document-edit" shortcut="Ctrl+A"/>
+  <Action name="edit_track" icon="document-properties" shortcut="Ctrl+T"/>
+  <Action name="select_all" icon="edit-select-all" shortcut="Ctrl+Shift+A"/>
+  <Action name="deselect_all" icon="edit-clear-list" shortcut="Ctrl+Shift+D"/>
+  <Action name="cddb_now" icon="media-optical-audio" shortcut="Ctrl+D"/>
+  <Action name="encode_files" icon="drive-harddisk" shortcut="Ctrl+F"/>
 </ActionProperties>
 
 <MenuBar>

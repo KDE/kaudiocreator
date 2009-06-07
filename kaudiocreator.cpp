@@ -120,7 +120,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	deselectAll->setEnabled( false );
 
 	KActionMenu *actActionMenu = actionCollection()->add<KActionMenu>( "rip" );
-        actActionMenu->setText( i18n("Rip &Selection") );
+        actActionMenu->setText( i18n("&Rip") );
 	actActionMenu->setDelayed(true); //needed for checking "all accounts"
 	actActionMenu->setEnabled( false );
 	connect(actActionMenu,SIGNAL(triggered()),tracks,SLOT(startSession()));
