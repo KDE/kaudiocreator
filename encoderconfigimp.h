@@ -71,18 +71,15 @@ class EncoderEditDialog : public KConfigDialog
 Q_OBJECT
 
 public:
-	EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config);
-	void setEncoderExists(bool);
+	EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config, bool isNew = false);
 
 protected slots:
 	void updateSettings();
 
-protected:
-	bool hasChanged();
-
 private:
 	EncoderEdit *editDialog;
-	bool encoderExists;
+	bool isNewEncoder;
+	QString origName;
 };
 
 #endif

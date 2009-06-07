@@ -122,7 +122,7 @@ void EncoderConfigImp::addEncoderSlot()
 		groupName = QString("__new encoder__").append(KRandom::randomString(10));
 	 } while (EncoderEditDialog::exists(groupName));
  
-	EncoderEditDialog *dialog = new EncoderEditDialog(this, groupName, EncoderPrefs::prefs(groupName));
+	EncoderEditDialog *dialog = new EncoderEditDialog(this, groupName, EncoderPrefs::prefs(groupName), true);
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
 	dialog->setCaption(i18n("Add Encoder"));
 	dialog->show();
@@ -167,10 +167,9 @@ void EncoderConfigImp::copyEncoderSlot()
 	EncoderPrefs *origPrefs = EncoderPrefs::prefs(groupName);
 	EncoderPrefs *encPrefs = cloneEncoder(origPrefs, tmpEncoderName);
 
-	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs);
+	EncoderEditDialog *dialog = new EncoderEditDialog(this, tmpEncoderName, encPrefs, true);
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(saveNewEncoderSlot(const QString &)));
 	dialog->setCaption(i18n("Copy Encoder"));
-	dialog->setEncoderExists(true);
 	dialog->show();
 }
 
@@ -375,8 +374,8 @@ void EncoderPrefs::deletePrefs(const QString &groupName)
 /**
  * EncoderEditDialog
  */
-EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config)
-	: KConfigDialog(parent, name, config), encoderExists(false)
+EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config, bool isNew)
+	: KConfigDialog(parent, name, config), isNewEncoder(isNew), origName(name)
 {
 	setFaceType(KPageDialog::Plain);
 	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
@@ -387,15 +386,17 @@ EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConf
 void EncoderEditDialog::updateSettings()
 {
 	// avoid double encodernames
-	QStringList list = EncoderPrefs::prefsList();
 	QString name = editDialog->kcfg_encoderName->text();
-	QString newName = name;
-	int i = 2;
-	while (list.contains(QString("Encoder_").append(newName))) {
-		newName = name + " " + QString::number(i);
-		++i;
+	if (isNewEncoder || name != origName) {
+		QStringList list = EncoderPrefs::prefsList();
+		QString newName = name;
+		int i = 2;
+		while (list.contains(QString("Encoder_").append(newName))) {
+			newName = name + " " + QString::number(i);
+			++i;
+		}
+		editDialog->kcfg_encoderName->setText(newName);
 	}
-	editDialog->kcfg_encoderName->setText(newName);
 
 	// trim inputtypes and turn them to lower letters
 	QStringList inputTypesList;
@@ -406,16 +407,6 @@ void EncoderEditDialog::updateSettings()
 	editDialog->kcfg_inputTypes->setText(inputTypes);
 
 	KConfigDialog::updateSettings();
-}
-
-void EncoderEditDialog::setEncoderExists(bool exists)
-{
-	encoderExists = exists;
-}
-
-bool EncoderEditDialog::hasChanged()
-{
-	return encoderExists;
 }
 
 #include "encoderconfigimp.moc"
