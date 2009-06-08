@@ -205,6 +205,7 @@ void KAudioCreator::checkSettings()
 		encPrefs->setEncoderName(i18n("WAV"));
 		encPrefs->setCommandLine("mv %f %o");
 		encPrefs->setExtension("wav");
+		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
 		encPrefs->writeConfig();
 
@@ -212,6 +213,7 @@ void KAudioCreator::checkSettings()
 		encPrefs->setEncoderName(i18n("Ogg Default"));
 		encPrefs->setCommandLine("oggenc -o %o --artist %{artist} --album %{albumtitle} --title %{title} --date %{year} --tracknum %{number} --genre %{genre} %f");
 		encPrefs->setExtension("ogg");
+		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(4);
 		encPrefs->writeConfig();
 
@@ -219,6 +221,7 @@ void KAudioCreator::checkSettings()
 		encPrefs->setEncoderName(i18n("MP3 Lame Standard"));
 		encPrefs->setCommandLine("lame --preset standard --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
 		encPrefs->setExtension("mp3");
+		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
 		encPrefs->writeConfig();
 
@@ -226,21 +229,21 @@ void KAudioCreator::checkSettings()
 		encPrefs->setEncoderName(i18n("FLAC Best"));
 		encPrefs->setCommandLine("flac --best -o %o --tag=Artist=%{artist} --tag=Album=%{albumtitle} --tag=Date=%{year} --tag=Title=%{title} --tag=Tracknumber=%{number} --tag=Genre=%{genre} %f");
 		encPrefs->setExtension("flac");
+		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
 		encPrefs->writeConfig();
 
 		Prefs::setInputTypesList(QStringList("wav"));
 		Prefs::self()->writeConfig();
-	} else {
-		if (list.contains(QString("Encoder_WAV"))) {
-			EncoderPrefs *encPrefs;
-			encPrefs = EncoderPrefs::prefs("Encoder_WAV");
-			encPrefs->setEncoderName(i18n("WAV"));
-			encPrefs->setCommandLine("mv %f %o");
-			encPrefs->setExtension("wav");
-			encPrefs->setPercentLength(2);
-			encPrefs->writeConfig();
-		}
+	} else if (!list.contains(QString("Encoder_WAV"))) {
+		EncoderPrefs *encPrefs;
+		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
+		encPrefs->setEncoderName(i18n("WAV"));
+		encPrefs->setCommandLine("mv %f %o");
+		encPrefs->setExtension("wav");
+		encPrefs->setInputTypes("wav");
+		encPrefs->setPercentLength(2);
+		encPrefs->writeConfig();
 	}
 
 	QString groupName = QString("Encoder_").append(Prefs::defaultEncoder());
@@ -250,7 +253,8 @@ void KAudioCreator::checkSettings()
 	}
 }
 
-void KAudioCreator::setupRipMenu(){
+void KAudioCreator::setupRipMenu()
+{
 	ripMenu->clear();
 
 	QStringList list = EncoderPrefs::prefsList();
@@ -266,19 +270,6 @@ void KAudioCreator::setupRipMenu(){
 				ripMenu->setDefaultAction(encAction);
 		}
     }
-/*	int i=0;
-	QString currentGroup = QString("Encoder_%1").arg(i);
-	while (EncoderPrefs::hasPrefs(currentGroup)) {
-		EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
-		QString command = encPrefs->commandLine();
-		int progEnd = command.indexOf(" ");
-		QString prog = command.left(progEnd).trimmed();
-		if (KStandardDirs::findExe(prog) != QString()) {
-			QAction *encAction = ripMenu->addAction(encPrefs->encoderName());
-			encAction->setData(QVariant(i));
-		}
-		currentGroup = QString("Encoder_%1").arg(++i);
-	}*/
 }
 
 /**
