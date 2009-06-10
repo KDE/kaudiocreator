@@ -236,6 +236,8 @@ void KAudioCreator::checkSettings()
 		Prefs::setInputTypesList(QStringList("wav"));
 		Prefs::self()->writeConfig();
 	} else if (!list.contains(QString("Encoder_WAV"))) {
+		// what is this good for?
+		// for the (admittedly rare) case WAV is manually erased from the config file
 		EncoderPrefs *encPrefs;
 		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
 		encPrefs->setEncoderName(i18n("WAV"));
@@ -244,6 +246,12 @@ void KAudioCreator::checkSettings()
 		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
 		encPrefs->writeConfig();
+
+		QStringList types = Prefs::inputTypesList();
+		if (!types.contains("wav")) {
+			types.append("wav");
+			Prefs::setInputTypesList(types);
+		}
 	}
 
 	QString groupName = QString("Encoder_").append(Prefs::defaultEncoder());
