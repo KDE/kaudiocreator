@@ -132,13 +132,13 @@
    <item row="5" column="1" >
     <widget class="QCheckBox" name="kcfg_checkOutput" >
      <property name="toolTip" >
-      <string>Check if output files should be checked for existence.</string>
+      <string>Check if output files should be checked for existence if possible (if you use %o).</string>
      </property>
      <property name="whatsThis" >
       <string>Check if output files should be checked for existence, if the files are placed by the encoder itself, not kaudiocreator leave this unchecked.</string>
      </property>
      <property name="text" >
-      <string>Check output files</string>
+      <string>Check output files if possible</string>
      </property>
     </widget>
    </item>

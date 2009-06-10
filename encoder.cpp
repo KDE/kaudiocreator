@@ -305,8 +305,9 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
  * When the process is done encoding a file this function is called.
  * @param job the job that just finished.
  */
-void Encoder::jobDone(KProcess *process) {
-kDebug() << "jobDone" << endl;
+void Encoder::jobDone(KProcess *process)
+{
+	kDebug() << "jobDone" << endl;
 	// Normal error checking here.
 	if ( !process)
 		return;
@@ -321,7 +322,7 @@ kDebug() << "jobDone" << endl;
 	if ( process->exitCode() == 127 ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
 		emit(updateProgress(job->id, -1));
-	} else if (encPrefs->checkOutput() && QFile::exists(job->newLocation)) {
+	} else if (encPrefs->checkOutput() && encPrefs->commandLine().contains("%o") && QFile::exists(job->newLocation)) {
 		// fyi segfaults return 136
 		if ( process->exitCode() != 0 ) {
 			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
