@@ -20,4 +20,5 @@ Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
 ******************************************************************************************************************
 what to to with to be overwritten files, delete before?
 make assignTrackNumbers work
-maybe use taglib for metainformation
+use KDirLister for adding directories in encodefile?
+maybe use custom model/view instead abusing QTreeWidget

@@ -1,6 +1,7 @@
-/*
+/**
  *  Copyright (c) 2003 Waldo Bastian <bastian@kde.org>
  *  Copyright (C) 2003-2005 Benjamin C. Meyer <ben at meyerhome dot net>
+ *  Copyright (C) 2009 Gerd Fleischer (gerdfleischer at web dot de)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public
@@ -15,7 +16,7 @@
  *  along with this library; see the file COPYING.LIB.  If not, write to
  *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  *  Boston, MA 02110-1301, USA.
- **/
+ */
 
 #include "prefs.h"
 #include "job.h"
