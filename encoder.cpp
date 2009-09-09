@@ -255,6 +255,7 @@ void Encoder::tendToNewJobs()
 	threads.append(proc);
 
 	proc->setOutputChannelMode(KProcess::MergedChannels);
+    proc->setEnvironment(proc->systemEnvironment());
 	proc->setProgram(KShell::splitArgs(command));
 	proc->start();
 	emit jobsChanged();
