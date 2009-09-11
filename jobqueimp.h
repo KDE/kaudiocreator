@@ -21,29 +21,12 @@
 #define JOBQUEIMP_H
 
 #include <QString>
-#include <QTreeWidgetItem>
 
 #include "ui_jobque.h"
 
 class Job;
 class QPainter;
 class QColorGroup;
-class QTreeWidget;
-
-/**
- * Helper class to allow for progress bars in list view items.
- */
-class QueListViewItem : public QTreeWidgetItem {
-
-public:
-	QueListViewItem(QTreeWidget * p = 0);
-//	virtual void paintCell (QPainter *p, const QColorGroup &cg, int column, int width,int align);
-	double percentDone;
-	// Has the percentDone gone beyond 0
-	// Here because percentDone might go 1,2,3,4 or it could go 1,20,21,78 or ...
-	bool progressing;
-};
-
 
 class JobQue : public QWidget, public Ui::JobQue
 {
@@ -77,11 +60,18 @@ private slots:
 	void removeAllJobs();
 
 private:
-	bool removeJob( QueListViewItem *item, bool kill=true, bool prompt=true );
+	bool removeJob( QTreeWidgetItem *item, bool kill=true, bool prompt=true );
 	QString getStringFromNumber( int number );
 	int highestNumber;
 
 	int currentId;
+
+    enum DataRole {
+        PercentDone = Qt::UserRole + 1,
+        Progressing,
+        Finished
+    };
+
 };
 
 #endif

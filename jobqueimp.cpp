@@ -92,10 +92,13 @@ void JobQueImp::addJob(Job *job, const QString &name) {
 	if(!job)
 		return;
 	job->id = ++currentId;
-	QueListViewItem *newItem = new QueListViewItem();
+	QTreeWidgetItem *newItem = new QTreeWidgetItem();
 	newItem->setText(HEADER_JOB, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId));
 	newItem->setIcon(ICON_LOC, KIcon("media-playback-pause"));
 	newItem->setText(HEADER_DESCRIPTION, name);
+    newItem->setData(HEADER_JOB, PercentDone, QVariant(0));
+    newItem->setData(HEADER_JOB, Progressing, QVariant(false));
+    newItem->setData(HEADER_JOB, Finished, QVariant(false));
 	todoQue->addTopLevelItem(newItem);
 	QProgressBar *pg = new QProgressBar();
 	pg->setValue(0);
@@ -115,11 +118,11 @@ void JobQueImp::updateProgress(int id, int progress)
 	buffer += QString("%1").arg(id);
 
 	// Find the current item
-	QueListViewItem *currentItem = 0;
+	QTreeWidgetItem *currentItem = 0;
 	QTreeWidgetItemIterator it(todoQue);
 	while (*it) {
 		if ((*it)->text(HEADER_JOB) == buffer) {
-			currentItem = static_cast<QueListViewItem *>(*it);
+			currentItem = *it;
 			break;
 		}
 		++it;
@@ -132,35 +135,41 @@ void JobQueImp::updateProgress(int id, int progress)
 	}
 
 	// Only update the % if it changed.
-	if (progress > 0 && currentItem->percentDone == progress)
+	if (progress > 0 && currentItem->data(HEADER_JOB, PercentDone).toInt() == progress)
 		return;
 
-	currentItem->percentDone = progress;
+	currentItem->setData(HEADER_JOB, PercentDone, QVariant(progress));
 	QProgressBar *pg = (QProgressBar *)todoQue->itemWidget(currentItem, HEADER_PROGRESS);
 
 	// Update the icon if needed
 	if (progress > 0 && progress < 100) {
+        if  (!currentItem->data(HEADER_JOB, Progressing).toBool()) {
+            currentItem->setIcon(ICON_LOC, KIcon("system-run"));
+            currentItem->setData(HEADER_JOB, Progressing, QVariant(true));
+        }
 		if (pg->maximum() == 0) pg->setMaximum(100);
 		pg->setValue(progress);
 	} else if (progress == 0) {
-		if  (!currentItem->progressing) {
+		if  (!currentItem->data(HEADER_JOB, Progressing).toBool()) {
 			currentItem->setIcon(ICON_LOC, KIcon("system-run"));
-			currentItem->progressing = true;
+			currentItem->setData(HEADER_JOB, Progressing, QVariant(true));
 		}
 		pg->setMinimum(0);
 		pg->setMaximum(0);
 	} else if(progress == -1) {
 		currentItem->setIcon(ICON_LOC, KIcon("dialog-cancel"));
+        currentItem->setData(HEADER_JOB, Finished, QVariant(true));
 		pg->setMaximum(100);
 		pg->setValue(0);
 	} else if (progress == 100) {
+        currentItem->setIcon(ICON_LOC, KIcon("dialog-ok"));
+        currentItem->setData(HEADER_JOB, Finished, QVariant(true));
+        pg->setValue(progress);
 		// Remove the job if requested.
 		if(Prefs::removeCompletedJobs()){
 			removeJob(currentItem, false);
 			return;
 		}
-		currentItem->setIcon(ICON_LOC, KIcon("dialog-ok"));
-		pg->setValue(progress);
 	}
 
 	if (currentJobCount > 0 && numberOfJobsNotFinished() == 0)
@@ -175,11 +184,13 @@ void JobQueImp::updateProgress(int id, int progress)
  * @param prompt the user if the job isn't finished
  * @return bool if remove was successful or not.
  */
-bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt) {
+bool JobQueImp::removeJob(QTreeWidgetItem *item, bool kill, bool prompt)
+{
 	if (!item)
 		return false;
 
-	if (item->percentDone < 100 && item->percentDone > -1 && (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?", item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStandardGuiItem::del(), KGuiItem(i18n("Keep")))
+	if (!item->data(HEADER_JOB, Finished).toBool() &&
+        (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?", item->text(HEADER_DESCRIPTION)), i18n("Unfinished Job in Queue"), KStandardGuiItem::del(), KGuiItem(i18n("Keep")))
 		  == KMessageBox::No ))
 		return false;
 
@@ -210,7 +221,7 @@ bool JobQueImp::removeJob(QueListViewItem *item, bool kill, bool prompt) {
 void JobQueImp::removeSelectedJob(){
 	QList<QTreeWidgetItem *> selected = todoQue->selectedItems();
 	foreach (QTreeWidgetItem *sel, selected) {
-		removeJob((QueListViewItem *)sel);
+		removeJob(sel);
 	}
 }
 
@@ -222,9 +233,10 @@ void JobQueImp::removeAllJobs(){
 	bool finished=true;
 	QTreeWidgetItemIterator it(todoQue);
 	while (*it) {
-		QueListViewItem *tmpItem = static_cast<QueListViewItem *>(*it);
-		if (tmpItem && tmpItem->percentDone < 100 && tmpItem->percentDone > -1)
+		if (!(*it)->data(HEADER_JOB, Finished).toBool()) {
 			finished = false;
+            break;
+        }
 		++it;
 	}
 
@@ -235,20 +247,20 @@ void JobQueImp::removeAllJobs(){
 	}
 
 	while (todoQue->topLevelItemCount()) {
-		removeJob(static_cast<QueListViewItem *>(todoQue->topLevelItem(0)), true, false);
+		removeJob(todoQue->topLevelItem(0), true, false);
 	}
 }
 
 /**
  * Remove any jobs that are in the list that are done.
  */
-void JobQueImp::clearDoneJobs(){
+void JobQueImp::clearDoneJobs()
+{
 	QTreeWidgetItemIterator it(todoQue);
 	while (*it) {
-		QueListViewItem *tmpItem = static_cast<QueListViewItem *>(*it);
-		if (tmpItem->percentDone == 100) {
-			emit (removeJob(tmpItem->text(HEADER_JOB).toInt()));
-			todoQue->invisibleRootItem()->removeChild(tmpItem);
+		if ((*it)->data(HEADER_JOB, PercentDone).toInt() == 100) {
+			emit (removeJob((*it)->text(HEADER_JOB).toInt()));
+			todoQue->invisibleRootItem()->removeChild(*it);
 		}
 		++it;
 	}
@@ -257,8 +269,9 @@ void JobQueImp::clearDoneJobs(){
 		queLabel->setText(i18n("No jobs are in the queue"));
 		highestNumber = DEFAULT_HIGHEST_NUMBER;
 		currentId = 0;
-	} else
+	} else {
 		queLabel->setText(i18n("Number of jobs in the queue: %1", todoQue->topLevelItemCount()));
+    }
 }
 
 /**
@@ -266,54 +279,16 @@ void JobQueImp::clearDoneJobs(){
  * Progress column
  * @return the number of jobs that are in the que that haven't been finished.
  */
-int JobQueImp::numberOfJobsNotFinished(){
+int JobQueImp::numberOfJobsNotFinished()
+{
 	int totalJobsToDo = 0;
 	QTreeWidgetItemIterator it(todoQue);
 	while (*it) {
-		QueListViewItem *tmpItem = static_cast<QueListViewItem *>(*it);
-		if (tmpItem->percentDone < 100 && tmpItem->percentDone > -1)
+		if (!(*it)->data(HEADER_JOB, Finished).toBool())
 			++totalJobsToDo;
 		++it;
 	}
 	return totalJobsToDo;
-}
-
-///TODO Use QProgressBar?
-/**
- * The repaint function overloaded so that we can have a built in progressbar.
- */
-// void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
-// 			int width,int align){
-// 	if(column != HEADER_PROGRESS){
-// 		Q3ListViewItem::paintCell(p,cg,column,width,align);
-// 		return;
-// 	}
-// 
-// 	p->setPen(cg.base());
-// 	p->drawRect(0,0,width,height());
-// 	if(isSelected())
-//             p->fillRect(1,1,width-2,height()-2,cg.color( QPalette::Highlight));
-// 	else
-//             p->fillRect(1,1,width-2,height()-2,cg.color( QPalette::Base));
-// 
-// 	int percent = (int)(((double)(width-2)) * (percentDone/100));
-// 
-// 	p->fillRect(1,1,percent,height()-2,cg.color( QPalette::Mid ));
-// 
-// 	// show the text
-// 	p->setPen(cg.text());
-// 	if(isSelected())
-//             p->setPen(cg.color( QPalette::HighlightedText));
-// 	if(percentDone != -1)
-// 	p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,QString().setNum((int)percentDone) + '%');
-// 	else
-// 		p->drawText(0,0,width-1,height()-1,Qt::AlignCenter,i18n("Error"));
-// }
-
-/**
- * Header for built in treelist item so we can have a progress bar in them.
- */
-QueListViewItem::QueListViewItem(QTreeWidget *parent) : QTreeWidgetItem(parent, QTreeWidgetItem::UserType), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"
