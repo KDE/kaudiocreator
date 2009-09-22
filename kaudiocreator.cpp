@@ -20,8 +20,6 @@
 #include <QTimer>
 
 #include <kicon.h>
-#include <kiconloader.h>
-
 #include <kmessagebox.h>
 #include <kmenu.h>
 #include <kaction.h>
@@ -62,7 +60,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
 
 	trackPage = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
-	trackPage->setIcon(KIcon(("media-optical-audio")));
+	trackPage->setIcon(KIcon("media-optical-audio"));
 	pageWidget->addPage(trackPage);
 
 	checkSettings();
@@ -72,7 +70,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	jobQue = new JobQueImp(0);
 
 	jobPage = new KPageWidgetItem(jobQue, i18n("&Jobs"));
-	jobPage->setIcon(KIcon(SmallIcon("system-run", 32)));
+	jobPage->setIcon(KIcon("system-run"));
 	pageWidget->addPage(jobPage);
 
 	connect(tracks, SIGNAL(sessionStarted()), this, SLOT(showJobPage()));
