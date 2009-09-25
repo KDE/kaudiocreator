@@ -27,6 +27,8 @@ set(kaudiocreator_SRCS
     jobqueimp.cpp
     ripper.cpp
     tracksimp.cpp
+    encodefilemodel.cpp
+    encodefiledelegate.cpp
     encodefileimp.cpp
     general.cpp
     wizard.cpp)

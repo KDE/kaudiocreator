@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EncodeFile</class>
- <widget class="QWidget" name="EncodeFile" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EncodeFile">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,317 +10,278 @@
     <height>697</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" >
-   <item rowspan="5" row="0" column="0" >
-    <widget class="QTreeWidget" name="fileList" >
-     <property name="focusPolicy" >
-      <enum>Qt::StrongFocus</enum>
-     </property>
-     <property name="selectionMode" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" rowspan="5">
+    <widget class="QTreeView" name="fileListView">
+     <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
-     <property name="rootIsDecorated" >
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
-     <property name="itemsExpandable" >
+     <property name="uniformRowHeights">
       <bool>false</bool>
      </property>
-     <column>
-      <property name="text" >
-       <string>File</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Title</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Artist</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Album</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Comment</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Genre</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Track</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Year</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Encoder</string>
-      </property>
-     </column>
+     <property name="itemsExpandable">
+      <bool>false</bool>
+     </property>
+     <property name="expandsOnDoubleClick">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QPushButton" name="addFilesButton" >
-     <property name="focusPolicy" >
+   <item row="0" column="1">
+    <widget class="QPushButton" name="addFilesButton">
+     <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Add Files</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2" >
-    <widget class="QPushButton" name="addDirectoryButton" >
-     <property name="text" >
+   <item row="0" column="2">
+    <widget class="QPushButton" name="addDirectoryButton">
+     <property name="text">
       <string>Add Directory</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="removeSelectedButton" >
-     <property name="text" >
+   <item row="1" column="1">
+    <widget class="QPushButton" name="removeSelectedButton">
+     <property name="text">
       <string>Remove Selected</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="clearButton" >
-     <property name="text" >
+   <item row="1" column="2">
+    <widget class="QPushButton" name="clearButton">
+     <property name="text">
       <string>Clear List</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2" >
-    <widget class="QGroupBox" name="groupBox1" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
+   <item row="2" column="1" colspan="2">
+    <widget class="QGroupBox" name="groupBox1">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Edit Selected Tracks</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="TextLabel5" >
-        <property name="text" >
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="TextLabel5">
+        <property name="text">
          <string>Artist:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="QLineEdit" name="artistEdit" >
-        <property name="toolTip" >
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="artistEdit">
+        <property name="toolTip">
          <string>Set the artist for the selected tracks.</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="QPushButton" name="assignArtistButton" >
-        <property name="text" >
+      <item row="0" column="3">
+       <widget class="QPushButton" name="assignArtistButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="TextLabel6" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="TextLabel6">
+        <property name="text">
          <string>Album:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2" >
-       <widget class="QLineEdit" name="albumEdit" >
-        <property name="toolTip" >
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="albumEdit">
+        <property name="toolTip">
          <string>Set the album for the selected tracks.</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3" >
-       <widget class="QPushButton" name="assignAlbumButton" >
-        <property name="text" >
+      <item row="1" column="3">
+       <widget class="QPushButton" name="assignAlbumButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="textLabel1">
+        <property name="text">
          <string>Comment:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2" >
-       <widget class="QLineEdit" name="commentEdit" >
-        <property name="toolTip" >
+      <item row="2" column="1" colspan="2">
+       <widget class="QLineEdit" name="commentEdit">
+        <property name="toolTip">
          <string>Set the comment for the selected tracks.</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3" >
-       <widget class="QPushButton" name="assignCommentButton" >
-        <property name="text" >
+      <item row="2" column="3">
+       <widget class="QPushButton" name="assignCommentButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="TextLabel1" >
-        <property name="text" >
+      <item row="3" column="0">
+       <widget class="QLabel" name="TextLabel1">
+        <property name="text">
          <string>Genre:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="2" >
-       <widget class="KComboBox" name="genreBox" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <item row="3" column="1" colspan="2">
+       <widget class="KComboBox" name="genreBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Set the genre for the selected tracks.</string>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="3" >
-       <widget class="QPushButton" name="assignGenreButton" >
-        <property name="text" >
+      <item row="3" column="3">
+       <widget class="QPushButton" name="assignGenreButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
+      <item row="4" column="0" colspan="2">
+       <widget class="QLabel" name="label">
+        <property name="text">
          <string>Track counting starts at:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="4" column="2" >
-       <widget class="KIntNumInput" name="trackStart" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <item row="4" column="2">
+       <widget class="KIntNumInput" name="trackStart">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Set the track numbers for the selected tracks. This is the number for the first track.</string>
         </property>
-        <property name="value" >
+        <property name="value">
          <number>1</number>
         </property>
-        <property name="minimum" >
+        <property name="minimum">
          <number>0</number>
         </property>
-        <property name="specialValueText" >
+        <property name="specialValueText">
          <string>empty</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="3" >
-       <widget class="QPushButton" name="assignTrackButton" >
-        <property name="text" >
+      <item row="4" column="3">
+       <widget class="QPushButton" name="assignTrackButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
-       <widget class="QLabel" name="TextLabel7" >
-        <property name="text" >
+      <item row="5" column="0">
+       <widget class="QLabel" name="TextLabel7">
+        <property name="text">
          <string>Year:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="5" column="1" colspan="2" >
-       <widget class="KIntNumInput" name="yearInput" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <item row="5" column="1" colspan="2">
+       <widget class="KIntNumInput" name="yearInput">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Set the year for the selected tracks.</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="3" >
-       <widget class="QPushButton" name="assignYearButton" >
-        <property name="text" >
+      <item row="5" column="3">
+       <widget class="QPushButton" name="assignYearButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" >
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
          <string>Encoder:</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="6" column="1" colspan="2" >
-       <widget class="KComboBox" name="encoderBox" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <item row="6" column="1" colspan="2">
+       <widget class="KComboBox" name="encoderBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Set the encoder to use for the selected tracks.</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="3" >
-       <widget class="QPushButton" name="assignEncoderButton" >
-        <property name="text" >
+      <item row="6" column="3">
+       <widget class="QPushButton" name="assignEncoderButton">
+        <property name="text">
          <string>Assign</string>
         </property>
        </widget>
@@ -327,19 +289,19 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2" >
-    <widget class="QPushButton" name="assignAllButton" >
-     <property name="text" >
+   <item row="3" column="1" colspan="2">
+    <widget class="QPushButton" name="assignAllButton">
+     <property name="text">
       <string>Assign all to selected tracks</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+   <item row="4" column="1" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>468</width>
        <height>40</height>
@@ -349,7 +311,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>

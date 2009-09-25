@@ -23,6 +23,8 @@
 #include "prefs.h"
 #include "encoder_prefs.h"
 #include "encodefileimp.h"
+#include "encodefilemodel.h"
+#include "encodefiledelegate.h"
 #include "job.h"
 
 //#include <kurlrequester.h>
@@ -30,17 +32,18 @@
 #include <kfiledialog.h>
 #include <kcombobox.h>
 #include <knuminput.h>
-#include <kmimetype.h>
 
 #include <QStringList>
-#include <QTreeWidget>
+#include <QTreeView>
+#include <QModelIndex>
 #include <QDate>
 #include <QSet>
 #include <QDir>
 #include <QDirIterator>
+// #include <QSize>
 
 #ifdef HAVE_TAGLIB
-#define Qt4QStringToTString(s) TagLib::String(s.toUtf8().data(), TagLib::String::UTF8) 
+#define Qt4QStringToTString(s) TagLib::String(s.toUtf8().data(), TagLib::String::UTF8)
 #include <tstring.h>
 #include <tag.h>
 #include <fileref.h>
@@ -48,7 +51,7 @@
 
 #include <kdebug.h>
 
-EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), editedColumn(0)
+EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedColumn(0)
 {
 	QWidget *w = new QWidget();
 	setupUi(w);
@@ -64,14 +67,14 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedItem(0), 
 	yearInput->setSpecialValueText(i18n("empty"));
 
 	setupGlobals();
-
+    fileListModel = new EncodeFileModel(this);
+    fileListView->setModel(fileListModel);
+    fileListView->setItemDelegate(new EncodeFileDelegate());
 	genreBox->addItems(m_genres);
 
 	restoreDialogSize(KConfigGroup(KGlobal::config(), "size_encodefiledialog"));
 
-	connect(fileList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editFile(QTreeWidgetItem *, int)));
-	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
-	connect(fileList, SIGNAL(itemSelectionChanged()), this, SLOT(setupEncoderBox()));
+	connect(fileListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(setupEncoderBox(const QItemSelection &, const QItemSelection &)));
 	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(openFiles()));
 	connect(addDirectoryButton, SIGNAL(clicked()), this, SLOT(openDirectory()));
 	connect(clearButton, SIGNAL(clicked()), this, SLOT(clearFileList()));
@@ -142,23 +145,27 @@ void EncodeFileImp::setupGlobals()
 	}
 
 #ifdef HAVE_TAGLIB
-	TagLib::StringList extensions = TagLib::FileRef::defaultFileExtensions();
-	TagLib::String tagExt = extensions.toString(",");
-	QString qtExt = TStringToQString(tagExt);
-	taglibExtensions = qtExt.split(",");
+    TagLib::StringList extensions = TagLib::FileRef::defaultFileExtensions();
+    TagLib::String tagExt = extensions.toString(",");
+    QString qtExt = TStringToQString(tagExt);
+    taglibExtensions = qtExt.split(",");
 #endif
 }
 
 /**
  * setup/update encoderBox
  */
-void EncodeFileImp::setupEncoderBox()
+void EncodeFileImp::setupEncoderBox(const QItemSelection &selected, const QItemSelection &)
 {
-	QStringList fileTypeList, encoders;
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		QString mimeType = KMimeType::extractKnownExtension(item->text(COLUMN_FILE));
-		fileTypeList << mimeType;
-		encoders << encoderMap[mimeType];
+    QStringList fileTypeList, encoders;
+    QModelIndex index;
+    QModelIndexList items = selected.indexes();
+    foreach (index, items) {
+        if (index.column() == COLUMN_ENCODER) {
+            QString mimeType = fileListModel->data(index, Qt::UserRole).toString();
+            fileTypeList << mimeType;
+            encoders << encoderMap[mimeType];
+        }
 	}
 
 	foreach (QString enc, encoders) {
@@ -209,183 +216,161 @@ void EncodeFileImp::openDirectory()
 
 void EncodeFileImp::addFilesToList(const QStringList &list)
 {
-	foreach (QString track, list) {
-		QTreeWidgetItem *newFile = new QTreeWidgetItem(QStringList(track));
-		fileList->addTopLevelItem(newFile);
+    foreach (QString track, list) {
+
+        QList<QStandardItem *> fileItems = QList<QStandardItem *>();
+
+        QStandardItem *pathItem = new QStandardItem(track);
+        pathItem->setEditable(FALSE);
+//         QSize size = pathItem->sizeHint();
+//         size.setHeight(size.height() + 14);
+//         pathItem->setSizeHint(size);
+        fileItems << pathItem;
 
 #ifdef HAVE_TAGLIB
-		TagLib::String s(Qt4QStringToTString(track));
-		TagLib::FileRef f(s.toCString(true));
-		if (taglibExtensions.contains(KMimeType::extractKnownExtension(track)) && !f.tag()->isEmpty()) {
-			TagLib::String tagString;
-			QString qtString;
-			tagString = f.tag()->title();
-			tagString == TagLib::String::null ? qtString = i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())) : qtString = TStringToQString(tagString);
-			newFile->setText(COLUMN_TITLE, qtString);
+        TagLib::String s(Qt4QStringToTString(track));
+        TagLib::FileRef f(s.toCString(true));
+        if (taglibExtensions.contains(KMimeType::extractKnownExtension(track)) && !f.tag()->isEmpty()) {
+            TagLib::String tagString;
+            QString qtString;
 
-			tagString = f.tag()->artist();
-			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
-			newFile->setText(COLUMN_ARTIST, qtString);
+            tagString = f.tag()->title();
+            tagString == TagLib::String::null ? qtString = i18n("track_%1").arg(QString::number(fileListModel->rowCount() + 1)) : qtString = TStringToQString(tagString);
+            fileItems << new QStandardItem(qtString); // title
 
-			tagString = f.tag()->album();
-			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
-			newFile->setText(COLUMN_ALBUM, qtString);
+            tagString = f.tag()->artist();
+            tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
+            fileItems << new QStandardItem(qtString); // artist
 
-			tagString = f.tag()->comment();
-			tagString == TagLib::String::null ? qtString = QString() : qtString = TStringToQString(tagString);
-			newFile->setText(COLUMN_COMMENT, qtString);
+            tagString = f.tag()->album();
+            tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
+            fileItems << new QStandardItem(qtString); // album
 
-			KComboBox *itemGenreBox = new KComboBox;
-			itemGenreBox->setEditable(true);
-			itemGenreBox->addItems(m_genres);
-			tagString = f.tag()->genre();
-			tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
-			itemGenreBox->setEditText(qtString);
-			fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
+            tagString = f.tag()->comment();
+            tagString == TagLib::String::null ? qtString = QString() : qtString = TStringToQString(tagString);
+            fileItems << new QStandardItem(qtString); // comment
 
-			KIntNumInput *itemYearInput = new KIntNumInput;
-			itemYearInput->setMinimum(EMPTY_YEAR);
-			itemYearInput->setMaximum(QDate::currentDate().year());
-			itemYearInput->setSpecialValueText(i18n("empty"));
-			uint y = f.tag()->year();
-			if (y == 0) y = EMPTY_YEAR;
-			fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
-			itemYearInput->setValue(y);
+            tagString = f.tag()->genre();
+            tagString == TagLib::String::null ? qtString = i18n("unknown") : qtString = TStringToQString(tagString);
+            QStandardItem *genreItem = new QStandardItem(qtString);
+            genreItem->setData(QVariant(m_genres), Qt::UserRole);
+            fileItems << genreItem;
 
-			KIntNumInput *trackNumberInput = new KIntNumInput;
-			uint t = f.tag()->track();
-			if (t == 0) t = fileList->topLevelItemCount();
-			trackNumberInput->setMinimum(EMPTY_TRACK);
-			trackNumberInput->setSpecialValueText(i18n("empty"));
-			fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
-			trackNumberInput->setValue(t);
-		} else {
-			newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
-			newFile->setText(COLUMN_ARTIST, i18n("unknown"));
-			newFile->setText(COLUMN_ALBUM, i18n("unknown"));
+            uint t = f.tag()->track();
+            t == 0 ? qtString = QString::number(fileListModel->rowCount() + 1) : qtString = QString::number(t);
+            fileItems << new QStandardItem(qtString); // track number
 
-			KComboBox *itemGenreBox = new KComboBox;
-			itemGenreBox->setEditable(true);
-			itemGenreBox->addItems(m_genres);
-			fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
-
-			KIntNumInput *itemYearInput = new KIntNumInput;
-			itemYearInput->setMinimum(EMPTY_YEAR);
-			itemYearInput->setMaximum(QDate::currentDate().year());
-			itemYearInput->setSpecialValueText(i18n("empty"));
-			fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
-
-			KIntNumInput *trackNumberInput = new KIntNumInput;
-			trackNumberInput->setMinimum(EMPTY_TRACK);
-			trackNumberInput->setSpecialValueText(i18n("empty"));
-			fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
-			trackNumberInput->setValue(fileList->topLevelItemCount());
-		}
+            uint y = f.tag()->year();
+            y == 0 ? qtString = QString() : qtString = QString::number(y);
+            fileItems << new QStandardItem(qtString); // year
+        } else {
+            fileItems << new QStandardItem(i18n("track_%1").arg(QString::number(fileListModel->rowCount() + 1))); // title
+            fileItems << new QStandardItem(i18n("unknown")); // artist
+            fileItems << new QStandardItem(i18n("unknown")); // album
+            fileItems << new QStandardItem(QString()); // comment
+            QStandardItem *genreItem = new QStandardItem(QString());
+            genreItem->setData(QVariant(m_genres), Qt::UserRole);
+            fileItems << genreItem;
+            fileItems << new QStandardItem(QString::number(fileListModel->rowCount() + 1)); // track number
+            fileItems << new QStandardItem(QString()); // year
+        }
 #else
-		newFile->setText(COLUMN_TITLE, i18n("track_%1").arg(QString::number(fileList->topLevelItemCount())));
-		newFile->setText(COLUMN_ARTIST, i18n("unknown"));
-		newFile->setText(COLUMN_ALBUM, i18n("unknown"));
-
-		KComboBox *itemGenreBox = new KComboBox;
-		itemGenreBox->setEditable(true);
-		itemGenreBox->addItems(m_genres);
-		fileList->setItemWidget(newFile, COLUMN_GENRE, itemGenreBox);
-
-		KIntNumInput *itemYearInput = new KIntNumInput;
-		itemYearInput->setMinimum(EMPTY_YEAR);
-		itemYearInput->setMaximum(QDate::currentDate().year());
-		itemYearInput->setSpecialValueText(i18n("empty"));
-		fileList->setItemWidget(newFile, COLUMN_YEAR, itemYearInput);
-
-		KIntNumInput *trackNumberInput = new KIntNumInput;
-		trackNumberInput->setMinimum(EMPTY_TRACK);
-		trackNumberInput->setSpecialValueText(i18n("empty"));
-		fileList->setItemWidget(newFile, COLUMN_TRACK, trackNumberInput);
-		trackNumberInput->setValue(fileList->topLevelItemCount());
+        fileItems << new QStandardItem(i18n("track_%1").arg(QString::number(fileListModel->rowCount() + 1))); // title
+        fileItems << new QStandardItem(i18n("unknown")); // artist
+        fileItems << new QStandardItem(i18n("unknown")); // album
+        fileItems << new QStandardItem(QString()); // comment
+        QStandardItem *genreItem = new QStandardItem(QString());
+        genreItem->setData(QVariant(m_genres), Qt::UserRole);
+        fileItems << genreItem;
+        fileItems << new QStandardItem(QString::number(fileListModel->rowCount() + 1)); // track number
+        fileItems << new QStandardItem(QString()); // year
 #endif
 
-		KComboBox *itemEncoderBox = new KComboBox;
-		QString extension = KMimeType::extractKnownExtension(track);
-		if (encoderMap.contains(extension)) {
-			itemEncoderBox->addItems(encoderMap[extension]);
-		}
-		fileList->setItemWidget(newFile, COLUMN_ENCODER, itemEncoderBox);
-	}
+        QString extension = KMimeType::extractKnownExtension(track);
+        QString encoder = QString();
+        if (encoderMap[extension].contains(Prefs::defaultEncoder())) {
+            encoder = Prefs::defaultEncoder();
+        } else {
+            encoder = encoderMap[extension].at(0);
+        }
+        QStandardItem *encoderItem = new QStandardItem(encoder);
+        encoderItem->setData(extension, Qt::UserRole);
+        encoderItem->setData(encoderMap[extension], Qt::UserRole + 1);
+        fileItems << encoderItem; // encoder
+
+        fileListModel->appendRow(fileItems);
+	} // foreach
 }
 
 void EncodeFileImp::fitToContent()
 {
-	for (int c = 0; c < fileList->columnCount(); ++c) {
-		fileList->resizeColumnToContents(c);
+	for (int c = 0; c < fileListModel->columnCount(); ++c) {
+		fileListView->resizeColumnToContents(c);
 	}
 }
 
 void EncodeFileImp::clearFileList()
 {
-	fileList->clear();
+	fileListModel->clear();
 }
 
 void EncodeFileImp::removeSelectedFiles()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		fileList->takeTopLevelItem(fileList->indexOfTopLevelItem(item));
-	}
+    QModelIndex index;
+    QModelIndexList items = fileListView->selectionModel()->selectedRows(0);
+    foreach (index, items) {
+        fileListModel->removeRow(index.row(), QModelIndex());
+    }
 }
 
 void EncodeFileImp::assignArtist()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_ARTIST, artistEdit->text());
-	}
+    assignItemText(COLUMN_ARTIST, artistEdit->text());
 }
 
 void EncodeFileImp::assignAlbum()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_ALBUM, albumEdit->text());
-	}
+    assignItemText(COLUMN_ALBUM, albumEdit->text());
 }
 
 void EncodeFileImp::assignComment()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		item->setText(COLUMN_COMMENT, commentEdit->text());
-	}
+    assignItemText(COLUMN_COMMENT, commentEdit->text());
 }
 
 void EncodeFileImp::assignGenre()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_GENRE);
-		input->setEditText(genreBox->currentText());
-	}
+    assignItemText(COLUMN_GENRE, genreBox->currentText());
 }
 
 void EncodeFileImp::assignTrack()
 {
-	int t = trackStart->value();
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		KIntNumInput *input = (KIntNumInput *)fileList->itemWidget(item, COLUMN_TRACK);
-		input->setValue(t);
-		if (t != EMPTY_TRACK) ++t;
-	}
+    int t = trackStart->value();
+    QModelIndex index;
+    QModelIndexList items = fileListView->selectionModel()->selectedRows(COLUMN_TRACK);
+    foreach (index, items) {
+        fileListModel->setData(index, QString::number(t), Qt::DisplayRole);
+        ++t;
+    }
 }
 
 void EncodeFileImp::assignYear()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		KIntNumInput *input = (KIntNumInput *)fileList->itemWidget(item, COLUMN_YEAR);
-		input->setValue(yearInput->value());
-	}
+    assignItemText(COLUMN_YEAR, QString::number(yearInput->value()));
 }
 
 void EncodeFileImp::assignEncoder()
 {
-	foreach (QTreeWidgetItem *item, fileList->selectedItems()) {
-		KComboBox *input = (KComboBox *)fileList->itemWidget(item, COLUMN_ENCODER);
-		int index = input->findText(encoderBox->currentText());
-		input->setCurrentIndex(index);
-	}
+    assignItemText(COLUMN_ENCODER, encoderBox->currentText());
+}
+
+void EncodeFileImp::assignItemText(int column, const QString &text)
+{
+    QModelIndex index;
+    QModelIndexList items = fileListView->selectionModel()->selectedRows(column);
+    foreach (index, items) {
+        fileListModel->setData(index, text, Qt::DisplayRole);
+    }
 }
 
 void EncodeFileImp::assignAll()
@@ -400,76 +385,31 @@ void EncodeFileImp::assignAll()
 }
 
 /**
- * open persistent editor for clicked "cell"
- */
-void EncodeFileImp::editFile(QTreeWidgetItem *item, int column)
-{
-	if (column != COLUMN_FILE) {
-		if (!editedItem && item) {
-			fileList->openPersistentEditor(item, column);
-			editedItem = item;
-			editedColumn = column;
-		} else if (editedItem && item && (editedItem != item)) {
-			fileList->closePersistentEditor(editedItem, editedColumn);
-			fileList->openPersistentEditor(item, column);
-			editedItem = item;
-			editedColumn = column;
-		} else if (editedItem && item && (editedItem == item)) {
-			if (column == editedColumn) {
-				fileList->closePersistentEditor(editedItem, editedColumn);
-				editedItem = 0;
-			} else {
-				fileList->closePersistentEditor(editedItem, editedColumn);
-				fileList->openPersistentEditor(item, column);
-				editedItem = item;
-				editedColumn = column;
-			}
-		}
-	}
-}
-
-void EncodeFileImp::closeEditor()
-{
-	if (editedItem) {
-		fileList->closePersistentEditor(editedItem, editedColumn);
-		editedItem = 0;
-	}
-}
-
-/**
  * When the user presses the "add to queue" button create a job with all of the current
  * selection options and emit a signal with it.
  */
 void EncodeFileImp::encode()
 {
-	int jobCounter(0);
-	QTreeWidgetItemIterator it(fileList);
-	while (*it) {
+	int jobCounter = 0;
+
+    int rows = fileListModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
 		Job *newJob = new Job();
-
-		newJob->location = (*it)->text(COLUMN_FILE);
-		newJob->track_title = (*it)->text(COLUMN_TITLE);
-		newJob->track_artist = (*it)->text(COLUMN_ARTIST);
-		newJob->album = (*it)->text(COLUMN_ALBUM);
-		newJob->track_comment = (*it)->text(COLUMN_COMMENT);
-
-		KComboBox *genreBox = (KComboBox *)fileList->itemWidget(*it, COLUMN_GENRE);
-		newJob->genre = genreBox->currentText();
-
-		KIntNumInput *yearInput = (KIntNumInput *)fileList->itemWidget(*it, COLUMN_YEAR);
-		newJob->year = yearInput->value();
-
-		KIntNumInput *trackInput = (KIntNumInput *)fileList->itemWidget(*it, COLUMN_TRACK);
-		newJob->track = trackInput->value();
-
-		KComboBox *encoderBox = (KComboBox *)fileList->itemWidget(*it, COLUMN_ENCODER);
-		newJob->encoder = encoderBox->currentText();
+ 
+		newJob->location = fileListModel->data(fileListModel->index(r, COLUMN_FILE, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->track_title = fileListModel->data(fileListModel->index(r, COLUMN_TITLE, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->track_artist = fileListModel->data(fileListModel->index(r, COLUMN_ARTIST, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->album = fileListModel->data(fileListModel->index(r, COLUMN_ALBUM, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->track_comment = fileListModel->data(fileListModel->index(r, COLUMN_COMMENT, QModelIndex()), Qt::DisplayRole).toString();
+        newJob->genre = fileListModel->data(fileListModel->index(r, COLUMN_GENRE, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->year = fileListModel->data(fileListModel->index(r, COLUMN_YEAR, QModelIndex()), Qt::DisplayRole).toInt();
+		newJob->track = fileListModel->data(fileListModel->index(r, COLUMN_TRACK, QModelIndex()), Qt::DisplayRole).toInt();
+		newJob->encoder = fileListModel->data(fileListModel->index(r, COLUMN_ENCODER, QModelIndex()), Qt::DisplayRole).toString();
 
 		newJob->removeTempFile = false;
 
 		emit(startJob(newJob));
 		++jobCounter;
-		++it;
 	}
 
 	// Same message and *strings* from tracksimp.cpp

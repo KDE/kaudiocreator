@@ -39,6 +39,7 @@
 #define COLUMN_ENCODER 8
 
 class Job;
+class EncodeFileModel;
 
 /**
  * This class lets the user encode a file.
@@ -72,10 +73,9 @@ protected slots:
 	void assignYear();
 	void assignEncoder();
 	void assignAll();
+    void assignItemText(int column, const QString &text);
 
-	void setupEncoderBox();
-	void editFile(QTreeWidgetItem *, int);
-	void closeEditor();
+	void setupEncoderBox(const QItemSelection &selected, const QItemSelection &deselected);
 	// Encode button
 	void encode();
 	void encodeAndClose();
@@ -83,13 +83,14 @@ protected slots:
 private:
 	// List of genres and i18n versions
 	QStringList m_genres;
-	QTreeWidgetItem *editedItem;
+    EncodeFileModel *fileListModel;
+// 	QTreeWidgetItem *editedItem;
 	int editedColumn;
 	QString fileTypeFilter;
 	QStringList dirFilter;
 	QMap<QString, QStringList> encoderMap;
 #ifdef HAVE_TAGLIB
-	QStringList taglibExtensions;
+    QStringList taglibExtensions;
 #endif
 
 	void setupGlobals();
