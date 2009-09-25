@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config-kaudiocreator.h"
-
 #include "encodefiledelegate.h"
 #include "encodefileimp.h"
 
@@ -91,6 +89,12 @@ void EncodeFileDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     editor->setGeometry(option.rect);
+}
+
+QSize EncodeFileDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
+{
+    QString text = index.data(Qt::DisplayRole).toString();
+    return QSize(QApplication::fontMetrics().width(text), QApplication::fontMetrics().height() * 1.5);
 }
 
 #include "encodefiledelegate.moc"

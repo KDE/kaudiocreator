@@ -222,9 +222,6 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
 
         QStandardItem *pathItem = new QStandardItem(track);
         pathItem->setEditable(FALSE);
-//         QSize size = pathItem->sizeHint();
-//         size.setHeight(size.height() + 14);
-//         pathItem->setSizeHint(size);
         fileItems << pathItem;
 
 #ifdef HAVE_TAGLIB

@@ -36,6 +36,7 @@ public:
                       const QModelIndex &index) const;
     void updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &/* index */) const;
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const;
 };
 
 #endif
