@@ -27,6 +27,8 @@
 class Job;
 class QPainter;
 class QColorGroup;
+class QStandardItemModel;
+class QStandardItem;
 
 class JobQue : public QWidget, public Ui::JobQue
 {
@@ -37,7 +39,8 @@ public:
 };
 
 
-class JobQueImp : public JobQue {
+class JobQueImp : public JobQue
+{
 
 Q_OBJECT
 
@@ -60,11 +63,12 @@ private slots:
 	void removeAllJobs();
 
 private:
-	bool removeJob( QTreeWidgetItem *item, bool kill=true, bool prompt=true );
+	bool removeJob( QStandardItem *item, bool kill=true, bool prompt=true );
 	QString getStringFromNumber( int number );
-	int highestNumber;
 
-	int currentId;
+    int highestNumber;
+    int currentId;
+    QStandardItemModel *jobModel;
 
     enum DataRole {
         PercentDone = Qt::UserRole + 1,
