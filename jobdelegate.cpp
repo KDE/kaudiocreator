@@ -41,4 +41,9 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
     }
 }
 
+QSize JobDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
+{
+    return QSize(0, QApplication::fontMetrics().height() * 1.4);
+}
+
 #include "jobdelegate.moc"

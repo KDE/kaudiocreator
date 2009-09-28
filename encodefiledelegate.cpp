@@ -94,7 +94,7 @@ void EncodeFileDelegate::updateEditorGeometry(QWidget *editor,
 QSize EncodeFileDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
     QString text = index.data(Qt::DisplayRole).toString();
-    return QSize(QApplication::fontMetrics().width(text), QApplication::fontMetrics().height() * 1.5);
+    return QSize(QApplication::fontMetrics().width(text), QApplication::fontMetrics().height() * 1.4);
 }
 
 #include "encodefiledelegate.moc"
