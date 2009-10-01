@@ -20,54 +20,16 @@
 #ifndef TRACKSIMP_H
 #define TRACKSIMP_H
 
-
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-
 #include <klocale.h>
 #include <libkcddb/client.h>
 #include <kdebug.h>
 
 #include "ui_tracks.h"
 
-#define HEADER_RIP 0
-#define HEADER_TRACK 1
-#define HEADER_LENGTH 2
-#define HEADER_TRACK_NAME 3
-#define HEADER_TRACK_ARTIST 4
-#define HEADER_TRACK_COMMENT 5
-
 class Job;
 class KCompactDisc;
-
-class TracksItem : public QTreeWidgetItem
-{
-public:
-    TracksItem( QTreeWidget *parent, QString t, QString a, int tr, QString l, QString c )
-        : QTreeWidgetItem( parent, QTreeWidgetItem::UserType )
-    {
-        m_title = t;
-        m_artist = a;
-        m_length = l;
-        m_track = tr;
-        m_comment = c;
-    }
-
-    QString title()     const { return m_title; }
-    QString artist()    const { return m_artist; }
-    int     track()     const { return m_track; }
-    QString length()    const { return m_length; }
-    QString comment()   const { return m_comment; }
-    void    setTitle( const QString &t )  { m_title = t; kDebug() << "title: " << m_title; }
-
-private:
-    QString m_title;
-    QString m_artist;
-    int     m_track;
-    QString m_length;
-    QString m_comment;
-};
-
+class QStandardItemModel;
+class QStandardItem;
 
 /**
  * This class handles the display of the tracks. It also starts off the job que.
@@ -81,7 +43,7 @@ signals:
 	void ripTrack(Job *job);
 	void hasCD(bool);
 	void hasTracks(bool);
-	void renameTrack(QTreeWidgetItem *);
+/*	void renameTrack(QTreeWidgetItem *);*/
 	void sessionStarted();
 
 public:
@@ -98,14 +60,12 @@ public slots:
 	// Toolbar Buttons
 	void startSession( QString encoder = QString() );
 	void editInformation();
+    void editCurrentTrack();
 	void performCDDB();
 	void ejectDevice(const QString &deviceToEject);
 	void eject();
 	void selectAllTracks();
 	void deselectAllTracks();
-	void editCurrentTrack();
-	void editTrackName(QTreeWidgetItem *);
-	void closeEditor();
 
 private slots:
 	void newDisc(unsigned int discId);
@@ -115,7 +75,7 @@ private slots:
 	void albumChangedByUser();
 	void yearChangedByUser(int);
 	void genreChangedByUser(const QString &);
-	void syncToCddbInfo(QTreeWidgetItem *, int);
+	void syncToCddbInfo(QStandardItem *);
 
 private:
 	void lookupDevice();
@@ -123,15 +83,13 @@ private:
 	void newAlbum();
 	void setAlbumInfo(const QString &, const QString &);
 	void ripWholeAlbum();
-	QList<TracksItem *> selectedTracks();
+	QList<int> selectedTracks();
 	void toggleInputs(bool);
 	QString formatTime(unsigned s);
 
 	KCDDB::Client* cddb;
-
+    QStandardItemModel *trackModel;
 	KCompactDisc* cd;
-
-	QTreeWidgetItem *editedItem;
 
 	// Current album
 	KCDDB::CDInfo cddbInfo;

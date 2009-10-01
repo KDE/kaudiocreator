@@ -18,7 +18,7 @@
  */
 
 #include <QPushButton>
-#include <QTreeWidgetItemIterator>
+#include <QStandardItemModel>
 
 #include <kmessagebox.h>
 #include <kurl.h>
@@ -36,24 +36,32 @@
 #include "job.h"
 #include "prefs.h"
 
+static const int COLUMN_RIP = 0;
+static const int COLUMN_TRACK = 1;
+static const int COLUMN_LENGTH = 2;
+static const int COLUMN_TRACK_NAME = 3;
+static const int COLUMN_TRACK_ARTIST = 4;
+static const int COLUMN_TRACK_COMMENT = 5;
+
 using namespace KCDDB;
 
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget *parent) : QWidget(parent), editedItem(0), cddbInfo()
+TracksImp::TracksImp( QWidget *parent) : QWidget(parent), cddbInfo()
 {
 	setupUi(this);
-	trackListing->resizeColumnToContents(HEADER_RIP);
+    trackModel = new QStandardItemModel(0, 6, this);
+    trackModel->setHorizontalHeaderLabels(QStringList() << i18n("Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+    trackView->setModel(trackModel);
+	trackView->resizeColumnToContents(COLUMN_RIP);
 	cd = new KCompactDisc;
 
 	genreBox->addItems(KCDDB::Genres().i18nList());
 
 	connect(cd, SIGNAL(discChanged(unsigned int)), this, SLOT(newDisc(unsigned int)));
 
-	connect(trackListing, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(editTrackName(QTreeWidgetItem *)));
-	connect(trackListing, SIGNAL(itemSelectionChanged()), this, SLOT(closeEditor()));
-	connect(trackListing, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(syncToCddbInfo(QTreeWidgetItem *, int)));
+	connect(trackModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(syncToCddbInfo(QStandardItem *)));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 
@@ -113,8 +121,7 @@ void TracksImp::initDevice()
 
 void TracksImp::newDisc(unsigned tracks)
 {
-	if (!tracks)
-	{
+	if (!tracks) {
 		kDebug(60002) << "newDisc - No disc";
 		cddbInfo.clear();
 		newAlbum();
@@ -211,7 +218,8 @@ void TracksImp::changeDevice(const QString &device)
 /**
  * Helper function (toolbar button) for users.
  **/ 
-void TracksImp::performCDDB() {
+void TracksImp::performCDDB()
+{
 	if (!hasCD()) {
 		KMessageBox::sorry(this, i18n("Please insert a disk."),
 		       i18n("CDDB Failed"));
@@ -224,7 +232,8 @@ void TracksImp::performCDDB() {
 /**
  * See if we can't get the cddb value for this cd.
  */ 
-void TracksImp::lookupCDDB() {
+void TracksImp::lookupCDDB()
+{
 	cddb->config().reparse();
 	cddb->lookup(cd->discSignature());
 }
@@ -234,7 +243,8 @@ void TracksImp::lookupCDDB() {
  * continue.
  * @param result the success or failure of the cddb retrieval.
  */
-void TracksImp::lookupCDDBDone(Result result ) {
+void TracksImp::lookupCDDBDone(Result result )
+{
 	if ((result != KCDDB::Success) &&
 		(result != KCDDB::MultipleRecordFound))
 	{
@@ -294,6 +304,10 @@ void TracksImp::artistChangedByUser()
 {
 	cddbInfo.set(Artist, artistEdit->text());
 	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        trackModel->item(r, COLUMN_TRACK_ARTIST)->setData(artistEdit->text(), Qt::DisplayRole);
+    }    
 }
 
 void TracksImp::albumChangedByUser()
@@ -317,7 +331,8 @@ void TracksImp::genreChangedByUser(const QString &newGenre)
  * If there is not currently selected track return.
  * If ok is pressed then store the information and update track name.
  */
-void TracksImp::editInformation() {
+void TracksImp::editInformation()
+{
 	if( !hasCD() ) return;
 	// Create dialog.
 	CDInfoDialog *dialog = new CDInfoDialog( this );
@@ -339,6 +354,14 @@ void TracksImp::editInformation() {
 	delete dialog;
 }
 
+void TracksImp::editCurrentTrack()
+{
+    trackView->setFocus();
+    trackView->setCurrentIndex((trackView->currentIndex()).sibling((trackView->currentIndex()).row(), COLUMN_TRACK_NAME));
+    trackView->edit(trackView->currentIndex());
+}
+
+
 QString TracksImp::formatTime(unsigned s)
 {
 	QTime time;
@@ -358,7 +381,8 @@ QString TracksImp::formatTime(unsigned s)
  * Helper function.
  * Selects all tracks and then calls startSession to rip them all.
  */
-void TracksImp::ripWholeAlbum() {
+void TracksImp::ripWholeAlbum()
+{
 	selectAllTracks();
 	startSession();
 }
@@ -367,16 +391,15 @@ void TracksImp::ripWholeAlbum() {
  * Start of the "ripping session" by emiting signals to rip the selected tracks.
  * If any album information is not set, notify the user first.
  */
-void TracksImp::startSession( QString encoder )
+void TracksImp::startSession(QString encoder)
 {
 	QString currentEncoder = encoder;
 	if (currentEncoder.isEmpty())
 		currentEncoder = Prefs::defaultEncoder();
 
-	QList<TracksItem *> selected = selectedTracks();
+	QList<int> selected = selectedTracks();
 
-	if( selected.isEmpty() )
-	{
+	if( selected.isEmpty() ) {
 		int i = KMessageBox::questionYesNo( this, i18n("No tracks have been selected.  Would you like to rip the entire CD?"),
 					                        i18n("No Tracks Selected"), KGuiItem(i18n("Rip CD")), KStandardGuiItem::cancel() );
 		if( i == KMessageBox::No )
@@ -386,8 +409,7 @@ void TracksImp::startSession( QString encoder )
 		selected = selectedTracks();
 	}
 
-	if (!KProtocolInfo::isKnownProtocol("audiocd"))
-	{
+	if (!KProtocolInfo::isKnownProtocol("audiocd")) {
 		KMessageBox::sorry( this, i18n("Could not find audiocd:/ protocol. Please install the audiocd ioslave"),
 		                          i18n("Protocol Not Found"));
 		return;
@@ -410,7 +432,7 @@ void TracksImp::startSession( QString encoder )
 	}
 	
 	Job *lastJob = 0;
-	foreach (TracksItem* item, selected) {
+	foreach (int r, selected) {
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;
 		newJob->device = cd->deviceUrl().path();
@@ -421,12 +443,10 @@ void TracksImp::startSession( QString encoder )
 		newJob->group = cddbInfo.get(Artist).toString();
 		newJob->comment = cddbInfo.get(Comment).toString();
 		newJob->year = cddbInfo.get(Year).toInt();
-		newJob->track = item->track();
-
-		//newJob->track_title = item->title();
-		newJob->track_title = item->text(HEADER_TRACK_NAME);
-		newJob->track_artist = item->artist();
-		newJob->track_comment = item->comment();
+		newJob->track = (trackModel->item(r, COLUMN_TRACK))->data(Qt::DisplayRole).toInt();
+        newJob->track_title = (trackModel->item(r, COLUMN_TRACK_NAME))->data(Qt::DisplayRole).toString();
+        newJob->track_artist = (trackModel->item(r, COLUMN_TRACK_ARTIST))->data(Qt::DisplayRole).toString();
+        newJob->track_comment = (trackModel->item(r, COLUMN_TRACK_COMMENT))->data(Qt::DisplayRole).toString();
 		lastJob = newJob;
 		emit( ripTrack(newJob) ); 
 	}
@@ -442,39 +462,39 @@ void TracksImp::startSession( QString encoder )
 	emit(sessionStarted());
 }
 
-QList<TracksItem *> TracksImp::selectedTracks()
+QList<int> TracksImp::selectedTracks()
 {
-	QList<TracksItem *> selected;
+	QList<int> selected;
 
-	QTreeWidgetItemIterator it(trackListing, QTreeWidgetItemIterator::Checked);
-	while (*it) {
-		TracksItem *item = (TracksItem *)(*it);
-		selected.append( item );
-		++it;
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+		if ((trackModel->item(r, COLUMN_RIP)->checkState()) == Qt::Checked)
+            selected.append(r);
 	}
+
 	return selected;
 }
 
 /**
  * Turn on all of the tracks.
  */
-void TracksImp::selectAllTracks() {
-	QTreeWidgetItemIterator it(trackListing);
-	while (*it) {
-		(*it)->setCheckState( HEADER_RIP, Qt::Checked );
-		++it;
+void TracksImp::selectAllTracks()
+{
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+		trackModel->item(r, COLUMN_RIP)->setCheckState(Qt::Checked);
 	}
 }
 
 /**
  * Turn off all of the tracks.
  */
-void TracksImp::deselectAllTracks() {
-	QTreeWidgetItemIterator it(trackListing);
-	while (*it) {
-		(*it)->setCheckState( HEADER_RIP, Qt::Unchecked );
-		++it;
-	}
+void TracksImp::deselectAllTracks()
+{
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        trackModel->item(r, COLUMN_RIP)->setCheckState(Qt::Unchecked);
+    }
 }
 
 void TracksImp::toggleInputs(bool status)
@@ -491,7 +511,8 @@ void TracksImp::toggleInputs(bool status)
 /**
  * Set the current stats for the new album being displayed.
  */
-void TracksImp::newAlbum() {
+void TracksImp::newAlbum()
+{
 	QString albumTitle = cddbInfo.get(Title).toString();
 	QString albumArtist = cddbInfo.get(Artist).toString();
 
@@ -500,33 +521,53 @@ void TracksImp::newAlbum() {
 	setAlbumInfo(albumArtist, albumTitle);
 	yearInput->setValue(cddbInfo.get(Year).toInt());
 	genreBox->setEditText(cddbInfo.get(Genre).toString());
-	trackListing->clear();
+	trackModel->clear();
+    trackModel->setHorizontalHeaderLabels(QStringList() << i18n("Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
 	toggleInputs(false);
 	emit(hasTracks(false));
 
-	for (int i = 0; i < cddbInfo.numberOfTracks(); i++)
-	{
+	for (int i = 0; i < cddbInfo.numberOfTracks(); ++i) {
 		TrackInfo ti = cddbInfo.track(i);
 		// There is a new track for this title.  Add it to the list of tracks.
-		QString trackLength = formatTime(cd->trackLength(i+1));
-		TracksItem *newItem = new TracksItem(0, ti.get(Title).toString(), ti.get(Artist).toString(),
-						      i+1, trackLength, ti.get(Comment).toString());
-		newItem->setCheckState(HEADER_RIP, Qt::Unchecked);
-		newItem->setTextAlignment(1, Qt::AlignHCenter);
-		newItem->setText(HEADER_TRACK, QString::number(i+1));
-		newItem->setTextAlignment(HEADER_LENGTH, Qt::AlignHCenter);
-		newItem->setText(HEADER_LENGTH, trackLength);
-		newItem->setText(HEADER_TRACK_NAME, ti.get(Title).toString());
-		trackListing->addTopLevelItem(newItem);
+		QString trackLength = formatTime(cd->trackLength(i + 1));
+        QList<QStandardItem *> trackItems = QList<QStandardItem *>();
+        
+		QStandardItem *ripItem = new QStandardItem();
+        ripItem->setCheckable(TRUE);
+        trackItems << ripItem;
+
+        QStandardItem *trackItem = new QStandardItem(QString::number(i + 1));
+        trackItem->setEditable(FALSE);
+        trackItems << trackItem;
+        
+        QStandardItem *lengthItem = new QStandardItem(trackLength);
+        lengthItem->setEditable(FALSE);
+        trackItems << lengthItem;
+        
+        QStandardItem *titleItem = new QStandardItem(ti.get(Title).toString());
+        trackItems << titleItem;
+
+        QStandardItem *artistItem = new QStandardItem(ti.get(Artist).toString());
+        trackItems << artistItem;
+
+        QString trackComment = ti.get(Comment).toString();
+        if (trackComment.isEmpty() && !(cddbInfo.get(Comment).toString().isEmpty()))
+            trackComment = cddbInfo.get(Comment).toString();
+        QStandardItem *commentItem = new QStandardItem(trackComment);
+        trackItems << commentItem;
+
+        trackModel->appendRow(trackItems);
 	}
 
-	trackListing->resizeColumnToContents(HEADER_TRACK);
-	trackListing->resizeColumnToContents(HEADER_LENGTH);
+    trackView->resizeColumnToContents(COLUMN_RIP);
+	trackView->resizeColumnToContents(COLUMN_TRACK);
+	trackView->resizeColumnToContents(COLUMN_LENGTH);
+    trackView->resizeColumnToContents(COLUMN_TRACK_NAME);
+    trackView->resizeColumnToContents(COLUMN_TRACK_ARTIST);
 
-	if (cddbInfo.numberOfTracks())
-	{
+	if (cddbInfo.numberOfTracks()) {
 		// Set the current selected track to the first one.
-		trackListing->setCurrentItem(trackListing->topLevelItem(0));
+		trackView->setCurrentIndex(trackModel->index(0, 0, QModelIndex()));
 		toggleInputs(true);
 		emit(hasTracks(true));
 	}
@@ -543,47 +584,19 @@ void TracksImp::setAlbumInfo(const QString &artist, const QString &album)
 	albumInfoLabel->setText(albumInfo);
 }
 
-void TracksImp::editCurrentTrack()
+void TracksImp::syncToCddbInfo(QStandardItem *item)
 {
-	QTreeWidgetItem *item = trackListing->currentItem();
-	trackListing->setFocus();
-	trackListing->setCurrentItem(item, HEADER_TRACK_NAME);
-	editTrackName(item);
-}
-
-void TracksImp::editTrackName(QTreeWidgetItem *item)
-{
-	if (!editedItem && item) {
-		trackListing->openPersistentEditor(item, HEADER_TRACK_NAME);
-		editedItem = item;
-	} else if (editedItem && item && (editedItem != item)) {
-		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
-		trackListing->openPersistentEditor(item, HEADER_TRACK_NAME);
-		editedItem = item;
-	} else if (editedItem && item && (editedItem == item)) {
-		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
-		editedItem = 0;
-	}
-}
-
-void TracksImp::closeEditor()
-{
-	if (editedItem) {
-		trackListing->closePersistentEditor(editedItem, HEADER_TRACK_NAME);
-		editedItem = 0;
-	}
-}
-
-void TracksImp::syncToCddbInfo(QTreeWidgetItem *item, int /*column*/)
-{
-	TrackInfo &track = cddbInfo.track((item->text(HEADER_TRACK)).toInt() - 1);
-	track.set(Title, QVariant(item->text(HEADER_TRACK_NAME)));
+    if (item->column() == COLUMN_TRACK_NAME) {
+        TrackInfo &track = cddbInfo.track(item->row());
+        track.set(Title, item->data(Qt::DisplayRole));
+    }
 }
 
 /**
  * Eject the current cd device
  */
-void TracksImp::eject() {
+void TracksImp::eject()
+{
 	cd->eject();
 }
 
@@ -591,7 +604,8 @@ void TracksImp::eject() {
  * Eject a device
  * @param deviceToEject the device to eject.
  */
-void TracksImp::ejectDevice(const QString &deviceToEject) {
+void TracksImp::ejectDevice(const QString &deviceToEject)
+{
 	changeDevice(deviceToEject);
 	
 	cd->eject();
