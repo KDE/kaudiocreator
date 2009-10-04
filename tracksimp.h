@@ -73,6 +73,9 @@ private slots:
 	void lookupCDDBDone(KCDDB::Result result);
 	void artistChangedByUser();
 	void albumChangedByUser();
+    void commentChangedByUser();
+    void assignArtisToTracks();
+    void assignCommentToTracks();
 	void yearChangedByUser(int);
 	void genreChangedByUser(const QString &);
 	void syncToCddbInfo(QStandardItem *);

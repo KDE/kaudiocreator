@@ -65,8 +65,13 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), cddbInfo()
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
 	connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
 
-	connect(artistEdit, SIGNAL(editingFinished()), this, SLOT(artistChangedByUser()));
-	connect(albumEdit, SIGNAL(editingFinished()), this, SLOT(albumChangedByUser()));
+    connect(artistEdit, SIGNAL(editingFinished()), this, SLOT(artistChangedByUser()));
+    connect(albumEdit, SIGNAL(editingFinished()), this, SLOT(albumChangedByUser()));
+    connect(commentEdit, SIGNAL(editingFinished()), this, SLOT(commentChangedByUser()));
+
+    connect(artistEditButton, SIGNAL(clicked()), this, SLOT(assignArtisToTracks()));
+    connect(commentEditButton, SIGNAL(clicked()), this, SLOT(assignCommentToTracks()));
+    
 	connect(yearInput, SIGNAL(valueChanged(int)), this, SLOT(yearChangedByUser(int)));
 	connect(genreBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(genreChangedByUser(const QString &)));
 	connect(genreBox, SIGNAL(editTextChanged(const QString &)), this, SLOT(genreChangedByUser(const QString &)));
@@ -304,16 +309,33 @@ void TracksImp::artistChangedByUser()
 {
 	cddbInfo.set(Artist, artistEdit->text());
 	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
-    int rows = trackModel->rowCount();
-    for (int r = 0; r < rows; ++r) {
-        trackModel->item(r, COLUMN_TRACK_ARTIST)->setData(artistEdit->text(), Qt::DisplayRole);
-    }    
 }
 
 void TracksImp::albumChangedByUser()
 {
 	cddbInfo.set(Title, albumEdit->text());
 	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+}
+
+void TracksImp::commentChangedByUser()
+{
+    cddbInfo.set(Comment, commentEdit->text());
+}
+
+void TracksImp::assignArtisToTracks()
+{
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        trackModel->item(r, COLUMN_TRACK_ARTIST)->setData(artistEdit->text(), Qt::DisplayRole);
+    }
+}
+
+void TracksImp::assignCommentToTracks()
+{
+    int rows = trackModel->rowCount();
+    for (int r = 0; r < rows; ++r) {
+        trackModel->item(r, COLUMN_TRACK_COMMENT)->setData(commentEdit->text(), Qt::DisplayRole);
+    }
 }
 
 void TracksImp::yearChangedByUser(int newYear)
@@ -503,7 +525,10 @@ void TracksImp::toggleInputs(bool status)
 	deselectAllTracksButton->setEnabled(status);
 
 	artistEdit->setEnabled(status);
+    artistEditButton->setEnabled(status);
 	albumEdit->setEnabled(status);
+    commentEdit->setEnabled(status);
+    commentEditButton->setEnabled(status);
 	yearInput->setEnabled(status);
 	genreBox->setEnabled(status);
 }
@@ -518,6 +543,7 @@ void TracksImp::newAlbum()
 
 	artistEdit->setText(albumArtist);
 	albumEdit->setText(albumTitle);
+    commentEdit->setText(cddbInfo.get(Comment).toString());
 	setAlbumInfo(albumArtist, albumTitle);
 	yearInput->setValue(cddbInfo.get(Year).toInt());
 	genreBox->setEditText(cddbInfo.get(Genre).toString());
