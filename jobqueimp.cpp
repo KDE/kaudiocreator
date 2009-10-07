@@ -24,6 +24,8 @@
 #include <QProgressBar>
 #include <QStandardItemModel>
 
+#include <QtDebug>
+
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -58,7 +60,7 @@ JobQueImp::JobQueImp(QWidget* parent) :
     jobView->setModel(jobModel);
     jobView->setItemDelegate(new JobDelegate());
 
-	connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
+	connect(removeSelected, SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
 	connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
 	connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
 }
@@ -72,8 +74,8 @@ JobQueImp::JobQueImp(QWidget* parent) :
 QString JobQueImp::getStringFromNumber(int number)
 {
 	if (number > highestNumber) {
-		int diff = QString("%1").arg(number).length() - QString("%1").arg(highestNumber).length();
-		highestNumber = number;
+        highestNumber = number;
+		int diff = QString::number(number).length() - QString::number(highestNumber).length();
 		if (diff > 0) {
 			// We have to update all of the cells.
             int rows = jobModel->rowCount();
@@ -81,18 +83,13 @@ QString JobQueImp::getStringFromNumber(int number)
                 QModelIndex index = jobModel->index(r, HEADER_JOB, QModelIndex());
                 QString number = jobModel->data(index, Qt::DisplayRole).toString();
                 jobModel->setData(index, '0' + number, Qt::DisplayRole);
-/*			int jobCount = todoQue->topLevelItemCount();
-			for (int j = 0; j < jobCount; ++j) {
-				QTreeWidgetItem *item = todoQue->topLevelItem(j);
-				item->setText(HEADER_JOB, '0' + item->text(HEADER_JOB));
-			}*/
             }
 		}
 	}
 
 	QString buffer = "";
-	uint newLength = QString("%1").arg(highestNumber).length() - QString("%1").arg(number).length();
-	for(uint i=0; i < newLength; i++)
+	uint newLength = QString::number(highestNumber).length() - QString::number(number).length();
+	for (uint i=0; i < newLength; ++i)
 		buffer += '0';
 	return buffer;
 }
@@ -119,9 +116,6 @@ void JobQueImp::addJob(Job *job, const QString &name)
 	descriptionItem->setIcon(KIcon("media-playback-pause"));
     jobItems << descriptionItem;
     jobModel->appendRow(jobItems);
-// 	QProgressBar *pg = new QProgressBar();
-// 	pg->setValue(0);
-// 	todoQue->setItemWidget(newItem, HEADER_PROGRESS, pg);
 	queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
 }
 
@@ -134,64 +128,45 @@ void JobQueImp::updateProgress(int id, int progress)
 {
 	int currentJobCount = numberOfJobsNotFinished();
 	QString jobId = getStringFromNumber(id);
-//	buffer += QString("%1").arg(id);
-
-	// Find the current item
-//	QTreeWidgetItem *currentItem = 0;
-// 	QTreeWidgetItemIterator it(todoQue);
-// 	while (*it) {
-// 		if ((*it)->text(HEADER_JOB) == buffer) {
-// 			currentItem = *it;
-// 			break;
-// 		}
-// 		++it;
-// 	}
+    jobId += QString::number(id);
 
     QList<QStandardItem *> jobs = jobModel->findItems(jobId, Qt::MatchExactly, HEADER_JOB);
 
 	if (jobs.isEmpty()) {
-		kDebug() << "JobQueImp::updateProgress An update was received about a job, "
-				  "but the job couldn't be found: " << id << endl;
+		qDebug() << "JobQueImp::updateProgress An update was received about a job, "
+				  "but the job couldn't be found: " << id;
 		return;
 	}
 
     QModelIndex progressIndex = jobs.at(0)->index();
-    progressIndex = progressIndex.sibling(0, HEADER_PROGRESS);
+    progressIndex = progressIndex.sibling(progressIndex.row(), HEADER_PROGRESS);
     QStandardItem *currentItem = jobModel->itemFromIndex(progressIndex);
 	// Only update the % if it changed.
 	if (progress > 0 && currentItem->data(PercentDone).toInt() == progress)
 		return;
 
 	currentItem->setData(QVariant(progress), PercentDone);
-// 	QProgressBar *pg = (QProgressBar *)todoQue->itemWidget(currentItem, HEADER_PROGRESS);
+    currentItem->setData(QVariant(progress), Qt::DisplayRole);
 
 	// Update the icon if needed
-	if (progress > 0 && progress < 100) {
+	if (progress > 0 && progress < JOB_COMPLETED) {
         if  (!currentItem->data(Progressing).toBool()) {
             currentItem->setIcon(KIcon("system-run"));
-            currentItem->setData(QVariant(true), Progressing);
+            currentItem->setData(TRUE, Progressing);
         }
-/*		if (pg->maximum() == 0) pg->setMaximum(100);
-		pg->setValue(progress);*/
 	} else if (progress == 0) {
 		if  (!currentItem->data(Progressing).toBool()) {
 			currentItem->setIcon(KIcon("system-run"));
-			currentItem->setData(QVariant(true), Progressing);
+			currentItem->setData(TRUE, Progressing);
 		}
-/*		pg->setMinimum(0);
-		pg->setMaximum(0);*/
 	} else if(progress == -1) {
 		currentItem->setIcon(KIcon("dialog-cancel"));
-        currentItem->setData(QVariant(true), Finished);
-/*		pg->setMaximum(100);
-		pg->setValue(0);*/
-	} else if (progress == 100) {
+        currentItem->setData(TRUE, Finished);
+	} else if (progress == JOB_COMPLETED) {
         currentItem->setIcon(KIcon("dialog-ok"));
-        currentItem->setData(QVariant(true), Finished);
-//         pg->setValue(progress);
-		// Remove the job if requested.
+        currentItem->setData(TRUE, Finished);
 		if(Prefs::removeCompletedJobs()){
-			removeJob(currentItem, false);
+			removeJob(currentItem, FALSE);
 			return;
 		}
 	}
@@ -223,19 +198,20 @@ bool JobQueImp::removeJob(QStandardItem *item, bool kill, bool prompt)
 		return false;
 
 	if(kill)
-		emit (removeJob(item->data(Qt::DisplayRole).toString().toInt()));
+		emit (removeJob(item->data(Qt::DisplayRole).toInt()));
 
 	jobModel->removeRow(item->row(), QModelIndex());
-	delete(item);
+// 	delete(item);
 
 	// See if the Que needs to be updated...
 	if (jobModel->rowCount() == 0) {
 		queLabel->setText(i18n("No jobs are in the queue"));
 		highestNumber = DEFAULT_HIGHEST_NUMBER;
 		currentId = 0;
-	}
-	else
+	} else {
 		queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
+    }
+
 	return true;
 }
 
@@ -286,7 +262,7 @@ void JobQueImp::clearDoneJobs()
     int rows = jobModel->rowCount();
     for (int r = 0; r < rows; ++r) {
         QModelIndex index = jobModel->index(r, HEADER_PROGRESS, QModelIndex());
-		if (jobModel->data(index, PercentDone).toInt() == 100) {
+		if (jobModel->data(index, Finished).toBool()) {
 			emit (removeJob(jobModel->data(index, Qt::DisplayRole).toString().toInt()));
 			jobModel->removeRow(index.row(), QModelIndex());
 		}

@@ -200,8 +200,9 @@ void Ripper::tendToNewJobs(){
  * information dialog.
  * @param copyjob the IO job to copy from
  */
-void Ripper::copyJobResult(KJob *copyjob){
-	if(!copyjob)
+void Ripper::copyJobResult(KJob *copyjob)
+{
+	if (!copyjob)
 		return;
 	KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (copyjob);
 	KNotification::event("track ripped");
@@ -214,17 +215,16 @@ void Ripper::copyJobResult(KJob *copyjob){
 	if(Prefs::beepAfterRip())
 		KNotification::beep();
 
-	if ( copyJob->error() == 0 ){
-		emit updateProgress(newJob->id, 100);
+	if ( copyJob->error() == 0 ) {
+		emit updateProgress(newJob->id, JOB_COMPLETED);
 		newJob->location = copyJob->destUrl().path();
 		emit(encodeWav(newJob));
-	}
-	else{
+	} else {
 		copyJob->ui()->setWindow(0);
 		copyJob->ui()->showErrorMessage();
 		QFile file( (copyJob->destUrl()).path());
 		file.remove();
-		emit updateProgress(newJob->id, -1);
+		emit updateProgress(newJob->id, JOB_ERROR);
 		delete newJob;
 		newJob = 0;
 	}

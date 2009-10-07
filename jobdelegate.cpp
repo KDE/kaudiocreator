@@ -32,16 +32,19 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
         opts.palette = option.palette;
         opts.rect = option.rect;
         opts.direction = option.direction;
+        opts.state = option.state;
+        opts.textVisible = TRUE;
         opts.minimum = 0;
         opts.maximum = 100;
         opts.progress = index.model()->data(index, Qt::DisplayRole).toInt();
+        opts.text = QString("%1%").arg(opts.progress);
         QApplication::style()->drawControl(QStyle::CE_ProgressBar, &opts, painter, 0);
     } else {
         QStyledItemDelegate::paint(painter, option, index);
     }
 }
 
-QSize JobDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
+QSize JobDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
 {
     return QSize(0, QApplication::fontMetrics().height() * 1.4);
 }

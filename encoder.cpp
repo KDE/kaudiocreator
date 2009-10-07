@@ -294,7 +294,7 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);
 	//qDebug(QString("number: %1").arg(percent).latin1());
-	if ( percent >= 0 && percent < 100 && conversionSuccessfull ) {
+	if ( percent >= 0 && percent < JOB_COMPLETED && conversionSuccessfull ) {
 		emit(updateProgress(job->id, percent));
 	}
 	// If it was just some random output that couldn't be converted then don't report the error.
@@ -323,7 +323,7 @@ void Encoder::jobDone(KProcess *process)
 	bool showDebugBox = false;
 	if ( process->exitCode() == 127 ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
-		emit(updateProgress(job->id, -1));
+		emit(updateProgress(job->id, JOB_ERROR));
 	} else if (encPrefs->checkOutput() && encPrefs->commandLine().contains("%o") && QFile::exists(job->newLocation)) {
 		// fyi segfaults return 136
 		if ( process->exitCode() != 0 ) {
@@ -331,16 +331,16 @@ void Encoder::jobDone(KProcess *process)
 			{
 				showDebugBox = true;
 			}
-			emit( updateProgress( job->id, -1 ) );
+			emit( updateProgress( job->id, JOB_ERROR) );
 		} else {
 			//qDebug("Must be done: %d", (process->exitStatus()));
-			emit(updateProgress(job->id, 100));
+			emit(updateProgress(job->id, JOB_COMPLETED));
 			KNotification::event("track encoded");
 			if ( job->lastSongInAlbum)
 				KNotification::event("cd encoded");
 		}
 	} else if (!encPrefs->checkOutput()) {
-		emit(updateProgress(job->id, 100));
+		emit(updateProgress(job->id, JOB_COMPLETED));
 		KNotification::event("track encoded");
 		if ( job->lastSongInAlbum)
 			KNotification::event("cd encoded");
@@ -349,7 +349,7 @@ void Encoder::jobDone(KProcess *process)
 		{
 			showDebugBox = true;
 		}
-		emit( updateProgress( job->id, -1 ) );
+		emit( updateProgress( job->id, JOB_ERROR) );
 	}
 
 	if ( job->removeTempFile )
