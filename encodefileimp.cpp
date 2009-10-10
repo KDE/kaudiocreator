@@ -20,6 +20,7 @@
 
 #include "config-kaudiocreator.h"
 
+#include "defs.h"
 #include "prefs.h"
 #include "encoder_prefs.h"
 #include "encodefileimp.h"

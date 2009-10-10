@@ -24,12 +24,6 @@
 #include <klocale.h>
 #include <QHash>
 
-#define EMPTY_TRACK 0
-#define EMPTY_YEAR 999
-
-static const int JOB_ERROR = -1;
-static const int JOB_COMPLETED = 101;
-
 /**
  * The job class is what is passed around the system.  All of the data about
  * the file being ripped and encoded is stored in here.

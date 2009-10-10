@@ -19,6 +19,7 @@
 
 #include "ripper.h"
 #include "prefs.h"
+#include "defs.h"
 
 #include <QFile>
 #include <QTimer>

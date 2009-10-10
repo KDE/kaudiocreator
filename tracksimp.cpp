@@ -32,16 +32,10 @@
 #include "libkcompactdisc/kcompactdisc.h"
 #include <kdebug.h>
 
-#include "tracksimp.h"
 #include "job.h"
+#include "tracksimp.h"
+#include "defs.h"
 #include "prefs.h"
-
-static const int COLUMN_RIP = 0;
-static const int COLUMN_TRACK = 1;
-static const int COLUMN_LENGTH = 2;
-static const int COLUMN_TRACK_NAME = 3;
-static const int COLUMN_TRACK_ARTIST = 4;
-static const int COLUMN_TRACK_COMMENT = 5;
 
 using namespace KCDDB;
 

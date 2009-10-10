@@ -69,13 +69,6 @@ private:
     int highestNumber;
     int currentId;
     QStandardItemModel *jobModel;
-
-    enum DataRole {
-        PercentDone = Qt::UserRole + 1,
-        Progressing,
-        Finished
-    };
-
 };
 
 #endif

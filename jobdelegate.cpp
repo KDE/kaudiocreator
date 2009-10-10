@@ -18,8 +18,11 @@
  */
 
 #include "jobdelegate.h"
+#include "defs.h"
 
 #include <QApplication>
+
+#include <klocale.h>
 
 JobDelegate::JobDelegate(QObject *parent) : QStyledItemDelegate(parent)
 {
@@ -36,8 +39,18 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
         opts.textVisible = TRUE;
         opts.minimum = 0;
         opts.maximum = 100;
-        opts.progress = index.model()->data(index, Qt::DisplayRole).toInt();
-        opts.text = QString("%1%").arg(opts.progress);
+        opts.progress = index.model()->data(index, PercentDone).toInt();
+
+        if (index.model()->data(index, JobState).toInt() == JOB_QUEUED) {
+            opts.text = i18n("Queued");
+        } else if (index.model()->data(index, JobState).toInt() == JOB_ERROR) {
+            opts.text = i18n("Error");
+        } else if (index.model()->data(index, JobState).toInt() == JOB_COMPLETED) {
+            opts.text = i18n("Done");
+        } else {
+            opts.text = QString("%1%").arg(opts.progress);
+        }
+
         QApplication::style()->drawControl(QStyle::CE_ProgressBar, &opts, painter, 0);
     } else {
         QStyledItemDelegate::paint(painter, option, index);
