@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kaudiocreator" version="4">
+<kpartgui name="kaudiocreator" version="5">
 <ActionProperties>
   <Action name="rip_selected" icon="system-run" shortcut="Ctrl+S"/>
   <Action name="rip" icon="system-run" shortcut="Ctrl+R"/>
@@ -7,7 +7,6 @@
   <Action name="clear_done_jobs" icon="user-trash" shortcut="Ctrl+J"/>
   <Action name="eject" icon="media-eject" shortcut="Ctrl+E"/>
   <Action name="edit_cd" icon="document-edit" shortcut="Ctrl+A"/>
-  <Action name="edit_track" icon="document-properties" shortcut="Ctrl+T"/>
   <Action name="select_all" icon="edit-select-all" shortcut="Ctrl+Shift+A"/>
   <Action name="deselect_all" icon="edit-clear-list" shortcut="Ctrl+Shift+D"/>
   <Action name="cddb_now" icon="media-optical-audio" shortcut="Ctrl+D"/>
@@ -19,7 +18,6 @@
     <Action name="eject"/>
     <Action name="cddb_now"/>
     <Action name="edit_cd"/>
-    <Action name="edit_track"/>
     <Action name="select_all"/>
     <Action name="deselect_all"/>
     <Action name="rip_selected"/>

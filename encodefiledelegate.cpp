@@ -27,7 +27,7 @@ EncodeFileDelegate::EncodeFileDelegate(QObject *parent) : QStyledItemDelegate(pa
 }
 
 QWidget *EncodeFileDelegate::createEditor(QWidget *parent,
-     const QStyleOptionViewItem &/* option */,
+     const QStyleOptionViewItem &option,
      const QModelIndex &index) const
 {
     int column = index.column();
@@ -49,8 +49,7 @@ QWidget *EncodeFileDelegate::createEditor(QWidget *parent,
         editor->addItems(index.model()->data(index, Qt::UserRole + 1).toStringList());
         return editor;
     } else {
-        QLineEdit *editor = new QLineEdit(parent);
-        return editor;
+        return QStyledItemDelegate::createEditor(parent, option, index);
     }
 }
 
@@ -64,8 +63,7 @@ void EncodeFileDelegate::setEditorData(QWidget *editor, const QModelIndex &index
         QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
         spinBox->setValue(index.model()->data(index, Qt::DisplayRole).toString().toInt());
     } else {
-        QLineEdit *textEdit = static_cast<QLineEdit *>(editor);
-        textEdit->setText(index.model()->data(index, Qt::DisplayRole).toString());
+        QStyledItemDelegate::setEditorData(editor, index);
     }
 }
 
@@ -80,8 +78,7 @@ void EncodeFileDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
         model->setData(index, QString::number(spinBox->value()), Qt::DisplayRole);
     } else {
-        QLineEdit *textEdit = static_cast<QLineEdit *>(editor);
-        model->setData(index, textEdit->text(), Qt::DisplayRole);
+        QStyledItemDelegate::setModelData(editor, model, index);
     }
 }
 

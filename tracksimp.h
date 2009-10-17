@@ -60,7 +60,7 @@ public slots:
 	// Toolbar Buttons
 	void startSession( QString encoder = QString() );
 	void editInformation();
-    void editCurrentTrack();
+//     void editCurrentTrack();
 	void performCDDB();
 	void ejectDevice(const QString &deviceToEject);
 	void eject();

@@ -370,12 +370,12 @@ void TracksImp::editInformation()
 	delete dialog;
 }
 
-void TracksImp::editCurrentTrack()
-{
-    trackView->setFocus();
-    trackView->setCurrentIndex((trackView->currentIndex()).sibling((trackView->currentIndex()).row(), COLUMN_TRACK_NAME));
-    trackView->edit(trackView->currentIndex());
-}
+// void TracksImp::editCurrentTrack()
+// {
+//     trackView->setFocus();
+//     trackView->setCurrentIndex((trackView->currentIndex()).sibling((trackView->currentIndex()).row(), COLUMN_TRACK_NAME));
+//     trackView->edit(trackView->currentIndex());
+// }
 
 
 QString TracksImp::formatTime(unsigned s)

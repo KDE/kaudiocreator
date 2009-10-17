@@ -145,11 +145,11 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
 	edit->setEnabled( false );
 
-	QAction *editTrack = actionCollection()->addAction("edit_track");
-	editTrack->setText(i18n("Edit &Track"));
-	connect(editTrack, SIGNAL(triggered(bool) ), tracks, SLOT(editCurrentTrack()));
-	connect(tracks, SIGNAL(hasCD(bool)), editTrack, SLOT(setEnabled(bool)));
-	editTrack->setEnabled( false );
+// 	QAction *editTrack = actionCollection()->addAction("edit_track");
+// 	editTrack->setText(i18n("Edit &Track"));
+// 	connect(editTrack, SIGNAL(triggered(bool) ), tracks, SLOT(editCurrentTrack()));
+// 	connect(tracks, SIGNAL(hasCD(bool)), editTrack, SLOT(setEnabled(bool)));
+// 	editTrack->setEnabled( false );
 
 	action = actionCollection()->addAction("encode_files");
         action->setText(i18n("Encode &Files from disk"));
