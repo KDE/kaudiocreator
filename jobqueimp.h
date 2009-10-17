@@ -63,10 +63,8 @@ private slots:
 	void removeAllJobs();
 
 private:
-	bool removeJob( QStandardItem *item, bool kill=true, bool prompt=true );
-	QString getStringFromNumber( int number );
+    bool removeJob( QStandardItem *item, bool kill=true, bool prompt=true );
 
-    int highestNumber;
     int currentId;
     QStandardItemModel *jobModel;
 };

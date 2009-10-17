@@ -32,7 +32,7 @@ static const int HEADER_PROGRESS = 1;
 static const int HEADER_DESCRIPTION = 2;
 // static const int ICON_LOC = HEADER_DESCRIPTION;
 
-static const int DEFAULT_HIGHEST_NUMBER = 9;
+// static const int DEFAULT_HIGHEST_NUMBER = 9;
 
 enum DataRole {
     PercentDone = Qt::UserRole + 1,
