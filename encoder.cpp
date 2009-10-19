@@ -239,7 +239,7 @@ void Encoder::tendToNewJobs()
 
 	command = job->replaceSpecialChars(command, true, map);
 
-	updateProgress(job->id, 0);
+	updateProgress(job->id, JOB_STARTED);
 	job->errorString = command;
 
 	EncodeProcess *proc = new EncodeProcess();

@@ -41,11 +41,15 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
         opts.maximum = 100;
         opts.progress = index.model()->data(index, PercentDone).toInt();
 
-        if (index.model()->data(index, JobState).toInt() == JOB_QUEUED) {
+        int state = index.model()->data(index, JobState).toInt();
+
+        if (state == JOB_QUEUED) {
             opts.text = i18n("Queued");
-        } else if (index.model()->data(index, JobState).toInt() == JOB_ERROR) {
+        } else if (state == JOB_STARTED) {
+            opts.text = i18n("Running");
+        } else if (state == JOB_ERROR) {
             opts.text = i18n("Error");
-        } else if (index.model()->data(index, JobState).toInt() == JOB_COMPLETED) {
+        } else if (state == JOB_COMPLETED) {
             opts.text = i18n("Done");
         } else {
             opts.text = QString("%1%").arg(opts.progress);

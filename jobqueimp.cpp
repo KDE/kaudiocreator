@@ -76,6 +76,7 @@ void JobQueImp::addJob(Job *job, const QString &name)
     QStandardItem *progressItem = new QStandardItem();
     progressItem->setData(JOB_QUEUED, JobState);
     progressItem->setData(job->id, JobId);
+    progressItem->setData(0, PercentDone);
     jobItems << progressItem;
     QStandardItem *descriptionItem = new QStandardItem(name);
     jobItems << descriptionItem;
@@ -110,13 +111,15 @@ void JobQueImp::updateProgress(int id, int progress)
         if  (currentItem->data(JobState).toInt() != JOB_PROGRESSING) {
             currentItem->setData(JOB_PROGRESSING, JobState);
         }
-	} else if(progress == JOB_ERROR) {
+    } else if (progress == JOB_ERROR) {
         currentItem->setData(JOB_ERROR, JobState);
-	} else if (progress == JOB_COMPLETED) {
+    } else if (progress == JOB_STARTED) {
+        currentItem->setData(JOB_STARTED, JobState);
+    } else if (progress == JOB_COMPLETED) {
         currentItem->setData(i18n("Done"), Qt::DisplayRole);
         currentItem->setData(JOB_COMPLETED, JobState);
         currentItem->setData(100, PercentDone);
-		if(Prefs::removeCompletedJobs()){
+		if (Prefs::removeCompletedJobs()){
 			removeJob(currentItem, FALSE);
 			return;
 		}

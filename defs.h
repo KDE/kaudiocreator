@@ -41,10 +41,11 @@ enum DataRole {
 };
 
 enum JobState {
-    JOB_QUEUED = 0,
-    JOB_PROGRESSING = 1,
     JOB_COMPLETED = 101,
-    JOB_ERROR = -1
+    JOB_QUEUED = 102,
+    JOB_STARTED = 103,
+    JOB_PROGRESSING = 104,
+    JOB_ERROR = 105
 };
 
 // tracks
