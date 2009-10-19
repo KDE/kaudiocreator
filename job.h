@@ -32,7 +32,7 @@ class Job
 {
 
 public:
-	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), removeTempFile(true), encoder(-1) {}
+	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), removeTempFile(false), encoder(-1) {}
 
 	QString replaceSpecialChars(const QString &string, bool quote, QHash<QString,QString> map, bool createFilename=false);
 

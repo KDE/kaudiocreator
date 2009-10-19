@@ -28,6 +28,10 @@
       <label>Automatically remove jobs when finished</label>
       <default>true</default>
     </entry>
+    <entry name="removeRippedWavs" type="Bool">
+      <label>Remove ripped wav files after encoding</label>
+      <default>true</default>
+    </entry>
     <entry name="replaceInput" type="String" key="selection">
       <label>Regexp to match file names with</label>
     </entry>

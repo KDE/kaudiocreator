@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QTimer>
 
-#include <ktemporaryfile.h>
+#include <krandom.h>
 #include <kmessagebox.h>
 #include <knotification.h>
 #include <kstandarddirs.h>
@@ -168,12 +168,12 @@ void Ripper::tendToNewJobs(){
 		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
 	// For cases like "/tmp" where there is a missing /
 	defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
-	kDebug() << "defaultTempDir: " << defaultTempDir;
-	KTemporaryFile tmp;
-	tmp.setPrefix(defaultTempDir);
-	tmp.setSuffix(".wav");
-	tmp.open();
 
+    QString tmpFileName;
+    do {
+        tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(defaultTempDir).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
+    } while (QFile::exists(tmpFileName));
+    
 	QString wavFile;
 	if(job->track < 10)
 		wavFile = QString("audiocd:/Wav/Track 0%1.wav").arg(job->track);
@@ -185,7 +185,7 @@ void Ripper::tendToNewJobs(){
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", "Track %{number}");
-	KUrl dest(tmp.fileName());
+	KUrl dest(tmpFileName);
 	kDebug() << "dest: " << dest;
 
 	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
@@ -219,6 +219,7 @@ void Ripper::copyJobResult(KJob *copyjob)
 	if ( copyJob->error() == 0 ) {
 		emit updateProgress(newJob->id, JOB_COMPLETED);
 		newJob->location = copyJob->destUrl().path();
+        newJob->removeTempFile = Prefs::removeRippedWavs();
 		emit(encodeWav(newJob));
 	} else {
 		copyJob->ui()->setWindow(0);

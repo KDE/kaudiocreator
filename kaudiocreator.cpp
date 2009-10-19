@@ -201,7 +201,7 @@ void KAudioCreator::checkSettings()
 		EncoderPrefs *encPrefs;
 		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
 		encPrefs->setEncoderName(i18n("WAV"));
-		encPrefs->setCommandLine("mv %f %o");
+		encPrefs->setCommandLine("cp %f %o");
 		encPrefs->setExtension("wav");
 		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
@@ -239,7 +239,7 @@ void KAudioCreator::checkSettings()
 		EncoderPrefs *encPrefs;
 		encPrefs = EncoderPrefs::prefs("Encoder_WAV");
 		encPrefs->setEncoderName(i18n("WAV"));
-		encPrefs->setCommandLine("mv %f %o");
+		encPrefs->setCommandLine("cp %f %o");
 		encPrefs->setExtension("wav");
 		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
