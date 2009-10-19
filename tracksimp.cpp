@@ -301,19 +301,22 @@ void TracksImp::lookupCDDBDone(Result result )
 
 void TracksImp::artistChangedByUser()
 {
-	cddbInfo.set(Artist, artistEdit->text());
-	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+    cddbInfo.set(Artist, artistEdit->text());
+    cddb->store(cddbInfo, cd->discSignature());
+    setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
 }
 
 void TracksImp::albumChangedByUser()
 {
-	cddbInfo.set(Title, albumEdit->text());
-	setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
+    cddbInfo.set(Title, albumEdit->text());
+    cddb->store(cddbInfo,cd->discSignature());
+    setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
 }
 
 void TracksImp::commentChangedByUser()
 {
     cddbInfo.set(Comment, commentEdit->text());
+    cddb->store(cddbInfo,cd->discSignature());
 }
 
 void TracksImp::assignArtisToTracks()
@@ -334,12 +337,14 @@ void TracksImp::assignCommentToTracks()
 
 void TracksImp::yearChangedByUser(int newYear)
 {
-	cddbInfo.set(Year, newYear);
+    cddbInfo.set(Year, newYear);
+    cddb->store(cddbInfo,cd->discSignature());
 }
 
 void TracksImp::genreChangedByUser(const QString &newGenre)
 {
-	cddbInfo.set(Genre, newGenre);
+    cddbInfo.set(Genre, newGenre);
+    cddb->store(cddbInfo,cd->discSignature());
 }
 
 /**
