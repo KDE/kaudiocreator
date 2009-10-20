@@ -24,7 +24,7 @@
    <item>
     <widget class="QCheckBox" name="kcfg_removeRippedWavs">
      <property name="toolTip">
-      <string>Remove from cd ripped wav files after encoding, from disk encoded files are always kept.</string>
+      <string>After encoding, remove wav files that were ripped from CD (files encoded from disk are always kept.)</string>
      </property>
      <property name="text">
       <string>Remove ripped wav files after encoding</string>
