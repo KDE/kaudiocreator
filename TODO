@@ -18,7 +18,8 @@ If possible restart jobs that have failed.
 Enhance kdedirs kcontrol config dialog to let users specify global kde temp dir
 	Tmp files are stored in $KDEHOME/tmp-$HOST/appname
 ******************************************************************************************************************
-what to to with to be overwritten files, delete before?
-make assignTrackNumbers work
-use KDirLister for adding directories in encodefile?
-maybe use custom model/view instead abusing QTreeWidget
+what to do with to be overwritten files, delete before?
+use KDirLister for adding directories in encodefile? (evaluate after next stable)
+
+for 1.3
+sort out problems with 2 ore more cd drives
