@@ -1,0 +1,9 @@
+1.2.85 (1.3 beta2):
+- switched views to model/index
+- add/make usable option to keep temporary ripped files
+
+1.2.80 (1.3 beta1):
+ - Ported to KDE4
+ - Encode more than one file from disk at once (parallel with smp)
+ - Reworked the encoder config a bit
+

@@ -22,4 +22,7 @@ what to do with to be overwritten files, delete before?
 use KDirLister for adding directories in encodefile? (evaluate after next stable)
 
 for 1.3
-sort out problems with 2 ore more cd drives
+try to sort out problems with 2 ore more cd drives
+    (e.g. when switching between drives a inserted cd is not recognized,
+     makes ripping >1 track sense?
+     rip parallel from >1 drive)
