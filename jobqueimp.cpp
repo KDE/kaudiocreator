@@ -72,13 +72,16 @@ void JobQueImp::addJob(Job *job, const QString &name)
     QList<QStandardItem *> jobItems = QList<QStandardItem *>();
     job->id = ++currentId;
     QStandardItem *jobItem = new QStandardItem(QString::number(currentId));
+    jobItem->setEditable(FALSE);
     jobItems << jobItem;
     QStandardItem *progressItem = new QStandardItem();
     progressItem->setData(JOB_QUEUED, JobState);
     progressItem->setData(job->id, JobId);
     progressItem->setData(0, PercentDone);
+    progressItem->setEditable(FALSE);
     jobItems << progressItem;
     QStandardItem *descriptionItem = new QStandardItem(name);
+    descriptionItem->setEditable(FALSE);
     jobItems << descriptionItem;
     jobModel->appendRow(jobItems);
     queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
