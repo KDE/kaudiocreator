@@ -27,7 +27,7 @@
 
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.2.80",
+  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.2.81",
     ki18n("CD ripper and audio encoder frontend"), KAboutData::License_LGPL,
           ki18n("(c) 2003-2005, Benjamin Meyer\n(c) 2008-2009, Gerd Fleischer"),
           KLocalizedString(), "http://kde-apps.org/content/show.php/KAudioCreator?content=107645");
