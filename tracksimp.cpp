@@ -46,7 +46,7 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), cddbInfo()
 {
 	setupUi(this);
     trackModel = new QStandardItemModel(0, 6, this);
-    trackModel->setHorizontalHeaderLabels(QStringList() << i18n("Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+    trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
     trackView->setModel(trackModel);
 	trackView->resizeColumnToContents(COLUMN_RIP);
 	cd = new KCompactDisc;
@@ -547,7 +547,7 @@ void TracksImp::newAlbum()
 	yearInput->setValue(cddbInfo.get(Year).toInt());
 	genreBox->setEditText(cddbInfo.get(Genre).toString());
 	trackModel->clear();
-    trackModel->setHorizontalHeaderLabels(QStringList() << i18n("Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+    trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
 	toggleInputs(false);
 	emit(hasTracks(false));
 

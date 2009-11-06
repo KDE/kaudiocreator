@@ -27,8 +27,8 @@ EncodeFileModel::EncodeFileModel(QObject *parent) : QStandardItemModel(parent)
     setColumnCount(9);
     QStringList headerLabels;
     headerLabels << i18n("File") << i18n("Title") << i18n("Artist")
-                << i18n("Album") << i18n("Comment") << i18n("Genre")
-                << i18n("Track") << i18n("Year") << i18n("Encoder");
+                << i18nc("@title:column", "Album") << i18n("Comment") << i18n("Genre")
+                << i18n("Track") << i18n("Year") << i18nc("@title:column", "Encoder");
     setHorizontalHeaderLabels(headerLabels);
 }
 
