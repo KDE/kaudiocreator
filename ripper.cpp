@@ -174,11 +174,7 @@ void Ripper::tendToNewJobs(){
         tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(defaultTempDir).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
     } while (QFile::exists(tmpFileName));
     
-	QString wavFile;
-	if(job->track < 10)
-		wavFile = QString("audiocd:/Wav/Track 0%1.wav").arg(job->track);
-	else
-		wavFile = QString("audiocd:/Wav/Track %1.wav").arg(job->track);
+    QString wavFile = QString("audiocd:/Wav/") + ki18n("Track %1.wav").subs(job->track, 2, 10, QChar('0')).toString();
 
 	KUrl source(wavFile);
 	kDebug() << "source: " << source;

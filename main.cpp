@@ -45,6 +45,7 @@ int main(int argc, char *argv[]){
 
   // we need some strings from libkcddb for the cddb album dialog
   KGlobal::locale()->insertCatalog("libkcddb");
+  KGlobal::locale()->insertCatalog("kio_audiocd");
 
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
   if ( args->count()>0 ) app->setDevice( args->arg( 0 ) );
