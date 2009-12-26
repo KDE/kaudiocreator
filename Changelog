@@ -1,5 +1,8 @@
 For more information see the svn log
 
+- removed option for ripping more than one file from one device
+  instead if there are 2+ drives try to rip parallel (limited, see TODO)
+
 1.2.81 (1.3 beta2):
 - switched views to model/index
 - add/make usable option to keep temporary ripped files

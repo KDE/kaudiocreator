@@ -33,22 +33,16 @@
 /**
  * Constructor, load settings.
  */
-Ripper::Ripper( QObject *parent) : QObject(parent) {
-	loadSettings();
-}
-
-/**
- * Loads the settings
- */
-void Ripper::loadSettings(){
-	for(int i=0; i<Prefs::maxWavFiles(); i++)
-		tendToNewJobs();
+Ripper::Ripper( QObject *parent) : QObject(parent)
+{
+    tendToNewJobs();
 }
 
 /**
  * Deconstructor, remove pending jobs, remove current jobs, save settings.
  */
-Ripper::~Ripper(){
+Ripper::~Ripper()
+{
 	qDeleteAll(pendingJobs);
 	pendingJobs.clear();
 
@@ -144,30 +138,38 @@ void Ripper::ripTrack(Job *job){
 }
 
 /**
- * See if there are are new jobs to attend too.  If we are all loaded up
+ * See if there are are new jobs to attend too.  If device is busy
  * then just loop.
  */
-void Ripper::tendToNewJobs(){
-	if(pendingJobs.count() == 0){
-		emit jobsChanged();
-		return;
-	}
+void Ripper::tendToNewJobs()
+{
+    if (pendingJobs.count() == 0) {
+        emit jobsChanged();
+        return;
+    }
 
-	// If we are currently ripping the max try again in a little bit.
-	if(jobs.count() >= Prefs::maxWavFiles()){
-		emit jobsChanged();
-		return;
-	}
+    Job *job = 0;
+    for (int i; i < pendingJobs.count(); ++i) {
+        QString jobDevice = pendingJobs[i]->device;
+        if (!usedDevices.contains(jobDevice)) {
+            usedDevices.append(jobDevice);
+            job = pendingJobs.takeAt(i);
+            break;
+        }
+    }
 
-	Job *job = pendingJobs.takeFirst();
+    if (!job)
+        return;
 
-	QString defaultTempDir;
-	if(Prefs::enableTempDir())
-		defaultTempDir = Prefs::tempDir();
-	else
-		defaultTempDir = KStandardDirs::locateLocal("tmp", "");
-	// For cases like "/tmp" where there is a missing /
-	defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
+    QString defaultTempDir;
+    if (Prefs::enableTempDir()) {
+        defaultTempDir = Prefs::tempDir();
+    } else {
+        defaultTempDir = KStandardDirs::locateLocal("tmp", "");
+    }
+
+    // For cases like "/tmp" where there is a missing /
+    defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
 
     QString tmpFileName;
     do {
@@ -176,20 +178,18 @@ void Ripper::tendToNewJobs(){
     
     QString wavFile = QString("audiocd:/Wav/") + ki18n("Track %1.wav").subs(job->track, 2, 10, QChar('0')).toString();
 
-	KUrl source(wavFile);
-	kDebug() << "source: " << source;
-	if (!job->device.isEmpty())
-		source.addQueryItem("device", job->device);
-	source.addQueryItem("fileNameTemplate", "Track %{number}");
-	KUrl dest(tmpFileName);
-	kDebug() << "dest: " << dest;
+    KUrl source(wavFile);
+    if (!job->device.isEmpty())
+        source.addQueryItem("device", job->device);
+    source.addQueryItem("fileNameTemplate", "Track %{number}");
+    KUrl dest(tmpFileName);
 
-	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
-	jobs.insert(copyJob, job);
-	connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
-	connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
+    KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
+    jobs.insert(copyJob, job);
+    connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
+    connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
 
-	emit jobsChanged();
+    emit jobsChanged();
 }
 
 /**
@@ -208,6 +208,7 @@ void Ripper::copyJobResult(KJob *copyjob)
 		return;
 	Job *newJob = jobs[static_cast<KIO::Job*>(copyjob)];
 	jobs.remove(static_cast<KIO::Job*>(copyjob));
+    usedDevices.removeAll(newJob->device);
 
 	if(Prefs::beepAfterRip())
 		KNotification::beep();

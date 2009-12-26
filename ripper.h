@@ -45,7 +45,6 @@ public:
 	int pendingJobCount();
 
 public slots:
-	void loadSettings();
 	void ripTrack( Job * );
 	void removeJob( int id );
 
@@ -59,6 +58,8 @@ private:
 	QString deviceToEject;
 	// Jobs that we are currently doing.
 	QMap<KIO::Job*, Job*> jobs;
+    QStringList usedDevices;
+
 	// Jobs that we want to do , but haven't done yet
 	QList<Job*> pendingJobs;
 };

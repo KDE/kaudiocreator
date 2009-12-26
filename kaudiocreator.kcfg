@@ -88,10 +88,6 @@
     </entry>
   </group>
   <group name="Ripper">
-    <entry name="maxWavFiles" type="Int">
-      <label>Number of tracks to rip at a time</label>
-      <default>1</default>
-    </entry>
     <entry name="beepAfterRip" type="Bool">
       <label>Beep after rip</label>
       <default>true</default>

@@ -26,3 +26,13 @@ try to sort out problems with 2 ore more cd drives
     (e.g. when switching between drives a inserted cd is not recognized,
      makes ripping >1 track sense?
      rip parallel from >1 drive)
+
+for now if there are jobs from different drives try to rip them in parallel
+what not works is detecting an already inserted cd, so if you switch drives
+you have to reinsert the cd.
+What is also annoying is that the gui freezes when reading a new cd.
+Maybe this can be resolved using Solid/Phonon instead of KCompactDisc.
+
+Also I would like to use directly libcdparanoia for ripping, the problem is that it needs
+a callback and I found no way to support parallel ripping with it - but my C knowledge is somewhat limited ;-),
+maybe someone has a solution?, else I will use the cdparanoia binary via a KProcess.
