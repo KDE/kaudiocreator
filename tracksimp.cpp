@@ -593,7 +593,7 @@ void TracksImp::newAlbum()
 	toggleInputs(false);
 	emit(hasTracks(false));
 
-	for (int i = 0; i < currentDrive->getTrackNum(); ++i) {
+	for (uint i = 0; i < currentDrive->getTrackNum(); ++i) {
 	TrackInfo ti = cddbInfo.track(i);
 		// There is a new track for this title.  Add it to the list of tracks.
 		QString trackLength = formatTime(currentDrive->getTrackLength(i));

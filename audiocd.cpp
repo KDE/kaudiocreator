@@ -264,6 +264,7 @@ void AudioCD::getDiscParameter()
         trackLengthList << discid_get_track_length(discid, i) * 1000 / 75;
     }
     offsetList << discid_get_sectors(discid);
+    discid_free(discid);
     emit(discInserted());
 }
 
