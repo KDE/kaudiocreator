@@ -6,12 +6,11 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 find_package(KDE4 REQUIRED)
 find_package(KdeMultimedia REQUIRED)
+find_package(DiscId REQUIRED)
 find_package(Taglib)
-find_package(DiscId)
 include (KDE4Defaults)
 include (MacroLibrary)
 
-#add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${TAGLIB_CFLAGS})
 
 include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR} ${DISCID_INCLUDE_DIR})
