@@ -20,6 +20,8 @@
 #ifndef TRACKSIMP_H
 #define TRACKSIMP_H
 
+#include <solid/device.h>
+#include <solid/devicenotifier.h>
 #include <klocale.h>
 #include <libkcddb/client.h>
 #include <kdebug.h>
@@ -27,7 +29,7 @@
 #include "ui_tracks.h"
 
 class Job;
-class KCompactDisc;
+class AudioCD;
 class QStandardItemModel;
 class QStandardItem;
 
@@ -68,9 +70,12 @@ public slots:
 	void deselectAllTracks();
 
 private slots:
-	void newDisc(unsigned int discId);
+	void newDisc();
+    void discRemoved();
 	void changeDevice(const QString &);
-	void lookupCDDBDone(KCDDB::Result result);
+    void registerDevice(const QString &udi);
+    void unregisterDevice(const QString &udi);
+    void lookupCDDBDone(KCDDB::Result result);
 	void artistChangedByUser();
 	void albumChangedByUser();
     void commentChangedByUser();
@@ -92,7 +97,11 @@ private:
 
 	KCDDB::Client* cddb;
     QStandardItemModel *trackModel;
-	KCompactDisc* cd;
+//	KCompactDisc* cd;
+    QHash<QString, Solid::Device> devMap;
+    QHash<QString, QString> udiMap;
+    AudioCD *currentDrive;
+    Solid::DeviceNotifier *bell;
 
 	// Current album
 	KCDDB::CDInfo cddbInfo;

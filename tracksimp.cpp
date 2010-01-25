@@ -29,9 +29,10 @@
 #include <kcombobox.h>
 #include "libkcddb/genres.h"
 #include "libkcddb/cdinfodialog.h"
-#include "libkcompactdisc/kcompactdisc.h"
 #include <kdebug.h>
+#include <solid/devicenotifier.h>
 
+#include "audiocd.h"
 #include "job.h"
 #include "tracksimp.h"
 #include "defs.h"
@@ -42,18 +43,15 @@ using namespace KCDDB;
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget *parent) : QWidget(parent), cddbInfo()
+TracksImp::TracksImp( QWidget *parent) : QWidget(parent), currentDrive(0), cddbInfo()
 {
-	setupUi(this);
+    setupUi(this);
     trackModel = new QStandardItemModel(0, 6, this);
     trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
     trackView->setModel(trackModel);
-	trackView->resizeColumnToContents(COLUMN_RIP);
-	cd = new KCompactDisc;
+    trackView->resizeColumnToContents(COLUMN_RIP);
 
 	genreBox->addItems(KCDDB::Genres().i18nList());
-
-	connect(cd, SIGNAL(discChanged(unsigned int)), this, SLOT(newDisc(unsigned int)));
 
 	connect(trackModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(syncToCddbInfo(QStandardItem *)));
 	connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
@@ -79,6 +77,10 @@ TracksImp::TracksImp( QWidget *parent) : QWidget(parent), cddbInfo()
 	connect(cddb, SIGNAL(finished(KCDDB::Result)), this, SLOT(lookupCDDBDone(KCDDB::Result)));
 
 	loadSettings();
+
+    bell = Solid::DeviceNotifier::instance();
+    connect(bell, SIGNAL(deviceAdded(const QString &)), this, SLOT(registerDevice(const QString &)));
+    connect(bell, SIGNAL(deviceRemoved(const QString &)), this, SLOT(unregisterDevice(const QString &)));
 }
 
 /**
@@ -95,17 +97,25 @@ TracksImp::~TracksImp()
  */
 void TracksImp::loadSettings()
 {
-	deviceCombo->blockSignals(true);
-	QStringList devices = KCompactDisc::cdromDeviceNames();
-	deviceCombo->clear();
+    deviceCombo->blockSignals(true);
 
-	if (devices.isEmpty()) {
+    devMap.clear();
+    // a lite version of KCompactDisc::cdromDeviceNames()
+    foreach (const Solid::Device &device, Solid::Device::listFromType(Solid::DeviceInterface::OpticalDrive)) {
+        kDebug() << device.udi().toLatin1().constData();
+        const Solid::Block *b = device.as<Solid::Block>();
+        QString devKey = b->device() + " (" + device.vendor() + " " + device.product() + ")";
+        devMap.insert(devKey, device);
+        udiMap.insert(device.udi(), devKey);
+    }
+
+
+    deviceCombo->clear();
+
+	if (devMap.isEmpty()) {
 		deviceCombo->addItem(i18n("none detected"));
 	} else {
-		foreach (const QString &tmpDevice, devices) {
-			QString path = KCompactDisc::cdromDeviceUrl(tmpDevice).path();
-			deviceCombo->addItem(tmpDevice + " (" + path + ")");
-		}
+		deviceCombo->addItems(devMap.keys());
 	}
 
 	int i = deviceCombo->findText(Prefs::lastUsedDevice());
@@ -118,9 +128,9 @@ void TracksImp::initDevice()
 	changeDevice(deviceCombo->currentText());
 }
 
-void TracksImp::newDisc(unsigned tracks)
+void TracksImp::newDisc()
 {
-	if (!tracks) {
+	if (!currentDrive->getTrackNum()) {
 		kDebug(60002) << "newDisc - No disc";
 		cddbInfo.clear();
 		newAlbum();
@@ -131,33 +141,47 @@ void TracksImp::newDisc(unsigned tracks)
 		return;
 	}
 	
-	unsigned discId = cd->discId();
-	kDebug(60002) << "newDisc - " << discId;
 	emit(hasCD(true));
 
 	toggleInputs(true);
  
 	cddbInfo.clear();
 
-	cddbInfo.set("discid", QString::number(discId,16).rightJustified(8,'0'));
-	cddbInfo.set(Length, cd->discLength());
+	cddbInfo.set("discid", currentDrive->getFreeDbId());
+	cddbInfo.set(Length, currentDrive->getDiscLength());
 
-	cddbInfo.set(Artist, cd->discArtist());
-	cddbInfo.set(Title, cd->discTitle());
-
+/*	cddbInfo.set(Artist, QString());
+	cddbInfo.set(Title, QString());*/
+ 
 	// If it's a sampler, we'll do artist/title.
 	bool isSampler = (cddbInfo.get(Title).toString().compare("Various") == 0);
-	for (unsigned i = 1; i <= cd->tracks(); i++) {
+	for (unsigned i = 1; i <= currentDrive->getTrackNum(); i++) {
 		TrackInfo& track(cddbInfo.track(i-1));
 		if (isSampler)
-			track.set(Artist, cd->trackArtist(i));
-		track.set(Title, cd->trackTitle(i));
+			track.set(Artist, QString());
+		track.set(Title, QString());
 	}
 
-	newAlbum();
 
-	if (Prefs::performCDDBauto())
-		lookupCDDB();
+    if (Prefs::performCDDBauto()) {
+        lookupCDDB();
+    } else {
+        newAlbum();
+    }
+}
+
+void TracksImp::discRemoved()
+{
+    artistEdit->setText(QString());
+    albumEdit->setText(QString());
+    commentEdit->setText(QString());
+    setAlbumInfo(i18n("Unknown Artist"), i18n("Unknown Album"));
+    yearInput->setValue(0);
+    genreBox->setEditText(QString());
+    trackModel->clear();
+    trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+    toggleInputs(false);
+    emit(hasTracks(false));
 }
 
 /**
@@ -165,7 +189,7 @@ void TracksImp::newDisc(unsigned tracks)
  */
 bool TracksImp::hasCD()
 {
-	return !cd->isNoDisc();
+    return currentDrive->isCdInserted();
 }
 
 /**
@@ -175,25 +199,25 @@ bool TracksImp::hasCD()
  */
 void TracksImp::setDevice(const QString &userDevice)
 {
-	KUrl url = KCompactDisc::cdromDeviceUrl(userDevice);
-	bool found = false;
-	int d = 0;
-	while (d < deviceCombo->count()) {
-		QString name = deviceCombo->itemText(d);
-		name = name.left(name.indexOf(" ("));
-		if (KCompactDisc::cdromDeviceUrl(name) == url) {
-			if (d != deviceCombo->currentIndex()) {
-				changeDevice(name);
-				deviceCombo->blockSignals(true);
-				deviceCombo->setCurrentIndex(d);
-				deviceCombo->blockSignals(false);
-			}
-			found = true;
-			break;
-		}
-		++d;
-	}
-	if (!found) kDebug() << "Selected device not found!" << endl;
+// 	KUrl url = KCompactDisc::cdromDeviceUrl(userDevice);
+// 	bool found = false;
+// 	int d = 0;
+// 	while (d < deviceCombo->count()) {
+// 		QString name = deviceCombo->itemText(d);
+// 		name = name.left(name.indexOf(" ("));
+// 		if (KCompactDisc::cdromDeviceUrl(name) == url) {
+// 			if (d != deviceCombo->currentIndex()) {
+// 				changeDevice(name);
+// 				deviceCombo->blockSignals(true);
+// 				deviceCombo->setCurrentIndex(d);
+// 				deviceCombo->blockSignals(false);
+// 			}
+// 			found = true;
+// 			break;
+// 		}
+// 		++d;
+// 	}
+// 	if (!found) kDebug() << "Selected device not found!" << endl;
 }
 
 /**
@@ -202,16 +226,37 @@ void TracksImp::setDevice(const QString &userDevice)
  */
 void TracksImp::changeDevice(const QString &device)
 {
-	QString newDevice = device.left(device.indexOf(" ("));
-	// assume that devices reported by KCompactDisc::cdromDeviceNames() are just there
-	if (!cd->setDevice(newDevice, 50, false))
-	{
-		QString errstring =
-		  i18n("CDROM read or access error (or no audio disk in drive).\n"\
-		    "Please make sure you have access permissions to:\n%1",
-		     device);
-		KMessageBox::error(this, errstring, i18n("Error"));
-	}
+    delete currentDrive;
+    currentDrive = new AudioCD(devMap[device]);
+    connect(currentDrive, SIGNAL(discInserted()), this, SLOT(newDisc()));
+    connect(currentDrive, SIGNAL(discRemoved()), this, SLOT(discRemoved()));
+
+    if (currentDrive->isCdInserted())
+        newDisc();
+}
+
+void TracksImp::registerDevice(const QString &udi)
+{
+    Solid::Device nd(udi);
+    if (nd.isDeviceInterface(Solid::DeviceInterface::OpticalDrive)) {
+        const Solid::Block *b = nd.as<Solid::Block>();
+        QString devKey = b->device() + " (" + nd.vendor() + " " + nd.product() + ")";
+        devMap.insert(devKey, nd);
+        udiMap.insert(nd.udi(), devKey);
+        deviceCombo->blockSignals(true);
+        deviceCombo->addItem(devKey);
+        deviceCombo->blockSignals(false);
+    }
+}
+
+void TracksImp::unregisterDevice(const QString &udi)
+{
+    if (udiMap.contains(udi)) {
+        deviceCombo->blockSignals(true);
+        deviceCombo->removeItem(deviceCombo->findText(udiMap[udi]));
+        deviceCombo->blockSignals(false);
+        devMap.remove(udiMap[udi]);
+    }
 }
 
 /**
@@ -233,8 +278,8 @@ void TracksImp::performCDDB()
  */ 
 void TracksImp::lookupCDDB()
 {
-	cddb->config().reparse();
-	cddb->lookup(cd->discSignature());
+    cddb->config().reparse();
+    cddb->lookup(currentDrive->getOffsetList());
 }
 
 /**
@@ -248,6 +293,7 @@ void TracksImp::lookupCDDBDone(Result result )
 		(result != KCDDB::MultipleRecordFound))
 	{
 		KMessageBox::sorry(this, i18n("Unable to retrieve CDDB information."), i18n("CDDB Failed"));
+        newAlbum();
 		return;
 	}
 
@@ -302,21 +348,21 @@ void TracksImp::lookupCDDBDone(Result result )
 void TracksImp::artistChangedByUser()
 {
     cddbInfo.set(Artist, artistEdit->text());
-    cddb->store(cddbInfo, cd->discSignature());
+    cddb->store(cddbInfo, currentDrive->getOffsetList());
     setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
 }
 
 void TracksImp::albumChangedByUser()
 {
     cddbInfo.set(Title, albumEdit->text());
-    cddb->store(cddbInfo,cd->discSignature());
+    cddb->store(cddbInfo,currentDrive->getOffsetList());
     setAlbumInfo(cddbInfo.get(Artist).toString(), cddbInfo.get(Title).toString());
 }
 
 void TracksImp::commentChangedByUser()
 {
     cddbInfo.set(Comment, commentEdit->text());
-    cddb->store(cddbInfo,cd->discSignature());
+    cddb->store(cddbInfo,currentDrive->getOffsetList());
 }
 
 void TracksImp::assignArtisToTracks()
@@ -338,13 +384,13 @@ void TracksImp::assignCommentToTracks()
 void TracksImp::yearChangedByUser(int newYear)
 {
     cddbInfo.set(Year, newYear);
-    cddb->store(cddbInfo,cd->discSignature());
+    cddb->store(cddbInfo, currentDrive->getOffsetList());
 }
 
 void TracksImp::genreChangedByUser(const QString &newGenre)
 {
     cddbInfo.set(Genre, newGenre);
-    cddb->store(cddbInfo,cd->discSignature());
+    cddb->store(cddbInfo, currentDrive->getOffsetList());
 }
 
 /**
@@ -363,14 +409,14 @@ void TracksImp::editInformation()
 	dialog->setDefaultButton(KDialog::Ok);
 	dialog->showButtonSeparator(true);
 
-	dialog->setInfo(cddbInfo, cd->discSignature());
+	dialog->setInfo(cddbInfo, currentDrive->getOffsetList());
 
 	// Show dialog->and save results.
 	bool okClicked = dialog->exec();
 	if( okClicked ) {
 		cddbInfo = dialog->info();
 		newAlbum();
-		cddb->store(cddbInfo,cd->discSignature());
+		cddb->store(cddbInfo, currentDrive->getOffsetList());
 	}
 	delete dialog;
 }
@@ -386,16 +432,12 @@ void TracksImp::editInformation()
 QString TracksImp::formatTime(unsigned s)
 {
 	QTime time;
+	time = time.addMSecs((int) s);
 
-	time = time.addSecs((int) s);
-
-	// Use ".zzz" for milliseconds...
-	QString temp2;
 	if (time.hour() > 0)
-		temp2 = time.toString("hh:mm:ss");
+		return time.toString("hh:mm:ss");
 	else
-		temp2 = time.toString("mm:ss");
-	return temp2;
+		return time.toString("mm:ss");
 }
 
 /**
@@ -456,7 +498,7 @@ void TracksImp::startSession(QString encoder)
 	foreach (int r, selected) {
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;
-		newJob->device = cd->deviceUrl().path();
+		newJob->device = currentDrive->getCdPath();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
@@ -551,10 +593,10 @@ void TracksImp::newAlbum()
 	toggleInputs(false);
 	emit(hasTracks(false));
 
-	for (int i = 0; i < cddbInfo.numberOfTracks(); ++i) {
-		TrackInfo ti = cddbInfo.track(i);
+	for (int i = 0; i < currentDrive->getTrackNum(); ++i) {
+	TrackInfo ti = cddbInfo.track(i);
 		// There is a new track for this title.  Add it to the list of tracks.
-		QString trackLength = formatTime(cd->trackLength(i + 1));
+		QString trackLength = formatTime(currentDrive->getTrackLength(i));
         QList<QStandardItem *> trackItems = QList<QStandardItem *>();
         
 		QStandardItem *ripItem = new QStandardItem();
@@ -590,7 +632,7 @@ void TracksImp::newAlbum()
     trackView->resizeColumnToContents(COLUMN_TRACK_NAME);
     trackView->resizeColumnToContents(COLUMN_TRACK_ARTIST);
 
-	if (cddbInfo.numberOfTracks()) {
+	if (currentDrive->getTrackNum()) {
 		// Set the current selected track to the first one.
 		trackView->setCurrentIndex(trackModel->index(0, 0, QModelIndex()));
 		toggleInputs(true);
@@ -622,7 +664,7 @@ void TracksImp::syncToCddbInfo(QStandardItem *item)
  */
 void TracksImp::eject()
 {
-	cd->eject();
+//	cd->eject();
 }
 
 /**
@@ -633,7 +675,7 @@ void TracksImp::ejectDevice(const QString &deviceToEject)
 {
 	changeDevice(deviceToEject);
 	
-	cd->eject();
+//	cd->eject();
 }
 
 #include "tracksimp.moc"

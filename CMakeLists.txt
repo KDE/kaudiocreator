@@ -2,17 +2,19 @@ if (NOT APPLE)
 
 project(kaudiocreator)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 find_package(KDE4 REQUIRED)
 find_package(KdeMultimedia REQUIRED)
 find_package(Taglib)
+find_package(DiscId)
 include (KDE4Defaults)
 include (MacroLibrary)
 
 #add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${TAGLIB_CFLAGS})
 
-include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR})
+include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEMULTIMEDIA_INCLUDE_DIR} ${TAGLIB_INCLUDE_DIR} ${DISCID_INCLUDE_DIR})
 
 CONFIGURE_FILE(config-kaudiocreator.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kaudiocreator.h)
 
@@ -32,6 +34,7 @@ set(kaudiocreator_SRCS
     encodefiledelegate.cpp
     encodefileimp.cpp
     general.cpp
+    audiocd.cpp
     wizard.cpp)
 
 
@@ -52,7 +55,7 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES} ${TAGLIB_LIBRARIES})
+target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES} ${TAGLIB_LIBRARIES} ${DISCID_LIBRARIES})
 
 install(TARGETS kaudiocreator  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
