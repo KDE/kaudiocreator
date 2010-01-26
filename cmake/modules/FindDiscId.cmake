@@ -1,4 +1,5 @@
 # Module to find the discid library
+# It can be found at http://musicbrainz.org/doc/libdiscid
 #
 # It defines
 #  DISCID_INCLUDE_DIR - the include dir
