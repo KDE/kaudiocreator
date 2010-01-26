@@ -69,8 +69,8 @@ protected:
 private slots:
 	void checkSettings();
   void showSettings();
-  void updateStatus();
-  void hasCD(bool);
+  void setRipStatus();
+  void setDriveStatus(bool);
   void showCurrentEncoder();
   void configureNotifications();
   void encodeFile();
@@ -86,7 +86,7 @@ private:
   Ripper      *ripper;
   Encoder     *encoder;
   KMenu       *ripMenu;
-  QLabel *statusLabel, *defaultEncLabel;
+  QLabel *driveLabel, *ripLabel, *defaultEncLabel;
 };
 
 class SettingsDialog: public KConfigDialog {

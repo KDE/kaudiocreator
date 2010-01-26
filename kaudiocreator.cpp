@@ -50,14 +50,14 @@
 /**
  * Constructor. Connect all of the object and the job control.
  */
-KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLabel(0)
+KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLabel(0), ripLabel(0)
 {
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
 
 	tracks = new TracksImp();
-	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(hasCD(bool)));
+	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(setDriveStatus(bool)));
 
 	trackPage = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
 	trackPage->setIcon(KIcon("media-optical-audio"));
@@ -93,9 +93,9 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 
 	connect(ripper, SIGNAL(encodeWav(Job *)), encoder, SLOT(encodeWav(Job *)));
 
-	connect( ripper, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
-	connect( encoder, SIGNAL( jobsChanged() ), this, SLOT( updateStatus() ) );
-	connect( jobQue, SIGNAL( removeJob( int ) ), this, SLOT( updateStatus() ) );
+	connect( ripper, SIGNAL( jobsChanged() ), this, SLOT( setRipStatus() ) );
+	connect( encoder, SIGNAL( jobsChanged() ), this, SLOT( setRipStatus() ) );
+	connect( jobQue, SIGNAL( removeJob( int ) ), this, SLOT( setRipStatus() ) );
 
 	QAction *eject = actionCollection()->addAction("eject");
 	eject->setText(i18n("&Eject CD"));
@@ -170,12 +170,15 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), statusLa
 	// Init statusbar
 	// replace with something not hardcoded
 	statusBar()->setContentsMargins(6, 0, 6, 0);
-	statusLabel = new QLabel();
-	statusBar()->addWidget(statusLabel);
-	statusLabel->setText(i18n("Searching"));
+	driveLabel = new QLabel();
+	statusBar()->addWidget(driveLabel);
+	driveLabel->setText(i18n("Searching"));
+    ripLabel = new QLabel();
+    statusBar()->addPermanentWidget(ripLabel, 0);
 	defaultEncLabel = new QLabel();
 	statusBar()->addPermanentWidget(defaultEncLabel, 0);
 	showCurrentEncoder();
+    setRipStatus();
 	// seems to need some time to settle
 	QTimer::singleShot(500, tracks, SLOT(initDevice()));
 }
@@ -281,15 +284,19 @@ void KAudioCreator::setupRipMenu()
 }
 
 /**
- * Changes the status bar to let the user no if a cd was not detected or inserted.
+ * Changes the status bar to let the user know if a cd was not detected or inserted.
  */
-void KAudioCreator::hasCD(bool cd){
-	if (statusLabel) {
-		if(cd)
-			statusLabel->setText(i18n("CD Inserted"));
-		else
-			statusLabel->setText(i18n("No Audio CD detected"));
-	}
+void KAudioCreator::setDriveStatus(bool cd)
+{
+    if (driveLabel) {
+        if (cd && tracks->hasAudio()) {
+            driveLabel->setText(i18n("Audio CD inserted"));
+        } else if (cd) {
+            driveLabel->setText(i18n("Disc inserted - No Audio"));
+        } else {
+            driveLabel->setText(i18n("No Audio CD detected"));
+        }
+    }
 }
 
 void KAudioCreator::showCurrentEncoder()
@@ -298,9 +305,9 @@ void KAudioCreator::showCurrentEncoder()
 	defaultEncLabel->setText(i18n("Default encoder: %1", encName));
 }
 
-
-void KAudioCreator::updateStatus() {
-	QString status = i18n("Idle.");
+void KAudioCreator::setRipStatus()
+{
+	QString status = i18n("Idle");
 	QString rippingStatus;
 	QString encodingStatus;
 	int activeRippingJobs = ripper->activeJobCount();
@@ -323,7 +330,7 @@ void KAudioCreator::updateStatus() {
 			status = encodingStatus;
 		}
 	}
-	statusLabel->setText(status);
+	ripLabel->setText(i18n("Jobs:") + " " + status);
 }
 
 /**

@@ -180,8 +180,9 @@ void TracksImp::discRemoved()
     genreBox->setEditText(QString());
     trackModel->clear();
     trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
-    toggleInputs(false);
-    emit(hasTracks(false));
+    toggleInputs(FALSE);
+    emit(hasTracks(FALSE));
+    emit(hasCD(FALSE));
 }
 
 /**
@@ -190,6 +191,11 @@ void TracksImp::discRemoved()
 bool TracksImp::hasCD()
 {
     return currentDrive->isCdInserted();
+}
+
+bool TracksImp::hasAudio() const
+{
+    return currentDrive->hasAudio();
 }
 
 /**
@@ -231,8 +237,11 @@ void TracksImp::changeDevice(const QString &device)
     connect(currentDrive, SIGNAL(discInserted()), this, SLOT(newDisc()));
     connect(currentDrive, SIGNAL(discRemoved()), this, SLOT(discRemoved()));
 
-    if (currentDrive->isCdInserted())
+    if (currentDrive->isCdInserted()) {
         newDisc();
+    } else {
+        emit hasCD(FALSE);
+    }
 }
 
 void TracksImp::registerDevice(const QString &udi)

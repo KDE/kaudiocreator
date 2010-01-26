@@ -130,6 +130,11 @@ bool AudioCD::isCdInserted() const
     return (cd != NULL);
 }
 
+bool AudioCD::hasAudio() const
+{
+    return (cd->availableContent() & Solid::OpticalDisc::Audio) == Solid::OpticalDisc::Audio;
+}
+
 QList<uint> AudioCD::getOffsetList()
 {
     return offsetList;
@@ -265,6 +270,7 @@ void AudioCD::getDiscParameter()
     }
     offsetList << discid_get_sectors(discid);
     discid_free(discid);
+    qDebug() << (cd->availableContent() & Solid::OpticalDisc::Audio);
     emit(discInserted());
 }
 

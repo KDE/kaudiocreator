@@ -53,6 +53,7 @@ public:
 	~TracksImp();
 
 	bool hasCD();
+    bool hasAudio() const;
 	void setDevice(const QString &);
 
 public slots:

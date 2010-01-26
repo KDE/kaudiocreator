@@ -77,6 +77,7 @@ public:
     Phonon::MediaSource * getMediaSource() const;
     QString getCdPath() const;
     bool isCdInserted() const;
+    bool hasAudio() const;
     QString getSignature() const;
     uint getTrackNum() const;
     QList<uint> getOffsetList();
