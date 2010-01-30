@@ -206,25 +206,23 @@ bool TracksImp::hasAudio() const
  */
 void TracksImp::setDevice(const QString &userDevice)
 {
-// 	KUrl url = KCompactDisc::cdromDeviceUrl(userDevice);
-// 	bool found = false;
-// 	int d = 0;
-// 	while (d < deviceCombo->count()) {
-// 		QString name = deviceCombo->itemText(d);
-// 		name = name.left(name.indexOf(" ("));
-// 		if (KCompactDisc::cdromDeviceUrl(name) == url) {
-// 			if (d != deviceCombo->currentIndex()) {
-// 				changeDevice(name);
-// 				deviceCombo->blockSignals(true);
-// 				deviceCombo->setCurrentIndex(d);
-// 				deviceCombo->blockSignals(false);
-// 			}
-// 			found = true;
-// 			break;
-// 		}
-// 		++d;
-// 	}
-// 	if (!found) kDebug() << "Selected device not found!" << endl;
+    bool found = false;
+    int d = 0;
+    while (d < deviceCombo->count()) {
+        QString name = deviceCombo->itemText(d);
+        if (name.contains(userDevice)) {
+            if (d != deviceCombo->currentIndex()) {
+                changeDevice(name);
+                deviceCombo->blockSignals(true);
+                deviceCombo->setCurrentIndex(d);
+                deviceCombo->blockSignals(false);
+            }
+            found = true;
+            break;
+        }
+        ++d;
+    }
+    if (!found) kDebug() << "Selected device not found!";
 }
 
 /**

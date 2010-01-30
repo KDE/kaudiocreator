@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
   KCmdLineArgs::init(argc, argv, &aboutData);
 
   KCmdLineOptions options;
-  options.add("+[device]", ki18n( "CD device, can be a path or a media:/ URL" ));
+  options.add("+[device]", ki18n( "CD device path" ));
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication a(true);
   KAudioCreator *app = new KAudioCreator();
