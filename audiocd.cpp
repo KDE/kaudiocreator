@@ -54,50 +54,59 @@ AudioCD::AudioCD()
     cd = 0;
     block = 0;
     src = 0;
-    obj = new MediaObject(this);
     ctlr = 0;
     status = NoDisc;
+    driveUdi = QString();
     discUdi = QString();
-}
 
-AudioCD::AudioCD(Solid::Device aCd)
-{
-    odsign = aCd;
-    bell = Solid::DeviceNotifier::instance();
-    cdDrive = aCd.as<Solid::OpticalDrive>();
-
-    connect(bell, SIGNAL(deviceAdded(const QString &)), this, SLOT(reloadCD()));
-    connect(bell, SIGNAL(deviceRemoved(const QString &)), this, SLOT(discEjected(const QString &)));
-
-    cd = 0;
-    block = 0;
-    src = 0;
     obj = new MediaObject(this);
     connect(obj, SIGNAL(metaDataChanged()), this, SLOT(discInfoChanged()));
-    ctlr = 0;
-    status = NoDisc;
-    discUdi = QString();
 
-    // look for an opticaldisc inserted in this drive
-    QList<Solid::Device> devList = Solid::Device::listFromType(Solid::DeviceInterface::OpticalDisc, QString());
-
-    if (!devList.isEmpty()) {
-        for (int i = 0; i < devList.size(); ++i) {
-            if (devList[i].parentUdi() == odsign.udi()) {
-                cd = devList[i].as<Solid::OpticalDisc>();
-                block = odsign.as<Solid::Block>();
-                src = new MediaSource(Cd, block->device());
-                obj->setCurrentSource(*src);
-                ctlr = new MediaController(obj);
-                discUdi = devList[i].udi();
-                getDiscParameter();
-            }
-        }
-    }
+    bell = Solid::DeviceNotifier::instance();
+    connect(bell, SIGNAL(deviceAdded(const QString &)), this, SLOT(reloadCD()));
+    connect(bell, SIGNAL(deviceRemoved(const QString &)), this, SLOT(discEjected(const QString &)));
 }
 
 AudioCD::~AudioCD()
 {
+}
+
+bool AudioCD::setDevice(Solid::Device aCd)
+{
+    odsign = aCd;
+    cd = 0;
+    block = 0;
+    src = 0;
+    ctlr = 0;
+    status = NoDisc;
+    driveUdi = QString();
+    discUdi = QString();
+
+    cdDrive = aCd.as<Solid::OpticalDrive>();
+    if (cdDrive) {
+        driveUdi = odsign.udi();
+        // look for an opticaldisc inserted in this drive
+        QList<Solid::Device> devList = Solid::Device::listFromType(Solid::DeviceInterface::OpticalDisc, QString());
+
+        if (!devList.isEmpty()) {
+            for (int i = 0; i < devList.size(); ++i) {
+                if (devList[i].parentUdi() == odsign.udi()) {
+                    cd = devList[i].as<Solid::OpticalDisc>();
+                    block = odsign.as<Solid::Block>();
+                    src = new MediaSource(Cd, block->device());
+                    obj->setCurrentSource(*src);
+                    ctlr = new MediaController(obj);
+                    discUdi = devList[i].udi();
+                    getDiscParameter();
+                }
+            }
+        }
+    } else {
+        kDebug() << "Drive seems not to be an optical drive!";
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 Solid::OpticalDrive *AudioCD::getCdDrive() const
@@ -162,7 +171,7 @@ QString AudioCD::getMusicbrainzId() const
 
 QString AudioCD::getDriveUdi() const
 {
-    return odsign.udi();
+    return driveUdi;
 }
 
 QString AudioCD::getDiscUdi() const
@@ -212,6 +221,7 @@ void AudioCD::discEjected(const QString &udi)
         discLength = 0;
         freeDbId = QString();
         musicbrainzId = QString();
+        driveUdi = QString();
         discUdi = QString();
         status = NoDisc;
         emit driveStatusChanged(status);

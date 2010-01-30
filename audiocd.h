@@ -66,7 +66,7 @@ private:
     Phonon::MediaObject *obj;
     Phonon::MediaController *ctlr;
     DriveStatus status;
-    QString discUdi;
+    QString driveUdi, discUdi;
     uint tracks;
     int discLength;
     QList<uint> offsetList, trackLengthList;
@@ -80,8 +80,8 @@ private slots:
 
 public:
     AudioCD();
-    AudioCD(Solid::Device aCd);
     ~AudioCD();
+    bool setDevice(Solid::Device aCd);
     Solid::OpticalDrive * getCdDrive() const;
     Solid::OpticalDisc * getCd() const;
     Phonon::MediaSource * getMediaSource() const;

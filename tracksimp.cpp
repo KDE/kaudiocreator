@@ -234,9 +234,11 @@ void TracksImp::setDevice(const QString &userDevice)
 void TracksImp::changeDevice(const QString &device)
 {
     delete currentDrive;
-    currentDrive = new AudioCD(devMap[device]);
-    connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
-    discChanged(currentDrive->getDriveStatus());
+    currentDrive = new AudioCD();
+    if (currentDrive->setDevice(devMap[device])) {
+        connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
+        discChanged(currentDrive->getDriveStatus());
+    }
 }
 
 void TracksImp::registerDevice(const QString &udi)
