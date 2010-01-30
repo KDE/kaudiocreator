@@ -48,6 +48,14 @@ class AudioCD: public QObject
 {
     Q_OBJECT
 
+public:
+    enum DriveStatus {
+        NoDisc,
+        Loading,
+        Ready,
+        ReadyNoAudio
+    };
+
 private:
     Solid::DeviceNotifier *bell;
     Solid::Device odsign;
@@ -57,6 +65,8 @@ private:
     Phonon::MediaSource *src;
     Phonon::MediaObject *obj;
     Phonon::MediaController *ctlr;
+    DriveStatus status;
+    QString discUdi;
     uint tracks;
     int discLength;
     QList<uint> offsetList, trackLengthList;
@@ -64,7 +74,6 @@ private:
     void getDiscParameter();
 
 private slots:
-    void cdStateChanged(Phonon::State, Phonon::State);
     void discInfoChanged();
     void registerMediaSource();
 
@@ -78,25 +87,24 @@ public:
     QString getCdPath() const;
     bool isCdInserted() const;
     bool hasAudio() const;
-    QString getSignature() const;
+    DriveStatus getDriveStatus() const;
+    QString getDriveUdi() const;
+    QString getDiscUdi() const;
     uint getTrackNum() const;
-    QList<uint> getOffsetList();
-    int getDiscLength();
-    uint getTrackLength(int);
+    QList<uint> getOffsetList() const;
+    int getDiscLength() const;
+    uint getTrackLength(int) const;
     QString getFreeDbId() const;
     QString getMusicbrainzId() const;
-    QString getCdLength();
     QStringList metaData();
     Phonon::State state();
         
 public slots:
-    void catchEjectPressed();
     void reloadCD();
-    void discEjected();
+    void discEjected(const QString &);
 
 signals:
-    void discInserted();
-    void discRemoved();
+    void driveStatusChanged(AudioCD::DriveStatus);
     void newDiscInfo();
 };
 

@@ -57,7 +57,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	setCentralWidget(pageWidget);
 
 	tracks = new TracksImp();
-	connect(tracks, SIGNAL(hasCD(bool)), this, SLOT(setDriveStatus(bool)));
+	connect(tracks, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(setDriveStatus(AudioCD::DriveStatus)));
 
 	trackPage = new KPageWidgetItem(tracks, i18n("&CD Tracks"));
 	trackPage->setIcon(KIcon("media-optical-audio"));
@@ -108,12 +108,12 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	QAction *selectAll = actionCollection()->addAction("select_all");
 	selectAll->setText(i18n("Select &All Tracks"));
 	connect(selectAll, SIGNAL(triggered(bool) ), tracks, SLOT(selectAllTracks()));
-	connect(tracks, SIGNAL(hasTracks(bool)), selectAll, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), selectAll, SLOT(setEnabled(bool)));
 
 	QAction *deselectAll = actionCollection()->addAction("deselect_all");
 	deselectAll->setText(i18n("Deselect &All Tracks"));
 	connect(deselectAll, SIGNAL(triggered(bool) ), tracks, SLOT(deselectAllTracks()));
-	connect(tracks, SIGNAL(hasTracks(bool)), deselectAll, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), deselectAll, SLOT(setEnabled(bool)));
 	selectAll->setEnabled( false );
 	deselectAll->setEnabled( false );
 
@@ -132,8 +132,8 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	connect(rip, SIGNAL(triggered(bool) ), tracks, SLOT(startSession()));
 	rip->setEnabled( false );
 
-	connect(tracks, SIGNAL(hasTracks(bool)), rip, SLOT(setEnabled(bool)));
-	connect(tracks, SIGNAL(hasTracks(bool)), actActionMenu, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), rip, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), actActionMenu, SLOT(setEnabled(bool)));
 
 	action = actionCollection()->addAction("clear_done_jobs");
         action->setText(i18n("Remove &Completed Jobs"));
@@ -142,7 +142,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	QAction *edit = actionCollection()->addAction("edit_cd");
 	edit->setText(i18n("&Edit Album..."));
 	connect(edit, SIGNAL(triggered(bool) ), tracks, SLOT(editInformation()));
-	connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), edit, SLOT(setEnabled(bool)));
 	edit->setEnabled( false );
 
 // 	QAction *editTrack = actionCollection()->addAction("edit_track");
@@ -158,7 +158,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	QAction *cddb = actionCollection()->addAction("cddb_now");
 	cddb->setText(i18n("&CDDB Lookup"));
 	connect(cddb, SIGNAL(triggered(bool) ), tracks, SLOT(performCDDB()));
-	connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(hasAudioCd(bool)), cddb, SLOT(setEnabled(bool)));
 	cddb->setEnabled( false );
 
 	KStandardAction::configureNotifications(this, SLOT(configureNotifications()),
@@ -180,7 +180,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	showCurrentEncoder();
     setRipStatus();
 	// seems to need some time to settle
-	QTimer::singleShot(500, tracks, SLOT(initDevice()));
+	QTimer::singleShot(50, tracks, SLOT(initDevice()));
 }
 
 void KAudioCreator::setDevice( const QString &device )
@@ -286,15 +286,24 @@ void KAudioCreator::setupRipMenu()
 /**
  * Changes the status bar to let the user know if a cd was not detected or inserted.
  */
-void KAudioCreator::setDriveStatus(bool cd)
+void KAudioCreator::setDriveStatus(AudioCD::DriveStatus status)
 {
     if (driveLabel) {
-        if (cd && tracks->hasAudio()) {
-            driveLabel->setText(i18n("Audio CD inserted"));
-        } else if (cd) {
-            driveLabel->setText(i18n("Disc inserted - No Audio"));
-        } else {
-            driveLabel->setText(i18n("No Audio CD detected"));
+        switch (status) {
+            case AudioCD::NoDisc:
+                driveLabel->setText(i18n("No disc"));
+                emit hasAudioCd(FALSE);
+                break;
+            case AudioCD::Loading:
+                driveLabel->setText(i18n("Loading disc"));
+                break;
+            case AudioCD::Ready:
+                driveLabel->setText(i18n("Audio CD inserted"));
+                emit hasAudioCd(TRUE);
+                break;
+            case AudioCD::ReadyNoAudio:
+                driveLabel->setText(i18n("Disc inserted - No Audio"));
+                break;
         }
     }
 }

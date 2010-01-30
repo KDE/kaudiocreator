@@ -20,6 +20,8 @@
 #ifndef KAUDIOCREATOR_H
 #define KAUDIOCREATOR_H
 
+#include "audiocd.h"
+
 #include <kxmlguiwindow.h>
 #include <kconfigdialog.h>
 
@@ -70,7 +72,7 @@ private slots:
 	void checkSettings();
   void showSettings();
   void setRipStatus();
-  void setDriveStatus(bool);
+  void setDriveStatus(AudioCD::DriveStatus);
   void showCurrentEncoder();
   void configureNotifications();
   void encodeFile();
@@ -87,6 +89,9 @@ private:
   Encoder     *encoder;
   KMenu       *ripMenu;
   QLabel *driveLabel, *ripLabel, *defaultEncLabel;
+  
+signals:
+    void hasAudioCd(bool);
 };
 
 class SettingsDialog: public KConfigDialog {

@@ -32,7 +32,6 @@
 #include <kdebug.h>
 #include <solid/devicenotifier.h>
 
-#include "audiocd.h"
 #include "job.h"
 #include "tracksimp.h"
 #include "defs.h"
@@ -130,19 +129,6 @@ void TracksImp::initDevice()
 
 void TracksImp::newDisc()
 {
-	if (!currentDrive->getTrackNum()) {
-		kDebug(60002) << "newDisc - No disc";
-		cddbInfo.clear();
-		newAlbum();
-		emit(hasCD(false));
-
-		toggleInputs(false);
-
-		return;
-	}
-	
-	emit(hasCD(true));
-
 	toggleInputs(true);
  
 	cddbInfo.clear();
@@ -170,19 +156,32 @@ void TracksImp::newDisc()
     }
 }
 
-void TracksImp::discRemoved()
+void TracksImp::discChanged(AudioCD::DriveStatus status)
 {
-    artistEdit->setText(QString());
-    albumEdit->setText(QString());
-    commentEdit->setText(QString());
-    setAlbumInfo(i18n("Unknown Artist"), i18n("Unknown Album"));
-    yearInput->setValue(0);
-    genreBox->setEditText(QString());
-    trackModel->clear();
-    trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
-    toggleInputs(FALSE);
-    emit(hasTracks(FALSE));
-    emit(hasCD(FALSE));
+    switch (status) {
+        case AudioCD::NoDisc:
+            artistEdit->setText(QString());
+            albumEdit->setText(QString());
+            commentEdit->setText(QString());
+            setAlbumInfo(i18n("Unknown Artist"), i18n("Unknown Album"));
+            yearInput->setValue(0);
+            genreBox->setEditText(QString());
+            trackModel->clear();
+            trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+            toggleInputs(FALSE);
+            emit driveStatusChanged(AudioCD::NoDisc);
+            break;
+        case AudioCD::Loading:
+            emit driveStatusChanged(AudioCD::Loading);
+            break;
+        case AudioCD::Ready:
+            emit driveStatusChanged(AudioCD::Ready);
+            newDisc();
+            break;
+        case AudioCD::ReadyNoAudio:
+            emit driveStatusChanged(AudioCD::ReadyNoAudio);
+            break;
+    }
 }
 
 /**
@@ -234,14 +233,8 @@ void TracksImp::changeDevice(const QString &device)
 {
     delete currentDrive;
     currentDrive = new AudioCD(devMap[device]);
-    connect(currentDrive, SIGNAL(discInserted()), this, SLOT(newDisc()));
-    connect(currentDrive, SIGNAL(discRemoved()), this, SLOT(discRemoved()));
-
-    if (currentDrive->isCdInserted()) {
-        newDisc();
-    } else {
-        emit hasCD(FALSE);
-    }
+    connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
+    discChanged(currentDrive->getDriveStatus());
 }
 
 void TracksImp::registerDevice(const QString &udi)

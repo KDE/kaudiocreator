@@ -20,6 +20,8 @@
 #ifndef TRACKSIMP_H
 #define TRACKSIMP_H
 
+#include "audiocd.h"
+
 #include <solid/device.h>
 #include <solid/devicenotifier.h>
 #include <klocale.h>
@@ -29,7 +31,6 @@
 #include "ui_tracks.h"
 
 class Job;
-class AudioCD;
 class QStandardItemModel;
 class QStandardItem;
 
@@ -43,7 +44,7 @@ Q_OBJECT
 
 signals:
 	void ripTrack(Job *job);
-	void hasCD(bool);
+	void driveStatusChanged(AudioCD::DriveStatus);
 	void hasTracks(bool);
 /*	void renameTrack(QTreeWidgetItem *);*/
 	void sessionStarted();
@@ -72,7 +73,7 @@ public slots:
 
 private slots:
 	void newDisc();
-    void discRemoved();
+    void discChanged(AudioCD::DriveStatus);
 	void changeDevice(const QString &);
     void registerDevice(const QString &udi);
     void unregisterDevice(const QString &udi);
