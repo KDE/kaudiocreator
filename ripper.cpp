@@ -241,7 +241,7 @@ void Ripper::copyJobResult(KJob *copyjob)
 				}
 			}
 			if( !job ){
-				deviceToEject = newJob->device;
+				deviceToEject = newJob->driveUdi;
 				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SLOT(ejectNow()));
 			}
 		}

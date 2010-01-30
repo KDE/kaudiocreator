@@ -196,6 +196,11 @@ void AudioCD::reloadCD()
     }
 }
 
+void AudioCD::eject()
+{
+    cdDrive->eject();
+}
+
 void AudioCD::discEjected(const QString &udi)
 {
     if (discUdi == udi) {

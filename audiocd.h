@@ -76,6 +76,7 @@ private:
 private slots:
     void discInfoChanged();
     void registerMediaSource();
+    void discEjected(const QString &);
 
 public:
     AudioCD();
@@ -101,7 +102,7 @@ public:
         
 public slots:
     void reloadCD();
-    void discEjected(const QString &);
+    void eject();
 
 signals:
     void driveStatusChanged(AudioCD::DriveStatus);

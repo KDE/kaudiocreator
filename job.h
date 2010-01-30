@@ -41,6 +41,7 @@ public:
 	
 	// The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
 	QString device;
+    QString driveUdi;
 	int id; 
 
 	QString track_title;

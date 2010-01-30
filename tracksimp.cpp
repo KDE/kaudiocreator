@@ -30,6 +30,8 @@
 #include "libkcddb/genres.h"
 #include "libkcddb/cdinfodialog.h"
 #include <kdebug.h>
+#include <solid/device.h>
+#include <solid/opticaldrive.h>
 #include <solid/devicenotifier.h>
 
 #include "job.h"
@@ -501,6 +503,7 @@ void TracksImp::startSession(QString encoder)
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;
 		newJob->device = currentDrive->getCdPath();
+        newJob->driveUdi = currentDrive->getDriveUdi();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
@@ -666,7 +669,7 @@ void TracksImp::syncToCddbInfo(QStandardItem *item)
  */
 void TracksImp::eject()
 {
-//	cd->eject();
+    currentDrive->eject();
 }
 
 /**
@@ -675,9 +678,9 @@ void TracksImp::eject()
  */
 void TracksImp::ejectDevice(const QString &deviceToEject)
 {
-	changeDevice(deviceToEject);
-	
-//	cd->eject();
+    Solid::Device device(deviceToEject);
+    Solid::OpticalDrive *drive = device.as<Solid::OpticalDrive>();
+    drive->eject();
 }
 
 #include "tracksimp.moc"
