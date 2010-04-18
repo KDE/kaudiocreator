@@ -149,8 +149,8 @@ void Ripper::tendToNewJobs()
     }
 
     Job *job = 0;
-    for (int i; i < pendingJobs.count(); ++i) {
-        QString jobDevice = pendingJobs[i]->device;
+    for (int i = 0; i < pendingJobs.count(); ++i) {
+        const QString jobDevice = pendingJobs[i]->device;
         if (!usedDevices.contains(jobDevice)) {
             usedDevices.append(jobDevice);
             job = pendingJobs.takeAt(i);
@@ -208,7 +208,7 @@ void Ripper::copyJobResult(KJob *copyjob)
 		return;
 	Job *newJob = jobs[static_cast<KIO::Job*>(copyjob)];
 	jobs.remove(static_cast<KIO::Job*>(copyjob));
-    usedDevices.removeAll(newJob->device);
+	usedDevices.removeAll(newJob->device);
 
 	if(Prefs::beepAfterRip())
 		KNotification::beep();

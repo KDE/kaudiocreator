@@ -266,15 +266,15 @@ void KAudioCreator::setupRipMenu()
 {
 	ripMenu->clear();
 
-	QStringList list = EncoderPrefs::prefsList();
-	foreach (QString encoder, list) {
+	const QStringList list = EncoderPrefs::prefsList();
+	foreach (const QString &encoder, list) {
 		EncoderPrefs *encPrefs = EncoderPrefs::prefs(encoder);
 		if (encPrefs->inputTypes().contains("wav")) {
-			QString command = encPrefs->commandLine();
+			const QString command = encPrefs->commandLine();
 			int progEnd = command.indexOf(" ");
-			QString prog = command.left(progEnd).trimmed();
+			const QString prog = command.left(progEnd).trimmed();
 			if (KStandardDirs::findExe(prog) != QString()) {
-				QAction *encAction = ripMenu->addAction(encoder.remove("Encoder_"));
+				QAction *encAction = ripMenu->addAction(encPrefs->encoderName());
 				encAction->setData(QVariant(encoder));
 				if (encoder == Prefs::defaultEncoder())
 					ripMenu->setDefaultAction(encAction);

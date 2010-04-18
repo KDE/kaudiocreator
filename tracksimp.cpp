@@ -503,7 +503,7 @@ void TracksImp::startSession(QString encoder)
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;
 		newJob->device = currentDrive->getCdPath();
-        newJob->driveUdi = currentDrive->getDriveUdi();
+		newJob->driveUdi = currentDrive->getDriveUdi();
 		newJob->album = cddbInfo.get(Title).toString();
 		newJob->genre = cddbInfo.get(Genre).toString();
 		if( newJob->genre.isEmpty())
@@ -512,9 +512,9 @@ void TracksImp::startSession(QString encoder)
 		newJob->comment = cddbInfo.get(Comment).toString();
 		newJob->year = cddbInfo.get(Year).toInt();
 		newJob->track = (trackModel->item(r, COLUMN_TRACK))->data(Qt::DisplayRole).toInt();
-        newJob->track_title = (trackModel->item(r, COLUMN_TRACK_NAME))->data(Qt::DisplayRole).toString();
-        newJob->track_artist = (trackModel->item(r, COLUMN_TRACK_ARTIST))->data(Qt::DisplayRole).toString();
-        newJob->track_comment = (trackModel->item(r, COLUMN_TRACK_COMMENT))->data(Qt::DisplayRole).toString();
+		newJob->track_title = (trackModel->item(r, COLUMN_TRACK_NAME))->data(Qt::DisplayRole).toString();
+		newJob->track_artist = (trackModel->item(r, COLUMN_TRACK_ARTIST))->data(Qt::DisplayRole).toString();
+		newJob->track_comment = (trackModel->item(r, COLUMN_TRACK_COMMENT))->data(Qt::DisplayRole).toString();
 		lastJob = newJob;
 		emit( ripTrack(newJob) ); 
 	}
