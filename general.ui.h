@@ -7,13 +7,13 @@
 ** place of a destructor.
 *****************************************************************************/
 
-#include <qregexp.h>
-#include <qlineedit.h>
-#include <qlabel.h>
+#include <tqregexp.h>
+#include <tqlineedit.h>
+#include <tqlabel.h>
 
 void General::updateExample()
 {
-  QString text = example->text();
-  text.replace( QRegExp(kcfg_replaceInput->text()), kcfg_replaceOutput->text() );
+  TQString text = example->text();
+  text.replace( TQRegExp(kcfg_replaceInput->text()), kcfg_replaceOutput->text() );
   exampleOutput->setText(text);
 }

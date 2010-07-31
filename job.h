@@ -21,7 +21,7 @@
 #ifndef JOB_H
 #define JOB_H
 
-#include <qmap.h>
+#include <tqmap.h>
 #include <klocale.h>
 
 /**
@@ -33,34 +33,34 @@ class Job{
 public:
 	inline Job():id(-1),track_title(""),track_artist(""), track(-1),track_comment(""), year(-1), genre(i18n("Other")), group(""), album(""), comment(""), lastSongInAlbum(false), removeTempFile(true), encoder(-1) {};
 
-	QString replaceSpecialChars(const QString &string, bool quote, QMap<QString,QString> map);
+	TQString replaceSpecialChars(const TQString &string, bool quote, TQMap<TQString,TQString> map);
 
-	void fix( const QString &in, const QString &out );
+	void fix( const TQString &in, const TQString &out );
 	
 	// The device to obtain the file such as /dev/cdrom/ (Used when ripping and ejecting)
-	QString device;
+	TQString device;
 	int id; 
 
-	QString track_title;
-	QString track_artist;
+	TQString track_title;
+	TQString track_artist;
 	int track;
-	QString track_comment;
+	TQString track_comment;
 	int year;
-	QString genre;
+	TQString genre;
 
-	QString group;
-	QString album;
-	QString comment;
+	TQString group;
+	TQString album;
+	TQString comment;
 
 	// Currently location of file X
-	QString location;
+	TQString location;
 
 	// New location of a file after current opertation is complete (rip/encode).
-	QString newLocation;
+	TQString newLocation;
 
 	// What was just attempted to do via this job and is spit out in the event
 	// of an error.
-	QString errorString;
+	TQString errorString;
 
 	// If this is the last track to be ripped then value is true. 
 	bool lastSongInAlbum;
@@ -69,7 +69,7 @@ public:
 	bool removeTempFile;
 
 	// output from the processing.
-	QString output;
+	TQString output;
 
 	int encoder;
 }; 

@@ -38,8 +38,8 @@ class KAudioCreator : public KMainWindow {
 Q_OBJECT
 
 public:
-  KAudioCreator( QWidget* parent = 0, const char* name = 0);
-  void setDevice( const QString &device );
+  KAudioCreator( TQWidget* parent = 0, const char* name = 0);
+  void setDevice( const TQString &device );
 
 protected:
   virtual bool queryClose();
@@ -69,7 +69,7 @@ class SettingsDialog: public KConfigDialog {
 Q_OBJECT
 
 public:
-  SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
+  SettingsDialog(TQWidget *parent, const char *name,KConfigSkeleton *config);
 
 protected slots:
   void updateSettings();

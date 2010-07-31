@@ -44,8 +44,8 @@ class KCompactDisc;
 class TracksItem : public KListViewItem
 {
 public:
-    TracksItem( KListView *parent, KListViewItem *after, QString t, QString a, int tr, QString l, QString c )
-        : KListViewItem( parent, after, QString::null/*rip*/, QString::number(tr), l, t )
+    TracksItem( KListView *parent, KListViewItem *after, TQString t, TQString a, int tr, TQString l, TQString c )
+        : KListViewItem( parent, after, TQString::null/*rip*/, TQString::number(tr), l, t )
     {
         m_title = t;
         m_artist = a;
@@ -55,14 +55,14 @@ public:
         m_checked = false;
     }
 
-    QString title()     const { return m_title; }
-    QString artist()    const { return m_artist; }
+    TQString title()     const { return m_title; }
+    TQString artist()    const { return m_artist; }
     int     track()     const { return m_track; }
-    QString length()    const { return m_length; }
+    TQString length()    const { return m_length; }
     bool    checked()   const { return m_checked; }
-    QString comment()   const { return m_comment; }
+    TQString comment()   const { return m_comment; }
     #include <kdebug.h>
-    void    setTitle( const QString &t )  { m_title = t; kdDebug() << "title: " << m_title << endl; }
+    void    setTitle( const TQString &t )  { m_title = t; kdDebug() << "title: " << m_title << endl; }
     void    setChecked( const bool &b )   { 
         m_checked = b;
         b ? setPixmap( HEADER_RIP, SmallIcon( "apply", height()-2 ) ) :
@@ -70,11 +70,11 @@ public:
     }
 
 private:
-    QString m_title;
-    QString m_artist;
+    TQString m_title;
+    TQString m_artist;
     int     m_track;
-    QString m_length;
-    QString m_comment;
+    TQString m_length;
+    TQString m_comment;
     bool    m_checked; // marked for ripping
 };
 
@@ -93,7 +93,7 @@ signals:
 	void hasTracks(bool);
  
 public:
-	TracksImp( QWidget* parent = 0, const char* name = 0);
+	TracksImp( TQWidget* parent = 0, const char* name = 0);
 	~TracksImp();
 
 	bool hasCD();
@@ -105,26 +105,26 @@ public slots:
 	void startSession( int encoder = -1 );
 	void editInformation();
 	void performCDDB();
-	void ejectDevice(const QString &deviceToEject);
+	void ejectDevice(const TQString &deviceToEject);
 	void eject();
 	void selectAllTracks();
 	void deselectAllTracks();
 
 private slots:
-    void changeDevice(const QString &file);
-	void keyPressEvent(QKeyEvent *event);
+    void changeDevice(const TQString &file);
+	void keyPressEvent(TQKeyEvent *event);
 	void lookupCDDBDone(CDDB::Result result);
     void newDisc(unsigned discId);   
-    void selectTrack(QListViewItem *);   
+    void selectTrack(TQListViewItem *);   
 
 private:
 	void lookupDevice();
 	void lookupCDDB();
 	void newAlbum();
 	void ripWholeAlbum();
-    QPtrList<TracksItem> selectedTracks();   
+    TQPtrList<TracksItem> selectedTracks();   
     
-	QString formatTime(unsigned ms);
+	TQString formatTime(unsigned ms);
 
 	KCDDB::Client *cddb;
 	KCompactDisc  *cd;

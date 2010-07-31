@@ -21,20 +21,20 @@
 #include "encodefileimp.h"
 #include "job.h"
 
-#include <qspinbox.h>
-#include <qlineedit.h>
+#include <tqspinbox.h>
+#include <tqlineedit.h>
 #include <kurlrequester.h>
-#include <qcombobox.h>
+#include <tqcombobox.h>
 #include <kmessagebox.h>
 
-EncodeFileImp::EncodeFileImp(QWidget* parent,
+EncodeFileImp::EncodeFileImp(TQWidget* parent,
 		const char* name) : EncodeFile(parent, name), m_genres(KCDDB::Genres()) {
   genre->insertStringList(m_genres.i18nList());
   // Specify to only accept wav files
   file->setFilter("*.wav|Wav Files");
 
-  connect(file,SIGNAL(textChanged(const QString &)),this,SLOT(enableEncodeButton(const QString &)));
-  connect(encodeButton,SIGNAL(clicked()),this,SLOT(encode()));
+  connect(file,TQT_SIGNAL(textChanged(const TQString &)),this,TQT_SLOT(enableEncodeButton(const TQString &)));
+  connect(encodeButton,TQT_SIGNAL(clicked()),this,TQT_SLOT(encode()));
 }
 
 /**
@@ -74,7 +74,7 @@ void EncodeFileImp::encode(){
  i18n("Jobs have started"), i18n("Jobs have started"));
 }
 
-void EncodeFileImp::enableEncodeButton(const QString &text){
+void EncodeFileImp::enableEncodeButton(const TQString &text){
   encodeButton->setEnabled(!text.isEmpty());
 }
 

@@ -26,9 +26,9 @@
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qmap.h>
+#include <tqstring.h>
+#include <tqregexp.h>
+#include <tqmap.h>
 #include <klocale.h>
 #include "job.h"
 
@@ -87,10 +87,10 @@ void fileWizard::commentPressed()
 	fileFormat->insert("%{albumcomment}");
 }
 
-void fileWizard::fileFormatTextChanged(const QString& text)
+void fileWizard::fileFormatTextChanged(const TQString& text)
 {
-	QString string = text;
-	string.replace(QRegExp("~"), "/home/foo");
+	TQString string = text;
+	string.replace(TQRegExp("~"), "/home/foo");
 	Job job;
 	job.genre = "Rock";
 	job.group = "J Rocker";
@@ -102,7 +102,7 @@ void fileWizard::fileFormatTextChanged(const QString& text)
 	job.track_title = "Time";
 	job.track_artist = "John Rocker"; 
 	job.track_comment = "This Song Rocks!";
-	QMap<QString,QString> map;
+	TQMap<TQString,TQString> map;
 	map.insert("extension", "mp3");
 	string = job.replaceSpecialChars(string, false, map);
 	exampleLabel->setText(i18n("Example: %1").arg(string));

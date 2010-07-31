@@ -23,8 +23,8 @@
 
 #include "encoderconfig.h"
 #include "encoder_prefs.h"
-#include <qmap.h>
-#include <qdict.h>
+#include <tqmap.h>
+#include <tqdict.h>
 
 /**
  * Class mainly build to manage encoder list.
@@ -37,20 +37,20 @@ signals:
   void encoderUpdated();
 
 public:
-  EncoderConfigImp( QWidget* parent = 0, const char* name = 0);
+  EncoderConfigImp( TQWidget* parent = 0, const char* name = 0);
 
 private slots:
   void addEncoderSlot();
   void removeEncoderSlot();
   void configureEncoderSlot();
 
-  void updateEncoder(QObject * obj);
+  void updateEncoder(TQObject * obj);
   void updateEncoder(const char *dialogName);
   void loadEncoderList();
 
 private:
   // Name, groupName
-  QMap<QString, QString> encoderNames;
+  TQMap<TQString, TQString> encoderNames;
 };
 
 #endif

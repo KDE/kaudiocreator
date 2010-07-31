@@ -20,7 +20,7 @@
 
 #include "kaudiocreator.h"
 
-#include <qvbox.h>
+#include <tqvbox.h>
 #include <kiconloader.h>
 
 #include <kmessagebox.h>
@@ -49,89 +49,89 @@
 /**
  * Constructor. Connect all of the object and the job control.
  */
-KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
+KAudioCreator::KAudioCreator( TQWidget* parent, const char* name) :
        KMainWindow(parent, name)
 {
     janusWidget = new KJanusWidget(this, name, KJanusWidget::Tabbed);
     setCentralWidget(janusWidget);
 
-    QVBox *frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), QString::null, SmallIcon("cdaudio_unmount", 32));
+    TQVBox *frame = janusWidget->addVBoxPage(i18n("&CD Tracks"), TQString::null, SmallIcon("cdaudio_unmount", 32));
     tracks = new TracksImp(frame, "Tracks");
 
     ripper  = new Ripper ( frame, "Rip" );
     encoder = new Encoder( frame, "Encoder" );
 
-    frame = janusWidget->addVBoxPage( i18n("&Jobs"), QString::null, SmallIcon( "run", 32 ) );
+    frame = janusWidget->addVBoxPage( i18n("&Jobs"), TQString::null, SmallIcon( "run", 32 ) );
     jobQue = new JobQueImp( frame, "Que" );
 
     resize(500, 440);
 
     /*KAction *eject = */new KAction( i18n("&Eject CD"), 0, tracks,
-                                  SLOT( eject() ), actionCollection(), "eject" );
+                                  TQT_SLOT( eject() ), actionCollection(), "eject" );
 
     (void)new KAction( i18n("&Configure KAudioCreator..."), 0, this,
-                       SLOT( showSettings() ), actionCollection(), "configure_kaudiocreator" );
+                       TQT_SLOT( showSettings() ), actionCollection(), "configure_kaudiocreator" );
 
     KAction *selectAll   = new KAction( i18n( "Select &All Tracks"), 0, tracks,
-                                        SLOT( selectAllTracks()   ), actionCollection(), "select_all" ) ;
+                                        TQT_SLOT( selectAllTracks()   ), actionCollection(), "select_all" ) ;
     KAction *deselectAll = new KAction( i18n( "Deselect &All Tracks"), 0, tracks,
-                                        SLOT( deselectAllTracks() ), actionCollection(), "deselect_all" );
+                                        TQT_SLOT( deselectAllTracks() ), actionCollection(), "deselect_all" );
     selectAll->setEnabled( false );
     deselectAll->setEnabled( false );
 
     KActionMenu *actActionMenu = new KActionMenu( i18n("Rip &Selection"), "rip", actionCollection(), "rip" );
     actActionMenu->setDelayed(true); //needed for checking "all accounts"
     actActionMenu->setEnabled( false );   
-    connect( actActionMenu, SIGNAL( activated() ), tracks, SLOT( startSession() ) );
+    connect( actActionMenu, TQT_SIGNAL( activated() ), tracks, TQT_SLOT( startSession() ) );
 
     ripMenu = actActionMenu->popupMenu();
-    connect( ripMenu, SIGNAL( activated(int) ), this, SLOT( slotRipSelection(int)) );
-    connect( ripMenu, SIGNAL( aboutToShow() ),  this, SLOT( getRipMenu()) );
+    connect( ripMenu, TQT_SIGNAL( activated(int) ), this, TQT_SLOT( slotRipSelection(int)) );
+    connect( ripMenu, TQT_SIGNAL( aboutToShow() ),  this, TQT_SLOT( getRipMenu()) );
 
     KAction *rip = new KAction( i18n( "Rip &Selection" ), 0, tracks,
-                                SLOT( startSession() ), actionCollection(), "rip_selected" );
+                                TQT_SLOT( startSession() ), actionCollection(), "rip_selected" );
     rip->setEnabled( false );
 
-    connect( jobQue, SIGNAL( removeJob(int) ), this,    SLOT( updateStatus() ) );
-    connect( jobQue, SIGNAL( removeJob(int) ), ripper,  SLOT( removeJob(int) ) );
-    connect( jobQue, SIGNAL( removeJob(int) ), encoder, SLOT( removeJob(int)) );
+    connect( jobQue, TQT_SIGNAL( removeJob(int) ), this,    TQT_SLOT( updateStatus() ) );
+    connect( jobQue, TQT_SIGNAL( removeJob(int) ), ripper,  TQT_SLOT( removeJob(int) ) );
+    connect( jobQue, TQT_SIGNAL( removeJob(int) ), encoder, TQT_SLOT( removeJob(int)) );
 
-    connect( ripper, SIGNAL( updateProgress(int, int) )     , jobQue,  SLOT( updateProgress(int,int) ) );
-    connect( ripper, SIGNAL( addJob(Job*, const QString &) ), jobQue,  SLOT( addJob(Job*, const QString &)) );
-    connect( ripper, SIGNAL( eject(const QString &) )       , tracks,  SLOT( ejectDevice(const QString &)) );
-    connect( ripper, SIGNAL( encodeWav(Job *) )             , encoder, SLOT( encodeWav(Job *)) );
-    connect( ripper, SIGNAL( jobsChanged() )                , this,    SLOT( updateStatus() ) );   
+    connect( ripper, TQT_SIGNAL( updateProgress(int, int) )     , jobQue,  TQT_SLOT( updateProgress(int,int) ) );
+    connect( ripper, TQT_SIGNAL( addJob(Job*, const TQString &) ), jobQue,  TQT_SLOT( addJob(Job*, const TQString &)) );
+    connect( ripper, TQT_SIGNAL( eject(const TQString &) )       , tracks,  TQT_SLOT( ejectDevice(const TQString &)) );
+    connect( ripper, TQT_SIGNAL( encodeWav(Job *) )             , encoder, TQT_SLOT( encodeWav(Job *)) );
+    connect( ripper, TQT_SIGNAL( jobsChanged() )                , this,    TQT_SLOT( updateStatus() ) );   
 
-    connect( encoder, SIGNAL( updateProgress(int, int) )   , jobQue,  SLOT( updateProgress(int,int)) );
-    connect( encoder, SIGNAL( addJob(Job*, const QString&)), jobQue,  SLOT( addJob(Job*, const QString &)) );
-    connect( encoder, SIGNAL( jobsChanged() )              , this,    SLOT( updateStatus() ) );
+    connect( encoder, TQT_SIGNAL( updateProgress(int, int) )   , jobQue,  TQT_SLOT( updateProgress(int,int)) );
+    connect( encoder, TQT_SIGNAL( addJob(Job*, const TQString&)), jobQue,  TQT_SLOT( addJob(Job*, const TQString &)) );
+    connect( encoder, TQT_SIGNAL( jobsChanged() )              , this,    TQT_SLOT( updateStatus() ) );
 
-    connect( tracks, SIGNAL( hasCD(bool) )    , this,          SLOT( hasCD(bool) ) );
-    connect( tracks, SIGNAL( ripTrack(Job *) ), ripper,        SLOT( ripTrack(Job *)) );
-    connect( tracks, SIGNAL( hasTracks(bool) ), rip,           SLOT( setEnabled(bool)) );
-    connect( tracks, SIGNAL( hasTracks(bool) ), actActionMenu, SLOT( setEnabled(bool)) );
-    connect( tracks, SIGNAL( hasTracks(bool) ), deselectAll,   SLOT( setEnabled(bool)) );
-    connect( tracks, SIGNAL( hasTracks(bool) ), selectAll,     SLOT( setEnabled(bool)) );
+    connect( tracks, TQT_SIGNAL( hasCD(bool) )    , this,          TQT_SLOT( hasCD(bool) ) );
+    connect( tracks, TQT_SIGNAL( ripTrack(Job *) ), ripper,        TQT_SLOT( ripTrack(Job *)) );
+    connect( tracks, TQT_SIGNAL( hasTracks(bool) ), rip,           TQT_SLOT( setEnabled(bool)) );
+    connect( tracks, TQT_SIGNAL( hasTracks(bool) ), actActionMenu, TQT_SLOT( setEnabled(bool)) );
+    connect( tracks, TQT_SIGNAL( hasTracks(bool) ), deselectAll,   TQT_SLOT( setEnabled(bool)) );
+    connect( tracks, TQT_SIGNAL( hasTracks(bool) ), selectAll,     TQT_SLOT( setEnabled(bool)) );
 
     (void)new KAction(i18n("Remove &Completed Jobs"), 0, jobQue,
-          SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
+          TQT_SLOT(clearDoneJobs()), actionCollection(), "clear_done_jobs" );
 
     KAction *edit = new KAction(i18n("&Edit Album..."), 0, tracks,
-          SLOT(editInformation()), actionCollection(), "edit_cd");
-    connect(tracks, SIGNAL(hasCD(bool)), edit, SLOT(setEnabled(bool)));
+          TQT_SLOT(editInformation()), actionCollection(), "edit_cd");
+    connect(tracks, TQT_SIGNAL(hasCD(bool)), edit, TQT_SLOT(setEnabled(bool)));
     edit->setEnabled( false );
 
     (void)new KAction(i18n("Encode &File..."), 0, this,
-          SLOT(encodeFile()), actionCollection(), "encode_file");
+          TQT_SLOT(encodeFile()), actionCollection(), "encode_file");
 
     KAction *cddb = new KAction(i18n("&CDDB Lookup"), 0, tracks,
-          SLOT(performCDDB()), actionCollection(), "cddb_now");
-    connect(tracks, SIGNAL(hasCD(bool)), cddb, SLOT(setEnabled(bool)));
+          TQT_SLOT(performCDDB()), actionCollection(), "cddb_now");
+    connect(tracks, TQT_SIGNAL(hasCD(bool)), cddb, TQT_SLOT(setEnabled(bool)));
     cddb->setEnabled( false );
 
-    KStdAction::configureNotifications(this, SLOT(configureNotifications()),
+    KStdAction::configureNotifications(this, TQT_SLOT(configureNotifications()),
           actionCollection());
-    KStdAction::quit( this, SLOT(close()), actionCollection(), "quit" );
+    KStdAction::quit( this, TQT_SLOT(close()), actionCollection(), "quit" );
 
     // Init statusbar
     statusBar()->insertItem(i18n("No Audio CD detected"), 0 );
@@ -140,7 +140,7 @@ KAudioCreator::KAudioCreator( QWidget* parent, const char* name) :
     setupGUI();
 }
 
-void KAudioCreator::setDevice( const QString &device )
+void KAudioCreator::setDevice( const TQString &device )
 {
     tracks->deviceCombo->setCurrentText( device );
 }
@@ -153,10 +153,10 @@ void KAudioCreator::getRipMenu(){
     ripMenu->clear();
 
     int i=0;
-    QString currentGroup = QString("Encoder_%1").arg(i);
+    TQString currentGroup = TQString("Encoder_%1").arg(i);
     while(EncoderPrefs::hasPrefs(currentGroup)){
         ripMenu->insertItem(EncoderPrefs::prefs(currentGroup)->encoderName(), i);
-        currentGroup = QString("Encoder_%1").arg(++i);
+        currentGroup = TQString("Encoder_%1").arg(++i);
     }
 }
 
@@ -171,9 +171,9 @@ void KAudioCreator::hasCD(bool cd){
 }
 
 void KAudioCreator::updateStatus() {
-    QString status = i18n("Idle.");
-    QString rippingStatus;
-    QString encodingStatus;
+    TQString status = i18n("Idle.");
+    TQString rippingStatus;
+    TQString encodingStatus;
     int activeRippingJobs = ripper->activeJobCount();
     int pendingRippingJobs = ripper->pendingJobCount();
     int activeEncodingJobs = encoder->activeJobCount();
@@ -216,7 +216,7 @@ void KAudioCreator::configureNotifications() {
 
 void KAudioCreator::encodeFile(){
     EncodeFileImp *file = new EncodeFileImp(this, "EncodeFile");
-    connect(file, SIGNAL(startJob(Job*)),encoder, SLOT(encodeWav(Job*)));
+    connect(file, TQT_SIGNAL(startJob(Job*)),encoder, TQT_SLOT(encodeWav(Job*)));
     file->show();
 }
 
@@ -228,14 +228,14 @@ void KAudioCreator::showSettings(){
         return;
 
     SettingsDialog *dialog = new SettingsDialog(this, "settings", Prefs::self());
-    connect(dialog, SIGNAL(settingsChanged()), ripper, SLOT(loadSettings()));
-    connect(dialog, SIGNAL(settingsChanged()), encoder, SLOT(loadSettings()));
-    connect(dialog, SIGNAL(settingsChanged()), tracks, SLOT(loadSettings()));
-    connect(dialog->encoderConfigImp, SIGNAL(encoderUpdated()), encoder, SLOT(loadSettings()));
+    connect(dialog, TQT_SIGNAL(settingsChanged()), ripper, TQT_SLOT(loadSettings()));
+    connect(dialog, TQT_SIGNAL(settingsChanged()), encoder, TQT_SLOT(loadSettings()));
+    connect(dialog, TQT_SIGNAL(settingsChanged()), tracks, TQT_SLOT(loadSettings()));
+    connect(dialog->encoderConfigImp, TQT_SIGNAL(encoderUpdated()), encoder, TQT_SLOT(loadSettings()));
     dialog->show();
 }
 
-SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config)
+SettingsDialog::SettingsDialog(TQWidget *parent, const char *name,KConfigSkeleton *config)
  : KConfigDialog(parent, name, config),
  cddb(0), cddbChanged(false)
 {
@@ -248,12 +248,12 @@ SettingsDialog::SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton
     KService::Ptr libkcddb = KService::serviceByDesktopName("libkcddb");
     if (libkcddb && libkcddb->isValid())
     {
-        cddb = KCModuleLoader::loadModule(QString("libkcddb"), KCModuleLoader::Inline);
+        cddb = KCModuleLoader::loadModule(TQString("libkcddb"), KCModuleLoader::Inline);
         if (cddb)
         {
             cddb->load();
             addPage(cddb, i18n("CDDB"), "cdaudio_mount", i18n("CDDB Configuration"), false);
-            connect(cddb, SIGNAL(changed(bool)), this, SLOT(slotCddbChanged(bool)));
+            connect(cddb, TQT_SIGNAL(changed(bool)), this, TQT_SLOT(slotCddbChanged(bool)));
         }
     }
     RipConfig *rip = new RipConfig(0, "Ripper");

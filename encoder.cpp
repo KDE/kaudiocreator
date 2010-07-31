@@ -24,20 +24,20 @@
 #include "encoder_prefs.h"
 #include "encoderoutput.h"
  
-#include <qregexp.h>
-#include <qdir.h>
+#include <tqregexp.h>
+#include <tqdir.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <kdebug.h>
 #include <knotifyclient.h>
-#include <qtextedit.h>
+#include <tqtextedit.h>
 #include <kinputdialog.h>
 
 /**
  * Constructor, load settings.
  */
-Encoder::Encoder( QObject* parent, const char* name):QObject(parent,name),reportCount(0) {
+Encoder::Encoder( TQObject* parent, const char* name):TQObject(parent,name),reportCount(0) {
 	loadSettings();
 }
 
@@ -53,11 +53,11 @@ void Encoder::loadSettings() {
 
 EncoderPrefs* Encoder::loadEncoder( int encoder ){
 	EncoderPrefs* prefs;
-	QString currentEncoderGroup = QString("Encoder_%1").arg(encoder);
+	TQString currentEncoderGroup = TQString("Encoder_%1").arg(encoder);
 	prefs = EncoderPrefs::prefs(currentEncoderGroup);
 	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
-		prefs->setCommandLine(QString::null);
+		prefs->setCommandLine(TQString::null);
 	}
 
 	return prefs;
@@ -69,13 +69,13 @@ EncoderPrefs* Encoder::loadEncoder( int encoder ){
 Encoder::~Encoder() {
 	pendingJobs.clear();
 
-	QMap<KShellProcess*, Job*>::Iterator pit;
+	TQMap<KShellProcess*, Job*>::Iterator pit;
 	for( pit = jobs.begin(); pit != jobs.end(); ++pit ) {
 		Job *job = jobs[pit.key()];
 		KShellProcess *process = pit.key();
 		threads.remove(process);
 		process->kill();
-		QFile::remove(job->newLocation);
+		TQFile::remove(job->newLocation);
 		delete job;
 		delete process;
 	}
@@ -101,7 +101,7 @@ int Encoder::pendingJobCount() {
  * @param id the id number of the job to stop.
  */
 void Encoder::removeJob(int id ) {
-	QMap<KShellProcess*, Job*>::Iterator it;
+	TQMap<KShellProcess*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ) {
 		if ( it.data()->id == id ) {
 			KShellProcess *process = it.key();
@@ -159,10 +159,10 @@ void Encoder::tendToNewJobs() {
 	
 	EncoderPrefs* prefs = loadEncoder(job->encoder);
 	
-	QString desiredFile = Prefs::fileFormat();
-	desiredFile.replace( QRegExp("~"), QDir::homeDirPath() );
+	TQString desiredFile = Prefs::fileFormat();
+	desiredFile.replace( TQRegExp("~"), TQDir::homeDirPath() );
 	{
-		QMap <QString,QString> map;
+		TQMap <TQString,TQString> map;
 		map.insert("extension", prefs->extension());
 		Job jobx = *job;
 		jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
@@ -171,9 +171,9 @@ void Encoder::tendToNewJobs() {
 		desiredFile = jobx.replaceSpecialChars(desiredFile, false, map);
 	}
 
-	while ( QFile::exists( desiredFile ) ) {
+	while ( TQFile::exists( desiredFile ) ) {
 		bool ok;
-		QString text = KInputDialog::getText(
+		TQString text = KInputDialog::getText(
 			i18n("File Already Exists"), i18n("Sorry, file already exists. Please pick a new name:"),
 			desiredFile, &ok );
 		if ( ok && !text.isEmpty() )
@@ -197,8 +197,8 @@ void Encoder::tendToNewJobs() {
 	job->newLocation = desiredFile;
 	reportCount = 0;
 
-	QString command = prefs->commandLine(); {
-		QMap <QString,QString> map;
+	TQString command = prefs->commandLine(); {
+		TQMap <TQString,TQString> map;
 		map.insert("extension", prefs->extension());
 		map.insert("f", job->location);
 		map.insert("o", desiredFile);
@@ -211,12 +211,12 @@ void Encoder::tendToNewJobs() {
 	KShellProcess *proc = new KShellProcess();
 	proc->setPriority(Prefs::niceLevel());
  
-	*proc << QFile::encodeName(command);
-	connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-	connect(proc, SIGNAL(receivedStderr(KProcess *, char *, int )),
-		    this, SLOT(receivedThreadOutput(KProcess *, char *, int )));
-	connect(proc, SIGNAL(processExited(KProcess *)), this, SLOT(jobDone(KProcess *)));
+	*proc << TQFile::encodeName(command);
+	connect(proc, TQT_SIGNAL(receivedStdout(KProcess *, char *, int )),
+		    this, TQT_SLOT(receivedThreadOutput(KProcess *, char *, int )));
+	connect(proc, TQT_SIGNAL(receivedStderr(KProcess *, char *, int )),
+		    this, TQT_SLOT(receivedThreadOutput(KProcess *, char *, int )));
+	connect(proc, TQT_SIGNAL(processExited(KProcess *)), this, TQT_SLOT(jobDone(KProcess *)));
 	jobs.insert(proc, job);
 	threads.append(proc);
 
@@ -243,21 +243,21 @@ void Encoder::receivedThreadOutput(KProcess *process, char *buffer, int length )
 	Job *job = jobs[(KShellProcess*)process];
 
 	// Keep the output in the event it fails.
-	job->output += QString(buffer).mid(0,length); 
+	job->output += TQString(buffer).mid(0,length); 
 
 	// Make sure the output string has a % symble in it.
-	QString output = QString(buffer).mid(0,length);
+	TQString output = TQString(buffer).mid(0,length);
 	if ( output.find('%') == -1 && reportCount < 5 ) {
 		kdDebug(60002) << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
 		reportCount++;
 		return;
 	}
-	//qDebug(QString("Pre cropped: %1").arg(output).latin1());
+	//qDebug(TQString("Pre cropped: %1").arg(output).latin1());
 	output = output.mid(output.find('%')-loadEncoder(job->encoder)->percentLength(),2);
-	//qDebug(QString("Post cropped: %1").arg(output).latin1());
+	//qDebug(TQString("Post cropped: %1").arg(output).latin1());
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);
-	//qDebug(QString("number: %1").arg(percent).latin1());
+	//qDebug(TQString("number: %1").arg(percent).latin1());
 	if ( percent >= 0 && percent < 100 && conversionSuccessfull ) {
 		emit(updateProgress(job->id, percent));
 	}
@@ -287,7 +287,7 @@ void Encoder::jobDone(KProcess *process ) {
 		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1").arg(job->errorString), i18n("Encoding Failed"));
 		emit(updateProgress(job->id, -1));
 	}
-	else if ( QFile::exists(job->newLocation) ) {
+	else if ( TQFile::exists(job->newLocation) ) {
 		// fyi segfaults return 136
 		if ( process->exitStatus() != 0 ) {
 			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),i18n("Show Output"),i18n("Skip Output")) == KMessageBox::Yes )
@@ -313,7 +313,7 @@ void Encoder::jobDone(KProcess *process ) {
 	}
 
 	if ( job->removeTempFile )
-		QFile::remove( job->location );
+		TQFile::remove( job->location );
 
 	if( showDebugBox ){
 		EncoderOutput dlg( 0, "Encoder Output" );

@@ -22,8 +22,8 @@
 #include "encoderedit.h"
 #include "prefs.h"
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <tqpushbutton.h>
+#include <tqlineedit.h>
 #include <kconfigdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -32,12 +32,12 @@
 /**
  * Constructor.
  */
-EncoderConfigImp::EncoderConfigImp( QWidget* parent, const char* name) :
+EncoderConfigImp::EncoderConfigImp( TQWidget* parent, const char* name) :
     EncoderConfig (parent, name) {
-  connect(addEncoder, SIGNAL(clicked()), this, SLOT(addEncoderSlot()));
-  connect(removeEncoder, SIGNAL(clicked()), this, SLOT(removeEncoderSlot()));
-  connect(configureEncoder, SIGNAL(clicked()), this, SLOT(configureEncoderSlot()));
-  connect(kcfg_currentEncoder, SIGNAL(doubleClicked ( QListBoxItem * )),this, SLOT(configureEncoderSlot()));
+  connect(addEncoder, TQT_SIGNAL(clicked()), this, TQT_SLOT(addEncoderSlot()));
+  connect(removeEncoder, TQT_SIGNAL(clicked()), this, TQT_SLOT(removeEncoderSlot()));
+  connect(configureEncoder, TQT_SIGNAL(clicked()), this, TQT_SLOT(configureEncoderSlot()));
+  connect(kcfg_currentEncoder, TQT_SIGNAL(doubleClicked ( TQListBoxItem * )),this, TQT_SLOT(configureEncoderSlot()));
 
   // If there are no encoders then store the three default ones.
   if( Prefs::lastKnownEncoder() == 0){
@@ -93,11 +93,11 @@ void EncoderConfigImp::loadEncoderList(){
   int lastKnownEncoder = Prefs::lastKnownEncoder();
   lastKnownEncoder++;
   for( int i=0; i<=lastKnownEncoder; i++ ){
-    QString currentGroup = QString("Encoder_%1").arg(i);
+    TQString currentGroup = TQString("Encoder_%1").arg(i);
     if(EncoderPrefs::hasPrefs(currentGroup)){
       lastEncoder = i;
       EncoderPrefs *encPrefs = EncoderPrefs::prefs(currentGroup);
-      QString encoderName = encPrefs->encoderName();
+      TQString encoderName = encPrefs->encoderName();
       kcfg_currentEncoder->insertItem(encoderName);
       encoderNames.insert(encoderName, currentGroup);
       if(Prefs::currentEncoder() == i)
@@ -121,9 +121,9 @@ void EncoderConfigImp::loadEncoderList(){
 void EncoderConfigImp::addEncoderSlot(){
   bool foundEmptyGroup = false;
   uint number = 0;
-  QString groupName;
+  TQString groupName;
   while(!foundEmptyGroup){
-    groupName = QString("Encoder_%1").arg(number);
+    groupName = TQString("Encoder_%1").arg(number);
     if(!EncoderPrefs::hasPrefs(groupName))
       foundEmptyGroup = true;
     else
@@ -138,7 +138,7 @@ void EncoderConfigImp::addEncoderSlot(){
                                             KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
-  connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadEncoderList()));
+  connect(dialog, TQT_SIGNAL(settingsChanged()), this, TQT_SLOT(loadEncoderList()));
   dialog->show();
 }
 
@@ -165,7 +165,7 @@ void EncoderConfigImp::removeEncoderSlot(){
       == KMessageBox::Cancel )
     return;
 
-  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
+  TQString groupName = encoderNames[kcfg_currentEncoder->currentText()];
   kcfg_currentEncoder->removeItem(kcfg_currentEncoder->currentItem());
 
   delete KConfigDialog::exists(groupName.latin1());
@@ -185,7 +185,7 @@ void EncoderConfigImp::configureEncoderSlot() {
     KMessageBox:: sorry(this, i18n("Please select an encoder."), i18n("No Encoder Selected"));
     return;
   }
-  QString groupName = encoderNames[kcfg_currentEncoder->currentText()];
+  TQString groupName = encoderNames[kcfg_currentEncoder->currentText()];
   KConfig &config = *KGlobal::config();
   if(!config.hasGroup(groupName))
     return;
@@ -198,16 +198,16 @@ void EncoderConfigImp::configureEncoderSlot() {
                                             KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help);
   dialog->setCaption(i18n("Configure Encoder"));
   dialog->addPage(new EncoderEdit(0, groupName.latin1()), i18n("Encoder Configuration"), "package_settings");
-  connect(dialog, SIGNAL(destroyed(QObject *)), this, SLOT(updateEncoder(QObject *)));
-  connect(dialog, SIGNAL(settingsChanged()), this, SIGNAL(encoderUpdated()));
-  connect(dialog, SIGNAL(settingsChanged(const char *)), this, SLOT(updateEncoder(const char *)));
+  connect(dialog, TQT_SIGNAL(destroyed(TQObject *)), this, TQT_SLOT(updateEncoder(TQObject *)));
+  connect(dialog, TQT_SIGNAL(settingsChanged()), this, TQT_SIGNAL(encoderUpdated()));
+  connect(dialog, TQT_SIGNAL(settingsChanged(const char *)), this, TQT_SLOT(updateEncoder(const char *)));
   dialog->show();
 }
 
 /**
  * If object exists update encoder
  */
-void EncoderConfigImp::updateEncoder(QObject * obj){
+void EncoderConfigImp::updateEncoder(TQObject * obj){
   if(!obj)
    return;
   updateEncoder(obj->name());
@@ -224,10 +224,10 @@ void EncoderConfigImp::updateEncoder(QObject * obj){
  * If current encoder update also.
  */
 void EncoderConfigImp::updateEncoder(const char *dialogName){
-  QString groupName = dialogName;
-  QString encoderName;
+  TQString groupName = dialogName;
+  TQString encoderName;
   bool found = false;
-  QMap<QString, QString>::Iterator it;
+  TQMap<TQString, TQString>::Iterator it;
   for ( it = encoderNames.begin(); it != encoderNames.end(); ++it ) {
     if(it.data() == groupName){
       found = true;
@@ -238,11 +238,11 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
     return;
   if(!EncoderPrefs::hasPrefs(groupName))
     return;
-  QString newName = EncoderPrefs::prefs(groupName)->encoderName();
+  TQString newName = EncoderPrefs::prefs(groupName)->encoderName();
   if(newName == encoderName)
     return;
 
-  QListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
+  TQListBoxItem *item = kcfg_currentEncoder->findItem(encoderName);
   if(!item)
     return;
   kcfg_currentEncoder->changeItem(newName, kcfg_currentEncoder->index(item));
@@ -251,13 +251,13 @@ void EncoderConfigImp::updateEncoder(const char *dialogName){
   encoderNames.erase(encoderName);
 }
 
-QDict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
+TQDict<EncoderPrefs> *EncoderPrefs::m_prefs = 0;
 
-EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
+EncoderPrefs *EncoderPrefs::prefs(const TQString &groupName)
 {
   if (!m_prefs)
   {
-     m_prefs = new QDict<EncoderPrefs>();
+     m_prefs = new TQDict<EncoderPrefs>();
      m_prefs->setAutoDelete(true);
   }
   EncoderPrefs *encPrefs = m_prefs->find(groupName);
@@ -270,13 +270,13 @@ EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
   return encPrefs;
 }
 
-bool EncoderPrefs::hasPrefs(const QString &groupName)
+bool EncoderPrefs::hasPrefs(const TQString &groupName)
 {
   KConfig &config = *KGlobal::config();
   return config.hasGroup(groupName);
 }
 
-void EncoderPrefs::deletePrefs(const QString &groupName)
+void EncoderPrefs::deletePrefs(const TQString &groupName)
 {
   KConfig &config = *KGlobal::config();
   config.deleteGroup(groupName);

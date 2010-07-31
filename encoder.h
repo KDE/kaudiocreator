@@ -21,26 +21,26 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-#include <qobject.h>
+#include <tqobject.h>
 
-#include <qptrlist.h>
-#include <qmap.h>
+#include <tqptrlist.h>
+#include <tqmap.h>
 #include "job.h"
 #include <kprocess.h>
 
 class EncoderPrefs;
 
-class Encoder : public QObject {
+class Encoder : public TQObject {
 
 Q_OBJECT
 
 signals:
-  void addJob(Job *job, const QString &name);
+  void addJob(Job *job, const TQString &name);
   void updateProgress(int id, int progress);
   void jobsChanged();
 
 public:
-  Encoder( QObject* parent = 0, const char* name = 0);
+  Encoder( TQObject* parent = 0, const char* name = 0);
   ~Encoder();
   int activeJobCount();
   int pendingJobCount();
@@ -57,9 +57,9 @@ private slots:
   void tendToNewJobs();
 
 private:
-  QPtrList<Job> pendingJobs;
-  QPtrList<KShellProcess> threads;
-  QMap<KShellProcess*, Job*> jobs;
+  TQPtrList<Job> pendingJobs;
+  TQPtrList<KShellProcess> threads;
+  TQMap<KShellProcess*, Job*> jobs;
 
   int reportCount;
 };

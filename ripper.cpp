@@ -21,8 +21,8 @@
 #include "ripper.h"
 #include "prefs.h"
 
-#include <qfile.h>
-#include <qtimer.h>
+#include <tqfile.h>
+#include <tqtimer.h>
 #include <ktempfile.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
@@ -32,7 +32,7 @@
 /**
  * Constructor, load settings.
  */
-Ripper::Ripper( QObject* parent, const char* name) : QObject(parent,name) {
+Ripper::Ripper( TQObject* parent, const char* name) : TQObject(parent,name) {
 	loadSettings();
 }
 
@@ -49,7 +49,7 @@ void Ripper::loadSettings(){
  */
 Ripper::~Ripper(){
 	pendingJobs.clear();
-	QMap<KIO::Job*, Job*>::Iterator it;
+	TQMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		 KIO::Job* ioJob = it.key();
 		Job *job = it.data();
@@ -57,11 +57,11 @@ Ripper::~Ripper(){
 	
 		if(ioJob){
 			KIO::FileCopyJob *copyJob = static_cast<KIO::FileCopyJob*> (ioJob);
-			disconnect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
-			disconnect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
-			QString fileDestination = (copyJob->destURL()).path();
+			disconnect(copyJob, TQT_SIGNAL(result(KIO::Job*)), this, TQT_SLOT(copyJobResult(KIO::Job*)));
+			disconnect(copyJob, TQT_SIGNAL(percent ( KIO::Job *, unsigned long)), this, TQT_SLOT(updateProgress ( KIO::Job *, unsigned long)));
+			TQString fileDestination = (copyJob->destURL()).path();
 			copyJob->kill();
-			QFile file( fileDestination );
+			TQFile file( fileDestination );
 			file.remove();
 		}
 	}
@@ -89,20 +89,20 @@ int Ripper::pendingJobCount() {
  * @param id the id number of the job to remove.
  */
 void Ripper::removeJob(int id){
-	QMap<KIO::Job*, Job*>::Iterator it;
+	TQMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		if(it.data()->id == id){
 			KIO::FileCopyJob *copyJob = dynamic_cast<KIO::FileCopyJob*> (it.key());
 			if(copyJob){
-				QString fileDestination = (copyJob->destURL()).path();
+				TQString fileDestination = (copyJob->destURL()).path();
 				copyJob->kill();
 				// This here is such a hack, shouldn't kill() do this, or why isn't there a stop()?
 				// TODO add to copyJob a stop() function.
-				QFile file( fileDestination );
+				TQFile file( fileDestination );
 				if(file.exists())
 					file.remove();
 				else {
-					QFile f( fileDestination+".part" );
+					TQFile f( fileDestination+".part" );
 					f.remove();
 				}
 			}
@@ -120,7 +120,7 @@ void Ripper::removeJob(int id){
 		pendingJobs.remove(job);
 		delete job;
 	}
-	//qDebug(QString("Done removing Job:%1").arg(id).latin1());
+	//qDebug(TQString("Done removing Job:%1").arg(id).latin1());
 	tendToNewJobs();
 }
 
@@ -158,8 +158,8 @@ void Ripper::tendToNewJobs(){
 		return;
 	pendingJobs.remove(job);
 
-	QMap<QString, QString> map;
-	QString defaultTempDir;
+	TQMap<TQString, TQString> map;
+	TQString defaultTempDir;
 	if(Prefs::enableTempDir())
 		defaultTempDir = Prefs::tempDir();
 	else
@@ -169,23 +169,23 @@ void Ripper::tendToNewJobs(){
 	KTempFile tmp( defaultTempDir, ".wav" );
 	tmp.setAutoDelete(true);
 
-	QString wavFile;
-	QString args = job->device;
+	TQString wavFile;
+	TQString args = job->device;
 	if(!args.isEmpty())
-		args = QString("?device=%1").arg(args);
+		args = TQString("?device=%1").arg(args);
 	args = args+"&fileNameTemplate=Track %{number}";
 	if(job->track < 10)
-		wavFile = QString("audiocd:/Wav/Track 0%1.wav%2").arg(job->track).arg(args);
+		wavFile = TQString("audiocd:/Wav/Track 0%1.wav%2").arg(job->track).arg(args);
 	else
-		wavFile = QString("audiocd:/Wav/Track %1.wav%2").arg(job->track).arg(args);
+		wavFile = TQString("audiocd:/Wav/Track %1.wav%2").arg(job->track).arg(args);
 
 	KURL source(wavFile);
 	KURL dest(tmp.name());
 
 	KIO::FileCopyJob *copyJob = new KIO::FileCopyJob(source, dest, 0644, false, true, false, false);
 	jobs.insert(copyJob, job);
-	connect(copyJob, SIGNAL(result(KIO::Job*)), this, SLOT(copyJobResult(KIO::Job*)));
-	connect(copyJob, SIGNAL(percent ( KIO::Job *, unsigned long)), this, SLOT(updateProgress ( KIO::Job *, unsigned long)));
+	connect(copyJob, TQT_SIGNAL(result(KIO::Job*)), this, TQT_SLOT(copyJobResult(KIO::Job*)));
+	connect(copyJob, TQT_SIGNAL(percent ( KIO::Job *, unsigned long)), this, TQT_SLOT(updateProgress ( KIO::Job *, unsigned long)));
 	
 	emit jobsChanged();
 }
@@ -216,7 +216,7 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 	}
 	else{
 		copyJob->showErrorDialog(0);
-		QFile file( (copyJob->destURL()).path());
+		TQFile file( (copyJob->destURL()).path());
 		file.remove();
 		emit updateProgress(newJob->id, -1);
 		delete newJob;
@@ -234,7 +234,7 @@ void Ripper::copyJobResult(KIO::Job *copyjob){
 			}
 			if( !job ){
 				deviceToEject = newJob->device;
-				QTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, SLOT(ejectNow()));
+				TQTimer::singleShot( Prefs::autoEjectDelay()*1000 + 500, this, TQT_SLOT(ejectNow()));
 			}
 		}
 		KNotifyClient::event("cd ripped");

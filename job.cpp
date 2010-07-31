@@ -18,20 +18,20 @@
 
 #include "job.h"
 #include <kmacroexpander.h>
-#include <qregexp.h>
+#include <tqregexp.h>
 
 /**
  * A helper function to replace %X with the stuff in the album.
  * if quote is true then put "" around the %X
  */
-QString Job::replaceSpecialChars(const QString &string, bool quote, QMap<QString, QString> _map){
-	QMap<QString,QString> map = _map;
+TQString Job::replaceSpecialChars(const TQString &string, bool quote, TQMap<TQString, TQString> _map){
+	TQMap<TQString,TQString> map = _map;
 
   map.insert("title", track_title);
   map.insert("artist", track_artist);
-  map.insert("number", QString().sprintf("%02d", track));
+  map.insert("number", TQString().sprintf("%02d", track));
   map.insert("comment", track_comment);
-  map.insert("year", QString::number(year));
+  map.insert("year", TQString::number(year));
 	map.insert("genre", genre);
 
   map.insert("albumtitle", album);
@@ -44,15 +44,15 @@ QString Job::replaceSpecialChars(const QString &string, bool quote, QMap<QString
       return (KMacroExpander::expandMacros(string, map));
 }
 
-void Job::fix(const QString &in, const QString &out){
-	track_title.replace( QRegExp(in), out );
-	track_artist.replace( QRegExp(in), out );
-	track_comment.replace( QRegExp(in), out );
+void Job::fix(const TQString &in, const TQString &out){
+	track_title.replace( TQRegExp(in), out );
+	track_artist.replace( TQRegExp(in), out );
+	track_comment.replace( TQRegExp(in), out );
 	// year
 	// track
-	genre.replace( QRegExp(in), out );
-	album.replace( QRegExp(in), out );
-	comment.replace( QRegExp(in), out );
-	group.replace( QRegExp(in), out );
+	genre.replace( TQRegExp(in), out );
+	album.replace( TQRegExp(in), out );
+	comment.replace( TQRegExp(in), out );
+	group.replace( TQRegExp(in), out );
 }
 

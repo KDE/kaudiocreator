@@ -23,7 +23,7 @@
 
 #include "libkcddb/genres.h"
 #include "encodefile.h"
-#include "qmap.h"
+#include "tqmap.h"
 
 class Job;
 
@@ -39,13 +39,13 @@ signals:
   void startJob(Job *newJob);
 
 public:
-  EncodeFileImp(QWidget* parent = 0, const char* name = 0);
+  EncodeFileImp(TQWidget* parent = 0, const char* name = 0);
 
 protected slots:
   // Encode button
   void encode();
   // Enable encode button when user selects a file
-  void enableEncodeButton(const QString &text);
+  void enableEncodeButton(const TQString &text);
 
 private:
   // List of genres and i18n versions

@@ -1,8 +1,8 @@
 
 public:
-  static EncoderPrefs *prefs(const QString &groupName);
-  static bool hasPrefs(const QString &groupName);
-  static void deletePrefs(const QString &groupName);
+  static EncoderPrefs *prefs(const TQString &groupName);
+  static bool hasPrefs(const TQString &groupName);
+  static void deletePrefs(const TQString &groupName);
 
 private:
-  static QDict<EncoderPrefs> *m_prefs;
+  static TQDict<EncoderPrefs> *m_prefs;

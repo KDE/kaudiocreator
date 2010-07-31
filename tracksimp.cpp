@@ -32,13 +32,13 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qptrlist.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qspinbox.h>
-#include <qtimer.h>
+#include <tqfileinfo.h>
+#include <tqlabel.h>
+#include <tqptrlist.h>
+#include <tqpushbutton.h>
+#include <tqregexp.h>
+#include <tqspinbox.h>
+#include <tqtimer.h>
 
 #include "job.h"
 #include "kcompactdisc.h"
@@ -49,28 +49,28 @@
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget* parent, const char* name) :
+TracksImp::TracksImp( TQWidget* parent, const char* name) :
     Tracks(parent,name),
     cddbInfo() 
 {
     cd = new KCompactDisc;
 
-    connect(cd,SIGNAL(discChanged(unsigned)),this,SLOT(newDisc(unsigned)));
+    connect(cd,TQT_SIGNAL(discChanged(unsigned)),this,TQT_SLOT(newDisc(unsigned)));
 
-    connect(trackListing, SIGNAL(clicked( QListViewItem * )), this, SLOT(selectTrack(QListViewItem*)));
-    connect(trackListing, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(editInformation()));
-    connect(trackListing, SIGNAL(returnPressed(QListViewItem *)), this, SLOT(editInformation()));
-    connect(selectAllTracksButton, SIGNAL(clicked()), this, SLOT(selectAllTracks()));
-    connect(deselectAllTracksButton, SIGNAL(clicked()), this, SLOT(deselectAllTracks()));
+    connect(trackListing, TQT_SIGNAL(clicked( TQListViewItem * )), this, TQT_SLOT(selectTrack(TQListViewItem*)));
+    connect(trackListing, TQT_SIGNAL(doubleClicked(TQListViewItem *)), this, TQT_SLOT(editInformation()));
+    connect(trackListing, TQT_SIGNAL(returnPressed(TQListViewItem *)), this, TQT_SLOT(editInformation()));
+    connect(selectAllTracksButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(selectAllTracks()));
+    connect(deselectAllTracksButton, TQT_SIGNAL(clicked()), this, TQT_SLOT(deselectAllTracks()));
 
-    connect(deviceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(changeDevice(const QString &)));
+    connect(deviceCombo, TQT_SIGNAL(textChanged(const TQString &)), this, TQT_SLOT(changeDevice(const TQString &)));
 
     selectAllTracksButton->setEnabled( false );
     deselectAllTracksButton->setEnabled( false );
 
     cddb = new KCDDB::Client();
     cddb->setBlockingMode(false);
-    connect(cddb, SIGNAL(finished(CDDB::Result)), this, SLOT(lookupCDDBDone(CDDB::Result)));
+    connect(cddb, TQT_SIGNAL(finished(CDDB::Result)), this, TQT_SLOT(lookupCDDBDone(CDDB::Result)));
     trackListing->setSorting(-1, false);
     loadSettings();
 }
@@ -79,11 +79,11 @@ TracksImp::TracksImp( QWidget* parent, const char* name) :
  * store the current device from the combo.
  */
 TracksImp::~TracksImp() {
-    QStringList list;
+    TQStringList list;
     if( deviceCombo->count() != 0)
         list.append(deviceCombo->currentText());
     for ( int i=0; i<deviceCombo->count();i++ ) {
-        QString text = deviceCombo->text(i);
+        TQString text = deviceCombo->text(i);
         if( list.find(text) == list.end())
             list.append(text);
         if( list.count() == 5)
@@ -98,18 +98,18 @@ TracksImp::~TracksImp() {
  * Load the class settings.
  */
 void TracksImp::loadSettings() {
-    QStringList list;
+    TQStringList list;
 
     // Add the saved list, no dups
-    QStringList prefsList = Prefs::device();
-    QStringList::Iterator it;
+    TQStringList prefsList = Prefs::device();
+    TQStringList::Iterator it;
     for ( it = prefsList.begin(); it != prefsList.end(); ++it ) {
         if( list.find( *it ) == list.end())
             list.append(*it);
     }
     // Get current list, no dups
     for ( int i=0; i<deviceCombo->count();i++ ) {
-        QString text = deviceCombo->text(i);
+        TQString text = deviceCombo->text(i);
         if( list.find(text) == list.end())
             list.append(text);
     }
@@ -145,7 +145,7 @@ void TracksImp::newDisc(unsigned discId)
 
     cddbInfo.clear();
 
-    cddbInfo.id = QString::number(discId, 16).rightJustify(8,'0');
+    cddbInfo.id = TQString::number(discId, 16).rightJustify(8,'0');
     cddbInfo.length = cd->discLength();
 
     cddbInfo.artist = cd->discArtist();
@@ -179,15 +179,15 @@ bool TracksImp::hasCD(){
  * The device text has changed.
  * @param file - the new text to check.
  */
-void TracksImp::changeDevice(const QString &file ) {
-    QString newDevice = KCompactDisc::urlToDevice(file);
+void TracksImp::changeDevice(const TQString &file ) {
+    TQString newDevice = KCompactDisc::urlToDevice(file);
 
     if( newDevice == cd->device() ) {
         //qDebug("Device names match, returning");
         return;
     }
 
-    QFileInfo fileInfo(newDevice);
+    TQFileInfo fileInfo(newDevice);
     if( !fileInfo.exists() || fileInfo.isDir()) {
         //qDebug("Device file !exist or isDir or !file");
         return;
@@ -195,7 +195,7 @@ void TracksImp::changeDevice(const QString &file ) {
 
     if (!cd->setDevice(newDevice, 50, false))
     {
-        QString errstring =
+        TQString errstring =
           i18n("CDROM read or access error (or no audio disk in drive).\n"\
             "Please make sure you have access permissions to:\n%1")
             .arg(file);
@@ -242,24 +242,24 @@ void TracksImp::lookupCDDBDone(CDDB::Result result ) {
     // TODO Why doesn't libcddb not return MultipleRecordFound?
     //if( result == KCDDB::CDDB::MultipleRecordFound ) {
     if( Prefs::promptIfIncompleteInfo() && cddb->lookupResponse().count() > 1 ) {
-        QString searchedCDId = cddbInfo.id;
+        TQString searchedCDId = cddbInfo.id;
         CDInfoList cddb_info = cddb->lookupResponse();
         CDInfoList::iterator it;
-        QStringList list;
+        TQStringList list;
         for ( it = cddb_info.begin(); it != cddb_info.end(); ++it  ) {
-            list.append( QString("%1, %2, %3").arg((*it).artist).arg((*it).title)
+            list.append( TQString("%1, %2, %3").arg((*it).artist).arg((*it).title)
               .arg((*it).genre));
         }
 
         bool ok(false);
-        QString res = KInputDialog::getItem(
+        TQString res = KInputDialog::getItem(
                         i18n("Select CDDB entry"),
                         i18n("Select a CDDB entry:"), list, 0, false, &ok,
                         this );
         if ( ok ) {
             // The user selected and item and pressed OK
             uint c = 0;
-            for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+            for ( TQStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
                 if( *it == res)    break;
                 c++;
             }
@@ -308,7 +308,7 @@ void TracksImp::editInformation( )
     CDInfoDialogBase *base = new CDInfoDialogBase(dialog, "Album info editor dialog");
     // Workaround the fact that CDInfoDialogBase doesn't take
     // a const TrackOffsetList
-    QValueList<unsigned> discSig = cd->discSignature();
+    TQValueList<unsigned> discSig = cd->discSignature();
     base->setInfo(cddbInfo, discSig);
     dialog->setMainWidget(base);
 
@@ -322,14 +322,14 @@ void TracksImp::editInformation( )
     delete dialog;
 }
 
-QString TracksImp::formatTime(unsigned ms)
+TQString TracksImp::formatTime(unsigned ms)
 {
-    QTime time;
+    TQTime time;
 
     time = time.addMSecs((int)ms);
 
     // Use ".zzz" for milliseconds...
-    QString temp2;
+    TQString temp2;
     if (time.hour() > 0)
         temp2 = time.toString("hh:mm:ss");
     else
@@ -352,7 +352,7 @@ void TracksImp::ripWholeAlbum() {
  */
 void TracksImp::startSession( int encoder )
 {
-    QPtrList<TracksItem> selected = selectedTracks();
+    TQPtrList<TracksItem> selected = selectedTracks();
 
     if( selected.isEmpty() )
     {
@@ -365,7 +365,7 @@ void TracksImp::startSession( int encoder )
         selected = selectedTracks();
     }
 
-    QStringList list;
+    TQStringList list;
     if( cddbInfo.genre == "Unknown" )
         list += "Genre";
     if( cddbInfo.year == 0 )
@@ -425,7 +425,7 @@ void TracksImp::startSession( int encoder )
  * Selects and unselects the tracks.
  * @param currentItem the track to swich the selection choice.
  */
-void TracksImp::selectTrack( QListViewItem *item )
+void TracksImp::selectTrack( TQListViewItem *item )
 {
     if( !item )
         return;
@@ -435,9 +435,9 @@ void TracksImp::selectTrack( QListViewItem *item )
 #undef item
 }
 
-QPtrList<TracksItem> TracksImp::selectedTracks()
+TQPtrList<TracksItem> TracksImp::selectedTracks()
 {
-    QPtrList<TracksItem> selected;
+    TQPtrList<TracksItem> selected;
     TracksItem *item = static_cast<TracksItem*>(trackListing->firstChild());
 
     while( item )
@@ -480,7 +480,7 @@ void TracksImp::deselectAllTracks()
  */
 void TracksImp::newAlbum()
 {
-    QString albumText = cddbInfo.title;
+    TQString albumText = cddbInfo.title;
     if( !cddbInfo.artist.isEmpty() )
         albumText = cddbInfo.artist + i18n( " - " ) + albumText;
 
@@ -506,8 +506,8 @@ void TracksImp::newAlbum()
     TracksItem *last = 0;
     for( unsigned i = 0; i < t.count(); i++ )
     {
-        QString trackArtist;
-        QString title;
+        TQString trackArtist;
+        TQString title;
 
         if( isSampler )
         {
@@ -523,7 +523,7 @@ void TracksImp::newAlbum()
         }
 
         // There is a new track for this title.  Add it to the list of tracks.
-        QString trackLength = formatTime(cd->trackLength(i+1));
+        TQString trackLength = formatTime(cd->trackLength(i+1));
         last = new TracksItem( trackListing, last, title, trackArtist, i+1, trackLength, t[i].extt );
     }
 
@@ -540,11 +540,11 @@ void TracksImp::newAlbum()
 
 /**
  * If the user presses the F2 key, trigger renaming of the title.
- * @param event the QKeyEvent passed to this event handler.
+ * @param event the TQKeyEvent passed to this event handler.
  */
-void TracksImp::keyPressEvent(QKeyEvent *event)
+void TracksImp::keyPressEvent(TQKeyEvent *event)
 {
-    QListViewItem *item = trackListing->selectedItem();
+    TQListViewItem *item = trackListing->selectedItem();
     if( !item ) return;
 
     if( event->key() == Qt::Key_F2 ) 
@@ -568,7 +568,7 @@ void TracksImp::eject() {
  * Eject a device
  * @param deviceToEject the device to eject.
  */
-void TracksImp::ejectDevice(const QString &deviceToEject) {
+void TracksImp::ejectDevice(const TQString &deviceToEject) {
     changeDevice(deviceToEject);
 
     cd->eject();

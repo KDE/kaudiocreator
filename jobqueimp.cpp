@@ -21,21 +21,21 @@
 #include "jobqueimp.h"
 #include "job.h"
 #include "prefs.h"
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qpainter.h>
+#include <tqpushbutton.h>
+#include <tqlabel.h>
+#include <tqpainter.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <qfile.h>
-#include <qregexp.h>
-#include <qfileinfo.h>
+#include <tqfile.h>
+#include <tqregexp.h>
+#include <tqfileinfo.h>
 #include <kstandarddirs.h>
 #include <knotifyclient.h>
-#include <qdir.h>
+#include <tqdir.h>
 
 #define HEADER_JOB 0
 #define HEADER_PROGRESS 1
@@ -49,11 +49,11 @@
  * @param parent - parent widget
  * @param name - widget name
  */
-JobQueImp::JobQueImp( QWidget* parent, const char* name) :
+JobQueImp::JobQueImp( TQWidget* parent, const char* name) :
 		JobQue(parent,name),highestNumber(DEFAULT_HIGHEST_NUMBER), currentId(0){
-	connect(removeSelected,SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
-	connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
-	connect(removeDoneJobs, SIGNAL(clicked()), this, SLOT(clearDoneJobs()));
+	connect(removeSelected,TQT_SIGNAL(clicked()), this, TQT_SLOT( removeSelectedJob()));
+	connect(removeAll, TQT_SIGNAL(clicked()), this, TQT_SLOT(removeAllJobs()));
+	connect(removeDoneJobs, TQT_SIGNAL(clicked()), this, TQT_SLOT(clearDoneJobs()));
 }
 
 /**
@@ -62,9 +62,9 @@ JobQueImp::JobQueImp( QWidget* parent, const char* name) :
  * Based upon a highest number that is kept.
  * @param number the number to fill out.
  */
-QString JobQueImp::getStringFromNumber(int number){
+TQString JobQueImp::getStringFromNumber(int number){
 	if(number > highestNumber){
-		int diff = QString("%1").arg(number).length() - QString("%1").arg(highestNumber).length();
+		int diff = TQString("%1").arg(number).length() - TQString("%1").arg(highestNumber).length();
 		highestNumber = number;
 		if(diff > 0){
 			// We have to update all of the cells.
@@ -76,8 +76,8 @@ QString JobQueImp::getStringFromNumber(int number){
 		}
 	}
 
-	QString buffer = "";
-	uint newLength = QString("%1").arg(highestNumber).length() - QString("%1").arg(number).length();
+	TQString buffer = "";
+	uint newLength = TQString("%1").arg(highestNumber).length() - TQString("%1").arg(number).length();
 	for(uint i=0; i < newLength; i++)
 		buffer += "0";
 	return buffer;
@@ -88,11 +88,11 @@ QString JobQueImp::getStringFromNumber(int number){
  * @param id the id of the job.
  * @param name the name of the job.
  */
-void JobQueImp::addJob(Job*job, const QString &name ){
+void JobQueImp::addJob(Job*job, const TQString &name ){
 	if(!job)
 		return;
 	job->id = ++currentId;
-	QueListViewItem *currentItem = new QueListViewItem(todoQue, QString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
+	QueListViewItem *currentItem = new QueListViewItem(todoQue, TQString("%1%2").arg(getStringFromNumber(currentId)).arg(currentId), "0", name);
 	currentItem->setPixmap(ICON_LOC, SmallIcon("player_pause", currentItem->height()-2));
 	queLabel->setText(i18n("Number of jobs in the queue: %1").arg(todoQue->childCount()));
 }
@@ -105,8 +105,8 @@ void JobQueImp::addJob(Job*job, const QString &name ){
 void JobQueImp::updateProgress(int id, int progress){
 	int currentJobCount = numberOfJobsNotFinished();
 	QueListViewItem * currentItem = (QueListViewItem*)todoQue->firstChild();
-	QString buffer = getStringFromNumber(id);
-	buffer += QString("%1").arg(id);
+	TQString buffer = getStringFromNumber(id);
+	buffer += TQString("%1").arg(id);
 
 	// Find the current item
 	while( currentItem != NULL ){
@@ -272,10 +272,10 @@ int JobQueImp::numberOfJobsNotFinished(){
 /**
  * The repaint function overloaded so that we can have a built in progressbar.
  */
-void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
+void QueListViewItem::paintCell (TQPainter * p,const TQColorGroup &cg,int column,
 			int width,int align){
 	if(column != HEADER_PROGRESS){
-		QListViewItem::paintCell(p,cg,column,width,align);
+		TQListViewItem::paintCell(p,cg,column,width,align);
 		return;
 	}
 
@@ -295,7 +295,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 	if(isSelected())
 		p->setPen(cg.highlightedText());
 	if(percentDone != -1)
-	p->drawText(0,0,width-1,height()-1,AlignCenter,QString().setNum((int)percentDone) + "%");
+	p->drawText(0,0,width-1,height()-1,AlignCenter,TQString().setNum((int)percentDone) + "%");
 	else
 		p->drawText(0,0,width-1,height()-1,AlignCenter,i18n("Error"));
 }
@@ -303,7 +303,7 @@ void QueListViewItem::paintCell (QPainter * p,const QColorGroup &cg,int column,
 /**
  * Header for built in treelist item so we can have a progress bar in them.
  */
-QueListViewItem::QueListViewItem(QListView *parent, const QString id, const QString p , const QString name, const QString d, const QString e) : QListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
+QueListViewItem::QueListViewItem(TQListView *parent, const TQString id, const TQString p , const TQString name, const TQString d, const TQString e) : TQListViewItem(parent, id, p, name,d,e), percentDone(0), progressing(false) {
 }
 
 #include "jobqueimp.moc"

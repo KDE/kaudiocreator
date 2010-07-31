@@ -22,8 +22,8 @@
 #define JOBQUEIMP_H
 
 #include "jobque.h"
-#include <qstring.h>
-#include <qlistview.h>
+#include <tqstring.h>
+#include <tqlistview.h>
 
 class Job;
 class QPainter;
@@ -33,11 +33,11 @@ class QListView;
 /**
  * Helper class to allow for progress bars in list view items.
  */
-class QueListViewItem : public QListViewItem {
+class QueListViewItem : public TQListViewItem {
 
 public:
-	QueListViewItem (QListView * p = NULL, const QString a=0, const QString b=0, const QString c=0, const QString d=0, const QString e=0);
-	virtual void paintCell (QPainter * p,const QColorGroup &cg,int column,
+	QueListViewItem (TQListView * p = NULL, const TQString a=0, const TQString b=0, const TQString c=0, const TQString d=0, const TQString e=0);
+	virtual void paintCell (TQPainter * p,const TQColorGroup &cg,int column,
       int width,int align);
 	double percentDone;
 	// Has the percentDone gone beyond 0
@@ -54,12 +54,12 @@ signals:
 	void removeJob( int idNumber );
 
 public:
-	JobQueImp( QWidget* parent = 0, const char* name = 0 );
+	JobQueImp( TQWidget* parent = 0, const char* name = 0 );
 	int numberOfJobsNotFinished();
 
 public slots:
 	void updateProgress( int id, int progress );
-	void addJob( Job* job, const QString &name );
+	void addJob( Job* job, const TQString &name );
 
 	// Toolbar Button
 	void clearDoneJobs();
@@ -70,7 +70,7 @@ private slots:
 
 private:
 	bool removeJob( QueListViewItem *item, bool kill=true, bool prompt=true );
-	QString getStringFromNumber( int number );
+	TQString getStringFromNumber( int number );
 	int highestNumber;
 
 	int currentId;

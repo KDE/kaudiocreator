@@ -23,24 +23,24 @@
 
 #include "job.h"
 #include <kio/jobclasses.h>
-#include <qmap.h>
-#include <qptrlist.h>
+#include <tqmap.h>
+#include <tqptrlist.h>
 
 class Job;
 
-class Ripper : public QObject {
+class Ripper : public TQObject {
 
 Q_OBJECT
 
 signals:
-	void addJob( Job *job, const QString &name );
+	void addJob( Job *job, const TQString &name );
 	void updateProgress( int id, int progress );
 	void encodeWav( Job *job );
-	void eject( const QString &device );
+	void eject( const TQString &device );
 	void jobsChanged();
 
 public:
-	Ripper( QObject* parent = 0, const char* name = 0 );
+	Ripper( TQObject* parent = 0, const char* name = 0 );
 	~Ripper();
 	int activeJobCount();
 	int pendingJobCount();
@@ -57,11 +57,11 @@ private slots:
 	void ejectNow();
 
 private:
-	QString deviceToEject;
+	TQString deviceToEject;
 	// Jobs that we are currently doing.
-	QMap<KIO::Job*, Job*> jobs;
+	TQMap<KIO::Job*, Job*> jobs;
 	// Jobs that we want to do , but haven't done yet
-	QPtrList<Job> pendingJobs;
+	TQPtrList<Job> pendingJobs;
 };
 
 #endif // RIPPER_H
