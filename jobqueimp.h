@@ -26,9 +26,9 @@
 #include <tqlistview.h>
 
 class Job;
-class QPainter;
-class QColorGroup;
-class QListView;
+class TQPainter;
+class TQColorGroup;
+class TQListView;
 
 /**
  * Helper class to allow for progress bars in list view items.
