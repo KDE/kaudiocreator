@@ -27,6 +27,7 @@
 #include <kcombobox.h>
 #include <knotifyconfigwidget.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "tracksimp.h"
 #include "jobqueimp.h"
@@ -52,6 +53,8 @@
  */
 KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLabel(0), ripLabel(0)
 {
+	KGlobal::locale()->insertCatalog("kio_audiocd"); //for the ripper
+
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
@@ -372,7 +375,7 @@ void KAudioCreator::showSettings(){
 		return;
 
 	SettingsDialog *dialog = new SettingsDialog(this, "settings", Prefs::self());
-	connect(dialog, SIGNAL(settingsChanged(const QString &)), ripper, SLOT(loadSettings()));
+// 	connect(dialog, SIGNAL(settingsChanged(const QString &)), ripper, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), encoder, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), tracks, SLOT(loadSettings()));
 	connect(dialog, SIGNAL(settingsChanged(const QString &)), this, SLOT(showCurrentEncoder()));

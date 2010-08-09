@@ -176,12 +176,14 @@ void Ripper::tendToNewJobs()
         tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(defaultTempDir).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
     } while (QFile::exists(tmpFileName));
     
-    QString wavFile = QString("audiocd:/Wav/") + ki18n("Track %1.wav").subs(job->track, 2, 10, QChar('0')).toString();
+    QString n;
+    // build the number like kio_audiocd, needs the same translation, I guess
+    QString wavFile = QString("audiocd:/") + i18n("Track %1", n.sprintf("%02d", job->track)) + QString(".wav");
 
     KUrl source(wavFile);
     if (!job->device.isEmpty())
         source.addQueryItem("device", job->device);
-    source.addQueryItem("fileNameTemplate", "Track %{number}");
+    source.addQueryItem("fileNameTemplate", i18n("Track %1", QString("%{number}")));
     KUrl dest(tmpFileName);
 
     KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
