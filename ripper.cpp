@@ -161,6 +161,8 @@ void Ripper::tendToNewJobs()
     if (!job)
         return;
 
+    job->fix("/", "%2f");
+
     QString defaultTempDir;
     if (Prefs::enableTempDir()) {
         defaultTempDir = Prefs::tempDir();
