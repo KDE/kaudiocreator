@@ -462,7 +462,7 @@ void TracksImp::startSession(QString encoder)
 {
 	QString currentEncoder = encoder;
 	if (currentEncoder.isEmpty())
-		currentEncoder = Prefs::defaultEncoder();
+		currentEncoder = QString("Encoder_").append(Prefs::defaultEncoder());
 
 	QList<int> selected = selectedTracks();
 

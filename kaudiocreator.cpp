@@ -279,7 +279,7 @@ void KAudioCreator::setupRipMenu()
 			if (KStandardDirs::findExe(prog) != QString()) {
 				QAction *encAction = ripMenu->addAction(encPrefs->encoderName());
 				encAction->setData(QVariant(encoder));
-				if (encoder == Prefs::defaultEncoder())
+				if (encoder == QString("Encoder_").append(Prefs::defaultEncoder()))
 					ripMenu->setDefaultAction(encAction);
 			}
 		}

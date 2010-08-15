@@ -54,7 +54,7 @@ public:
  * Constructor, load settings.
  */
 Encoder::Encoder( QObject* parent):QObject(parent),reportCount(0) {
-	loadSettings();
+// 	loadSettings();
 }
 
 /**
@@ -70,9 +70,8 @@ void Encoder::loadSettings() {
 EncoderPrefs *Encoder::loadEncoder(QString encoder)
 {
 	EncoderPrefs *prefs = 0;
-	QString currentEncoderGroup = QString("Encoder_").append(encoder);
-	prefs = EncoderPrefs::prefs(currentEncoderGroup);
-	if ( !EncoderPrefs::hasPrefs(currentEncoderGroup) ) {
+	prefs = EncoderPrefs::prefs(encoder);
+	if ( !EncoderPrefs::hasPrefs(encoder) ) {
 		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString());
 	}

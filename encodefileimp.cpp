@@ -402,7 +402,7 @@ void EncodeFileImp::encode()
         newJob->genre = fileListModel->data(fileListModel->index(r, COLUMN_GENRE, QModelIndex()), Qt::DisplayRole).toString();
 		newJob->year = fileListModel->data(fileListModel->index(r, COLUMN_YEAR, QModelIndex()), Qt::DisplayRole).toInt();
 		newJob->track = fileListModel->data(fileListModel->index(r, COLUMN_TRACK, QModelIndex()), Qt::DisplayRole).toInt();
-		newJob->encoder = fileListModel->data(fileListModel->index(r, COLUMN_ENCODER, QModelIndex()), Qt::DisplayRole).toString();
+		newJob->encoder = QString("Encoder_").append(fileListModel->data(fileListModel->index(r, COLUMN_ENCODER, QModelIndex()), Qt::DisplayRole).toString());
 
 		newJob->removeTempFile = false;
 
