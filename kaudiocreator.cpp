@@ -53,8 +53,6 @@
  */
 KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLabel(0), ripLabel(0)
 {
-	KGlobal::locale()->insertCatalog("kio_audiocd"); //for the ripper
-
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
 	setCentralWidget(pageWidget);
