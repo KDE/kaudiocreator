@@ -221,7 +221,6 @@ void AudioCD::discEjected(const QString &udi)
         discLength = 0;
         freeDbId = QString();
         musicbrainzId = QString();
-        driveUdi = QString();
         discUdi = QString();
         status = NoDisc;
         emit driveStatusChanged(status);
