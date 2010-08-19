@@ -192,7 +192,7 @@ void AudioCD::reloadCD()
     if (!devList.isEmpty()) {
         for (int i = 0; i < devList.size(); ++i) {
             if (devList[i].parentUdi() == odsign.udi()) {
-                qDebug() << "CD inserted!";
+                kDebug() << "CD inserted!";
                 cd = devList[i].as<Solid::OpticalDisc>();
                 block = odsign.as<Solid::Block>();
                 discUdi = devList[i].udi();
