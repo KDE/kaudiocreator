@@ -53,17 +53,18 @@ public:
 /**
  * Constructor, load settings.
  */
-Encoder::Encoder( QObject* parent):QObject(parent),reportCount(0) {
+Encoder::Encoder( QObject* parent):QObject(parent), reportCount(0)
+{
 // 	loadSettings();
 }
 
 /**
  * Load the settings for this class.
  */
-void Encoder::loadSettings() {
-	loadEncoder(Prefs::defaultEncoder());
+void Encoder::loadSettings()
+{
 	// If the cpu count change then try
-	for(uint i=0; i<(uint)Prefs::numberOfCpus(); ++i)
+	for (uint i = 0; i < (uint)Prefs::numberOfCpus(); ++i)
 		tendToNewJobs();
 }
 
