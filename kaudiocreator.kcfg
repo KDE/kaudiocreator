@@ -5,6 +5,7 @@
 		  http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kaudiocreatorrc"/>
   <include>libkcompactdisc/kcompactdisc.h</include>
+  <include>kstandarddirs.h</include>
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
       <label>Perform automatic CDDB lookups.</label>
@@ -104,9 +105,9 @@
       <label>Specify temporary directory</label>
       <default>false</default>
     </entry>
-    <entry name="tempDir" type="String">
+    <entry name="tempDir" type="Url">
       <label>Location of temporary directory to use</label>
-      <default></default>
+      <default code="true">KUrl(KStandardDirs::locateLocal("tmp", ""))</default>
     </entry>
   </group>
 </kcfg>

@@ -163,19 +163,19 @@ void Ripper::tendToNewJobs()
 
     job->fix("/", "%2f");
 
-    QString defaultTempDir;
+    KUrl defaultTempDir;
     if (Prefs::enableTempDir()) {
         defaultTempDir = Prefs::tempDir();
     } else {
-        defaultTempDir = KStandardDirs::locateLocal("tmp", "");
+        defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
     }
 
     // For cases like "/tmp" where there is a missing /
-    defaultTempDir = KUrl(defaultTempDir).path(KUrl::AddTrailingSlash);
+    QString tempDirStr = defaultTempDir.path(KUrl::AddTrailingSlash);
 
     QString tmpFileName;
     do {
-        tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(defaultTempDir).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
+        tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(tempDirStr).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
     } while (QFile::exists(tmpFileName));
     
     QString n;
