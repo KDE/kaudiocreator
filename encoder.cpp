@@ -266,13 +266,11 @@ void Encoder::tendToNewJobs()
  * We have received some output from a thread. See if it contains %.
  * @param proc the process that has new output.
  */
-void Encoder::receivedThreadOutput(EncodeProcess *process) {
-// 	if ( Prefs::fullDecoderDebug() && buffer)
-// 		kDebug(60002) << buffer;
-
+void Encoder::receivedThreadOutput(EncodeProcess *process)
+{
 	// Make sure we have a job to send an update too.
 	if(jobs.find((KProcess *)process) == jobs.end()){
-		kDebug() << "Encoder::receivedThreadOutput Job doesn't exists. Line: " <<  endl;
+		kDebug() << "Encoder::receivedThreadOutput Job doesn't exists.";
 		return;
 	}
 
@@ -285,16 +283,16 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
 
 	// Make sure the output string has a % symble in it.
 	if ( !output.contains('%') && reportCount < 5 ) {
-		kDebug() << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill." << endl;
+		kDebug() << "No \'%%\' in output. Report as bug w/encoder options if progressbar doesn't fill.";
 		reportCount++;
 		return;
 	}
-	//qDebug(QString("Pre cropped: %1").arg(output).latin1());
+
 	output = output.mid(output.indexOf('%')-loadEncoder(job->encoder)->percentLength(),2);
-	//qDebug(QString("Post cropped: %1").arg(output).latin1());
+
 	bool conversionSuccessfull = false;
 	int percent = output.toInt(&conversionSuccessfull);
-	//qDebug(QString("number: %1").arg(percent).latin1());
+
 	if ( percent >= 0 && percent < JOB_COMPLETED && conversionSuccessfull ) {
 		emit(updateProgress(job->id, percent));
 	}
@@ -310,12 +308,10 @@ void Encoder::receivedThreadOutput(EncodeProcess *process) {
  */
 void Encoder::jobDone(KProcess *process)
 {
-	kDebug() << "jobDone" << endl;
+	kDebug() << "jobDone";
 	// Normal error checking here.
 	if ( !process)
 		return;
-
-	//qDebug("Process exited with status: %d", process->exitStatus());
 
 	Job *job = jobs[(KProcess *)process];
 	EncoderPrefs *encPrefs = loadEncoder(job->encoder);
@@ -334,7 +330,6 @@ void Encoder::jobDone(KProcess *process)
 			}
 			emit( updateProgress( job->id, JOB_ERROR) );
 		} else {
-			//qDebug("Must be done: %d", (process->exitStatus()));
 			emit(updateProgress(job->id, JOB_COMPLETED));
 			KNotification::event("track encoded");
 			if ( job->lastSongInAlbum)

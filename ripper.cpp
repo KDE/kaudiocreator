@@ -68,14 +68,16 @@ Ripper::~Ripper()
 /**
  * @return The number of active jobs
  */
-int Ripper::activeJobCount() {
+int Ripper::activeJobCount()
+{
 	return jobs.count();
 }
 
 /**
  * @return The number of pending jobs
  */
-int Ripper::pendingJobCount() {
+int Ripper::pendingJobCount()
+{
 	return pendingJobs.count();
 }
 
@@ -85,7 +87,8 @@ int Ripper::pendingJobCount() {
  * there is one.
  * @param id the id number of the job to remove.
  */
-void Ripper::removeJob(int id){
+void Ripper::removeJob(int id)
+{
 	QMap<KIO::Job*, Job*>::Iterator it;
 	for( it = jobs.begin(); it != jobs.end(); ++it ){
 		if(it.value()->id == id){
@@ -120,7 +123,7 @@ void Ripper::removeJob(int id){
 		pendingJobs.removeAll(job);
 		delete job;
 	}
-	//qDebug(QString("Done removing Job:%1").arg(id).latin1());
+
 	tendToNewJobs();
 }
 
@@ -129,7 +132,8 @@ void Ripper::removeJob(int id){
  * @param job the new job that this module should take over.
  * @param job the new job that we need to handle.
  */
-void Ripper::ripTrack(Job *job){
+void Ripper::ripTrack(Job *job)
+{
 	if(!job)
 		return;
 	emit(addJob(job, i18n("Ripping: %1 - %2", job->track_artist, job->track_title)));

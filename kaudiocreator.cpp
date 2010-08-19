@@ -174,12 +174,12 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 	driveLabel = new QLabel();
 	statusBar()->addWidget(driveLabel);
 	driveLabel->setText(i18n("Searching"));
-    ripLabel = new QLabel();
-    statusBar()->addPermanentWidget(ripLabel, 0);
+	ripLabel = new QLabel();
+	statusBar()->addPermanentWidget(ripLabel, 0);
 	defaultEncLabel = new QLabel();
 	statusBar()->addPermanentWidget(defaultEncLabel, 0);
 	showCurrentEncoder();
-    setRipStatus();
+	setRipStatus();
 	// seems to need some time to settle
 	QTimer::singleShot(50, tracks, SLOT(initDevice()));
 }
@@ -289,24 +289,24 @@ void KAudioCreator::setupRipMenu()
  */
 void KAudioCreator::setDriveStatus(AudioCD::DriveStatus status)
 {
-    if (driveLabel) {
-        switch (status) {
-            case AudioCD::NoDisc:
-                driveLabel->setText(i18n("No disc"));
-                emit hasAudioCd(FALSE);
-                break;
-            case AudioCD::Loading:
-                driveLabel->setText(i18n("Loading disc"));
-                break;
-            case AudioCD::Ready:
-                driveLabel->setText(i18n("Audio CD inserted"));
-                emit hasAudioCd(TRUE);
-                break;
-            case AudioCD::ReadyNoAudio:
-                driveLabel->setText(i18n("Disc inserted - No Audio"));
-                break;
-        }
-    }
+	if (driveLabel) {
+		switch (status) {
+			case AudioCD::NoDisc:
+				driveLabel->setText(i18n("No disc"));
+				emit hasAudioCd(FALSE);
+				break;
+			case AudioCD::Loading:
+				driveLabel->setText(i18n("Loading disc"));
+				break;
+			case AudioCD::Ready:
+				driveLabel->setText(i18n("Audio CD inserted"));
+				emit hasAudioCd(TRUE);
+				break;
+			case AudioCD::ReadyNoAudio:
+				driveLabel->setText(i18n("Disc inserted - No Audio"));
+				break;
+		}
+	}
 }
 
 void KAudioCreator::showCurrentEncoder()
