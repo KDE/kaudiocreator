@@ -24,8 +24,6 @@
 #include <QProgressBar>
 #include <QStandardItemModel>
 
-#include <QtDebug>
-
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -47,12 +45,12 @@
  * @param name - widget name
  */
 JobQueImp::JobQueImp(QWidget* parent) :
-		JobQue(parent), currentId(0)
+	JobQue(parent), currentId(0)
 {
-    jobModel = new QStandardItemModel(0, 3, this);
-    jobModel->setHorizontalHeaderLabels(QStringList() << i18n("Job") << i18n("Progress") << i18n("Description"));
-    jobView->setModel(jobModel);
-    jobView->setItemDelegate(new JobDelegate());
+	jobModel = new QStandardItemModel(0, 3, this);
+	jobModel->setHorizontalHeaderLabels(QStringList() << i18n("Job") << i18n("Progress") << i18n("Description"));
+	jobView->setModel(jobModel);
+	jobView->setItemDelegate(new JobDelegate());
 
 	connect(removeSelected, SIGNAL(clicked()), this, SLOT( removeSelectedJob()));
 	connect(removeAll, SIGNAL(clicked()), this, SLOT(removeAllJobs()));
@@ -66,25 +64,24 @@ JobQueImp::JobQueImp(QWidget* parent) :
  */
 void JobQueImp::addJob(Job *job, const QString &name)
 {
-    if(!job)
-        return;
+	if (!job) return;
 
-    QList<QStandardItem *> jobItems = QList<QStandardItem *>();
-    job->id = ++currentId;
-    QStandardItem *jobItem = new QStandardItem(QString::number(currentId));
-    jobItem->setEditable(FALSE);
-    jobItems << jobItem;
-    QStandardItem *progressItem = new QStandardItem();
-    progressItem->setData(JOB_QUEUED, JobState);
-    progressItem->setData(job->id, JobId);
-    progressItem->setData(0, PercentDone);
-    progressItem->setEditable(FALSE);
-    jobItems << progressItem;
-    QStandardItem *descriptionItem = new QStandardItem(name);
-    descriptionItem->setEditable(FALSE);
-    jobItems << descriptionItem;
-    jobModel->appendRow(jobItems);
-    queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
+	QList<QStandardItem *> jobItems = QList<QStandardItem *>();
+	job->id = ++currentId;
+	QStandardItem *jobItem = new QStandardItem(QString::number(currentId));
+	jobItem->setEditable(FALSE);
+	jobItems << jobItem;
+	QStandardItem *progressItem = new QStandardItem();
+	progressItem->setData(JOB_QUEUED, JobState);
+	progressItem->setData(job->id, JobId);
+	progressItem->setData(0, PercentDone);
+	progressItem->setEditable(FALSE);
+	jobItems << progressItem;
+	QStandardItem *descriptionItem = new QStandardItem(name);
+	descriptionItem->setEditable(FALSE);
+	jobItems << descriptionItem;
+	jobModel->appendRow(jobItems);
+	queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
 }
 
 /**
@@ -94,34 +91,34 @@ void JobQueImp::addJob(Job *job, const QString &name)
  */
 void JobQueImp::updateProgress(int id, int progress)
 {
-    QList<QStandardItem *> jobs = jobModel->findItems(QString::number(id), Qt::MatchExactly, HEADER_JOB);
+	QList<QStandardItem *> jobs = jobModel->findItems(QString::number(id), Qt::MatchExactly, HEADER_JOB);
 
 	if (jobs.isEmpty()) {
-		qDebug() << "JobQueImp::updateProgress An update was received about a job, "
+		kDebug() << "JobQueImp::updateProgress An update was received about a job, "
 				  "but the job couldn't be found: " << id;
 		return;
 	}
 
-    QModelIndex progressIndex = jobs.at(0)->index();
-    progressIndex = progressIndex.sibling(progressIndex.row(), HEADER_PROGRESS);
-    QStandardItem *currentItem = jobModel->itemFromIndex(progressIndex);
+	QModelIndex progressIndex = jobs.at(0)->index();
+	progressIndex = progressIndex.sibling(progressIndex.row(), HEADER_PROGRESS);
+	QStandardItem *currentItem = jobModel->itemFromIndex(progressIndex);
 	// Only update the % if it changed.
 	if (progress > 0 && currentItem->data(PercentDone).toInt() == progress)
 		return;
 
 	if (progress >= 0 && progress < JOB_COMPLETED) {
-        currentItem->setData(progress, PercentDone);
-        if  (currentItem->data(JobState).toInt() != JOB_PROGRESSING) {
-            currentItem->setData(JOB_PROGRESSING, JobState);
-        }
-    } else if (progress == JOB_ERROR) {
-        currentItem->setData(JOB_ERROR, JobState);
-    } else if (progress == JOB_STARTED) {
-        currentItem->setData(JOB_STARTED, JobState);
-    } else if (progress == JOB_COMPLETED) {
-        currentItem->setData(i18n("Done"), Qt::DisplayRole);
-        currentItem->setData(JOB_COMPLETED, JobState);
-        currentItem->setData(100, PercentDone);
+		currentItem->setData(progress, PercentDone);
+		if  (currentItem->data(JobState).toInt() != JOB_PROGRESSING) {
+			currentItem->setData(JOB_PROGRESSING, JobState);
+		}
+	} else if (progress == JOB_ERROR) {
+		currentItem->setData(JOB_ERROR, JobState);
+	} else if (progress == JOB_STARTED) {
+		currentItem->setData(JOB_STARTED, JobState);
+	} else if (progress == JOB_COMPLETED) {
+		currentItem->setData(i18n("Done"), Qt::DisplayRole);
+		currentItem->setData(JOB_COMPLETED, JobState);
+		currentItem->setData(100, PercentDone);
 		if (Prefs::removeCompletedJobs()){
 			removeJob(currentItem, FALSE);
 			return;
@@ -142,19 +139,17 @@ void JobQueImp::updateProgress(int id, int progress)
  */
 bool JobQueImp::removeJob(QStandardItem *item, bool kill, bool prompt)
 {
-	if (!item)
-		return false;
+	if (!item) return false;
 
 	if (item->data(JobState).toInt() != JOB_COMPLETED &&
-        (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?", item->data(Qt::DisplayRole).toString()), i18n("Unfinished Job in Queue"), KStandardGuiItem::del(), KGuiItem(i18n("Keep")))
-		  == KMessageBox::No))
+	    (prompt && KMessageBox::questionYesNo(this, i18n("KAudioCreator has not finished %1. Remove anyway?", item->data(Qt::DisplayRole).toString()), i18n("Unfinished Job in Queue"), KStandardGuiItem::del(), KGuiItem(i18n("Keep")))
+	     == KMessageBox::No))
 		return false;
 
 	// "Thread" safe
-	if(!item)
-		return false;
+	if(!item) return false;
 
-	if(kill)
+	if (kill)
 		emit (removeJob(item->data(Qt::DisplayRole).toInt()));
 
 	jobModel->removeRow(item->row(), QModelIndex());
@@ -165,7 +160,7 @@ bool JobQueImp::removeJob(QStandardItem *item, bool kill, bool prompt)
 		currentId = 0; // no jobs left so we can reset the count
 	} else {
 		queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
-    }
+	}
 
 	return true;
 }
@@ -175,11 +170,11 @@ bool JobQueImp::removeJob(QStandardItem *item, bool kill, bool prompt)
  */
 void JobQueImp::removeSelectedJob()
 {
-    QModelIndex index;
-    QModelIndexList items = jobView->selectionModel()->selectedRows(0);
-    foreach (index, items) {
-        jobModel->removeRow(index.row(), QModelIndex());
-    }
+	QModelIndex index;
+	QModelIndexList items = jobView->selectionModel()->selectedRows(0);
+	foreach (index, items) {
+		jobModel->removeRow(index.row(), QModelIndex());
+	}
 }
 
 /**
@@ -189,13 +184,13 @@ void JobQueImp::removeAllJobs()
 {
 	// First determine if there are jobs not finished and prompt once here
 	bool finished=true;
-    int rows = jobModel->rowCount();
-    for (int r = 0; r < rows; ++r) {
-        QModelIndex index = jobModel->index(r, HEADER_PROGRESS, QModelIndex());
-        if (jobModel->data(index, JobState).toInt() != JOB_COMPLETED) {
-            finished = false;
-            break;
-        }
+	int rows = jobModel->rowCount();
+	for (int r = 0; r < rows; ++r) {
+		QModelIndex index = jobModel->index(r, HEADER_PROGRESS, QModelIndex());
+		if (jobModel->data(index, JobState).toInt() != JOB_COMPLETED) {
+			finished = false;
+			break;
+		}
 	}
 
 	if (!finished) {
@@ -214,9 +209,9 @@ void JobQueImp::removeAllJobs()
  */
 void JobQueImp::clearDoneJobs()
 {
-    QList<QStandardItem *> jobs = jobModel->findItems(i18n("Done"), Qt::MatchExactly, HEADER_PROGRESS);
+	QList<QStandardItem *> jobs = jobModel->findItems(i18n("Done"), Qt::MatchExactly, HEADER_PROGRESS);
     
-    foreach (QStandardItem *item, jobs) {
+	foreach (QStandardItem *item, jobs) {
 			emit (removeJob(item->data(JobId).toInt()));
 			jobModel->removeRow(item->row(), QModelIndex());
 	}
@@ -226,7 +221,7 @@ void JobQueImp::clearDoneJobs()
 		currentId = 0; // no jobs left so we can reset the count
 	} else {
 		queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
-    }
+	}
 }
 
 /**
@@ -237,12 +232,12 @@ void JobQueImp::clearDoneJobs()
 int JobQueImp::numberOfJobsNotFinished()
 {
 	int totalJobsToDo = 0;
-    int rows = jobModel->rowCount();
-    for (int r = 0; r < rows; ++r) {
-        QModelIndex index = jobModel->index(r, HEADER_PROGRESS, QModelIndex());
-        if (jobModel->data(index, JobState).toInt() != JOB_COMPLETED) {
+	int rows = jobModel->rowCount();
+	for (int r = 0; r < rows; ++r) {
+		QModelIndex index = jobModel->index(r, HEADER_PROGRESS, QModelIndex());
+		if (jobModel->data(index, JobState).toInt() != JOB_COMPLETED) {
 			++totalJobsToDo;
-        }
+		}
 	}
 	return totalJobsToDo;
 }
