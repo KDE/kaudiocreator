@@ -21,6 +21,7 @@
 #include "prefs.h"
 #include "defs.h"
 
+#include <QDir>
 #include <QFile>
 #include <QTimer>
 
@@ -147,57 +148,62 @@ void Ripper::ripTrack(Job *job)
  */
 void Ripper::tendToNewJobs()
 {
-    if (pendingJobs.count() == 0) {
-        emit jobsChanged();
-        return;
-    }
+	if (pendingJobs.count() == 0) {
+		emit jobsChanged();
+		return;
+	}
 
-    Job *job = 0;
-    for (int i = 0; i < pendingJobs.count(); ++i) {
-        const QString jobDevice = pendingJobs[i]->device;
-        if (!usedDevices.contains(jobDevice)) {
-            usedDevices.append(jobDevice);
-            job = pendingJobs.takeAt(i);
-            break;
-        }
-    }
+	Job *job = 0;
+	for (int i = 0; i < pendingJobs.count(); ++i) {
+		const QString jobDevice = pendingJobs[i]->device;
+		if (!usedDevices.contains(jobDevice)) {
+			usedDevices.append(jobDevice);
+			job = pendingJobs.takeAt(i);
+			break;
+		}
+	}
 
-    if (!job)
-        return;
+	if (!job)
+	    return;
 
-    job->fix("/", "%2f");
+	job->fix("/", "%2f");
 
-    KUrl defaultTempDir;
-    if (Prefs::enableTempDir()) {
-        defaultTempDir = Prefs::tempDir();
-    } else {
-        defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
-    }
+	KUrl defaultTempDir;
+	if (Prefs::enableTempDir()) {
+		defaultTempDir = Prefs::tempDir();
+		QDir tmpPath = defaultTempDir.path();
+		if (!tmpPath.exists()) {
+			KMessageBox::information(0, i18n("The custom temporary directory was not found.\nThe standard temporary directory will be used instead."), i18n("Temporary directory not found."), QString("CustomTemporaryNotExisting"));
+			defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
+		}
+	} else {
+		defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
+	}
 
-    // For cases like "/tmp" where there is a missing /
-    QString tempDirStr = defaultTempDir.path(KUrl::AddTrailingSlash);
+	// For cases like "/tmp" where there is a missing /
+	QString tempDirStr = defaultTempDir.path(KUrl::AddTrailingSlash);
 
-    QString tmpFileName;
-    do {
-        tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(tempDirStr).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
-    } while (QFile::exists(tmpFileName));
-    
-    QString n;
-    // build the number like kio_audiocd, needs the same translation, I guess
-    QString wavFile = QString("audiocd:/") + i18n("Track %1", n.sprintf("%02d", job->track)) + QString(".wav");
+	QString tmpFileName;
+	do {
+		tmpFileName = QString("%1%2_%3-%4_%5.wav").arg(tempDirStr).arg(job->track).arg(job->track_artist).arg(job->track_title).arg(KRandom::randomString(6));
+	} while (QFile::exists(tmpFileName));
 
-    KUrl source(wavFile);
-    if (!job->device.isEmpty())
-        source.addQueryItem("device", job->device);
-    source.addQueryItem("fileNameTemplate", i18n("Track %1", QString("%{number}")));
-    KUrl dest(tmpFileName);
+	QString n;
+	// build the number like kio_audiocd, needs the same translation, I guess
+	QString wavFile = QString("audiocd:/") + i18n("Track %1", n.sprintf("%02d", job->track)) + QString(".wav");
 
-    KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
-    jobs.insert(copyJob, job);
-    connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
-    connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
+	KUrl source(wavFile);
+	if (!job->device.isEmpty())
+		source.addQueryItem("device", job->device);
+	source.addQueryItem("fileNameTemplate", i18n("Track %1", QString("%{number}")));
+	KUrl dest(tmpFileName);
 
-    emit jobsChanged();
+	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
+	jobs.insert(copyJob, job);
+	connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(copyJobResult(KJob*)));
+	connect(copyJob, SIGNAL(percent ( KJob *, unsigned long)), this, SLOT(updateProgress ( KJob *, unsigned long)));
+
+	emit jobsChanged();
 }
 
 /**
