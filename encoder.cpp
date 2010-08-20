@@ -123,7 +123,7 @@ int Encoder::pendingJobCount()
 void Encoder::removeJob(int id )
 {
 	QMap<KProcess *, Job *>::Iterator it;
-	for( it = jobs.begin(); it != jobs.end(); ++it ) {
+	for (it = jobs.begin(); it != jobs.end(); ++it ) {
 		if ( it.value()->id == id ) {
 			KProcess *process = it.key();
 			Job *job = it.value();
@@ -135,19 +135,20 @@ void Encoder::removeJob(int id )
 			break;
 		}
 	}
+
 	Job *job = 0;
-	foreach(Job *j, pendingJobs)
-	{
-		if ( j->id == id)
-		{
+	foreach (Job *j, pendingJobs) {
+		if ( j->id == id) {
 			job = j;
 			break;
 		}
 	}
-	if ( job ) {
+
+	if (job) {
 		pendingJobs.removeAll(job);
 		delete job;
 	}
+
 	tendToNewJobs();
 }
 
@@ -157,8 +158,7 @@ void Encoder::removeJob(int id )
  */
 void Encoder::encodeWav(Job *job )
 {
-	emit(addJob(job, i18n("Encoding (%1): %2 - %3", loadEncoder(job->encoder)->extension(),
-	                                                job->track_artist, job->track_title)));
+	emit addJob(job, i18n("Encoding (%1): %2 - %3", loadEncoder(job->encoder)->extension(), job->track_artist, job->track_title));
 	pendingJobs.append(job);
 	tendToNewJobs();
 }
@@ -209,7 +209,7 @@ void Encoder::tendToNewJobs()
 			case KIO::R_CANCEL:
 			default:
 				emit jobsChanged();
-				updateProgress(job->id, -1);
+				emit updateProgress(job->id, JOB_ERROR);
 				return;
 		}
 	}
@@ -219,7 +219,7 @@ void Encoder::tendToNewJobs()
 			!(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash), 0775)) ) {
 		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed"));
 		emit jobsChanged();
-		updateProgress(job->id, -1);
+		emit updateProgress(job->id, JOB_ERROR);
 		return;
 	}
 
@@ -239,7 +239,7 @@ void Encoder::tendToNewJobs()
 
 	command = job->replaceSpecialChars(command, true, map);
 
-	updateProgress(job->id, JOB_STARTED);
+	emit updateProgress(job->id, JOB_STARTED);
 	job->errorString = command;
 
 	EncodeProcess *proc = new EncodeProcess();
@@ -256,7 +256,7 @@ void Encoder::tendToNewJobs()
 	threads.append(proc);
 
 	proc->setOutputChannelMode(KProcess::MergedChannels);
-    proc->setEnvironment(proc->systemEnvironment());
+	proc->setEnvironment(proc->systemEnvironment());
 	proc->setProgram(KShell::splitArgs(command));
 	proc->start();
 	emit jobsChanged();
