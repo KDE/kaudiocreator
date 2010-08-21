@@ -21,8 +21,7 @@
 #include "prefs.h"
 #include "defs.h"
 
-#include <QDir>
-#include <QFile>
+#include <QFileInfo>
 #include <QTimer>
 
 #include <krandom.h>
@@ -171,9 +170,13 @@ void Ripper::tendToNewJobs()
 	KUrl defaultTempDir;
 	if (Prefs::enableTempDir()) {
 		defaultTempDir = Prefs::tempDir();
-		QDir tmpPath = defaultTempDir.path();
-		if (!tmpPath.exists()) {
-			KMessageBox::information(0, i18n("The custom temporary directory was not found.\nThe standard temporary directory will be used instead."), i18n("Temporary directory not found."), QString("CustomTemporaryNotExisting"));
+		QFileInfo tmpDirInfo = QFileInfo(defaultTempDir.path());
+		if (!tmpDirInfo.isDir() || !tmpDirInfo.isWritable() || !tmpDirInfo.isReadable()) {
+			KMessageBox::information(0, i18n("There is a problem with the custom temporary directory.\n"
+							 "Please check existence and permissions of \"%1\".\n"
+							 "The KDE standard temporary directory will be used instead.", defaultTempDir.path()),
+						 i18n("Problem with the temporary directory"),
+						 QString("CustomTemporaryNotAcessible"));
 			defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
 		}
 	} else {
