@@ -2,6 +2,8 @@ For more information see the svn log
 
 1.2.90
 - bugfixes
+- switch from kcompactdisc to enhanced version of audiocd from kscd
+  for cd stuff
 - removed option for ripping more than one file from one device
   instead if there are 2+ drives try to rip parallel (limited, see TODO)
 
