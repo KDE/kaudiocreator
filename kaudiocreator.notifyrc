@@ -41,6 +41,7 @@ Comment[tr]=KAudioCreator
 Comment[uk]=KAudioCreator
 Comment[x-test]=xxKAudioCreatorxx
 Comment[zh_CN]=KAudioCreator
+Comment[zh_TW]=KAudioCreator
 
 [Event/no jobs left]
 Name=All Jobs Finished
@@ -82,6 +83,7 @@ Name[tr]=Tüm Görevler Tamamlandı
 Name[uk]=Всі роботи завершено
 Name[x-test]=xxAll Jobs Finishedxx
 Name[zh_CN]=所有任务都已经完成
+Name[zh_TW]=所有工作均已完成
 Comment=All of the jobs in the queue have been finished
 Comment[bg]=Всички задачи от опашката са изпълнение
 Comment[cs]=Všechny úlohy ve frontě byly dokončeny
@@ -121,6 +123,7 @@ Comment[tr]=Kuyruktaki tüm görevler tamamlandı
 Comment[uk]=Всі роботи у черзі завершено
 Comment[x-test]=xxAll of the jobs in the queue have been finishedxx
 Comment[zh_CN]=所有在队列中的任务都已经完成
+Comment[zh_TW]=佇列中的所有工作都已完成
 
 [Event/track ripped]
 Name=Track Ripped
@@ -163,6 +166,7 @@ Name[tr]=Parça Dönüştürüldü
 Name[uk]=Доріжку видобуто
 Name[x-test]=xxTrack Rippedxx
 Name[zh_CN]=音轨已经抓取
+Name[zh_TW]=曲目已擷取
 Comment=Track finished ripping
 Comment[bg]=Завърши извличането на записи
 Comment[cs]=Extrakce stopy dokončena
@@ -202,6 +206,7 @@ Comment[tr]=Parça dönüştürme işlemi tamamlandı
 Comment[uk]=Видобування доріжки завершено
 Comment[x-test]=xxTrack finished rippingxx
 Comment[zh_CN]=音轨抓取完毕
+Comment[zh_TW]=曲目已完成擷取
 
 [Event/cd ripped]
 Name=CD Ripped
@@ -244,6 +249,7 @@ Name[tr]=CD Dönüştürüldü
 Name[uk]=Дані КД видобуто
 Name[x-test]=xxCD Rippedxx
 Name[zh_CN]=CD 已经抓取
+Name[zh_TW]=光碟已擷取
 Comment=CD finished ripping
 Comment[bg]=Завърши извличането на компактдиска
 Comment[cs]=Dokončena extrakce CD
@@ -284,6 +290,7 @@ Comment[tr]=CD dönüştürme işlemi tamamlandı
 Comment[uk]=Видобування даних КД завершено
 Comment[x-test]=xxCD finished rippingxx
 Comment[zh_CN]=CD 抓取完毕
+Comment[zh_TW]=光碟已完成擷取
 
 [Event/track encoded]
 Name=Track Encoded
@@ -326,6 +333,7 @@ Name[tr]=Parça kodlandı
 Name[uk]=Доріжку закодовано
 Name[x-test]=xxTrack Encodedxx
 Name[zh_CN]=音轨已经编码
+Name[zh_TW]=曲目已編碼
 Comment=Track finished encoding
 Comment[bg]=Завърши кодирането на записа
 Comment[cs]=Dokončena komprese stopy
@@ -366,6 +374,7 @@ Comment[tr]=Parça kodlama işlemi tamamlandı
 Comment[uk]=Кодування доріжки завершено
 Comment[x-test]=xxTrack finished encodingxx
 Comment[zh_CN]=音轨编码完毕
+Comment[zh_TW]=曲目已完成編碼
 
 [Event/cd encoded]
 Name=CD Encoded
@@ -408,6 +417,7 @@ Name[tr]=CD Kodlandı
 Name[uk]=КД закодовано
 Name[x-test]=xxCD Encodedxx
 Name[zh_CN]=CD 已经编码
+Name[zh_TW]=光碟已編碼
 Comment=CD finished encoding
 Comment[bg]=Завърши кодирането на компактдиска
 Comment[cs]=Dokončena komprese CD
@@ -448,5 +458,6 @@ Comment[tr]=CD kodlama işlemi tamamlandı
 Comment[uk]=Кодування КД завершено
 Comment[x-test]=xxCD finished encodingxx
 Comment[zh_CN]=CD 编码完毕
+Comment[zh_TW]=光碟已完成編碼
 Action=PassivePopup|Sound
 Sound=KDE_Beep_ClockChime.wav

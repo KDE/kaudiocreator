@@ -43,6 +43,7 @@ Name[tr]=KAudioCreator-Dönüştür
 Name[uk]=KAudioCreator-Extract
 Name[x-test]=xxKAudioCreator-Extractxx
 Name[zh_CN]=KAudioCreator-Extract
+Name[zh_TW]=KAudioCreator-Extract
 Type=Service
 
 [Desktop Action Extract]
