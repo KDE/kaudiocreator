@@ -54,7 +54,9 @@ kde4_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc )
 
 kde4_add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
-target_link_libraries(kaudiocreator ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDEMULTIMEDIA_LIBRARIES} ${TAGLIB_LIBRARIES} ${DISCID_LIBRARIES})
+target_link_libraries(kaudiocreator
+    ${KDE4_KUTILS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KIO_LIBS} ${KDE4_PHONON_LIBS} ${KDE4_SOLID_LIBS}
+    ${KDEMULTIMEDIA_LIBRARIES} ${TAGLIB_LIBRARIES} ${DISCID_LIBRARIES})
 
 install(TARGETS kaudiocreator  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
