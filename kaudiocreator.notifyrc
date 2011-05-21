@@ -2,7 +2,7 @@
 IconName=kaudiocreator
 Comment=KAudioCreator
 Comment[bg]=KAudioCreator
-Comment[bs]=K‑audio-stvaralac
+Comment[bs]=KAudioCreator
 Comment[ca]=KAudioCreator
 Comment[ca@valencia]=KAudioCreator
 Comment[cs]=KAudioCreator
@@ -49,6 +49,7 @@ Comment[zh_TW]=KAudioCreator
 [Event/no jobs left]
 Name=All Jobs Finished
 Name[bg]=Всички задачи са завършени
+Name[bs]=Svi poslovi su završeni
 Name[ca]=S'han finalitzat totes les tasques
 Name[ca@valencia]=S'han finalitzat totes les tasques
 Name[cs]=Všechny úlohy jsou dokončeny
@@ -136,6 +137,7 @@ Comment[zh_TW]=佇列中的所有工作都已完成
 [Event/track ripped]
 Name=Track Ripped
 Name[bg]=Записът е извлечен
+Name[bs]=Numera je iščupana
 Name[ca]=Pista extreta
 Name[ca@valencia]=Pista extreta
 Name[cs]=Stopa extrahována
@@ -224,6 +226,7 @@ Comment[zh_TW]=曲目已完成擷取
 [Event/cd ripped]
 Name=CD Ripped
 Name[bg]=Компактдискът е извлечен
+Name[bs]=CD je iščupan
 Name[ca]=CD extret
 Name[ca@valencia]=CD extret
 Name[cs]=CD extrahováno
@@ -313,6 +316,7 @@ Comment[zh_TW]=光碟已完成擷取
 [Event/track encoded]
 Name=Track Encoded
 Name[bg]=Записът е кодиран
+Name[bs]=Numera je kodirana
 Name[ca]=Pista codificada
 Name[ca@valencia]=Pista codificada
 Name[cs]=Stopa zkomprimována
@@ -402,6 +406,7 @@ Comment[zh_TW]=曲目已完成編碼
 [Event/cd encoded]
 Name=CD Encoded
 Name[bg]=Компактдискът е кодиран
+Name[bs]=CD je kodiran
 Name[ca]=CD codificat
 Name[ca@valencia]=CD codificat
 Name[cs]=CD zkomprimováno

@@ -6,6 +6,7 @@ Encoding=UTF-8
 Name=KAudioCreator-Extract
 Name[be]=KAudioCreator-Extract
 Name[bg]=KAudioCreator-извличане
+Name[bs]=K‑audio-stvaralac — čupanje
 Name[ca]=KAudioCreator-Extreu
 Name[ca@valencia]=KAudioCreator-Extreu
 Name[cs]=KAudioCreator-Extrahovat
@@ -51,6 +52,7 @@ Type=Service
 [Desktop Action Extract]
 Name=Extract and Encode Audio Tracks
 Name[bg]=Извличане и кодиране на аудио записи
+Name[bs]=Čupa i kodira audio staze
 Name[ca]=Extreu i codifica pistes d'àudio
 Name[ca@valencia]=Extreu i codifica pistes d'àudio
 Name[cs]=Extrahujte a komprimujte audio stopy
