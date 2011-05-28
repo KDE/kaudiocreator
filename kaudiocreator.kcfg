@@ -2,10 +2,11 @@
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
-		  http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+        http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kaudiocreatorrc"/>
   <include>libkcompactdisc/kcompactdisc.h</include>
   <include>kstandarddirs.h</include>
+  <include>klocale.h</include>
   <group name="CD">
     <entry name="performCDDBauto" type="Bool">
       <label>Perform automatic CDDB lookups.</label>
@@ -49,7 +50,7 @@
       <default>_</default>
     </entry>
     <entry name="genericArtist" type="String">
-      <default>Various Artists</default>
+      <default code="true">i18n("Various Artists")</default>
     </entry>
     <entry name="delimiter" type="String">
       <default> - </default>
