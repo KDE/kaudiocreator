@@ -103,6 +103,7 @@ bool AudioCD::setDevice(Solid::Device aCd)
         }
     } else {
         kDebug() << "Drive seems not to be an optical drive!";
+        status = NoDrive;
         return FALSE;
     }
 
@@ -126,7 +127,10 @@ Phonon::MediaSource *AudioCD::getMediaSource() const
 
 QString AudioCD::getCdPath() const
 {
-    return block->device();
+    if (block)
+        return block->device();
+    else
+        return QString();
 }
 
 bool AudioCD::isCdInserted() const
@@ -136,7 +140,10 @@ bool AudioCD::isCdInserted() const
 
 bool AudioCD::hasAudio() const
 {
-    return (cd->availableContent() & Solid::OpticalDisc::Audio) == Solid::OpticalDisc::Audio;
+    if (cd)
+        return (cd->availableContent() & Solid::OpticalDisc::Audio) == Solid::OpticalDisc::Audio;
+    else
+        return FALSE;
 }
 
 AudioCD::DriveStatus AudioCD::getDriveStatus() const
@@ -156,7 +163,7 @@ int AudioCD::getDiscLength() const
 
 uint AudioCD::getTrackLength(int track) const
 {
-    return trackLengthList[track];
+    return trackLengthList.value(track);
 }
 
 QString AudioCD::getFreeDbId() const

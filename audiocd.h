@@ -50,6 +50,7 @@ class AudioCD: public QObject
 
 public:
     enum DriveStatus {
+        NoDrive,
         NoDisc,
         Loading,
         Ready,

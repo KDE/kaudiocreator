@@ -110,10 +110,9 @@ void TracksImp::loadSettings()
         udiMap.insert(device.udi(), devKey);
     }
 
-
     deviceCombo->clear();
 
-	if (devMap.isEmpty()) {
+	if (udiMap.isEmpty()) {
 		deviceCombo->addItem(i18n("none detected"));
 	} else {
 		deviceCombo->addItems(devMap.keys());
@@ -161,6 +160,18 @@ void TracksImp::newDisc()
 void TracksImp::discChanged(AudioCD::DriveStatus status)
 {
     switch (status) {
+        case AudioCD::NoDrive:
+            artistEdit->setText(QString());
+            albumEdit->setText(QString());
+            commentEdit->setText(QString());
+            setAlbumInfo(i18n("Unknown Artist"), i18n("Unknown Album"));
+            yearInput->setValue(0);
+            genreBox->setEditText(QString());
+            trackModel->clear();
+            trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
+            toggleInputs(FALSE);
+            emit driveStatusChanged(AudioCD::NoDrive);
+            break;
         case AudioCD::NoDisc:
             artistEdit->setText(QString());
             albumEdit->setText(QString());
@@ -191,12 +202,18 @@ void TracksImp::discChanged(AudioCD::DriveStatus status)
  */
 bool TracksImp::hasCD()
 {
-    return currentDrive->isCdInserted();
+    if (currentDrive)
+        return currentDrive->isCdInserted();
+    else
+        return false;
 }
 
 bool TracksImp::hasAudio() const
 {
-    return currentDrive->hasAudio();
+    if (currentDrive)
+        return currentDrive->hasAudio();
+    else
+        return false;
 }
 
 /**
@@ -232,34 +249,44 @@ void TracksImp::setDevice(const QString &userDevice)
 void TracksImp::changeDevice(const QString &device)
 {
     delete currentDrive;
-    currentDrive = new AudioCD();
-    if (currentDrive->setDevice(devMap[device])) {
-        connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
-        discChanged(currentDrive->getDriveStatus());
+    if (!udiMap.isEmpty()) {
+        currentDrive = new AudioCD();
+        if (currentDrive->setDevice(devMap[device])) {
+            connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
+            discChanged(currentDrive->getDriveStatus());
+        }
+    } else {
+        currentDrive = 0;
+        discChanged(AudioCD::NoDrive);
     }
 }
 
 void TracksImp::registerDevice(const QString &udi)
 {
     Solid::Device nd(udi);
-    if (nd.isDeviceInterface(Solid::DeviceInterface::OpticalDrive)) {
+    if (nd.isDeviceInterface(Solid::DeviceInterface::OpticalDrive) && !udiMap.contains(udi)) {
         const Solid::Block *b = nd.as<Solid::Block>();
         QString devKey = b->device() + " (" + nd.vendor() + " " + nd.product() + ")";
         devMap.insert(devKey, nd);
-        udiMap.insert(nd.udi(), devKey);
-        deviceCombo->blockSignals(true);
+        udiMap.insert(udi, devKey);
         deviceCombo->addItem(devKey);
-        deviceCombo->blockSignals(false);
+        int i = deviceCombo->findText(i18n("none detected"));
+        if (i != -1)
+            deviceCombo->removeItem(i);
     }
 }
 
 void TracksImp::unregisterDevice(const QString &udi)
 {
     if (udiMap.contains(udi)) {
-        deviceCombo->blockSignals(true);
         deviceCombo->removeItem(deviceCombo->findText(udiMap[udi]));
-        deviceCombo->blockSignals(false);
         devMap.remove(udiMap[udi]);
+        udiMap.remove(udi);
+    }
+
+    if (udiMap.isEmpty()) {
+        deviceCombo->addItem(i18n("none detected"));
+        devMap.clear(); // sometimes devMap still contains a "" entry?
     }
 }
 
@@ -283,7 +310,7 @@ void TracksImp::performCDDB()
 void TracksImp::lookupCDDB()
 {
     cddb->config().reparse();
-    cddb->lookup(currentDrive->getOffsetList());
+    if (currentDrive) cddb->lookup(currentDrive->getOffsetList());
 }
 
 /**
@@ -388,13 +415,13 @@ void TracksImp::assignCommentToTracks()
 void TracksImp::yearChangedByUser(int newYear)
 {
     cddbInfo.set(Year, newYear);
-    cddb->store(cddbInfo, currentDrive->getOffsetList());
+    if (currentDrive) cddb->store(cddbInfo, currentDrive->getOffsetList());
 }
 
 void TracksImp::genreChangedByUser(const QString &newGenre)
 {
     cddbInfo.set(Genre, newGenre);
-    cddb->store(cddbInfo, currentDrive->getOffsetList());
+    if (currentDrive) cddb->store(cddbInfo, currentDrive->getOffsetList());
 }
 
 /**

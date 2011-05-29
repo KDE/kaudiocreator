@@ -289,21 +289,31 @@ void KAudioCreator::setupRipMenu()
  */
 void KAudioCreator::setDriveStatus(AudioCD::DriveStatus status)
 {
+    QAction *eject = actionCollection()->action("eject");
 	if (driveLabel) {
 		switch (status) {
+            case AudioCD::NoDrive:
+                driveLabel->setText(i18n("No CD drive"));
+                emit hasAudioCd(FALSE);
+                eject->setEnabled(FALSE);
+                break;
 			case AudioCD::NoDisc:
 				driveLabel->setText(i18n("No disc"));
 				emit hasAudioCd(FALSE);
+                eject->setEnabled(TRUE);
 				break;
 			case AudioCD::Loading:
 				driveLabel->setText(i18n("Loading disc"));
+                eject->setEnabled(TRUE);
 				break;
 			case AudioCD::Ready:
 				driveLabel->setText(i18n("Audio CD inserted"));
 				emit hasAudioCd(TRUE);
+                eject->setEnabled(TRUE);
 				break;
 			case AudioCD::ReadyNoAudio:
 				driveLabel->setText(i18n("Disc inserted - No Audio"));
+                eject->setEnabled(TRUE);
 				break;
 		}
 	}
