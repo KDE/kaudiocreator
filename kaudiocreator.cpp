@@ -221,7 +221,7 @@ void KAudioCreator::checkSettings()
 
 		encPrefs = EncoderPrefs::prefs("Encoder_MP3 Lame Standard");
 		encPrefs->setEncoderName(i18n("MP3 Lame Standard"));
-		encPrefs->setCommandLine("lame --preset standard --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
+		encPrefs->setCommandLine("lame --preset standard --ignore-tag-errors --tt %{title} --ta %{artist} --tl %{albumtitle} --ty %{year} --tn %{number} --tg %{genre} %f %o");
 		encPrefs->setExtension("mp3");
 		encPrefs->setInputTypes("wav");
 		encPrefs->setPercentLength(2);
