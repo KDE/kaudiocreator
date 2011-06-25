@@ -253,8 +253,8 @@ void TracksImp::changeDevice(const QString &device)
         currentDrive = new AudioCD();
         if (currentDrive->setDevice(devMap[device])) {
             connect(currentDrive, SIGNAL(driveStatusChanged(AudioCD::DriveStatus)), this, SLOT(discChanged(AudioCD::DriveStatus)));
-            discChanged(currentDrive->getDriveStatus());
         }
+        discChanged(currentDrive->getDriveStatus());
     } else {
         currentDrive = 0;
         discChanged(AudioCD::NoDrive);

@@ -45,6 +45,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QFileInfo>
 
 using namespace Phonon;
 
@@ -93,6 +94,13 @@ bool AudioCD::setDevice(Solid::Device aCd)
                 if (devList[i].parentUdi() == odsign.udi()) {
                     cd = devList[i].as<Solid::OpticalDisc>();
                     block = odsign.as<Solid::Block>();
+                    QFileInfo cdInfo = QFileInfo(block->device());
+                    if (!cdInfo.isWritable() || !cdInfo.isReadable()) { // seems to need write permissions too?
+                        kDebug() << "Wrong permissions to " + block->device() + "!\n"
+                                    "Consider setting to 660 or add yourself to \'cdrom\' group.";
+                        status = NoDrive;
+                        return FALSE;
+                    }
                     src = new MediaSource(Cd, block->device());
                     obj->setCurrentSource(*src);
                     ctlr = new MediaController(obj);
