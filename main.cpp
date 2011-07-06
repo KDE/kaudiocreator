@@ -27,9 +27,9 @@
 
 
 int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.2.90",
+  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.2.95",
     ki18n("CD ripper and audio encoder frontend"), KAboutData::License_LGPL,
-          ki18n("(c) 2003-2005, Benjamin Meyer\n(c) 2008-2010, Gerd Fleischer"),
+          ki18n("(c) 2003-2005, Benjamin Meyer\n(c) 2008-2011, Gerd Fleischer"),
           KLocalizedString(), "http://kde-apps.org/content/show.php/KAudioCreator?content=107645");
     aboutData.addAuthor(ki18n("Gerd Fleischer"), ki18n("Maintainer"), "gerdfleischer@web.de", "http://www.gerdfleischer.de");
     aboutData.addAuthor(ki18n("Benjamin Meyer"), ki18n("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
