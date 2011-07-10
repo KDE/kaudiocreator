@@ -17,6 +17,10 @@ include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${
 
 CONFIGURE_FILE(config-kaudiocreator.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kaudiocreator.h)
 
+######## po for a release #############
+
+#add_subdirectory(po)
+
 ########### next target ###############
 
 set(kaudiocreator_SRCS
