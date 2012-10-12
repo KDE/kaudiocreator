@@ -7,9 +7,9 @@
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
 
-<book lang="&language;">
+<book id="kaudiocreator" lang="&language;">
 
-<bookinfo>
+<book id="kaudiocreator"info>
 <title>The &kaudiocreator; Handbook</title>
 
 <authorgroup>
