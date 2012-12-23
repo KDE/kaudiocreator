@@ -1,7 +1,6 @@
 [Desktop Entry]
 Comment=Frontend for audio file creation
 Comment[bg]=Програма за създаване на аудио файлове
-Comment[bs]=Pročelje za stvaranje audio datoteka
 Comment[ca]=Frontal per crear fitxers d'àudio
 Comment[ca@valencia]=Frontal per crear fitxers d'àudio
 Comment[cs]=Prostředí pro tvorbu audio souborů
@@ -50,7 +49,6 @@ Name=KAudioCreator
 Name[ar]=منشئ الصوتيات ك
 Name[be]=KAudioCreator
 Name[bg]=KAudioCreator
-Name[bs]=KAudioCreator
 Name[ca]=KAudioCreator
 Name[ca@valencia]=KAudioCreator
 Name[cs]=KAudioCreator
@@ -99,7 +97,6 @@ Name[zh_CN]=KAudioCreator
 Name[zh_TW]=KAudioCreator
 GenericName=CD Ripper
 GenericName[bg]=Извличане на CD
-GenericName[bs]=CD čupač
 GenericName[ca]=Extractor de CD
 GenericName[ca@valencia]=Extractor de CD
 GenericName[cs]=CD extraktor
