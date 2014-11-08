@@ -1,20 +1,36 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>kaudiocreator.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2+</project_license>
   <name>KAudioCreator</name>
+  <name xml:lang="pt">KAudioCreator</name>
+  <name xml:lang="uk">KAudioCreator</name>
+  <name xml:lang="x-test">xxKAudioCreatorxx</name>
   <summary>CD Ripper</summary>
+  <summary xml:lang="uk">Програма для видобування даних КД</summary>
+  <summary xml:lang="x-test">xxCD Ripperxx</summary>
   <description>
     <p>
-      KAudioCreator is an audio CD ripper, which uses &quot;cdparanoia&quot; as a backend to extract the tracks
+      KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks
       and later it encodes them to mp3 or ogg files (or many other formats supported)
     </p>
+    <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
+    <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>CDDB lookup to extract the album and track information</li>
+      <li xml:lang="uk">Пошук у CDDB для отримання даних щодо альбому і композиції.</li>
+      <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
+      <li xml:lang="uk">Підтримка різних форматів кодування даних (ogg, mp3, flac).</li>
+      <li xml:lang="x-test">xxDifferent encoding formats supported (ogg, mp3, flac)xx</li>
       <li>Different filename formats using tags</li>
+      <li xml:lang="uk">Підтримка створення різних назв файлів на основі міток композицій.</li>
+      <li xml:lang="x-test">xxDifferent filename formats using tagsxx</li>
     </ul>
   </description>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kaudiocreator</url>
