@@ -5,6 +5,7 @@
   <project_license>GPL-2+</project_license>
   <name>KAudioCreator</name>
   <name xml:lang="cs">KAudioCreator</name>
+  <name xml:lang="da">KAudioCreator</name>
   <name xml:lang="de">KAudioCreator</name>
   <name xml:lang="el">KAudioCreator</name>
   <name xml:lang="es">KAudioCreator</name>
@@ -22,6 +23,7 @@
   <name xml:lang="x-test">xxKAudioCreatorxx</name>
   <summary>CD Ripper</summary>
   <summary xml:lang="cs">CD extraktor</summary>
+  <summary xml:lang="da">Cd-Ripper</summary>
   <summary xml:lang="de">CD-Ripper</summary>
   <summary xml:lang="el">Αντιγραφέας CD</summary>
   <summary xml:lang="es">Ripeador de CD</summary>
@@ -58,6 +60,7 @@
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="da">Funktioner:</p>
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="es">Funciones:</p>
