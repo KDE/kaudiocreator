@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2+</project_license>
   <name>KAudioCreator</name>
+  <name xml:lang="ca">KAudioCreator</name>
   <name xml:lang="cs">KAudioCreator</name>
   <name xml:lang="da">KAudioCreator</name>
   <name xml:lang="de">KAudioCreator</name>
@@ -24,6 +25,7 @@
   <name xml:lang="uk">KAudioCreator</name>
   <name xml:lang="x-test">xxKAudioCreatorxx</name>
   <summary>CD Ripper</summary>
+  <summary xml:lang="ca">Extractor de CD</summary>
   <summary xml:lang="cs">CD extraktor</summary>
   <summary xml:lang="da">Cd-Ripper</summary>
   <summary xml:lang="de">CD-Ripper</summary>
@@ -48,6 +50,7 @@
       KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks
       and later it encodes them to mp3 or ogg files (or many other formats supported)
     </p>
+    <p xml:lang="ca">El KAudioCreator és un extractor d'àudio de CD, que utilitza el «cdparanoia» com a dorsal per extreure les peces i codificar-les més tard a fitxers mp3 o ogg (o molts altres formats acceptats)</p>
     <p xml:lang="el">Το KAudioCreator είναι ένας αντιγραφέςα CD, που χρησιμοποιεί το "cdparanoia" ως σύστημα υποστήριξης για την εξαγωγή κομματιών και έπειτα τα κωδικοποιεί σε αρχεία mp3 ή ogg (ή σε πολλούς άλλους υποστηριζόμενους τύπους κωδικοποίησης)</p>
     <p xml:lang="en-GB">KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)</p>
     <p xml:lang="es">KAudioCreator es un ripeador de CD de audio que usa «cdparanoia» como motor para extraer las pistas y codificarlas a continuación en archivos mp3 u ogg (u otros formatos implementados)</p>
@@ -65,6 +68,7 @@
     <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="da">Funktioner:</p>
     <p xml:lang="de">Funktionen:</p>
@@ -86,6 +90,7 @@
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>CDDB lookup to extract the album and track information</li>
+      <li xml:lang="ca">Cerca CDDB per extreure la informació de l'àlbum i la peça</li>
       <li xml:lang="el">Αναζήτηση σε CDDB για την εξαγωγή πληροφοριών για το άλμπουμ και το κομμάτι</li>
       <li xml:lang="en-GB">CDDB lookup to extract the album and track information</li>
       <li xml:lang="es">Búsqueda CDDB para extraer información sobre el álbum y las pistas</li>
@@ -103,6 +108,7 @@
       <li xml:lang="uk">Пошук у CDDB для отримання даних щодо альбому і композиції.</li>
       <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
+      <li xml:lang="ca">Hi ha implementats formats de codificació diferents (ogg, mp3, flac)</li>
       <li xml:lang="el">Υποστηρίζονται διάφοροι τύποι κωδικοποίησης (ogg, mp3, flac)</li>
       <li xml:lang="en-GB">Different encoding formats supported (ogg, mp3, flac)</li>
       <li xml:lang="es">Permite usar diferentes formatos de codificación (ogg, mp3, flac)</li>
@@ -120,6 +126,7 @@
       <li xml:lang="uk">Підтримка різних форматів кодування даних (ogg, mp3, flac).</li>
       <li xml:lang="x-test">xxDifferent encoding formats supported (ogg, mp3, flac)xx</li>
       <li>Different filename formats using tags</li>
+      <li xml:lang="ca">Formats diferents de nom de fitxer usant etiquetes</li>
       <li xml:lang="el">Διάφοροι τύποι κωδικοποίησης με χρήση ετικετών</li>
       <li xml:lang="en-GB">Different filename formats using tags</li>
       <li xml:lang="es">Diferentes formatos de nombres de archivos usando etiquetas</li>
