@@ -22,6 +22,7 @@
   <name xml:lang="sr-Latn">K‑audio-stvaralac</name>
   <name xml:lang="sr-ijekavian">К‑аудио-стваралац</name>
   <name xml:lang="sr-ijekavianlatin">K‑audio-stvaralac</name>
+  <name xml:lang="sv">Kaudiocreator</name>
   <name xml:lang="uk">KAudioCreator</name>
   <name xml:lang="x-test">xxKAudioCreatorxx</name>
   <summary>CD Ripper</summary>
@@ -43,6 +44,7 @@
   <summary xml:lang="sr-Latn">Čupač CD‑ova</summary>
   <summary xml:lang="sr-ijekavian">Чупач ЦД‑ова</summary>
   <summary xml:lang="sr-ijekavianlatin">Čupač CD‑ova</summary>
+  <summary xml:lang="sv">Cd-lagring</summary>
   <summary xml:lang="uk">Програма для видобування даних КД</summary>
   <summary xml:lang="x-test">xxCD Ripperxx</summary>
   <description>
@@ -65,6 +67,7 @@
     <p xml:lang="sr-Latn">K‑audio-stvaralac je čupač CD‑ova, koji koristi naredbu <command>cdparanoia</command> kao pozadinu za izvlačenje numera. Potom ih kodira u MP3 ili OGG fajlove (ili u neki drugi od mnogih podržanih formata).</p>
     <p xml:lang="sr-ijekavian">К‑аудио-стваралац је чупач ЦД‑ова, који користи наредбу <command>cdparanoia</command> као позадину за извлачење нумера. Потом их кодира у МП3 или ОГГ фајлове (или у неки други од многих подржаних формата).</p>
     <p xml:lang="sr-ijekavianlatin">K‑audio-stvaralac je čupač CD‑ova, koji koristi naredbu <command>cdparanoia</command> kao pozadinu za izvlačenje numera. Potom ih kodira u MP3 ili OGG fajlove (ili u neki drugi od mnogih podržanih formata).</p>
+    <p xml:lang="sv">Kaudiocreator är ett verktyg för lagring av ljud-cd, som använder "cdparanoia" som gränssnitt för att extrahera spår, och senare kodar dem till MP3- eller OGG-filer (eller många andra format som stöds).</p>
     <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
@@ -86,6 +89,7 @@
     <p xml:lang="sr-Latn">Mogućnosti:</p>
     <p xml:lang="sr-ijekavian">Могућности:</p>
     <p xml:lang="sr-ijekavianlatin">Mogućnosti:</p>
+    <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
@@ -105,6 +109,7 @@
       <li xml:lang="sr-Latn">Potraga na CDDB‑u za izvlačenje podataka o albumu i numerama.</li>
       <li xml:lang="sr-ijekavian">Потрага на ЦДДБ‑у за извлачење података о албуму и нумерама.</li>
       <li xml:lang="sr-ijekavianlatin">Potraga na CDDB‑u za izvlačenje podataka o albumu i numerama.</li>
+      <li xml:lang="sv">CDDB-uppslagning för att extrahera album- och spårinformation</li>
       <li xml:lang="uk">Пошук у CDDB для отримання даних щодо альбому і композиції.</li>
       <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
@@ -123,6 +128,7 @@
       <li xml:lang="sr-Latn">Podrška za različite formate kodiranja (OGG, MP3, FLAC).</li>
       <li xml:lang="sr-ijekavian">Подршка за различите формате кодирања (ОГГ, МП3, ФЛАЦ).</li>
       <li xml:lang="sr-ijekavianlatin">Podrška za različite formate kodiranja (OGG, MP3, FLAC).</li>
+      <li xml:lang="sv">Olika kodningsformat stöds (OGG, MP3, FLAC)</li>
       <li xml:lang="uk">Підтримка різних форматів кодування даних (ogg, mp3, flac).</li>
       <li xml:lang="x-test">xxDifferent encoding formats supported (ogg, mp3, flac)xx</li>
       <li>Different filename formats using tags</li>
@@ -141,6 +147,7 @@
       <li xml:lang="sr-Latn">Raznovrsni formati imena fajla na osnovu oznaka.</li>
       <li xml:lang="sr-ijekavian">Разноврсни формати имена фајла на основу ознака.</li>
       <li xml:lang="sr-ijekavianlatin">Raznovrsni formati imena fajla na osnovu oznaka.</li>
+      <li xml:lang="sv">Olika filnamnsformat med användning av taggar</li>
       <li xml:lang="uk">Підтримка створення різних назв файлів на основі міток композицій.</li>
       <li xml:lang="x-test">xxDifferent filename formats using tagsxx</li>
     </ul>
