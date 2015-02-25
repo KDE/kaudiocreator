@@ -76,6 +76,7 @@
     <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="da">Funktioner:</p>
