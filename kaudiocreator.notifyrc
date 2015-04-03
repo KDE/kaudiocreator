@@ -54,6 +54,7 @@ Comment[zh_TW]=KAudioCreator
 
 [Event/no jobs left]
 Name=All Jobs Finished
+Name[ast]=Fináronse tolos trabayos
 Name[bg]=Всички задачи са завършени
 Name[bs]=Svi poslovi su završeni
 Name[ca]=S'han finalitzat totes les tasques
