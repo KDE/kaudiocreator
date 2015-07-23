@@ -62,6 +62,7 @@
     <p xml:lang="bs">KAudioCreator je  audio CD ekstraktor, koji koristi "cdparanoia" kao pozadinu za vađenje traka i kasnije ih kodira u  mp3 ili ogg datoteke (ili mnoge druge podržane formate)</p>
     <p xml:lang="ca">El KAudioCreator és un extractor d'àudio de CD, que utilitza el «cdparanoia» com a dorsal per extreure les peces i codificar-les més tard a fitxers mp3 o ogg (o molts altres formats acceptats)</p>
     <p xml:lang="da">KAudioCreator er en lyd-cd-ripper, der bruger "cdparanoia" som backend til at udtrække sporene og derefter indkoder dem som mp3- eller ogg-filer (eller mange andre understøttede formater)</p>
+    <p xml:lang="de">KAudioCreator ist ein Programm zum Auslesen Audio-CDs und verwendet „cdparanoia“, um die Stücke zu extrahieren und sie dann als Mp3- oder Ogg-Dateien zu kodieren. Es werden noch viele andere Formate unterstützt</p>
     <p xml:lang="el">Το KAudioCreator είναι ένας αντιγραφέςα CD, που χρησιμοποιεί το "cdparanoia" ως σύστημα υποστήριξης για την εξαγωγή κομματιών και έπειτα τα κωδικοποιεί σε αρχεία mp3 ή ogg (ή σε πολλούς άλλους υποστηριζόμενους τύπους κωδικοποίησης)</p>
     <p xml:lang="en-GB">KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)</p>
     <p xml:lang="es">KAudioCreator es un ripeador de CD de audio que usa «cdparanoia» como motor para extraer las pistas y codificarlas a continuación en archivos mp3 u ogg (u otros formatos implementados)</p>
@@ -111,6 +112,7 @@
       <li xml:lang="bs">CDDB pregled za ekstrakciju informacija o albumu i traci</li>
       <li xml:lang="ca">Cerca CDDB per extreure la informació de l'àlbum i la peça</li>
       <li xml:lang="da">CDDB-opslag til at udtrække informationer om albummer og sange</li>
+      <li xml:lang="de">CDDB-Anfragen für Informationen über das Album und die Stücke</li>
       <li xml:lang="el">Αναζήτηση σε CDDB για την εξαγωγή πληροφοριών για το άλμπουμ και το κομμάτι</li>
       <li xml:lang="en-GB">CDDB lookup to extract the album and track information</li>
       <li xml:lang="es">Búsqueda CDDB para extraer información sobre el álbum y las pistas</li>
