@@ -13,6 +13,7 @@
   <name xml:lang="el">KAudioCreator</name>
   <name xml:lang="en-GB">KAudioCreator</name>
   <name xml:lang="es">KAudioCreator</name>
+  <name xml:lang="fi">KAudioCreator</name>
   <name xml:lang="gl">KAudioCreator</name>
   <name xml:lang="it">KAudioCreator</name>
   <name xml:lang="ko">KAudioCreator</name>
@@ -38,6 +39,7 @@
   <summary xml:lang="el">Αντιγραφέας CD</summary>
   <summary xml:lang="en-GB">CD Ripper</summary>
   <summary xml:lang="es">Ripeador de CD</summary>
+  <summary xml:lang="fi">CD-lukija</summary>
   <summary xml:lang="gl">Copiador de CD</summary>
   <summary xml:lang="it">Estrattore di CD</summary>
   <summary xml:lang="ko">CD 추출기</summary>
@@ -66,6 +68,7 @@
     <p xml:lang="el">Το KAudioCreator είναι ένας αντιγραφέςα CD, που χρησιμοποιεί το "cdparanoia" ως σύστημα υποστήριξης για την εξαγωγή κομματιών και έπειτα τα κωδικοποιεί σε αρχεία mp3 ή ogg (ή σε πολλούς άλλους υποστηριζόμενους τύπους κωδικοποίησης)</p>
     <p xml:lang="en-GB">KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)</p>
     <p xml:lang="es">KAudioCreator es un ripeador de CD de audio que usa «cdparanoia» como motor para extraer las pistas y codificarlas a continuación en archivos mp3 u ogg (u otros formatos implementados)</p>
+    <p xml:lang="fi">KAudioCreator lukee ääni-CD:itä cdparanoia-taustaosan avulla: purkaa ääniraidat ja pakkaa ne MP3-, Ogg- tai muiksi tiedostoiksi</p>
     <p xml:lang="gl">KAudioCreator é un copiador de CD que usa «cdparanoia» como motor para extraer as pistas, que posteriormente codifica como ficheiros MP3 ou OGG (ou outro dos moitos formatos que ofrece).</p>
     <p xml:lang="it">KAudioCreator è un estrattore di CD audio, che utilizza «cdparanoia» come motore per estrarre le tracce e successivamente le codifica in file mp3 o ogg (o molti altri formati supportati)</p>
     <p xml:lang="ko">KAudioCreator는 "cdparanoia"를 백엔드로 사용하고 MP3, OGG(외 여러 형식 지원) 등으로 인코딩할 수 있는 오디오 CD 추출기입니다.</p>
@@ -91,6 +94,7 @@
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Funciones:</p>
+    <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ko">기능:</p>
@@ -116,6 +120,7 @@
       <li xml:lang="el">Αναζήτηση σε CDDB για την εξαγωγή πληροφοριών για το άλμπουμ και το κομμάτι</li>
       <li xml:lang="en-GB">CDDB lookup to extract the album and track information</li>
       <li xml:lang="es">Búsqueda CDDB para extraer información sobre el álbum y las pistas</li>
+      <li xml:lang="fi">CDDB-haku levyn ja raitojen tietojen etsimiseksi</li>
       <li xml:lang="gl">Consultas en CDDB para obter información das pistas e do álbum.</li>
       <li xml:lang="it">Ricerca CDDB per estrarre le informazioni sull'album e sulla traccia</li>
       <li xml:lang="ko">앨범과 트랙 정보를 CDDB에서 검색</li>
@@ -140,6 +145,7 @@
       <li xml:lang="el">Υποστηρίζονται διάφοροι τύποι κωδικοποίησης (ogg, mp3, flac)</li>
       <li xml:lang="en-GB">Different encoding formats supported (ogg, mp3, flac)</li>
       <li xml:lang="es">Permite usar diferentes formatos de codificación (ogg, mp3, flac)</li>
+      <li xml:lang="fi">Eri pakkausmuotojen tuki (Ogg, MP3, FLAC)</li>
       <li xml:lang="gl">Ofrece varios formatos de codificación (OGG, MP3, FLAC).</li>
       <li xml:lang="it">Diversi formati di codifica supportati (ogg, mp3, flac)</li>
       <li xml:lang="ko">다양한 인코딩 지원(OGG, MP3, FLAC)</li>
@@ -164,6 +170,7 @@
       <li xml:lang="el">Διάφοροι τύποι κωδικοποίησης με χρήση ετικετών</li>
       <li xml:lang="en-GB">Different filename formats using tags</li>
       <li xml:lang="es">Diferentes formatos de nombres de archivos usando etiquetas</li>
+      <li xml:lang="fi">Tiedostojen nimeäminen tunnisteiden avulla</li>
       <li xml:lang="gl">Permite distintos formatos para o nome dos ficheiros mediante etiquetas.</li>
       <li xml:lang="it">Diversi formati dei nomi dei file che utilizzano i tag</li>
       <li xml:lang="ko">태그에서 파일 이름 변경 지원</li>
