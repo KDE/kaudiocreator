@@ -149,7 +149,7 @@
       <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
       <li xml:lang="bs">Podržani razni formati kodiranja (ogg, mp3, flac)</li>
-      <li xml:lang="ca">Hi ha implementats formats de codificació diferents (ogg, mp3, flac)</li>
+      <li xml:lang="ca">Es permeten diversos formats de codificació (ogg, mp3, flac)</li>
       <li xml:lang="ca-valencia">Hi ha implementats formats de codificació diferents (ogg, mp3, flac)</li>
       <li xml:lang="da">Forskellige indkodningsformater understøttes (ogg, mp3, flac)</li>
       <li xml:lang="de">Unterstützung für verschiedene Kodierungs-Formate wie ogg, mp3 und flac</li>
