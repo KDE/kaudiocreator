@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
         http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kaudiocreatorrc"/>
-  <include>libkcompactdisc/kcompactdisc.h</include>
+  <!-- <include>kcompactdisc.h</include> -->
   <include>kstandarddirs.h</include>
   <include>klocale.h</include>
   <group name="CD">
@@ -18,7 +18,7 @@
     </entry>
     <entry name="lastUsedDevice" type="String">
       <label>Last used CD device</label>
-      <default code="true">KCompactDisc::defaultCdromDeviceName()</default>
+      <!-- <default code="true">KCompactDisc::defaultCdromDeviceName()</default> -->
     </entry>
     <entry name="promptIfIncompleteInfo" type="Bool">
       <label>Prompt if information is not complete</label>
@@ -108,7 +108,7 @@
     </entry>
     <entry name="tempDir" type="Url">
       <label>Location of temporary directory to use</label>
-      <default code="true">KUrl(KStandardDirs::locateLocal("tmp", ""))</default>
+      <default code="true">QUrl(KStandardDirs::locateLocal("tmp", ""))</default>
     </entry>
   </group>
 </kcfg>

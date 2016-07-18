@@ -36,7 +36,7 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
         opts.rect = option.rect;
         opts.direction = option.direction;
         opts.state = option.state;
-        opts.textVisible = TRUE;
+        opts.textVisible = true;
         opts.minimum = 0;
         opts.maximum = 100;
         opts.progress = index.model()->data(index, PercentDone).toInt();

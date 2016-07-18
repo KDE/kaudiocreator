@@ -188,15 +188,15 @@ void Encoder::tendToNewJobs()
 
 	QHash <QString,QString> map;
 	map.insert("extension", prefs->extension());
-	Job jobx = *job;
-	jobx.fix(Prefs::replaceInput(), Prefs::replaceOutput());
-	jobx.fix("/", "%2f");
+	Job *jobx = job;
+	jobx->fix(Prefs::replaceInput(), Prefs::replaceOutput());
+	jobx->fix("/", "%2f");
 	// If the user wants anything regexp replaced do it now...
-	desiredFile = jobx.replaceSpecialChars(desiredFile, false, map, true);
+	desiredFile = jobx->replaceSpecialChars(desiredFile, false, map, true);
 
 	if (QFile::exists(desiredFile)) {
 		KUrl desiredFileUrl = KUrl::fromPath(desiredFile);
-		KIO::RenameDialog over(0, i18n("File Already Exists"), KUrl(), desiredFileUrl, KIO::M_OVERWRITE);
+		KIO::RenameDialog over(0, i18n("File Already Exists"), KUrl(), desiredFileUrl, KIO::RenameDialog_Overwrite);
 		int result = over.exec();
 		switch (result) {
 			case KIO::R_OVERWRITE:

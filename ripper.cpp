@@ -23,6 +23,7 @@
 
 #include <QFileInfo>
 #include <QTimer>
+#include <QUrl>
 
 #include <krandom.h>
 #include <kmessagebox.h>
@@ -167,7 +168,7 @@ void Ripper::tendToNewJobs()
 
 	job->fix("/", "%2f");
 
-	KUrl defaultTempDir;
+	QUrl defaultTempDir;
 	if (Prefs::enableTempDir()) {
 		defaultTempDir = Prefs::tempDir();
 		QFileInfo tmpDirInfo = QFileInfo(defaultTempDir.path());
@@ -177,14 +178,14 @@ void Ripper::tendToNewJobs()
 							 "The KDE standard temporary directory will be used instead.", defaultTempDir.path()),
 						 i18n("Problem with the temporary directory"),
 						 QString("CustomTemporaryNotAcessible"));
-			defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
+			defaultTempDir = QUrl(KStandardDirs::locateLocal("tmp", ""));
 		}
 	} else {
-		defaultTempDir = KUrl(KStandardDirs::locateLocal("tmp", ""));
+		defaultTempDir = QUrl(KStandardDirs::locateLocal("tmp", ""));
 	}
 
 	// For cases like "/tmp" where there is a missing /
-	QString tempDirStr = defaultTempDir.path(KUrl::AddTrailingSlash);
+	QString tempDirStr = defaultTempDir.path().startsWith("/") ? defaultTempDir.path() : "/" + defaultTempDir.path();
 
 	QString tmpFileName;
 	do {
@@ -195,11 +196,11 @@ void Ripper::tendToNewJobs()
 	// build the number like kio_audiocd, needs the same translation, I guess
 	QString wavFile = QString("audiocd:/") + i18n("Track %1", n.sprintf("%02d", job->track)) + QString(".wav");
 
-	KUrl source(wavFile);
+	QUrl source(wavFile);
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", i18n("Track %1", QString("%{number}")));
-	KUrl dest(tmpFileName);
+	QUrl dest(tmpFileName);
 
 	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
 	jobs.insert(copyJob, job);
@@ -236,7 +237,7 @@ void Ripper::copyJobResult(KJob *copyjob)
         newJob->removeTempFile = Prefs::removeRippedWavs();
 		emit(encodeWav(newJob));
 	} else {
-		copyJob->ui()->setWindow(0);
+		//copyJob->ui()->setWindow(0);
 		copyJob->ui()->showErrorMessage();
 		QFile file( (copyJob->destUrl()).path());
 		file.remove();

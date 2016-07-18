@@ -99,7 +99,7 @@ bool AudioCD::setDevice(Solid::Device aCd)
                         kDebug() << "Wrong permissions to " + block->device() + "!\n"
                                     "Consider setting to 660 or add yourself to \'cdrom\' group.";
                         status = NoDrive;
-                        return FALSE;
+                        return false;
                     }
                     src = new MediaSource(Cd, block->device());
                     obj->setCurrentSource(*src);
@@ -112,10 +112,10 @@ bool AudioCD::setDevice(Solid::Device aCd)
     } else {
         kDebug() << "Drive seems not to be an optical drive!";
         status = NoDrive;
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 Solid::OpticalDrive *AudioCD::getCdDrive() const
@@ -151,7 +151,7 @@ bool AudioCD::hasAudio() const
     if (cd)
         return (cd->availableContent() & Solid::OpticalDisc::Audio) == Solid::OpticalDisc::Audio;
     else
-        return FALSE;
+        return false;
 }
 
 AudioCD::DriveStatus AudioCD::getDriveStatus() const

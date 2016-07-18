@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2003-2005 Benjamin C Meyer (ben at meyerhome dot net)
+ * Copyright (C) 2016 Leslie Zhai <xiang.zhai@i-soft.com.cn>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kapplication.h>
+#include <QApplication>
+#include <QCommandLineParser>
 
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
@@ -25,31 +27,32 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+int main(int argc, char *argv[]) {
+  KAboutData aboutData("kaudiocreator", i18n("KAudioCreator"), "1.3");
+  aboutData.setLicense(KAboutLicense::GPL);
+  aboutData.addAuthor(i18n("Gerd Fleischer"), i18n("Maintainer"), "gerdfleischer@web.de");
+  aboutData.addAuthor(i18n("Benjamin Meyer"), i18n("Original author"), "ben+kaudiocreator@meyerhome.net");
 
-int main(int argc, char *argv[]){
-  KAboutData aboutData("kaudiocreator", 0, ki18n("KAudioCreator"), "1.3",
-    ki18n("CD ripper and audio encoder frontend"), KAboutData::License_LGPL,
-          ki18n("(c) 2003-2005, Benjamin Meyer\n(c) 2008-2011, Gerd Fleischer"),
-          KLocalizedString(), "http://kde-apps.org/content/show.php/KAudioCreator?content=107645");
-    aboutData.addAuthor(ki18n("Gerd Fleischer"), ki18n("Maintainer"), "gerdfleischer@web.de", "http://www.gerdfleischer.de");
-    aboutData.addAuthor(ki18n("Benjamin Meyer"), ki18n("Original author"), "ben+kaudiocreator@meyerhome.net", "http://www.icefox.net/");
+  QApplication a(argc, argv);
 
   // command line
-  KCmdLineArgs::init(argc, argv, &aboutData);
-
-  KCmdLineOptions options;
-  options.add("+[device]", ki18n( "CD device path" ));
-  KCmdLineArgs::addCmdLineOptions( options );
-  KApplication a(true);
+  QCommandLineParser parser;
+  QCommandLineOption option("+[device]", i18n("CD device path"));
+  parser.addOption(option);
+  KAboutData::setApplicationData(aboutData);
+  parser.addVersionOption();
+  parser.addHelpOption();
+  aboutData.setupCommandLine(&parser);
+  parser.process(a);
+  aboutData.processCommandLine(&parser);
   KAudioCreator *app = new KAudioCreator();
 
   // we need some strings from libkcddb for the cddb album dialog
   KGlobal::locale()->insertCatalog("libkcddb");
   KGlobal::locale()->insertCatalog("kio_audiocd");
 
-  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-  if ( args->count()>0 ) app->setDevice( args->arg( 0 ) );
-  args->clear();
+  const QStringList args = parser.positionalArguments();
+  if (args.count() > 0) app->setDevice(args.at(0));
   app->show();
   return a.exec();
 }

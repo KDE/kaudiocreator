@@ -23,7 +23,7 @@
 
 #include "config-kaudiocreator.h"
 
-#include "libkcddb/genres.h"
+#include <libkcddb/genres.h>
 #include "ui_encodefile.h"
 #include "qmap.h"
 #include <kpagedialog.h>
@@ -44,7 +44,7 @@ class EncodeFileModel;
 /**
  * This class lets the user encode a file.
  */
-class EncodeFileImp : public KDialog, public Ui::EncodeFile
+class EncodeFileImp : public QDialog, Ui::EncodeFile
 {
 
 Q_OBJECT

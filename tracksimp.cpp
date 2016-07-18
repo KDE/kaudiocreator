@@ -27,8 +27,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kcombobox.h>
-#include "libkcddb/genres.h"
-#include "libkcddb/cdinfodialog.h"
+#include <libkcddb/genres.h>
+#include <libkcddb/cdinfodialog.h>
 #include <kdebug.h>
 #include <solid/device.h>
 #include <solid/opticaldrive.h>
@@ -169,7 +169,7 @@ void TracksImp::discChanged(AudioCD::DriveStatus status)
             genreBox->setEditText(QString());
             trackModel->clear();
             trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
-            toggleInputs(FALSE);
+            toggleInputs(false);
             emit driveStatusChanged(AudioCD::NoDrive);
             break;
         case AudioCD::NoDisc:
@@ -181,7 +181,7 @@ void TracksImp::discChanged(AudioCD::DriveStatus status)
             genreBox->setEditText(QString());
             trackModel->clear();
             trackModel->setHorizontalHeaderLabels(QStringList() << i18nc("@title:column", "Rip") << i18n("Track") << i18n("Length") << i18n("Title") << i18n("Artist") << i18n("Comment"));
-            toggleInputs(FALSE);
+            toggleInputs(false);
             emit driveStatusChanged(AudioCD::NoDisc);
             break;
         case AudioCD::Loading:
@@ -435,10 +435,10 @@ void TracksImp::editInformation()
 	// Create dialog.
 	CDInfoDialog *dialog = new CDInfoDialog( this );
 	dialog->setModal(false);
-	dialog->setCaption(i18n( "CD Editor" ));
-	dialog->setButtons(KDialog::Ok|KDialog::Cancel);
-	dialog->setDefaultButton(KDialog::Ok);
-	dialog->showButtonSeparator(true);
+	dialog->setWindowTitle(i18n( "CD Editor" ));
+	//dialog->setButtons(KDialog::Ok|KDialog::Cancel);
+	//dialog->setDefaultButton(KDialog::Ok);
+	//dialog->showButtonSeparator(true);
 
 	dialog->setInfo(cddbInfo, currentDrive->getOffsetList());
 
@@ -632,15 +632,15 @@ void TracksImp::newAlbum()
         QList<QStandardItem *> trackItems = QList<QStandardItem *>();
         
 		QStandardItem *ripItem = new QStandardItem();
-        ripItem->setCheckable(TRUE);
+        ripItem->setCheckable(true);
         trackItems << ripItem;
 
         QStandardItem *trackItem = new QStandardItem(QString::number(i + 1));
-        trackItem->setEditable(FALSE);
+        trackItem->setEditable(false);
         trackItems << trackItem;
         
         QStandardItem *lengthItem = new QStandardItem(trackLength);
-        lengthItem->setEditable(FALSE);
+        lengthItem->setEditable(false);
         trackItems << lengthItem;
         
         QStandardItem *titleItem = new QStandardItem(ti.get(Title).toString());

@@ -24,6 +24,7 @@
 
 #include <kxmlguiwindow.h>
 #include <kconfigdialog.h>
+#include <kconfigskeleton.h>
 
 #include "ui_ripconfig.h"
 #include "ui_cdconfig.h"
@@ -87,7 +88,7 @@ private:
   JobQueImp   *jobQue;
   Ripper      *ripper;
   Encoder     *encoder;
-  KMenu       *ripMenu;
+  QMenu       *ripMenu;
   QLabel *driveLabel, *ripLabel, *defaultEncLabel;
   
 signals:

@@ -294,26 +294,26 @@ void KAudioCreator::setDriveStatus(AudioCD::DriveStatus status)
 		switch (status) {
             case AudioCD::NoDrive:
                 driveLabel->setText(i18n("No CD drive"));
-                emit hasAudioCd(FALSE);
-                eject->setEnabled(FALSE);
+                emit hasAudioCd(false);
+                eject->setEnabled(false);
                 break;
 			case AudioCD::NoDisc:
 				driveLabel->setText(i18n("No disc"));
-				emit hasAudioCd(FALSE);
-                eject->setEnabled(TRUE);
+				emit hasAudioCd(false);
+                eject->setEnabled(true);
 				break;
 			case AudioCD::Loading:
 				driveLabel->setText(i18n("Loading disc"));
-                eject->setEnabled(TRUE);
+                eject->setEnabled(true);
 				break;
 			case AudioCD::Ready:
 				driveLabel->setText(i18n("Audio CD inserted"));
-				emit hasAudioCd(TRUE);
-                eject->setEnabled(TRUE);
+				emit hasAudioCd(true);
+                eject->setEnabled(true);
 				break;
 			case AudioCD::ReadyNoAudio:
 				driveLabel->setText(i18n("Disc inserted - No Audio"));
-                eject->setEnabled(TRUE);
+                eject->setEnabled(true);
 				break;
 		}
 	}

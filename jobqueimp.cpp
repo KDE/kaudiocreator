@@ -69,16 +69,16 @@ void JobQueImp::addJob(Job *job, const QString &name)
 	QList<QStandardItem *> jobItems = QList<QStandardItem *>();
 	job->id = ++currentId;
 	QStandardItem *jobItem = new QStandardItem(QString::number(currentId));
-	jobItem->setEditable(FALSE);
+	jobItem->setEditable(false);
 	jobItems << jobItem;
 	QStandardItem *progressItem = new QStandardItem();
 	progressItem->setData(JOB_QUEUED, JobState);
 	progressItem->setData(job->id, JobId);
 	progressItem->setData(0, PercentDone);
-	progressItem->setEditable(FALSE);
+	progressItem->setEditable(false);
 	jobItems << progressItem;
 	QStandardItem *descriptionItem = new QStandardItem(name);
-	descriptionItem->setEditable(FALSE);
+	descriptionItem->setEditable(false);
 	jobItems << descriptionItem;
 	jobModel->appendRow(jobItems);
 	queLabel->setText(i18n("Number of jobs in the queue: %1", jobModel->rowCount()));
@@ -120,7 +120,7 @@ void JobQueImp::updateProgress(int id, int progress)
 		currentItem->setData(JOB_COMPLETED, JobState);
 		currentItem->setData(100, PercentDone);
 		if (Prefs::removeCompletedJobs()){
-			removeJob(currentItem, FALSE);
+			removeJob(currentItem, false);
 			return;
 		}
 	}

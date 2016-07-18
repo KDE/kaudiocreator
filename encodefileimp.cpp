@@ -33,6 +33,7 @@
 #include <kfiledialog.h>
 #include <kcombobox.h>
 #include <knuminput.h>
+#include <kmimetype.h>
 
 #include <QStringList>
 #include <QTreeView>
@@ -52,17 +53,17 @@
 
 #include <kdebug.h>
 
-EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedColumn(0)
+EncodeFileImp::EncodeFileImp(QWidget* parent) : QDialog(parent), editedColumn(0)
 {
 	QWidget *w = new QWidget();
 	setupUi(w);
-	setMainWidget(w);
-	setCaption(i18n("Encode Files"));
-	setButtons(Default|User1|User2|Close);
-	setButtonText(Default, i18n("Fit Columns to Content"));
-	setButtonIcon(Default, KIcon("resizeimages"));
-	setButtonText(User1, i18n("&Add to queue"));
-	setButtonText(User2, i18n("&Add to queue and close"));
+	//setMainWidget(w);
+	setWindowTitle(i18n("Encode Files"));
+	//setButtons(Default|User1|User2|Close);
+	//setButtonText(Default, i18n("Fit Columns to Content"));
+	//setButtonIcon(Default, KIcon("resizeimages"));
+	//setButtonText(User1, i18n("&Add to queue"));
+	//setButtonText(User2, i18n("&Add to queue and close"));
 	yearInput->setMinimum(EMPTY_YEAR);
 	yearInput->setMaximum(QDate::currentDate().year());
 	yearInput->setSpecialValueText(i18n("empty"));
@@ -73,7 +74,7 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedColumn(0)
     fileListView->setItemDelegate(new EncodeFileDelegate());
 	genreBox->addItems(m_genres);
 
-	restoreDialogSize(KConfigGroup(KGlobal::config(), "size_encodefiledialog"));
+	//restoreDialogSize(KConfigGroup(KSharedConfig::openConfig(), "size_encodefiledialog"));
 
 	connect(fileListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(setupEncoderBox(const QItemSelection &, const QItemSelection &)));
 	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(openFiles()));
@@ -100,8 +101,8 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : KDialog(parent), editedColumn(0)
 
 void EncodeFileImp::saveSize()
 {
-	KConfigGroup group(KGlobal::config(), "size_encodefiledialog");
-	saveDialogSize(group);
+	KConfigGroup group(KSharedConfig::openConfig(), "size_encodefiledialog");
+	//saveDialogSize(group);
 	group.sync();
 }
 
@@ -185,14 +186,14 @@ void EncodeFileImp::setupEncoderBox(const QItemSelection &selected, const QItemS
 
 void EncodeFileImp::openFiles()
 {
-	QStringList files = KFileDialog::getOpenFileNames(KUrl(), fileTypeFilter, this, QString());
+	QStringList files = KFileDialog::getOpenFileNames(QUrl(), fileTypeFilter, this, QString());
 	addFilesToList(files);
 }
 
 void EncodeFileImp::openDirectory()
 {
 	QStringList files;
-	QString dirPath = KFileDialog::getExistingDirectory(KUrl(), this, QString());
+	QString dirPath = KFileDialog::getExistingDirectory(QUrl(), this, QString());
 	QDir dir(dirPath);
 	
 	QStringList entries = dir.entryList(dirFilter, QDir::Files);
@@ -222,7 +223,7 @@ void EncodeFileImp::addFilesToList(const QStringList &list)
         QList<QStandardItem *> fileItems = QList<QStandardItem *>();
 
         QStandardItem *pathItem = new QStandardItem(track);
-        pathItem->setEditable(FALSE);
+        pathItem->setEditable(false);
         fileItems << pathItem;
 
 #ifdef HAVE_TAGLIB
