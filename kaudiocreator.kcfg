@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
         http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kaudiocreatorrc"/>
-  <!-- <include>kcompactdisc.h</include> -->
+  <include>kcompactdisc.h</include>
   <include>kstandarddirs.h</include>
   <include>klocale.h</include>
   <group name="CD">
@@ -18,7 +18,7 @@
     </entry>
     <entry name="lastUsedDevice" type="String">
       <label>Last used CD device</label>
-      <!-- <default code="true">KCompactDisc::defaultCdromDeviceName()</default> -->
+      <default code="true">KCompactDisc::defaultCdromDeviceName()</default>
     </entry>
     <entry name="promptIfIncompleteInfo" type="Bool">
       <label>Prompt if information is not complete</label>

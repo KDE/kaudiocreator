@@ -96,7 +96,7 @@ kconfig_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc)
 add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
 target_link_libraries(kaudiocreator
-#   KF5::CompactDisc
+    KF5::CompactDisc
     KF5::KCMUtils
     KF5::Solid
     KF5::NotifyConfig
