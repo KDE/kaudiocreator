@@ -23,7 +23,7 @@
 
 #include "config-kaudiocreator.h"
 
-#include <libkcddb/genres.h>
+#include <KCddb/Genres>
 #include "ui_encodefile.h"
 #include "qmap.h"
 #include <kpagedialog.h>

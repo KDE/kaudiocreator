@@ -27,8 +27,8 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kcombobox.h>
-#include <libkcddb/genres.h>
-#include <libkcddb/cdinfodialog.h>
+#include <KCddb/Genres>
+#include <KCddb/CdinfoDialog>
 #include <kdebug.h>
 #include <solid/device.h>
 #include <solid/opticaldrive.h>

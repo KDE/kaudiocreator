@@ -25,7 +25,7 @@
 #include <solid/device.h>
 #include <solid/devicenotifier.h>
 #include <klocale.h>
-#include <libkcddb/client.h>
+#include <KCddb/Client>
 #include <kdebug.h>
 
 #include "ui_tracks.h"
