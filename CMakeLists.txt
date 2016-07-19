@@ -11,7 +11,14 @@ set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Mod
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
+find_package(Qt5 REQUIRED COMPONENTS
+    Test
+    Network
+    Core
+    Widgets
+)
 find_package(KF5 REQUIRED COMPONENTS
+    Cddb
     CompactDisc
     KCMUtils
     Solid
@@ -25,12 +32,6 @@ find_package(KF5 REQUIRED COMPONENTS
     I18n
     KIO
 )
-find_package(Qt5 REQUIRED COMPONENTS
-    Test
-    Core
-    Widgets
-)
-find_package(Libkcddb REQUIRED)
 find_package(Phonon4Qt5 REQUIRED NO_MODULE)
 find_package(DiscId REQUIRED)
 find_package(Taglib)
@@ -96,6 +97,7 @@ kconfig_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc)
 add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
 target_link_libraries(kaudiocreator
+    KF5::CddbWidgets
     KF5::CompactDisc
     KF5::KCMUtils
     KF5::Solid
@@ -107,7 +109,6 @@ target_link_libraries(kaudiocreator
     KF5::KIOWidgets
     Qt5::Core
     Qt5::Widgets
-    KDE::Libkcddb::kcddbwidgets
     ${PHONON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
     ${DISCID_LIBRARIES}
