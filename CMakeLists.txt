@@ -18,7 +18,6 @@ find_package(Qt5 REQUIRED COMPONENTS
     Widgets
 )
 find_package(KF5 REQUIRED COMPONENTS
-    Cddb
     CompactDisc
     KCMUtils
     Solid
@@ -31,6 +30,13 @@ find_package(KF5 REQUIRED COMPONENTS
     KDELibs4Support
     I18n
     KIO
+)
+find_package(KF5Cddb)
+set_package_properties(KF5Cddb PROPERTIES
+    DESCRIPTION "KF5 CDDB library"
+    URL "https://github.com/isoft-linux/libkcddb"
+    TYPE REQUIRED
+    PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet."
 )
 find_package(Phonon4Qt5 REQUIRED NO_MODULE)
 find_package(DiscId REQUIRED)
