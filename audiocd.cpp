@@ -274,7 +274,8 @@ void AudioCD::getDiscParameter()
     discLength = discid_get_sectors(discid) * 1000 / 75; // milliseconds
     freeDbId = discid_get_freedb_id(discid);
     musicbrainzId = discid_get_id(discid);
-    tracks = discid_get_last_track_num(discid);
+    // FIXME: discid_get_last_track_num will return 4294967295 for a Empty DVD+R medium 
+    tracks = qMax(discid_get_last_track_num(discid), 1024);
     offsetList.clear();
     trackLengthList.clear();
     for (uint i = discid_get_first_track_num(discid); i <= tracks; ++i) {
