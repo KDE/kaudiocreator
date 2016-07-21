@@ -58,7 +58,6 @@ public:
 	EncodeFileImp(QWidget* parent = 0);
 
 protected slots:
-	void saveSize();
 	void openFiles();
 	void openDirectory();
 	void clearFileList();

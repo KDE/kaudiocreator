@@ -42,7 +42,6 @@
 #include <QSet>
 #include <QDir>
 #include <QDirIterator>
-// #include <QSize>
 
 #ifdef HAVE_TAGLIB
 #define Qt4QStringToTString(s) TagLib::String(s.toUtf8().data(), TagLib::String::UTF8)
@@ -55,15 +54,23 @@
 
 EncodeFileImp::EncodeFileImp(QWidget* parent) : QDialog(parent), editedColumn(0)
 {
-	QWidget *w = new QWidget();
-	setupUi(w);
-	//setMainWidget(w);
+	QVBoxLayout *vbox = new QVBoxLayout;
+    setLayout(vbox);
+    QWidget *w = new QWidget;
+    setupUi(w);
+    vbox->addWidget(w);
 	setWindowTitle(i18n("Encode Files"));
-	//setButtons(Default|User1|User2|Close);
-	//setButtonText(Default, i18n("Fit Columns to Content"));
-	//setButtonIcon(Default, KIcon("resizeimages"));
-	//setButtonText(User1, i18n("&Add to queue"));
-	//setButtonText(User2, i18n("&Add to queue and close"));
+    QHBoxLayout *hbox = new QHBoxLayout;
+    vbox->addLayout(hbox);
+    QPushButton *deflt = new QPushButton(QIcon::fromTheme("resizeimages"), i18n("Fit Columns to Content"));
+    QPushButton *user1 = new QPushButton(i18n("&Add to queue"));
+    QPushButton *user2 = new QPushButton(i18n("&Add to queue and close"));
+    QPushButton *close = new QPushButton(i18n("Close"));
+    hbox->addWidget(deflt);
+    hbox->addWidget(user1);
+    hbox->addWidget(user2);
+    hbox->addWidget(close);
+	
 	yearInput->setMinimum(EMPTY_YEAR);
 	yearInput->setMaximum(QDate::currentDate().year());
 	yearInput->setSpecialValueText(i18n("empty"));
@@ -73,8 +80,6 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : QDialog(parent), editedColumn(0)
     fileListView->setModel(fileListModel);
     fileListView->setItemDelegate(new EncodeFileDelegate());
 	genreBox->addItems(m_genres);
-
-	//restoreDialogSize(KConfigGroup(KSharedConfig::openConfig(), "size_encodefiledialog"));
 
 	connect(fileListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(setupEncoderBox(const QItemSelection &, const QItemSelection &)));
 	connect(addFilesButton, SIGNAL(clicked()), this, SLOT(openFiles()));
@@ -91,19 +96,10 @@ EncodeFileImp::EncodeFileImp(QWidget* parent) : QDialog(parent), editedColumn(0)
 	connect(assignEncoderButton, SIGNAL(clicked()), this, SLOT(assignEncoder()));
 	connect(assignAllButton, SIGNAL(clicked()), this, SLOT(assignAll()));
 
-	connect(this, SIGNAL(defaultClicked()), this, SLOT(fitToContent()));
-	connect(this, SIGNAL(user1Clicked()), this, SLOT(encode()));
-	connect(this, SIGNAL(user2Clicked()), this, SLOT(encodeAndClose()));
-
-	connect(this, SIGNAL(user2Clicked()), this, SLOT(saveSize()));
-	connect(this, SIGNAL(closeClicked()), this, SLOT(saveSize()));
-}
-
-void EncodeFileImp::saveSize()
-{
-	KConfigGroup group(KSharedConfig::openConfig(), "size_encodefiledialog");
-	//saveDialogSize(group);
-	group.sync();
+	connect(deflt, SIGNAL(clicked()), this, SLOT(fitToContent()));
+	connect(user1, SIGNAL(clicked()), this, SLOT(encode()));
+	connect(user2, SIGNAL(clicked()), this, SLOT(encodeAndClose()));
+	connect(close, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 /**
