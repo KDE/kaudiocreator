@@ -136,9 +136,6 @@ void TracksImp::newDisc()
 
 	cddbInfo.set("discid", currentDrive->getFreeDbId());
 	cddbInfo.set(Length, currentDrive->getDiscLength());
-
-/*	cddbInfo.set(Artist, QString());
-	cddbInfo.set(Title, QString());*/
  
 	// If it's a sampler, we'll do artist/title.
 	bool isSampler = (cddbInfo.get(Title).toString().compare("Various") == 0);
@@ -148,7 +145,6 @@ void TracksImp::newDisc()
 			track.set(Artist, QString());
 		track.set(Title, QString());
 	}
-
 
     if (Prefs::performCDDBauto()) {
         lookupCDDB();
@@ -431,34 +427,22 @@ void TracksImp::genreChangedByUser(const QString &newGenre)
  */
 void TracksImp::editInformation()
 {
-	if( !hasCD() ) return;
+    if( !hasCD() ) return;
 	// Create dialog.
 	CDInfoDialog *dialog = new CDInfoDialog( this );
 	dialog->setModal(false);
 	dialog->setWindowTitle(i18n( "CD Editor" ));
-	//dialog->setButtons(KDialog::Ok|KDialog::Cancel);
-	//dialog->setDefaultButton(KDialog::Ok);
-	//dialog->showButtonSeparator(true);
-
 	dialog->setInfo(cddbInfo, currentDrive->getOffsetList());
 
 	// Show dialog->and save results.
 	bool okClicked = dialog->exec();
 	if( okClicked ) {
-		cddbInfo = dialog->info();
+        cddbInfo = dialog->info();
 		newAlbum();
 		cddb->store(cddbInfo, currentDrive->getOffsetList());
 	}
 	delete dialog;
 }
-
-// void TracksImp::editCurrentTrack()
-// {
-//     trackView->setFocus();
-//     trackView->setCurrentIndex((trackView->currentIndex()).sibling((trackView->currentIndex()).row(), COLUMN_TRACK_NAME));
-//     trackView->edit(trackView->currentIndex());
-// }
-
 
 QString TracksImp::formatTime(unsigned s)
 {

@@ -46,7 +46,6 @@ signals:
 	void ripTrack(Job *job);
 	void driveStatusChanged(AudioCD::DriveStatus);
 	void hasTracks(bool);
-/*	void renameTrack(QTreeWidgetItem *);*/
 	void sessionStarted();
 
 public:
@@ -64,7 +63,6 @@ public slots:
 	// Toolbar Buttons
 	void startSession( QString encoder = QString() );
 	void editInformation();
-//     void editCurrentTrack();
 	void performCDDB();
 	void ejectDevice(const QString &deviceToEject);
 	void eject();
@@ -99,7 +97,6 @@ private:
 
 	KCDDB::Client* cddb;
     QStandardItemModel *trackModel;
-//	KCompactDisc* cd;
     QHash<QString, Solid::Device> devMap;
     QHash<QString, QString> udiMap;
     AudioCD *currentDrive;

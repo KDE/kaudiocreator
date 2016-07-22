@@ -379,7 +379,6 @@ EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConf
 	: KConfigDialog(parent, name, config), isNewEncoder(isNew), origName(name)
 {
 	setFaceType(KPageDialog::Plain);
-	//setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Help);
 	editDialog = new EncoderEdit(0);
 	addPage(editDialog, i18n("Encoder Configuration"), "configure");
 }
