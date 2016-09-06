@@ -270,19 +270,21 @@ void AudioCD::registerMediaSource()
 void AudioCD::getDiscParameter()
 {
     DiscId *discid = discid_new();
-    discid_read(discid, (block->device()).toLatin1());
-    discLength = discid_get_sectors(discid) * 1000 / 75; // milliseconds
-    freeDbId = discid_get_freedb_id(discid);
-    musicbrainzId = discid_get_id(discid);
-    // FIXME: discid_get_last_track_num will return 4294967295 for a Empty DVD+R medium 
-    tracks = qMin(discid_get_last_track_num(discid), 1024);
-    offsetList.clear();
-    trackLengthList.clear();
-    for (uint i = discid_get_first_track_num(discid); i <= tracks; ++i) {
-        offsetList << discid_get_track_offset(discid, i);
-        trackLengthList << discid_get_track_length(discid, i) * 1000 / 75;
+    if (discid_read(discid, (block->device()).toLatin1())) {
+        discLength = discid_get_sectors(discid) * 1000 / 75; // milliseconds
+        freeDbId = discid_get_freedb_id(discid);
+        musicbrainzId = discid_get_id(discid);
+        tracks = discid_get_last_track_num(discid);
+        offsetList.clear();
+        trackLengthList.clear();
+        for (uint i = discid_get_first_track_num(discid); i <= tracks; ++i) {
+            offsetList << discid_get_track_offset(discid, i);
+            trackLengthList << discid_get_track_length(discid, i) * 1000 / 75;
+        }
+        offsetList << discid_get_sectors(discid);
+    } else {
+        qWarning() << discid_get_error_msg(discid);
     }
-    offsetList << discid_get_sectors(discid);
     discid_free(discid);
 
     if (hasAudio()) {
