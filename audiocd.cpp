@@ -47,6 +47,10 @@
 #include <QTimer>
 #include <QFileInfo>
 
+#ifndef DISCID_HAVE_SPARSE_READ
+#define discid_read_sparse(disc, dev, i) discid_read(disc, dev)
+#endif
+
 using namespace Phonon;
 
 AudioCD::AudioCD()
@@ -270,7 +274,7 @@ void AudioCD::registerMediaSource()
 void AudioCD::getDiscParameter()
 {
     DiscId *discid = discid_new();
-    if (discid_read(discid, (block->device()).toLatin1())) {
+    if (discid_read_sparse(discid, (block->device()).toLatin1(), 0)) {
         discLength = discid_get_sectors(discid) * 1000 / 75; // milliseconds
         freeDbId = discid_get_freedb_id(discid);
         musicbrainzId = discid_get_id(discid);
