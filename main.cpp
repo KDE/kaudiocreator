@@ -24,16 +24,16 @@
 #include "kaudiocreator.h"
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 int main(int argc, char *argv[]) {
+  QApplication a(argc, argv);
+
+  KLocalizedString::setApplicationDomain("kaudiocreator");
   KAboutData aboutData("kaudiocreator", i18n("KAudioCreator"), "1.3");
   aboutData.setLicense(KAboutLicense::GPL);
   aboutData.addAuthor(i18n("Gerd Fleischer"), i18n("Maintainer"), "gerdfleischer@web.de");
   aboutData.addAuthor(i18n("Benjamin Meyer"), i18n("Original author"), "ben+kaudiocreator@meyerhome.net");
-
-  QApplication a(argc, argv);
 
   // command line
   QCommandLineParser parser;
@@ -46,10 +46,6 @@ int main(int argc, char *argv[]) {
   parser.process(a);
   aboutData.processCommandLine(&parser);
   KAudioCreator *app = new KAudioCreator();
-
-  // we need some strings from libkcddb for the cddb album dialog
-  KGlobal::locale()->insertCatalog("libkcddb");
-  KGlobal::locale()->insertCatalog("kio_audiocd");
 
   const QStringList args = parser.positionalArguments();
   if (args.count() > 0) app->setDevice(args.at(0));

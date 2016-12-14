@@ -84,7 +84,7 @@ set(kaudiocreator_SRCS
     wizard.cpp
 )
 
-qt5_wrap_ui(kaudiocreator_SRCS
+ki18n_wrap_ui(kaudiocreator_SRCS
     encodefile.ui
     tracks.ui
     encoderedit.ui
