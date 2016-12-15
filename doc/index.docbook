@@ -144,6 +144,9 @@ This is the main window after starting the program.
 <variablelist>
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Eject CD</guimenuitem>
 </menuchoice></term>
@@ -152,6 +155,9 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>D</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>CDDB Lookup</guimenuitem>
 </menuchoice></term>
@@ -160,6 +166,9 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Edit Album...</guimenuitem>
 </menuchoice></term>
@@ -168,6 +177,9 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>A</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Select All Tracks</guimenuitem>
 </menuchoice></term>
@@ -176,6 +188,9 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>D</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Deselect All Tracks</guimenuitem>
 </menuchoice></term>
@@ -184,6 +199,9 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Rip Selection</guimenuitem>
 </menuchoice></term>
@@ -192,14 +210,20 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
-<guisubmenu>Rip Selection</guisubmenu>
+<guisubmenu>Rip</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Opens a sub-menu with a list of the available encoders, so you can rip a selection with another encoder than the standard one. Note, that the encoder should have been configured on the <guilabel>Encoder Configuration</guilabel> tab in the settings dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>J</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Remove Completed Jobs</guimenuitem>
 </menuchoice></term>
@@ -208,8 +232,11 @@ This is the main window after starting the program.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Encode File...</guimenuitem>
+<guimenuitem>Encode Files from disk</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens a file browser so you can select an already ripped file to encode rather then rip and encode a complete &CD;.</action></para></listitem>
 </varlistentry>
