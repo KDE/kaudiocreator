@@ -18,7 +18,6 @@ find_package(Qt5 REQUIRED COMPONENTS
     Widgets
 )
 find_package(KF5 REQUIRED COMPONENTS
-    CompactDisc
     KCMUtils
     Solid
     NotifyConfig
@@ -37,6 +36,13 @@ set_package_properties(KF5Cddb PROPERTIES
     URL "http://projects.kde.org/projects/kde/kdemultimedia/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet."
+)
+find_package(KF5CompactDisc)
+set_package_properties(KF5CompactDisc PROPERTIES
+    DESCRIPTION "KCompactDisc library"
+    URL "https://commits.kde.org/libkcompactdisc"
+    TYPE REQUIRED
+    PURPOSE "libkcompactdisc is used to access CD drives."
 )
 find_package(Phonon4Qt5 REQUIRED NO_MODULE)
 find_package(DiscId REQUIRED)
