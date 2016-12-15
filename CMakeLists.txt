@@ -27,6 +27,7 @@ find_package(KF5 REQUIRED COMPONENTS
     XmlGui
     Solid
     KDELibs4Support
+    DocTools
     I18n
     KIO
 )
@@ -59,6 +60,10 @@ option(ENABLE_DEBUG "Enable debug" OFF)
 if(ENABLE_DEBUG)
     add_definitions(-g -DDEBUG)
 endif()
+
+if(KF5DocTools_VERSION)
+    add_subdirectory(doc)
+endif(KF5DocTools_VERSION)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
