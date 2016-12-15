@@ -1,8 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
   <!ENTITY kaudiocreator "<application>KAudioCreator</application>">
-  <!ENTITY kappname "&kaudiocreator;"><!-- Do *not* replace kappname-->
-  <!ENTITY package "extragear"><!-- kdebase, kdeadmin, etc -->
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
@@ -52,7 +50,7 @@ Do NOT change these in the translation. -->
 
 <abstract>
 <para>
-&kaudiocreator; is an audio &CD; ripper for &kde;.
+&kaudiocreator; is an audio &CD; ripper by &kde;.
 </para>
 </abstract>
 
@@ -68,7 +66,7 @@ Do NOT change these in the translation. -->
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para>&kaudiocreator; is an audio &CD; ripper for &kde;. With it you can easily rip your audio &CD;s to mp3 or ogg files or other formats, depending on whatever encoder you have installed on your system.</para>
+<para>&kaudiocreator; is an audio &CD; ripper by &kde;. With it you can easily rip your audio &CD;s to mp3 or ogg files or other formats, depending on whatever encoder you have installed on your system.</para>
 
 <para>&kaudiocreator; is a frontend to cdparanoia (for ripping the &CD; data to wav files on your hard disk) and many encoders which encode (compress) these wav files. Currently lame for 
 mp3, oggenc for oggs and flac (lossless compression) are supported out of the box (you may still need to install these encoder packages from your distro). But you can add more encoders with the program (if you have them installed).</para>
@@ -141,7 +139,7 @@ This is the main window after starting the program.
 <title>The main &kaudiocreator; window</title>
 
 <sect2>
-<title>The <guimenu>File</guimenu> Menu</title>
+<title>The File Menu</title>
 <para>
 <variablelist>
 <varlistentry>
@@ -232,65 +230,14 @@ This is the main window after starting the program.
 </sect2>
 
 <sect2>
-<title>The <guimenu>Settings</guimenu> Menu</title>
+<title>The Settings and Help Menu</title>
 <para>
-<variablelist>
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Toggles the toolbar.</action></para></listitem>
-</varlistentry>
+&kaudiocreator; has the common &kde; <guimenu>Settings</guimenu> and <guimenu>Help</guimenu>
+menu items, for more information read the sections about the <ulink url="help:/fundamentals/ui.html#menus-settings"
+>Settings Menu</ulink> and <ulink url="help:/fundamentals/ui.html#menus-help">Help Menu</ulink>
+of the &kde; Fundamentals.
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Statusbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Toggles the statusbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure Shortcuts...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the configuration window to set shortcuts (key codes) to menu commands.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure Toolbars...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the configuration window to configure the toolbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure Notifications...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the configuration window to configure the type of notification (like logs, beeps) for program events (like finished &CD; ripping).</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure &kaudiocreator;...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens &kaudiocreator; main configuration dialog with several tabs (like Encoder, for the encoder configuration). You have to go here before you will be able to successfully use this program!</action></para></listitem>
-</varlistentry>
-</variablelist>
 </para>
-
-</sect2>
-
-<sect2>
-<title>The <guimenu>Help</guimenu> Menu</title>
-
-&help.menu.documentation;
 
 </sect2>
 
@@ -423,9 +370,6 @@ You are not alone with your wish to listen to your music independently of your a
 
 <chapter id="faq">
 <title>Questions and Answers</title>
-
-&reporting.bugs;
-&updating.documentation;
 
 <qandaset id="faqlist">
 <qandaentry>
@@ -1011,49 +955,6 @@ Documentation update 2009 Rene Landert <email>rene.landert@bluewin.ch</email>
 &underGPL;        	 <!-- GPL License -->
 
 </chapter>
-
-<appendix id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-kaudiocreator">
-<title>How to obtain &kaudiocreator;</title>
-
-&install.intro.documentation;
-
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>In order to successfully use &kaudiocreator;, you need &kde; 4.x. and cdparanoia. If you want to create compressed audio files like mp3s or oggs, you need the encoder of your choice.</para>
-
-<para>
-&kaudiocreator; is today maintained within the &kde; SVN as part of the extragear multimedia package. If you are familiar with svn you can do an anonymous checkout from there. However, most distros come with a pre-compiled package, especially because &kaudiocreator; is part of a main &kde; package. Install the extragear multimedia package from your distro. If you read this, you have most likely found it already...
-</para>
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-&install.compile.documentation;
-
-</sect1>
-
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>Well, this section is most likely intended for people who build from source and not the user using a pre-compiled package from a distro.</para>
-
-<para>Sorry, there is currently no help available for configuration options before compiling the source.</para>
-
-<para>If you look for help to configure the program to your needs once it is running, then the following is for you:</para>
-
-<para>Being a program that can invoke many different other programs there is a lot to configure. Best read the <link linkend="Example">full walkthrough example</link> to introduce yourself with the configuration options. It sports screenshots of the different configuration tabs and provides comments even for options not used in the example.</para>
-
-</sect1>
-
-</appendix>
 
 &documentation.index;
 </book>
