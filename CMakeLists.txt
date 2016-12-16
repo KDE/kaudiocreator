@@ -54,6 +54,7 @@ include(KDECompilerSettings)
 include(KDECMakeSettings)
 include(ECMInstallIcons)
 include(ECMMarkAsTest)
+include(ECMEnableSanitizers)
 
 add_definitions(${TAGLIB_CFLAGS})
 option(ENABLE_DEBUG "Enable debug" OFF)
@@ -64,6 +65,11 @@ endif()
 if(KF5DocTools_VERSION)
     add_subdirectory(doc)
 endif(KF5DocTools_VERSION)
+
+if(BUILD_TESTING)
+    find_package(Qt5Test REQUIRED)
+    add_subdirectory(tests)
+endif()
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

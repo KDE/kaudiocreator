@@ -200,7 +200,7 @@ void Ripper::tendToNewJobs()
 	if (!job->device.isEmpty())
 		source.addQueryItem("device", job->device);
 	source.addQueryItem("fileNameTemplate", i18n("Track %1", QString("%{number}")));
-	QUrl dest(tmpFileName);
+	QUrl dest = QUrl::fromLocalFile(tmpFileName);
 
 	KIO::FileCopyJob *copyJob = KIO::file_copy(source, dest, 0644, KIO::HideProgressInfo);
 	jobs.insert(copyJob, job);
