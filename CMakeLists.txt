@@ -146,7 +146,8 @@ install(PROGRAMS org.kde.kaudiocreator.desktop  DESTINATION  ${XDG_APPS_INSTALL_
 install(FILES org.kde.kaudiocreator.appdata.xml DESTINATION  ${KDE_INSTALL_METAINFODIR})
 install(FILES kaudiocreator.kcfg kaudiocreator_encoders.kcfg  DESTINATION  ${KCFG_INSTALL_DIR})
 install(FILES audiocd_extract.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
-install(FILES kaudiocreatorui.rc kaudiocreator.notifyrc DESTINATION  ${KXMLGUI_INSTALL_DIR}/kaudiocreator)
+install(FILES kaudiocreatorui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/kaudiocreator)
+install(FILES kaudiocreator.notifyrc DESTINATION  ${KDE_INSTALL_KNOTIFY5RCDIR} )
 
 install(FILES kaudiocreator-libkcddb.upd  DESTINATION  ${KCONF_UPDATE_INSTALL_DIR})
 
