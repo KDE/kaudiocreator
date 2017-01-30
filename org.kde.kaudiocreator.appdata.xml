@@ -33,6 +33,7 @@
   <name xml:lang="uk">KAudioCreator</name>
   <name xml:lang="x-test">xxKAudioCreatorxx</name>
   <name xml:lang="zh-CN">KAudioCreator</name>
+  <name xml:lang="zh-TW">KAudioCreator</name>
   <summary>CD Ripper</summary>
   <summary xml:lang="bs">CD čupač</summary>
   <summary xml:lang="ca">Extractor de CD</summary>
@@ -120,6 +121,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>CDDB lookup to extract the album and track information</li>
       <li xml:lang="bs">CDDB pregled za ekstrakciju informacija o albumu i traci</li>
