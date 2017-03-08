@@ -50,7 +50,7 @@ find_package(DiscId REQUIRED)
 find_package(Taglib)
 
 include(KDEInstallDirs)
-include(KDECompilerSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
 include(ECMInstallIcons)
 include(ECMMarkAsTest)
