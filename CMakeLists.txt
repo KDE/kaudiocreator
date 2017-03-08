@@ -155,7 +155,12 @@ if(NOT WIN32)
     install(PROGRAMS upgrade-kaudiocreator-metadata.sh DESTINATION  ${KCONF_UPDATE_INSTALL_DIR})
 endif(NOT WIN32)
 
-ecm_install_icons(${ICON_INSTALL_DIR})
+ecm_install_icons(ICONS
+    16-apps-kaudiocreator.png
+    32-apps-kaudiocreator.png
+    DESTINATION ${KDE_INSTALL_ICONDIR}
+    THEME hicolor
+)
 
 endif (NOT APPLE)
 
