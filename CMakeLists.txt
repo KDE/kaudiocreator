@@ -12,33 +12,32 @@ feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKA
 set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 find_package(Qt5 REQUIRED COMPONENTS
-    Test
-    Network
     Core
+    Network
+    Test
     Widgets
 )
 find_package(KF5 REQUIRED COMPONENTS
-    KCMUtils
-    Solid
-    NotifyConfig
-    ConfigWidgets
-    Config
     Completion
-    XmlGui
-    Solid
-    KDELibs4Support
+    Config
+    ConfigWidgets
     DocTools
     I18n
+    KCMUtils
+    KDELibs4Support
     KIO
+    NotifyConfig
+    Solid
+    XmlGui
 )
-find_package(KF5Cddb)
+find_package(KF5Cddb 5.0.0) # >= 16.12.0
 set_package_properties(KF5Cddb PROPERTIES
-    DESCRIPTION "KF5 branch for CDDB library"
-    URL "http://projects.kde.org/projects/kde/kdemultimedia/libkcddb"
+    DESCRIPTION "KDE CDDB library"
+    URL "https://commits.kde.org/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet."
 )
-find_package(KF5CompactDisc)
+find_package(KF5CompactDisc 5.0.0) # >= 16.12.0
 set_package_properties(KF5CompactDisc PROPERTIES
     DESCRIPTION "KCompactDisc library"
     URL "https://commits.kde.org/libkcompactdisc"
