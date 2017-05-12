@@ -34,12 +34,16 @@ int main(int argc, char *argv[]) {
   aboutData.setLicense(KAboutLicense::GPL);
   aboutData.addAuthor(i18n("Gerd Fleischer"), i18n("Maintainer"), "gerdfleischer@web.de");
   aboutData.addAuthor(i18n("Benjamin Meyer"), i18n("Original author"), "ben+kaudiocreator@meyerhome.net");
+  aboutData.setOrganizationDomain(QByteArray("kde.org"));
+  aboutData.setDesktopFileName(QStringLiteral("org.kde.kaudiocreator"));
+  KAboutData::setApplicationData(aboutData);
+
+  a.setWindowIcon(QIcon::fromTheme(QStringLiteral("kaudiocreator")));
 
   // command line
   QCommandLineParser parser;
   QCommandLineOption option("+[device]", i18n("CD device path"));
   parser.addOption(option);
-  KAboutData::setApplicationData(aboutData);
   parser.addVersionOption();
   parser.addHelpOption();
   aboutData.setupCommandLine(&parser);
