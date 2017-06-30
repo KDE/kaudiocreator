@@ -55,6 +55,7 @@ Comment[zh_TW]=KAudioCreator
 
 [Event/no jobs left]
 Name=All Jobs Finished
+Name[ast]=Tolos trabayos finaos
 Name[bg]=Всички задачи са завършени
 Name[bs]=Svi poslovi su završeni
 Name[ca]=S'han finalitzat totes les tasques
@@ -105,6 +106,7 @@ Name[x-test]=xxAll Jobs Finishedxx
 Name[zh_CN]=所有任务都已经完成
 Name[zh_TW]=所有工作均已完成
 Comment=All of the jobs in the queue have been finished
+Comment[ast]=Finaron tolos trabayos de la cola
 Comment[bg]=Всички задачи от опашката са изпълнение
 Comment[bs]=Svi poslovi iz reda su završeni
 Comment[ca]=Totes les tasques de la cua han estat finalitzades
@@ -155,6 +157,7 @@ Comment[zh_TW]=佇列中的所有工作都已完成
 
 [Event/track ripped]
 Name=Track Ripped
+Name[ast]=Pista ripiada
 Name[bg]=Записът е извлечен
 Name[bs]=Numera je iščupana
 Name[ca]=Pista extreta
@@ -205,6 +208,7 @@ Name[x-test]=xxTrack Rippedxx
 Name[zh_CN]=音轨已经抓取
 Name[zh_TW]=曲目已擷取
 Comment=Track finished ripping
+Comment[ast]=Finó'l ripéu de pistes
 Comment[bg]=Завърши извличането на записи
 Comment[bs]=Čupanje numere je završeno
 Comment[ca]=L'extracció de la pista ha acabat
@@ -256,6 +260,7 @@ Comment[zh_TW]=曲目已完成擷取
 
 [Event/cd ripped]
 Name=CD Ripped
+Name[ast]=CD ripiáu
 Name[bg]=Компактдискът е извлечен
 Name[bs]=CD je iščupan
 Name[ca]=CD extret
@@ -306,6 +311,7 @@ Name[x-test]=xxCD Rippedxx
 Name[zh_CN]=CD 已经抓取
 Name[zh_TW]=光碟已擷取
 Comment=CD finished ripping
+Comment[ast]=Finó'l ripéu del CD
 Comment[bg]=Завърши извличането на компактдиска
 Comment[bs]=Čupanje CD‑a je završeno
 Comment[ca]=L'extracció del CD ha acabat
@@ -358,6 +364,7 @@ Comment[zh_TW]=光碟已完成擷取
 
 [Event/track encoded]
 Name=Track Encoded
+Name[ast]=Pista codificada
 Name[bg]=Записът е кодиран
 Name[bs]=Numera je kodirana
 Name[ca]=Pista codificada
@@ -407,6 +414,7 @@ Name[x-test]=xxTrack Encodedxx
 Name[zh_CN]=音轨已经编码
 Name[zh_TW]=曲目已編碼
 Comment=Track finished encoding
+Comment[ast]=Finó la codificación de les pistes
 Comment[bg]=Завърши кодирането на записа
 Comment[bs]=Kodiranje numere je završeno
 Comment[ca]=La codificació de la pista ha acabat
@@ -458,6 +466,7 @@ Comment[zh_TW]=曲目已完成編碼
 
 [Event/cd encoded]
 Name=CD Encoded
+Name[ast]=CD codificáu
 Name[bg]=Компактдискът е кодиран
 Name[bs]=CD je kodiran
 Name[ca]=CD codificat
@@ -507,6 +516,7 @@ Name[x-test]=xxCD Encodedxx
 Name[zh_CN]=CD 已经编码
 Name[zh_TW]=光碟已編碼
 Comment=CD finished encoding
+Comment[ast]=Finó la codificación del CD
 Comment[bg]=Завърши кодирането на компактдиска
 Comment[bs]=Kodiranje CD‑a je završeno
 Comment[ca]=La codificació del CD ha acabat
