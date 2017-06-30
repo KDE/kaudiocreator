@@ -36,6 +36,7 @@
   <name xml:lang="zh-CN">KAudioCreator</name>
   <name xml:lang="zh-TW">KAudioCreator</name>
   <summary>CD Ripper</summary>
+  <summary xml:lang="ast">Ripiador de CDs</summary>
   <summary xml:lang="bs">CD čupač</summary>
   <summary xml:lang="ca">Extractor de CD</summary>
   <summary xml:lang="ca-valencia">Extractor de CD</summary>
@@ -69,6 +70,7 @@
       KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks
       and later it encodes them to mp3 or ogg files (or many other formats supported)
     </p>
+    <p xml:lang="ast">KAudioCreator ye un ripiador de CDs d'audiu qu'usa «cdparanoia» como backend pa estrayer les pistes y más sero codifícales en ficheros mp3 o ogg (o munchos formatos más sofitaos)</p>
     <p xml:lang="bs">KAudioCreator je  audio CD ekstraktor, koji koristi "cdparanoia" kao pozadinu za vađenje traka i kasnije ih kodira u  mp3 ili ogg datoteke (ili mnoge druge podržane formate)</p>
     <p xml:lang="ca">El KAudioCreator és un extractor d'àudio de CD, que utilitza el «cdparanoia» com a dorsal per extreure les peces i codificar-les més tard a fitxers mp3 o ogg (o molts altres formats acceptats)</p>
     <p xml:lang="ca-valencia">El KAudioCreator és un extractor d'àudio de CD, que utilitza el «cdparanoia» com a dorsal per extreure les peces i codificar-les més tard a fitxers mp3 o ogg (o molts altres formats acceptats)</p>
@@ -97,6 +99,7 @@
     <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
     <p>Features:</p>
+    <p xml:lang="ast">Carauterístiques:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -128,6 +131,7 @@
     <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>CDDB lookup to extract the album and track information</li>
+      <li xml:lang="ast">Gueta CDDB pa estrayer la información d'álbumes y pistes</li>
       <li xml:lang="bs">CDDB pregled za ekstrakciju informacija o albumu i traci</li>
       <li xml:lang="ca">Cerca CDDB per extreure la informació de l'àlbum i la peça</li>
       <li xml:lang="ca-valencia">Busca CDDB per extreure la informació de l'àlbum i la peça</li>
@@ -156,6 +160,7 @@
       <li xml:lang="uk">Пошук у CDDB для отримання даних щодо альбому і композиції.</li>
       <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
+      <li xml:lang="ast">Formatos diferentes y sofitaos de codificación (ogg, mp3, flac)</li>
       <li xml:lang="bs">Podržani razni formati kodiranja (ogg, mp3, flac)</li>
       <li xml:lang="ca">Es permeten diversos formats de codificació (ogg, mp3, flac)</li>
       <li xml:lang="ca-valencia">Es permeten diversos formats de codificació (ogg, mp3, flac)</li>
@@ -184,6 +189,7 @@
       <li xml:lang="uk">Підтримка різних форматів кодування даних (ogg, mp3, flac).</li>
       <li xml:lang="x-test">xxDifferent encoding formats supported (ogg, mp3, flac)xx</li>
       <li>Different filename formats using tags</li>
+      <li xml:lang="ast">Formatos de nomes de ficheru diferentes usando etiquetes</li>
       <li xml:lang="bs">Razni formati imena datoteka koristeći oznake</li>
       <li xml:lang="ca">Formats diferents de nom de fitxer usant etiquetes</li>
       <li xml:lang="ca-valencia">Formats diferents de nom de fitxer usant etiquetes</li>
