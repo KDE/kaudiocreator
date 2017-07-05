@@ -30,9 +30,11 @@ int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 
   KLocalizedString::setApplicationDomain("kaudiocreator");
-  KAboutData aboutData("kaudiocreator", i18n("KAudioCreator"), "1.3");
-  aboutData.setLicense(KAboutLicense::GPL);
-  aboutData.addAuthor(i18n("Gerd Fleischer"), i18n("Maintainer"), "gerdfleischer@web.de");
+  KAboutData aboutData("kaudiocreator", i18n("KAudioCreator"), "1.3",
+    i18n("CD ripper and audio encoder frontend"), KAboutLicense::GPL,
+    i18n("(c) 2003-2005, Benjamin Meyer\n(c) 2008-2011, Gerd Fleischer\n(c) 2016, Leslie Zhai"),
+    QString(), "https://www.kde.org/applications/multimedia/kaudiocreator/");
+  aboutData.addAuthor(i18n("Gerd Fleischer"), i18n("Former maintainer"), "gerdfleischer@web.de");
   aboutData.addAuthor(i18n("Benjamin Meyer"), i18n("Original author"), "ben+kaudiocreator@meyerhome.net");
   aboutData.setOrganizationDomain(QByteArray("kde.org"));
   aboutData.setDesktopFileName(QStringLiteral("org.kde.kaudiocreator"));
