@@ -65,6 +65,7 @@
   <summary xml:lang="tr">CD Kopyalayıcı</summary>
   <summary xml:lang="uk">Програма для видобування даних КД</summary>
   <summary xml:lang="x-test">xxCD Ripperxx</summary>
+  <summary xml:lang="zh-CN">CD Ripper</summary>
   <description>
     <p>
       KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks
@@ -128,6 +129,7 @@
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
+    <p xml:lang="zh-CN">功能：</p>
     <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>CDDB lookup to extract the album and track information</li>
