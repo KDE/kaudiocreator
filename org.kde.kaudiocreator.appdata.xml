@@ -83,7 +83,7 @@
     <p xml:lang="es">KAudioCreator es un ripeador de CD de audio que usa «cdparanoia» como motor para extraer las pistas y codificarlas a continuación en archivos mp3 u ogg (u otros formatos implementados)</p>
     <p xml:lang="fi">KAudioCreator lukee ääni-CD:itä cdparanoia-taustaosan avulla: purkaa ääniraidat ja pakkaa ne MP3-, Ogg- tai muiksi tiedostoiksi</p>
     <p xml:lang="fr">KAudioCreator est un extracteur de CD audio qui utilise le système « cdparanoia » pour importer et encoder les pistes dans des fichiers MP3, OGG et bien d'autres formats supportés</p>
-    <p xml:lang="gl">KAudioCreator é un copiador de CD que usa «cdparanoia» como motor para extraer as pistas, que posteriormente codifica como ficheiros MP3 ou OGG (ou outro dos moitos formatos que ofrece).</p>
+    <p xml:lang="gl">KAudioCreator é un copiador de CD de son que usa «cdparanoia» como motor para extraer as pistas, que posteriormente codifica como ficheiros MP3 ou OGG (ou outro dos moitos formatos que ofrece).</p>
     <p xml:lang="it">KAudioCreator è un estrattore di CD audio, che utilizza «cdparanoia» come motore per estrarre le tracce e successivamente le codifica in file mp3 o ogg (o molti altri formati supportati)</p>
     <p xml:lang="ko">KAudioCreator는 "cdparanoia"를 백엔드로 사용하고 MP3, OGG(외 여러 형식 지원) 등으로 인코딩할 수 있는 오디오 CD 추출기입니다.</p>
     <p xml:lang="nl">KAudioCreator is een audio-cd-ripper, die "cdparanoia" als backend gebruikt om de tracks uit te pakken en later deze te coderen naar mp3 of ogg-bestanden (of vele andere ondersteunde formaten)</p>
