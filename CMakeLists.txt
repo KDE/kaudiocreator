@@ -115,6 +115,7 @@ ki18n_wrap_ui(kaudiocreator_SRCS
 )
 
 kconfig_add_kcfg_files(kaudiocreator_SRCS prefs.kcfgc encoder_prefs.kcfgc)
+qt5_add_resources(kaudiocreator_SRCS kaudiocreator.qrc)
 
 add_executable(kaudiocreator ${kaudiocreator_SRCS})
 
@@ -145,7 +146,6 @@ install(PROGRAMS org.kde.kaudiocreator.desktop  DESTINATION  ${XDG_APPS_INSTALL_
 install(FILES org.kde.kaudiocreator.appdata.xml DESTINATION  ${KDE_INSTALL_METAINFODIR})
 install(FILES kaudiocreator.kcfg kaudiocreator_encoders.kcfg  DESTINATION  ${KCFG_INSTALL_DIR})
 install(FILES audiocd_extract.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
-install(FILES kaudiocreatorui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/kaudiocreator)
 install(FILES kaudiocreator.notifyrc DESTINATION  ${KDE_INSTALL_KNOTIFY5RCDIR} )
 
 install(FILES kaudiocreator-libkcddb.upd  DESTINATION  ${KCONF_UPDATE_INSTALL_DIR})
