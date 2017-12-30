@@ -44,7 +44,7 @@ using namespace KCDDB;
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget *parent) : QWidget(parent), currentDrive(nullptr), cddbInfo()
+TracksImp::TracksImp( QWidget *parent) : QWidget(parent), currentDrive(nullptr)
 {
     setupUi(this);
     trackModel = new QStandardItemModel(0, 6, this);
