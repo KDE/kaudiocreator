@@ -75,7 +75,7 @@ public:
 	EncoderEditDialog(QWidget *parent, const QString &name, KConfigSkeleton *config, bool isNew = false);
 
 protected slots:
-	void updateSettings();
+	void updateSettings() override;
 
 private:
 	EncoderEdit *editDialog;

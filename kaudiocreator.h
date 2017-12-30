@@ -67,7 +67,7 @@ public slots:
 	void showJobPage();
 
 protected:
-  virtual bool queryClose();
+  bool queryClose() override;
 
 private slots:
 	void checkSettings();
@@ -102,14 +102,14 @@ public:
   SettingsDialog(QWidget *parent, const char *name,KConfigSkeleton *config);
 
 protected slots:
-  void updateSettings();
-  void updateWidgets();
-  void updateWidgetsDefault();
+  void updateSettings() override;
+  void updateWidgets() override;
+  void updateWidgetsDefault() override;
   void slotCddbChanged(bool);
 
 protected:
-  bool hasChanged();
-  bool isDefault();
+  bool hasChanged() override;
+  bool isDefault() override;
 
 public:
    EncoderConfigImp *encoderConfigImp;
