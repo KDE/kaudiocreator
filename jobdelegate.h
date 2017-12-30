@@ -27,7 +27,7 @@ class JobDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    JobDelegate(QObject *parent = 0);
+    JobDelegate(QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override;

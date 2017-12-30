@@ -55,11 +55,11 @@ using namespace Phonon;
 
 AudioCD::AudioCD()
 {
-    cdDrive = 0;
-    cd = 0;
-    block = 0;
-    src = 0;
-    ctlr = 0;
+    cdDrive = nullptr;
+    cd = nullptr;
+    block = nullptr;
+    src = nullptr;
+    ctlr = nullptr;
     status = NoDisc;
     driveUdi = QString();
     discUdi = QString();
@@ -79,10 +79,10 @@ AudioCD::~AudioCD()
 bool AudioCD::setDevice(Solid::Device aCd)
 {
     odsign = aCd;
-    cd = 0;
-    block = 0;
-    src = 0;
-    ctlr = 0;
+    cd = nullptr;
+    block = nullptr;
+    src = nullptr;
+    ctlr = nullptr;
     status = NoDisc;
     driveUdi = QString();
     discUdi = QString();
@@ -147,7 +147,7 @@ QString AudioCD::getCdPath() const
 
 bool AudioCD::isCdInserted() const
 {
-    return (cd != NULL);
+    return (cd != nullptr);
 }
 
 bool AudioCD::hasAudio() const
@@ -232,8 +232,8 @@ void AudioCD::eject()
 void AudioCD::discEjected(const QString &udi)
 {
     if (discUdi == udi) {
-        cd = 0;
-        src = 0;
+        cd = nullptr;
+        src = nullptr;
         tracks = 0;
         offsetList.clear();
         trackLengthList.clear();

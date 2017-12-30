@@ -27,7 +27,7 @@ class EncodeFileDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    EncodeFileDelegate(QObject *parent = 0);
+    EncodeFileDelegate(QObject *parent = nullptr);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const override;

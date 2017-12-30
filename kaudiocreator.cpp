@@ -51,7 +51,7 @@
 /**
  * Constructor. Connect all of the object and the job control.
  */
-KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLabel(0), ripLabel(0)
+KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLabel(nullptr), ripLabel(nullptr)
 {
 	pageWidget = new KPageWidget(this);
 	pageWidget->setFaceType(KPageView::Tabbed);
@@ -68,7 +68,7 @@ KAudioCreator::KAudioCreator( QWidget *parent) : KXmlGuiWindow(parent), driveLab
 
 	ripper = new Ripper(this);
 	encoder = new Encoder(this);
-	jobQue = new JobQueImp(0);
+	jobQue = new JobQueImp(nullptr);
 
 	jobPage = new KPageWidgetItem(jobQue, i18n("&Jobs"));
 	jobPage->setIcon(KIcon("system-run"));
@@ -398,7 +398,7 @@ void KAudioCreator::showSettings(){
 
 SettingsDialog::SettingsDialog(QWidget *parent, const char *name, KConfigSkeleton *config)
  : KConfigDialog(parent, name, config),
- cddb(0), cddbChanged(false)
+ cddb(nullptr), cddbChanged(false)
 {
 	addPage(new General, i18n("General"), "kaudiocreator",
 		  i18n("General Configuration"));

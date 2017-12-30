@@ -49,7 +49,7 @@ signals:
 	void sessionStarted();
 
 public:
-	TracksImp( QWidget* parent = 0);
+	TracksImp( QWidget* parent = nullptr);
 	~TracksImp();
 
 	bool hasCD();

@@ -111,7 +111,7 @@ void Ripper::removeJob(int id)
 			break;
 		}
 	}
-	Job *job = 0;
+	Job *job = nullptr;
 	foreach(Job *j, pendingJobs)
 	{
 		if(j->id == id)
@@ -153,7 +153,7 @@ void Ripper::tendToNewJobs()
 		return;
 	}
 
-	Job *job = 0;
+	Job *job = nullptr;
 	for (int i = 0; i < pendingJobs.count(); ++i) {
 		const QString jobDevice = pendingJobs[i]->device;
 		if (!usedDevices.contains(jobDevice)) {
@@ -173,7 +173,7 @@ void Ripper::tendToNewJobs()
 		defaultTempDir = Prefs::tempDir();
 		QFileInfo tmpDirInfo = QFileInfo(defaultTempDir.path());
 		if (!tmpDirInfo.isDir() || !tmpDirInfo.isWritable() || !tmpDirInfo.isReadable()) {
-			KMessageBox::information(0, i18n("There is a problem with the custom temporary directory.\n"
+			KMessageBox::information(nullptr, i18n("There is a problem with the custom temporary directory.\n"
 							 "Please check existence and permissions of \"%1\".\n"
 							 "The KDE standard temporary directory will be used instead.", defaultTempDir.path()),
 						 i18n("Problem with the temporary directory"),
@@ -243,13 +243,13 @@ void Ripper::copyJobResult(KJob *copyjob)
 		file.remove();
 		emit updateProgress(newJob->id, JOB_ERROR);
 		delete newJob;
-		newJob = 0;
+		newJob = nullptr;
 	}
 
 	if(newJob && newJob->lastSongInAlbum){
 		if(Prefs::autoEjectAfterRip()){
 			// Don't eject device if a pending job has that device
-			Job *job = 0;
+			Job *job = nullptr;
 			foreach(Job *j, pendingJobs)
 			{
 				if( j->device == newJob->device )

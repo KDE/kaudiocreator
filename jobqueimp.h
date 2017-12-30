@@ -48,7 +48,7 @@ signals:
 	void removeJob( int idNumber );
 
 public:
-	JobQueImp( QWidget* parent = 0 );
+	JobQueImp( QWidget* parent = nullptr );
 	int numberOfJobsNotFinished();
 
 public slots:

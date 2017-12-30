@@ -28,7 +28,7 @@ class fileWizard : public QDialog, public Ui_fileWizard
     Q_OBJECT
 
 public:
-    fileWizard( QWidget* parent = 0 );
+    fileWizard( QWidget* parent = nullptr );
     
 private slots:
     void homePressed();

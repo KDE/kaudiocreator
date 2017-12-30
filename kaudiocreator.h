@@ -42,7 +42,7 @@ class KMenu;
 class CdCfg : public QWidget, public Ui::CdConfig
 {
     public:
-        CdCfg(QWidget *parent = 0) : QWidget(parent) {
+        CdCfg(QWidget *parent = nullptr) : QWidget(parent) {
             setupUi(this);
         }
 };
@@ -50,7 +50,7 @@ class CdCfg : public QWidget, public Ui::CdConfig
 class RipCfg : public QWidget, public Ui::RipConfig
 {
     public:
-        RipCfg(QWidget *parent = 0) : QWidget(parent) {
+        RipCfg(QWidget *parent = nullptr) : QWidget(parent) {
             setupUi(this);
         }
 };
@@ -60,7 +60,7 @@ class KAudioCreator : public KXmlGuiWindow {
 Q_OBJECT
 
 public:
-  KAudioCreator(QWidget *parent = 0);
+  KAudioCreator(QWidget *parent = nullptr);
   void setDevice(const QString &device);
   
 public slots:

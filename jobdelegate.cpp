@@ -55,7 +55,7 @@ void JobDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, c
             opts.text = QString("%1%").arg(opts.progress);
         }
 
-        QApplication::style()->drawControl(QStyle::CE_ProgressBar, &opts, painter, 0);
+        QApplication::style()->drawControl(QStyle::CE_ProgressBar, &opts, painter, nullptr);
     } else {
         QStyledItemDelegate::paint(painter, option, index);
     }

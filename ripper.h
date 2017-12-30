@@ -39,7 +39,7 @@ signals:
 	void jobsChanged();
 
 public:
-	Ripper( QObject* parent = 0 );
+	Ripper( QObject* parent = nullptr );
 	~Ripper();
 	int activeJobCount();
 	int pendingJobCount();

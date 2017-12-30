@@ -28,7 +28,7 @@ class General : public QWidget, private Ui::General
 Q_OBJECT
 
 public:
-	General( QWidget* parent = 0 );
+	General( QWidget* parent = nullptr );
 
 private slots:
 	void updateExample();

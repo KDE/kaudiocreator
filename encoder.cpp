@@ -43,7 +43,7 @@
 class EncoderOutput : public QDialog, public Ui::EncoderOutput
 {
 public:
-	EncoderOutput(QWidget *parent = 0)
+	EncoderOutput(QWidget *parent = nullptr)
 	  : QDialog(parent)
 	{
 		setupUi(this);
@@ -70,10 +70,10 @@ void Encoder::loadSettings()
 
 EncoderPrefs *Encoder::loadEncoder(QString encoder)
 {
-	EncoderPrefs *prefs = 0;
+	EncoderPrefs *prefs = nullptr;
 	prefs = EncoderPrefs::prefs(encoder);
 	if ( !EncoderPrefs::hasPrefs(encoder) ) {
-		KMessageBox::sorry(0, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
+		KMessageBox::sorry(nullptr, i18n("No encoder has been selected.\nPlease select an encoder in the configuration."), i18n("No Encoder Selected"));
 		prefs->setCommandLine(QString());
 	}
 	return prefs;
@@ -136,7 +136,7 @@ void Encoder::removeJob(int id )
 		}
 	}
 
-	Job *job = 0;
+	Job *job = nullptr;
 	foreach (Job *j, pendingJobs) {
 		if ( j->id == id) {
 			job = j;
@@ -196,7 +196,7 @@ void Encoder::tendToNewJobs()
 
 	if (QFile::exists(desiredFile)) {
 		KUrl desiredFileUrl = KUrl::fromPath(desiredFile);
-		KIO::RenameDialog over(0, i18n("File Already Exists"), KUrl(), desiredFileUrl, KIO::RenameDialog_Overwrite);
+		KIO::RenameDialog over(nullptr, i18n("File Already Exists"), KUrl(), desiredFileUrl, KIO::RenameDialog_Overwrite);
 		int result = over.exec();
 		switch (result) {
 			case KIO::R_OVERWRITE:
@@ -217,7 +217,7 @@ void Encoder::tendToNewJobs()
 	int lastSlash = desiredFile.lastIndexOf('/',-1);
 	if ( lastSlash == -1 ||
 			!(KStandardDirs::makeDir( desiredFile.mid(0,lastSlash), 0775)) ) {
-		KMessageBox::sorry(0, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed"));
+		KMessageBox::sorry(nullptr, i18n("Cannot place file, unable to make directories."), i18n("Encoding Failed"));
 		emit jobsChanged();
 		emit updateProgress(job->id, JOB_ERROR);
 		return;
@@ -319,12 +319,12 @@ void Encoder::jobDone(KProcess *process)
 	jobs.remove((KProcess *)process);
 	bool showDebugBox = false;
 	if ( process->exitCode() == 127 ) {
-		KMessageBox::sorry(0, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
+		KMessageBox::sorry(nullptr, i18n("The selected encoder was not found.\nThe wav file has been removed. Command was: %1", job->errorString), i18n("Encoding Failed"));
 		emit(updateProgress(job->id, JOB_ERROR));
 	} else if (encPrefs->checkOutput() && encPrefs->commandLine().contains("%o") && QFile::exists(job->newLocation)) {
 		// fyi segfaults return 136
 		if ( process->exitCode() != 0 ) {
-			if ( KMessageBox::questionYesNo(0, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
+			if ( KMessageBox::questionYesNo(nullptr, i18n("The encoder exited with a error.  Please check that the file was created.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
 			{
 				showDebugBox = true;
 			}
@@ -341,7 +341,7 @@ void Encoder::jobDone(KProcess *process)
 		if ( job->lastSongInAlbum)
 			KNotification::event("cd encoded");
 	} else {
-		if ( KMessageBox::questionYesNo(0, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
+		if ( KMessageBox::questionYesNo(nullptr, i18n("The encoded file was not created.\nPlease check the encoder options.\nThe wav file has been removed.\nDo you want to see the full encoder output?"), i18n("Encoding Failed"),KGuiItem(i18n("Show Output")),KGuiItem(i18n("Skip Output"))) == KMessageBox::Yes )
 		{
 			showDebugBox = true;
 		}

@@ -55,7 +55,7 @@ signals:
 	void allJobsStarted();
 
 public:
-	EncodeFileImp(QWidget* parent = 0);
+	EncodeFileImp(QWidget* parent = nullptr);
 
 protected slots:
 	void openFiles();

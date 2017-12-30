@@ -44,7 +44,7 @@ using namespace KCDDB;
 /**
  * Constructor, connect up slots and signals.
  */
-TracksImp::TracksImp( QWidget *parent) : QWidget(parent), currentDrive(0), cddbInfo()
+TracksImp::TracksImp( QWidget *parent) : QWidget(parent), currentDrive(nullptr), cddbInfo()
 {
     setupUi(this);
     trackModel = new QStandardItemModel(0, 6, this);
@@ -252,7 +252,7 @@ void TracksImp::changeDevice(const QString &device)
         }
         discChanged(currentDrive->getDriveStatus());
     } else {
-        currentDrive = 0;
+        currentDrive = nullptr;
         discChanged(AudioCD::NoDrive);
     }
 }
@@ -509,7 +509,7 @@ void TracksImp::startSession(QString encoder)
 			return;
 	}
 	
-	Job *lastJob = 0;
+	Job *lastJob = nullptr;
 	foreach (int r, selected) {
 		Job *newJob = new Job();
 		newJob->encoder = currentEncoder;

@@ -332,7 +332,7 @@ EncoderPrefs *EncoderConfigImp::cloneEncoder(EncoderPrefs *origPrefs, const QStr
 /**
  * EncoderPrefs
  */
-QHash<QString, EncoderPrefs *> *EncoderPrefs::m_prefs = 0;
+QHash<QString, EncoderPrefs *> *EncoderPrefs::m_prefs = nullptr;
 
 EncoderPrefs *EncoderPrefs::prefs(const QString &groupName)
 {
@@ -379,7 +379,7 @@ EncoderEditDialog::EncoderEditDialog(QWidget *parent, const QString &name, KConf
 	: KConfigDialog(parent, name, config), isNewEncoder(isNew), origName(name)
 {
 	setFaceType(KPageDialog::Plain);
-	editDialog = new EncoderEdit(0);
+	editDialog = new EncoderEdit(nullptr);
 	addPage(editDialog, i18n("Encoder Configuration"), "configure");
 }
 

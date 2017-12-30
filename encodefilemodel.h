@@ -27,7 +27,7 @@ class EncodeFileModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    EncodeFileModel(QObject *parent = 0);
+    EncodeFileModel(QObject *parent = nullptr);
 
 private:
     QStandardItem *parentItem;

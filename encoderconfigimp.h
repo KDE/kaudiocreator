@@ -44,7 +44,7 @@ class EncoderConfigImp : public QWidget, public Ui::EncoderConfig
 Q_OBJECT
 
 public:
-	EncoderConfigImp( QWidget* parent = 0);
+	EncoderConfigImp( QWidget* parent = nullptr);
 	~EncoderConfigImp();
 
 private:

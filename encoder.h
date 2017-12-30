@@ -35,7 +35,7 @@ class EncodeProcess : public KProcess
 	Q_OBJECT
 
 	public:
-		EncodeProcess(QObject *parent = 0)
+		EncodeProcess(QObject *parent = nullptr)
 			: KProcess(parent) {
 			connect(this, SIGNAL(readyReadStandardOutput()),
 				this, SLOT(newStandardOutput()));
@@ -67,7 +67,7 @@ signals:
   void jobsChanged();
 
 public:
-  Encoder( QObject* parent = 0 );
+  Encoder( QObject* parent = nullptr );
   ~Encoder();
   int activeJobCount();
   int pendingJobCount();
