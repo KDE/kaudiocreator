@@ -65,6 +65,7 @@
   <summary xml:lang="uk">Програма для видобування даних КД</summary>
   <summary xml:lang="x-test">xxCD Ripperxx</summary>
   <summary xml:lang="zh-CN">CD Ripper</summary>
+  <summary xml:lang="zh-TW">CD 擷取器</summary>
   <description>
     <p>
       KAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks
@@ -97,6 +98,7 @@
     <p xml:lang="tr">KAudioCreator parçaları ayıklamak için bir arka uç olarak "cdparanoia" kullanan ve daha sonra bunları mp3 veya ogg dosyalarına (veya diğer birçok biçim de desteklenmektedir) kodlayan bir ses CD'si kopyalayıcıdır.</p>
     <p xml:lang="uk">KAudioCreator — програма для видобування цифрових даних з компакт-дисків, у якій для отримання даних композицій використано програму «cdparanoia». Ця програма здатна виконати кодування отриманих даних до файлів mp3 чи ogg. Крім того, передбачено підтримку і багатьох інших форматі.</p>
     <p xml:lang="x-test">xxKAudioCreator is an audio CD ripper, which uses "cdparanoia" as a backend to extract the tracks and later it encodes them to mp3 or ogg files (or many other formats supported)xx</p>
+    <p xml:lang="zh-TW">KAudioCreator 是個音樂 CD 擷取器，使用「cdparanoia」作為後端來解開音樂並稍候將這些音樂編碼成 mp3 或 ogg 檔案（或其他支援的格式）</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -158,6 +160,7 @@
       <li xml:lang="tr">Albüm ve parça bilgilerini ayıklamak için CDDB araması</li>
       <li xml:lang="uk">Пошук у CDDB для отримання даних щодо альбому і композиції.</li>
       <li xml:lang="x-test">xxCDDB lookup to extract the album and track informationxx</li>
+      <li xml:lang="zh-TW">CDDB 查詢以解開專輯與音樂資訊</li>
       <li>Different encoding formats supported (ogg, mp3, flac)</li>
       <li xml:lang="bs">Podržani razni formati kodiranja (ogg, mp3, flac)</li>
       <li xml:lang="ca">Es permeten diversos formats de codificació (ogg, mp3, flac)</li>
@@ -186,6 +189,7 @@
       <li xml:lang="tr">Desteklenen farklı kodlama biçimleri (ogg, mp3, flac)</li>
       <li xml:lang="uk">Підтримка різних форматів кодування даних (ogg, mp3, flac).</li>
       <li xml:lang="x-test">xxDifferent encoding formats supported (ogg, mp3, flac)xx</li>
+      <li xml:lang="zh-TW">支援不同的編碼格式 (ogg, mp3, flac)</li>
       <li>Different filename formats using tags</li>
       <li xml:lang="bs">Razni formati imena datoteka koristeći oznake</li>
       <li xml:lang="ca">Formats diferents de nom de fitxer usant etiquetes</li>
