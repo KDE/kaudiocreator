@@ -1,5 +1,6 @@
 [Global]
 IconName=kaudiocreator
+DesktopEntry=org.kde.kaudiocreator
 Comment=KAudioCreator
 Comment[bg]=KAudioCreator
 Comment[bs]=KAudioCreator
